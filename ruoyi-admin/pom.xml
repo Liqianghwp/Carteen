@@ -24,20 +24,26 @@
             <optional>true</optional> <!-- 表示依赖不会传递 -->
         </dependency>
 
-        <!-- swagger3-->
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>swagger-bootstrap-ui</artifactId>
+            <version>1.9.6</version>
         </dependency>
 
-        <!-- 防止进入swagger页面报类型转换错误，排除3.0.0中的引用，手动增加1.6.2版本 -->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <!--在引用时请在maven中央仓库搜索最新版本号-->
+            <version>2.0.1</version>
+        </dependency>
+
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-models</artifactId>
-            <version>1.6.2</version>
+            <version>1.5.21</version>
         </dependency>
 
-         <!-- Mysql驱动包 -->
+        <!-- Mysql驱动包 -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -65,7 +71,6 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-business</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -76,6 +81,7 @@
                 <version>2.1.1.RELEASE</version>
                 <configuration>
                     <fork>true</fork> <!-- 如果没有该配置，devtools不会生效 -->
+                    <includeSystemScope>true</includeSystemScope><!-- 引入了本地破解版jar包不可删除此配置 -->
                 </configuration>
                 <executions>
                     <execution>
@@ -93,7 +99,7 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                     <warName>${project.artifactId}</warName>
                 </configuration>   
-           </plugin>   
+           </plugin>
         </plugins>
         <finalName>${project.artifactId}</finalName>
     </build>

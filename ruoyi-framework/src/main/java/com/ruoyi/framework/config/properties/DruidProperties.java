@@ -1,17 +1,16 @@
 package com.ruoyi.framework.config.properties;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import com.alibaba.druid.pool.DruidDataSource;
 
 /**
  * druid 配置属性
- * 
+ *
  * @author ruoyi
  */
 @Configuration
-public class DruidProperties
-{
+public class DruidProperties {
     @Value("${spring.datasource.druid.initialSize}")
     private int initialSize;
 
@@ -45,8 +44,7 @@ public class DruidProperties
     @Value("${spring.datasource.druid.testOnReturn}")
     private boolean testOnReturn;
 
-    public DruidDataSource dataSource(DruidDataSource datasource)
-    {
+    public DruidDataSource dataSource(DruidDataSource datasource) {
         /** 配置初始化大小、最小、最大 */
         datasource.setInitialSize(initialSize);
         datasource.setMaxActive(maxActive);

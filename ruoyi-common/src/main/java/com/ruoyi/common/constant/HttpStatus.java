@@ -2,11 +2,10 @@ package com.ruoyi.common.constant;
 
 /**
  * 返回状态码
- * 
+ *
  * @author ruoyi
  */
-public class HttpStatus
-{
+public class HttpStatus {
     /**
      * 操作成功
      */
@@ -86,4 +85,19 @@ public class HttpStatus
      * 接口未实现
      */
     public static final int NOT_IMPLEMENTED = 501;
+
+    /**
+     * 无效参数
+     */
+    public static final int ILLEGAL_PARAM = 590;
+
+    /**
+     * 数据异常
+     */
+    public static final int DATA_NULL = 591;
+
+    /**
+     * 数据异常
+     */
+    public static final int DATA_ERROR = 592;
 }

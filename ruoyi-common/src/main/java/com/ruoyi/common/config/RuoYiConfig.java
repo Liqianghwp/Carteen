@@ -5,91 +5,92 @@ import org.springframework.stereotype.Component;
 
 /**
  * 读取项目相关配置
- * 
+ *
  * @author ruoyi
  */
 @Component
 @ConfigurationProperties(prefix = "ruoyi")
-public class RuoYiConfig
-{
-    /** 项目名称 */
+public class RuoYiConfig {
+    /**
+     * 项目名称
+     */
     private String name;
 
-    /** 版本 */
+    /**
+     * 版本
+     */
     private String version;
 
-    /** 版权年份 */
+    /**
+     * 版权年份
+     */
     private String copyrightYear;
 
-    /** 实例演示开关 */
+    /**
+     * 实例演示开关
+     */
     private boolean demoEnabled;
 
-    /** 上传路径 */
+    /**
+     * 上传路径
+     */
     private static String profile;
 
-    /** 获取地址开关 */
+    /**
+     * 获取地址开关
+     */
     private static boolean addressEnabled;
 
-    /** 验证码类型 */
+    /**
+     * 验证码类型
+     */
     private static String captchaType;
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getVersion()
-    {
+    public String getVersion() {
         return version;
     }
 
-    public void setVersion(String version)
-    {
+    public void setVersion(String version) {
         this.version = version;
     }
 
-    public String getCopyrightYear()
-    {
+    public String getCopyrightYear() {
         return copyrightYear;
     }
 
-    public void setCopyrightYear(String copyrightYear)
-    {
+    public void setCopyrightYear(String copyrightYear) {
         this.copyrightYear = copyrightYear;
     }
 
-    public boolean isDemoEnabled()
-    {
+    public boolean isDemoEnabled() {
         return demoEnabled;
     }
 
-    public void setDemoEnabled(boolean demoEnabled)
-    {
+    public void setDemoEnabled(boolean demoEnabled) {
         this.demoEnabled = demoEnabled;
     }
 
-    public static String getProfile()
-    {
+    public static String getProfile() {
         return profile;
     }
 
-    public void setProfile(String profile)
-    {
+    public void setProfile(String profile) {
         RuoYiConfig.profile = profile;
     }
 
-    public static boolean isAddressEnabled()
-    {
+    public static boolean isAddressEnabled() {
         return addressEnabled;
     }
 
-    public void setAddressEnabled(boolean addressEnabled)
-    {
+    public void setAddressEnabled(boolean addressEnabled) {
         RuoYiConfig.addressEnabled = addressEnabled;
     }
 
@@ -104,32 +105,64 @@ public class RuoYiConfig
     /**
      * 获取导入上传路径
      */
-    public static String getImportPath()
-    {
+    public static String getImportPath() {
         return getProfile() + "/import";
     }
 
     /**
      * 获取头像上传路径
      */
-    public static String getAvatarPath()
-    {
+    public static String getAvatarPath() {
         return getProfile() + "/avatar";
     }
 
     /**
      * 获取下载路径
      */
-    public static String getDownloadPath()
-    {
+    public static String getDownloadPath() {
         return getProfile() + "/download/";
+    }
+
+    /**
+     * 文件模板路径
+     *
+     * @return
+     */
+    public static String getFileTemplatePath() {
+        return getProfile() + "/file_template";
+    }
+
+    /**
+     * 系统图片路径
+     *
+     * @return
+     */
+    public static String getSystemPicPath() {
+        return getProfile() + "/system_pic";
+    }
+
+    /**
+     * 项目图片路径
+     *
+     * @return
+     */
+    public static String getProjectPicPath() {
+        return getProfile() + "/project_pic";
+    }
+
+    /**
+     * 身份证图片路径
+     *
+     * @return
+     */
+    public static String getIdPicPath() {
+        return getProfile() + "/id_pic";
     }
 
     /**
      * 获取上传路径
      */
-    public static String getUploadPath()
-    {
+    public static String getUploadPath() {
         return getProfile() + "/upload";
     }
 }

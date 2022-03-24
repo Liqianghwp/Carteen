@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.CanteenMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.CanteenPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="canteen_name" jdbcType="VARCHAR" property="canteenName"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="canteen_picture" jdbcType="VARCHAR" property="canteenPicture"/>
+        <result column="canteen_introduce" jdbcType="VARCHAR" property="canteenIntroduce"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,c.id
+            ,c.canteen_name
+            ,c.status
+            ,c.canteen_picture
+            ,c.canteen_introduce
+            ,c.create_by
+            ,c.create_time
+            ,c.update_by
+            ,c.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and c.id = #{id}
+            </if>
+            <if test="canteenName != null and canteenName != ''">
+                and c.canteen_name = #{canteenName}
+            </if>
+            <if test="status != null and status != ''">
+                and c.status = #{status}
+            </if>
+            <if test="canteenPicture != null and canteenPicture != ''">
+                and c.canteen_picture = #{canteenPicture}
+            </if>
+            <if test="canteenIntroduce != null and canteenIntroduce != ''">
+                and c.canteen_introduce = #{canteenIntroduce}
+            </if>
+            <if test="beginTime != null">
+                and c.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and c.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  canteen -->
+
+</mapper>

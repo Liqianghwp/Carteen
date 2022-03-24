@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.BusinessConfigMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.BusinessConfigPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="config_name" jdbcType="VARCHAR" property="configName"/>
+        <result column="config_value" jdbcType="VARCHAR" property="configValue"/>
+        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,bc.id
+            ,bc.config_name
+            ,bc.config_value
+            ,bc.data_state
+            ,bc.version
+            ,bc.create_by
+            ,bc.create_name
+            ,bc.create_time
+            ,bc.update_by
+            ,bc.update_name
+            ,bc.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and bc.id = #{id}
+            </if>
+            <if test="configName != null and configName != ''">
+                and bc.config_name = #{configName}
+            </if>
+            <if test="configValue != null and configValue != ''">
+                and bc.config_value = #{configValue}
+            </if>
+            <if test="dataState != null">
+                and bc.data_state = #{dataState}
+            </if>
+            <if test="version != null">
+                and bc.version = #{version}
+            </if>
+            <if test="createName != null and createName != ''">
+                and bc.create_name = #{createName}
+            </if>
+            <if test="updateName != null and updateName != ''">
+                and bc.update_name = #{updateName}
+            </if>
+            <if test="beginTime != null">
+                and bc.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and bc.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  business_config -->
+
+</mapper>

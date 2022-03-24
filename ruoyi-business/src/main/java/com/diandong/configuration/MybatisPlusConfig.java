@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 //配置说明:此为若依mybatic的mapper包路径,以及自定义业务的mapper包路径
 //如果此配置文件的位置在自定义的business包下,还需要配合修改如下的6
-@MapperScan({"com.diandong.dao.mp","com.ruoyi.system.mapper"})
+@MapperScan({"com.diandong.mapper", "com.ruoyi.system.mapper"})
 public class MybatisPlusConfig {
 
     /**
@@ -33,5 +33,14 @@ public class MybatisPlusConfig {
     @Bean
     public ConfigurationCustomizer configurationCustomizer() {
         return configuration -> configuration.setUseDeprecatedExecutor(false);
+    }
+
+    /**
+     * 自定义 SqlInjector
+     * 里面包含自定义的全局方法
+     */
+    @Bean
+    public CustomerSqlInjector myLogicSqlInjector() {
+        return new CustomerSqlInjector();
     }
 }

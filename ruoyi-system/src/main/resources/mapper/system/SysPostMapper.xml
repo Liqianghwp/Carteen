@@ -119,4 +119,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach> 
  	</delete>
 
+	<select id="selectUserPostExist" resultType="int">
+		select count(0) exist
+		from sys_user u,
+		     (select up.user_id from sys_user_post up,sys_post p where up.post_id = p.post_id and p.post_code = #{postCode}) a
+		where a.user_id = u.user_id
+		  and u.user_id = #{userId}
+	</select>
 </mapper> 

@@ -92,8 +92,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<include refid="selectRoleVo"/>
 		 where r.role_key=#{roleKey} limit 1
 	</select>
-	
- 	<insert id="insertRole" parameterType="SysRole" useGeneratedKeys="true" keyProperty="roleId">
+
+    <insert id="insertRole" parameterType="SysRole" useGeneratedKeys="true" keyProperty="roleId">
  		insert into sys_role(
  			<if test="roleId != null and roleId != 0">role_id,</if>
  			<if test="roleName != null and roleName != ''">role_name,</if>
@@ -148,5 +148,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			#{roleId}
         </foreach> 
  	</delete>
- 	
+
+	<select id="selectUserRoleExist" resultType="int">
+		select count(0) exist
+		from sys_user u,
+		     (select ur.user_id from sys_user_role ur,sys_role r where ur.role_id = r.role_id and r.role_key = #{roleKey}) a
+		where a.user_id = u.user_id
+		  and u.user_id = #{userId}
+	</select>
 </mapper> 
