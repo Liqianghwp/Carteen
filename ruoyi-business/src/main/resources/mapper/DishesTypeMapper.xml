@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.DishesTypeMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.DishesTypePO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="canteen_id" jdbcType="BIGINT" property="canteenId"/>
+        <result column="canteen_name" jdbcType="VARCHAR" property="canteenName"/>
+        <result column="type_name" jdbcType="VARCHAR" property="typeName"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="is_show" jdbcType="INTEGER" property="isShow"/>
+        <result column="type_label" jdbcType="VARCHAR" property="typeLabel"/>
+        <result column="is_package" jdbcType="INTEGER" property="isPackage"/>
+        <result column="uuid" jdbcType="VARCHAR" property="uuid"/>
+        <result column="puuid" jdbcType="VARCHAR" property="puuid"/>
+        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,dt.id
+            ,dt.canteen_id
+            ,dt.canteen_name
+            ,dt.type_name
+            ,dt.sort
+            ,dt.is_show
+            ,dt.type_label
+            ,dt.is_package
+            ,dt.uuid
+            ,dt.puuid
+            ,dt.data_state
+            ,dt.version
+            ,dt.create_by
+            ,dt.create_name
+            ,dt.create_time
+            ,dt.update_by
+            ,dt.update_name
+            ,dt.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and dt.id = #{id}
+            </if>
+            <if test="canteenId != null">
+                and dt.canteen_id = #{canteenId}
+            </if>
+            <if test="canteenName != null and canteenName != ''">
+                and dt.canteen_name = #{canteenName}
+            </if>
+            <if test="typeName != null and typeName != ''">
+                and dt.type_name = #{typeName}
+            </if>
+            <if test="sort != null">
+                and dt.sort = #{sort}
+            </if>
+            <if test="isShow != null">
+                and dt.is_show = #{isShow}
+            </if>
+            <if test="typeLabel != null and typeLabel != ''">
+                and dt.type_label = #{typeLabel}
+            </if>
+            <if test="isPackage != null">
+                and dt.is_package = #{isPackage}
+            </if>
+            <if test="uuid != null and uuid != ''">
+                and dt.uuid = #{uuid}
+            </if>
+            <if test="puuid != null and puuid != ''">
+                and dt.puuid = #{puuid}
+            </if>
+            <if test="dataState != null">
+                and dt.data_state = #{dataState}
+            </if>
+            <if test="version != null">
+                and dt.version = #{version}
+            </if>
+            <if test="createName != null and createName != ''">
+                and dt.create_name = #{createName}
+            </if>
+            <if test="updateName != null and updateName != ''">
+                and dt.update_name = #{updateName}
+            </if>
+            <if test="beginTime != null">
+                and dt.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and dt.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  dishes_type -->
+
+</mapper>

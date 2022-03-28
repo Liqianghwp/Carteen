@@ -8,13 +8,13 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 系统配置DTO实体类
+ * DTO实体类
  *
  * @author YuLiu
- * @date 2022-03-23
+ * @date 2022-03-25
  */
 @Data
-@ApiModel("系统配置DTO实体类")
+@ApiModel("DTO实体类")
 public class BusinessConfigDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 

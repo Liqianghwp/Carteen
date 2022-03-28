@@ -1,7 +1,7 @@
 package com.diandong.mapstruct;
 
-import com.diandong.domain.po.BusinessConfigPO;
 import com.diandong.domain.dto.BusinessConfigDTO;
+import com.diandong.domain.po.BusinessConfigPO;
 import com.diandong.domain.vo.BusinessConfigVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -9,10 +9,10 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 /**
- * 系统配置Mapstruct
+ * Mapstruct
  *
  * @author YuLiu
- * @date 2022-03-23
+ * @date 2022-03-24
  */
 @Mapper
 public interface BusinessConfigMsMapper {

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.RawMaterialNutritionMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.RawMaterialNutritionPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="raw_material_id" jdbcType="BIGINT" property="rawMaterialId"/>
+        <result column="nutrition_params_id" jdbcType="BIGINT" property="nutritionParamsId"/>
+        <result column="number" jdbcType="INTEGER" property="number"/>
+        <result column="is_del" jdbcType="INTEGER" property="isDel"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,rmn.id
+            ,rmn.raw_material_id
+            ,rmn.nutrition_params_id
+            ,rmn.number
+            ,rmn.is_del
+            ,rmn.create_by
+            ,rmn.create_time
+            ,rmn.update_by
+            ,rmn.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and rmn.id = #{id}
+            </if>
+            <if test="rawMaterialId != null">
+                and rmn.raw_material_id = #{rawMaterialId}
+            </if>
+            <if test="nutritionParamsId != null">
+                and rmn.nutrition_params_id = #{nutritionParamsId}
+            </if>
+            <if test="number != null">
+                and rmn.number = #{number}
+            </if>
+            <if test="isDel != null">
+                and rmn.is_del = #{isDel}
+            </if>
+            <if test="beginTime != null">
+                and rmn.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and rmn.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  raw_material_nutrition -->
+
+</mapper>

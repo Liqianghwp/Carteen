@@ -65,7 +65,7 @@ public class SysLoginController {
      * @return 用户信息
      */
     @ApiOperation(value = "获取用户信息", notes = "获取用户信息", httpMethod = "GET")
-    @GetMapping("/getInfo")
+    @GetMapping("getInfo")
     public BaseResult getInfo() {
 
         SysUser user = SecurityUtils.getLoginUser().getUser();

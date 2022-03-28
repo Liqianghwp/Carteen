@@ -14,7 +14,7 @@ import java.io.Serializable;
  * VO实体类
  *
  * @author YuLiu
- * @date 2022-03-23
+ * @date 2022-03-25
  */
 @Data
 @ApiModel("VO实体类")
@@ -53,15 +53,16 @@ public class CanteenVO implements Serializable {
     private String canteenIntroduce;
 
     /**
-     * 开始时间
+     * 唯一标识
      */
-    @ApiModelProperty(value = "开始时间")
-    private LocalDateTime beginTime;
+    @ApiModelProperty(value = "唯一标识")
+    private String uuid;
 
     /**
-     * 结束时间
+     * 父级唯一标识
      */
-    @ApiModelProperty(value = "结束时间")
-    private LocalDateTime endTime;
+    @ApiModelProperty(value = "父级唯一标识")
+    private String puuid;
+
 
 }

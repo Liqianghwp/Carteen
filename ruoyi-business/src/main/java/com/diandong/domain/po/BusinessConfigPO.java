@@ -10,14 +10,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 系统配置PO实体类
+ * PO实体类
  *
  * @author YuLiu
- * @date 2022-03-23
+ * @date 2022-03-25
  */
 @TableName("business_config")
 @Data
-@ApiModel("系统配置PO实体类")
+@ApiModel("PO实体类")
 @Accessors(chain = true)
 public class BusinessConfigPO implements Serializable {
     private static final long serialVersionUID = 1L;

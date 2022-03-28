@@ -87,8 +87,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="remark != null">remark = #{remark},</if>
  			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
 
- 		    <if test="beginTime != null">begin_time = #{beginTime},</if>
- 			<if test="endTime != null">end_time = #{endTime},</if>
+ 		    <if test="beginTime != null and beginTime != ''">begin_time = #{beginTime},</if>
+ 			<if test="endTime != null and endTime != ''">end_time = #{endTime},</if>
 
  			update_time = sysdate()
  		</set>
@@ -112,8 +112,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="remark != null and remark != ''">remark,</if>
  			<if test="createBy != null and createBy != ''">create_by,</if>
 
-			<if test="beginTime != null">begin_time,</if>
-			<if test="endTime != null">end_time,</if>
+			<if test="beginTime != null and beginTime !=''">begin_time,</if>
+			<if test="endTime != null and endTime != ''">end_time,</if>
 
  			create_time
  		)values(
@@ -128,8 +128,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="remark != null and remark != ''">#{remark},</if>
  			<if test="createBy != null and createBy != ''">#{createBy},</if>
 
-			<if test="beginTime != null">#{beginTime},</if>
-			<if test="endTime != null">#{endTime},</if>
+			<if test="beginTime != null and beginTime != ''">#{beginTime},</if>
+			<if test="endTime != null and endTime != ''">#{endTime},</if>
 
  			sysdate()
  		)

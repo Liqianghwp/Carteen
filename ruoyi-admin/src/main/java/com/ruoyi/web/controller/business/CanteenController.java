@@ -8,26 +8,28 @@ import com.diandong.domain.dto.CanteenDTO;
 import com.diandong.domain.po.CanteenPO;
 import com.diandong.domain.vo.CanteenVO;
 import com.diandong.mapstruct.CanteenMsMapper;
+import com.diandong.service.CanteenMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.mp.CanteenMpService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
 import java.util.List;
+import java.util.UUID;
 import javax.annotation.Resource;
 
 /**
  * Controller
- *
+ *  食堂设置接口信息
  * @author YuLiu
- * @date 2022-03-23
+ * @date 2022-03-24
  */
 @Validated
 @RestController
-@Api(value = "/canteen", tags = {"模块"})
+@Api(value = "/canteen", tags = {"食堂设置"})
 @RequestMapping(value = "/canteen")
 public class CanteenController extends BaseController {
 
@@ -53,8 +55,8 @@ public class CanteenController extends BaseController {
                 .eq(StringUtils.isNotBlank(vo.getStatus()), CanteenPO::getStatus, vo.getStatus())
                 .eq(StringUtils.isNotBlank(vo.getCanteenPicture()), CanteenPO::getCanteenPicture, vo.getCanteenPicture())
                 .eq(StringUtils.isNotBlank(vo.getCanteenIntroduce()), CanteenPO::getCanteenIntroduce, vo.getCanteenIntroduce())
-                .le(ObjectUtils.isNotEmpty(vo.getEndTime()), CanteenPO::getCreateTime, vo.getEndTime())
-                .ge(ObjectUtils.isNotEmpty(vo.getBeginTime()), CanteenPO::getCreateTime, vo.getBeginTime())
+                .eq(StringUtils.isNotBlank(vo.getUuid()), CanteenPO::getUuid, vo.getUuid())
+                .eq(StringUtils.isNotBlank(vo.getPuuid()), CanteenPO::getPuuid, vo.getPuuid())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(CanteenMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -89,9 +91,21 @@ public class CanteenController extends BaseController {
     })
     @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
     @PostMapping
-    public BaseResult save(@Validated(Insert.class) CanteenVO vo) {
+    public BaseResult save(@RequestBody @Validated(Insert.class) CanteenVO vo) {
+        LoginUser loginUser = getLoginUser();
+        if (ObjectUtils.isNull(loginUser)) {
+            return BaseResult.error("用户未登陆，无法保存食堂信息");
+        }
+
         CanteenPO po = CanteenMsMapper.INSTANCE.vo2po(vo);
+
+        po.setUuid(UUID.randomUUID().toString());
+//        设置部门id 绑定这个意味着这个食堂属于这个部门
+        po.setPuuid(loginUser.getDeptId().toString());
+
         boolean result = canteenMpService.save(po);
+
+
         if (result) {
             return BaseResult.successMsg("添加成功！");
         } else {
@@ -145,7 +159,7 @@ public class CanteenController extends BaseController {
      *
      * @param idList 编号id集合
      * @return 返回结果
-    */
+     */
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
     })

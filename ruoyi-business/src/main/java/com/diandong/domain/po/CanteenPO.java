@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * PO实体类
  *
  * @author YuLiu
- * @date 2022-03-23
+ * @date 2022-03-25
  */
 @TableName("canteen")
 @Data
@@ -84,5 +84,19 @@ public class CanteenPO implements Serializable {
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
+
+    /**
+     * 唯一标识
+     */
+    @TableField(value = "uuid")
+    @ApiModelProperty(value = "唯一标识")
+    private String uuid;
+
+    /**
+     * 父级唯一标识
+     */
+    @TableField(value = "puuid")
+    @ApiModelProperty(value = "父级唯一标识")
+    private String puuid;
 
 }

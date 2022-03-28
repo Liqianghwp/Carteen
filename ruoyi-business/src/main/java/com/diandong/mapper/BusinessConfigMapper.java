@@ -5,10 +5,10 @@ import com.diandong.domain.po.BusinessConfigPO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 系统配置Mapper
+ * Mapper
  *
  * @author YuLiu
- * @date 2022-03-23
+ * @date 2022-03-24
  */
 @Mapper
 public interface BusinessConfigMapper extends CommonMapper<BusinessConfigPO> {

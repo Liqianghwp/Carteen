@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.PaymentConfigMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.PaymentConfigPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="payment_method" jdbcType="VARCHAR" property="paymentMethod"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="canteen_id" jdbcType="BIGINT" property="canteenId"/>
+        <result column="canteen_name" jdbcType="VARCHAR" property="canteenName"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,pc.id
+            ,pc.payment_method
+            ,pc.status
+            ,pc.remark
+            ,pc.canteen_id
+            ,pc.canteen_name
+            ,pc.version
+            ,pc.create_by
+            ,pc.create_name
+            ,pc.create_time
+            ,pc.update_by
+            ,pc.update_name
+            ,pc.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and pc.id = #{id}
+            </if>
+            <if test="paymentMethod != null and paymentMethod != ''">
+                and pc.payment_method = #{paymentMethod}
+            </if>
+            <if test="status != null">
+                and pc.status = #{status}
+            </if>
+            <if test="remark != null and remark != ''">
+                and pc.remark = #{remark}
+            </if>
+            <if test="canteenId != null">
+                and pc.canteen_id = #{canteenId}
+            </if>
+            <if test="canteenName != null and canteenName != ''">
+                and pc.canteen_name = #{canteenName}
+            </if>
+            <if test="version != null">
+                and pc.version = #{version}
+            </if>
+            <if test="createName != null and createName != ''">
+                and pc.create_name = #{createName}
+            </if>
+            <if test="updateName != null and updateName != ''">
+                and pc.update_name = #{updateName}
+            </if>
+            <if test="beginTime != null">
+                and pc.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and pc.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  payment_config -->
+
+</mapper>

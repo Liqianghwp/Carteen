@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
  * Mapper
  *
  * @author YuLiu
- * @date 2022-03-23
+ * @date 2022-03-24
  */
 @Mapper
 public interface CanteenMapper extends CommonMapper<CanteenPO> {

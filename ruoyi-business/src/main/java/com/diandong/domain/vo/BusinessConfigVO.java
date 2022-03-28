@@ -11,13 +11,13 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 
 /**
- * 系统配置VO实体类
+ * VO实体类
  *
  * @author YuLiu
- * @date 2022-03-23
+ * @date 2022-03-25
  */
 @Data
-@ApiModel("系统配置VO实体类")
+@ApiModel("VO实体类")
 public class BusinessConfigVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -64,16 +64,5 @@ public class BusinessConfigVO implements Serializable {
     @ApiModelProperty(value = "更新人姓名")
     private String updateName;
 
-    /**
-     * 开始时间
-     */
-    @ApiModelProperty(value = "开始时间")
-    private LocalDateTime beginTime;
-
-    /**
-     * 结束时间
-     */
-    @ApiModelProperty(value = "结束时间")
-    private LocalDateTime endTime;
 
 }

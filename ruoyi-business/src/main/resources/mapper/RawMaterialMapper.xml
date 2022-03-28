@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.RawMaterialMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.RawMaterialPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="canteen_id" jdbcType="BIGINT" property="canteenId"/>
+        <result column="category_id" jdbcType="BIGINT" property="categoryId"/>
+        <result column="raw_material_name" jdbcType="VARCHAR" property="rawMaterialName"/>
+        <result column="unit_id" jdbcType="BIGINT" property="unitId"/>
+        <result column="purchase_type_id" jdbcType="BIGINT" property="purchaseTypeId"/>
+        <result column="pre_price" jdbcType="DECIMAL" property="prePrice"/>
+        <result column="storehouse_id" jdbcType="BIGINT" property="storehouseId"/>
+        <result column="storehouse_name" jdbcType="VARCHAR" property="storehouseName"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,rm.id
+            ,rm.canteen_id
+            ,rm.category_id
+            ,rm.raw_material_name
+            ,rm.unit_id
+            ,rm.purchase_type_id
+            ,rm.pre_price
+            ,rm.storehouse_id
+            ,rm.storehouse_name
+            ,rm.remark
+            ,rm.status
+            ,rm.create_by
+            ,rm.create_time
+            ,rm.update_by
+            ,rm.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and rm.id = #{id}
+            </if>
+            <if test="canteenId != null">
+                and rm.canteen_id = #{canteenId}
+            </if>
+            <if test="categoryId != null">
+                and rm.category_id = #{categoryId}
+            </if>
+            <if test="rawMaterialName != null and rawMaterialName != ''">
+                and rm.raw_material_name = #{rawMaterialName}
+            </if>
+            <if test="unitId != null">
+                and rm.unit_id = #{unitId}
+            </if>
+            <if test="purchaseTypeId != null">
+                and rm.purchase_type_id = #{purchaseTypeId}
+            </if>
+            <if test="prePrice != null">
+                and rm.pre_price = #{prePrice}
+            </if>
+            <if test="storehouseId != null">
+                and rm.storehouse_id = #{storehouseId}
+            </if>
+            <if test="storehouseName != null and storehouseName != ''">
+                and rm.storehouse_name = #{storehouseName}
+            </if>
+            <if test="remark != null and remark != ''">
+                and rm.remark = #{remark}
+            </if>
+            <if test="status != null and status != ''">
+                and rm.status = #{status}
+            </if>
+            <if test="beginTime != null">
+                and rm.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and rm.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  raw_material -->
+
+</mapper>

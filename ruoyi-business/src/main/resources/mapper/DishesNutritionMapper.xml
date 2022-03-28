@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.DishesNutritionMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.DishesNutritionPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="disher_id" jdbcType="BIGINT" property="disherId"/>
+        <result column="disher_name" jdbcType="BIGINT" property="disherName"/>
+        <result column="nutrition_id" jdbcType="BIGINT" property="nutritionId"/>
+        <result column="nutrition_name" jdbcType="VARCHAR" property="nutritionName"/>
+        <result column="number" jdbcType="DOUBLE" property="number"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,dn.id
+            ,dn.disher_id
+            ,dn.disher_name
+            ,dn.nutrition_id
+            ,dn.nutrition_name
+            ,dn.number
+            ,dn.create_by
+            ,dn.create_name
+            ,dn.create_time
+            ,dn.update_by
+            ,dn.update_name
+            ,dn.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and dn.id = #{id}
+            </if>
+            <if test="disherId != null">
+                and dn.disher_id = #{disherId}
+            </if>
+            <if test="disherName != null">
+                and dn.disher_name = #{disherName}
+            </if>
+            <if test="nutritionId != null">
+                and dn.nutrition_id = #{nutritionId}
+            </if>
+            <if test="nutritionName != null and nutritionName != ''">
+                and dn.nutrition_name = #{nutritionName}
+            </if>
+            <if test="number != null">
+                and dn.number = #{number}
+            </if>
+            <if test="createName != null and createName != ''">
+                and dn.create_name = #{createName}
+            </if>
+            <if test="updateName != null and updateName != ''">
+                and dn.update_name = #{updateName}
+            </if>
+            <if test="beginTime != null">
+                and dn.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and dn.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  dishes_nutrition -->
+
+</mapper>

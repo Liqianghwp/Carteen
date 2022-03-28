@@ -74,11 +74,11 @@ public class SysDictData extends BaseEntity {
     /**
      * 餐次开始时间
      */
-    private Date beginTime;
+    private String beginTime;
     /**
      * 餐次结束时间
      */
-    private Date endTime;
+    private String endTime;
 
 
     public Long getDictCode() {
@@ -164,19 +164,19 @@ public class SysDictData extends BaseEntity {
         this.status = status;
     }
 
-    public Date getBeginTime() {
+    public String getBeginTime() {
         return beginTime;
     }
 
-    public void setBeginTime(Date beginTime) {
+    public void setBeginTime(String beginTime) {
         this.beginTime = beginTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 

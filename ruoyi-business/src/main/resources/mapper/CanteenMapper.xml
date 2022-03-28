@@ -12,6 +12,8 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="uuid" jdbcType="VARCHAR" property="uuid"/>
+        <result column="puuid" jdbcType="VARCHAR" property="puuid"/>
     </resultMap>
 
     <!-- Select_Field -->
@@ -26,6 +28,8 @@
             ,c.create_time
             ,c.update_by
             ,c.update_time
+            ,c.uuid
+            ,c.puuid
         </trim>
     </sql>
 
@@ -47,6 +51,12 @@
             </if>
             <if test="canteenIntroduce != null and canteenIntroduce != ''">
                 and c.canteen_introduce = #{canteenIntroduce}
+            </if>
+            <if test="uuid != null and uuid != ''">
+                and c.uuid = #{uuid}
+            </if>
+            <if test="puuid != null and puuid != ''">
+                and c.puuid = #{puuid}
             </if>
             <if test="beginTime != null">
                 and c.create_time <![CDATA[ >= ]]> #{beginTime}

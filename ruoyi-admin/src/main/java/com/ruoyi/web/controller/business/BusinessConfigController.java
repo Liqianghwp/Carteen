@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.business;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
@@ -8,34 +9,37 @@ import com.diandong.domain.dto.BusinessConfigDTO;
 import com.diandong.domain.po.BusinessConfigPO;
 import com.diandong.domain.vo.BusinessConfigVO;
 import com.diandong.mapstruct.BusinessConfigMsMapper;
+import com.diandong.service.BusinessConfigMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.mp.BusinessConfigMpService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
-import java.util.List;
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
- * 系统配置Controller
- *
+ * Controller
+ *  这个是配置富文本的访问接口信息
  * @author YuLiu
- * @date 2022-03-23
+ * @date 2022-03-24
  */
 @Validated
 @RestController
-@Api(value = "/business_config", tags = {"系统配置模块"})
-@RequestMapping(value = "/business_config")
+@Api(value = "/businessConfig", tags = {"富文本设置"})
+@RequestMapping(value = "/businessConfig")
 public class BusinessConfigController extends BaseController {
 
     @Resource
     private BusinessConfigMpService businessConfigMpService;
 
     /**
-     * 系统配置分页查询
+     * 分页查询
      *
      * @param vo 参数对象
      * @return 分页数据结果
@@ -43,7 +47,7 @@ public class BusinessConfigController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "BusinessConfigVO", name = "vo", value = "查询参数")
     })
-    @ApiOperation(value = "系统配置分页查询", notes = "系统配置分页查询方法", httpMethod = "GET")
+    @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
     @GetMapping
     public TableDataInfo<BusinessConfigDTO> getList(BusinessConfigVO vo) {
         startPage();
@@ -55,8 +59,6 @@ public class BusinessConfigController extends BaseController {
                 .eq(ObjectUtils.isNotEmpty(vo.getVersion()), BusinessConfigPO::getVersion, vo.getVersion())
                 .eq(StringUtils.isNotBlank(vo.getCreateName()), BusinessConfigPO::getCreateName, vo.getCreateName())
                 .eq(StringUtils.isNotBlank(vo.getUpdateName()), BusinessConfigPO::getUpdateName, vo.getUpdateName())
-                .le(ObjectUtils.isNotEmpty(vo.getEndTime()), BusinessConfigPO::getCreateTime, vo.getEndTime())
-                .ge(ObjectUtils.isNotEmpty(vo.getBeginTime()), BusinessConfigPO::getCreateTime, vo.getBeginTime())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(BusinessConfigMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -64,7 +66,7 @@ public class BusinessConfigController extends BaseController {
     }
 
     /**
-     * 系统配置根据id查询
+     * 根据id查询
      *
      * @param id 编号id
      * @return 返回结果
@@ -72,7 +74,7 @@ public class BusinessConfigController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
     })
-    @ApiOperation(value = "系统配置根据id查询", notes = "系统配置根据id查询", httpMethod = "GET")
+    @ApiOperation(value = "根据id查询", notes = "根据id查询", httpMethod = "GET")
     @GetMapping(value = "/{id}")
     public BaseResult<BusinessConfigDTO> getById(@PathVariable("id") Long id) {
         BusinessConfigDTO dto = BusinessConfigMsMapper.INSTANCE
@@ -81,7 +83,7 @@ public class BusinessConfigController extends BaseController {
     }
 
     /**
-     * 系统配置保存
+     * 保存
      *
      * @param vo 参数对象
      * @return 返回结果
@@ -89,7 +91,7 @@ public class BusinessConfigController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "BusinessConfigVO", name = "vo", value = "参数对象")
     })
-    @ApiOperation(value = "系统配置保存", notes = "系统配置保存", httpMethod = "POST")
+    @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
     @PostMapping
     public BaseResult save(@Validated(Insert.class) BusinessConfigVO vo) {
         BusinessConfigPO po = BusinessConfigMsMapper.INSTANCE.vo2po(vo);
@@ -102,7 +104,63 @@ public class BusinessConfigController extends BaseController {
     }
 
     /**
-     * 系统配置更新
+     * 查询关于我们的信息
+     *
+     * @return
+     */
+    @ApiOperation(value = "关于我们", notes = "关于我们", httpMethod = "GET")
+    @GetMapping("/getAboutUs")
+    public BaseResult getAboutUs() {
+
+        return searchBusinessConfig("关于我们");
+    }
+
+    /**
+     * 查询用户服务协议的信息
+     *
+     * @return
+     */
+    @ApiOperation(value = "用户服务协议", notes = "用户服务协议", httpMethod = "GET")
+    @GetMapping("/getUserServicesAgreement")
+    public BaseResult getUserServicesAgreement() {
+
+        return searchBusinessConfig("用户服务协议");
+    }
+
+    /**
+     * 查询充值服务协议的信息
+     *
+     * @return
+     */
+    @ApiOperation(value = "充值服务协议", notes = "充值服务协议", httpMethod = "GET")
+    @GetMapping("/getRechargeServiceAgreement")
+    public BaseResult getRechargeServiceAgreement() {
+
+        return searchBusinessConfig("充值服务协议");
+    }
+
+
+    /**
+     * 根据配置名称查询配置信息
+     *
+     * @param configName 配置名称
+     * @return
+     */
+    private BaseResult searchBusinessConfig(String configName) {
+        BusinessConfigPO businessConfigPO = new BusinessConfigPO();
+        if (StringUtils.isNotBlank(configName)) {
+            List<BusinessConfigPO> list = businessConfigMpService.lambdaQuery().eq(BusinessConfigPO::getConfigName, configName).list();
+
+            if (CollectionUtils.isNotEmpty(list)) {
+                businessConfigPO = list.get(0);
+            }
+        }
+        return BaseResult.success(businessConfigPO);
+    }
+
+
+    /**
+     * 更新
      *
      * @param vo 参数对象
      * @return 返回结果
@@ -110,7 +168,7 @@ public class BusinessConfigController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "BusinessConfigVO", name = "vo", value = "参数对象")
     })
-    @ApiOperation(value = "系统配置更新", notes = "系统配置更新", httpMethod = "PUT")
+    @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
     public BaseResult update(@Validated(Update.class) BusinessConfigVO vo) {
         BusinessConfigPO po = BusinessConfigMsMapper.INSTANCE.vo2po(vo);
@@ -123,7 +181,7 @@ public class BusinessConfigController extends BaseController {
     }
 
     /**
-     * 系统配置删除
+     * 删除
      *
      * @param id 编号id
      * @return 返回结果
@@ -131,7 +189,7 @@ public class BusinessConfigController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
     })
-    @ApiOperation(value = "系统配置删除", notes = "系统配置删除", httpMethod = "DELETE")
+    @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
     @DeleteMapping(value = "/{id}")
     public BaseResult delete(@PathVariable("id") Long id) {
         boolean result = businessConfigMpService.removeById(id);
@@ -143,15 +201,15 @@ public class BusinessConfigController extends BaseController {
     }
 
     /**
-     * 系统配置批量删除
+     * 批量删除
      *
      * @param idList 编号id集合
      * @return 返回结果
-    */
+     */
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
     })
-    @ApiOperation(value = "系统配置批量删除", notes = "系统配置批量删除", httpMethod = "DELETE")
+    @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
     @DeleteMapping
     public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
         boolean result = businessConfigMpService.removeByIds(idList);

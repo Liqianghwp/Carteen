@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.DishesMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.DishesPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="canteen_id" jdbcType="BIGINT" property="canteenId"/>
+        <result column="canteen_name" jdbcType="VARCHAR" property="canteenName"/>
+        <result column="dishes_type_id" jdbcType="BIGINT" property="dishesTypeId"/>
+        <result column="dishes_type_name" jdbcType="VARCHAR" property="dishesTypeName"/>
+        <result column="dishes_name" jdbcType="VARCHAR" property="dishesName"/>
+        <result column="dishes_price" jdbcType="DECIMAL" property="dishesPrice"/>
+        <result column="dishes_unit" jdbcType="VARCHAR" property="dishesUnit"/>
+        <result column="specification" jdbcType="VARCHAR" property="specification"/>
+        <result column="pre_price" jdbcType="DECIMAL" property="prePrice"/>
+        <result column="origin" jdbcType="VARCHAR" property="origin"/>
+        <result column="dishes_attr_id" jdbcType="BIGINT" property="dishesAttrId"/>
+        <result column="dishes_attr_name" jdbcType="VARCHAR" property="dishesAttrName"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="dishes_picture" jdbcType="VARCHAR" property="dishesPicture"/>
+        <result column="dishes_introduction" jdbcType="VARCHAR" property="dishesIntroduction"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
+        <result column="version" jdbcType="VARCHAR" property="version"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,d.id
+            ,d.canteen_id
+            ,d.canteen_name
+            ,d.dishes_type_id
+            ,d.dishes_type_name
+            ,d.dishes_name
+            ,d.dishes_price
+            ,d.dishes_unit
+            ,d.specification
+            ,d.pre_price
+            ,d.origin
+            ,d.dishes_attr_id
+            ,d.dishes_attr_name
+            ,d.remark
+            ,d.dishes_picture
+            ,d.dishes_introduction
+            ,d.state
+            ,d.data_state
+            ,d.version
+            ,d.create_by
+            ,d.create_name
+            ,d.create_time
+            ,d.update_by
+            ,d.update_name
+            ,d.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and d.id = #{id}
+            </if>
+            <if test="canteenId != null">
+                and d.canteen_id = #{canteenId}
+            </if>
+            <if test="canteenName != null and canteenName != ''">
+                and d.canteen_name = #{canteenName}
+            </if>
+            <if test="dishesTypeId != null">
+                and d.dishes_type_id = #{dishesTypeId}
+            </if>
+            <if test="dishesTypeName != null and dishesTypeName != ''">
+                and d.dishes_type_name = #{dishesTypeName}
+            </if>
+            <if test="dishesName != null and dishesName != ''">
+                and d.dishes_name = #{dishesName}
+            </if>
+            <if test="dishesPrice != null">
+                and d.dishes_price = #{dishesPrice}
+            </if>
+            <if test="dishesUnit != null and dishesUnit != ''">
+                and d.dishes_unit = #{dishesUnit}
+            </if>
+            <if test="specification != null and specification != ''">
+                and d.specification = #{specification}
+            </if>
+            <if test="prePrice != null">
+                and d.pre_price = #{prePrice}
+            </if>
+            <if test="origin != null and origin != ''">
+                and d.origin = #{origin}
+            </if>
+            <if test="dishesAttrId != null">
+                and d.dishes_attr_id = #{dishesAttrId}
+            </if>
+            <if test="dishesAttrName != null and dishesAttrName != ''">
+                and d.dishes_attr_name = #{dishesAttrName}
+            </if>
+            <if test="remark != null and remark != ''">
+                and d.remark = #{remark}
+            </if>
+            <if test="dishesPicture != null and dishesPicture != ''">
+                and d.dishes_picture = #{dishesPicture}
+            </if>
+            <if test="dishesIntroduction != null and dishesIntroduction != ''">
+                and d.dishes_introduction = #{dishesIntroduction}
+            </if>
+            <if test="state != null">
+                and d.state = #{state}
+            </if>
+            <if test="dataState != null">
+                and d.data_state = #{dataState}
+            </if>
+            <if test="version != null and version != ''">
+                and d.version = #{version}
+            </if>
+            <if test="createName != null and createName != ''">
+                and d.create_name = #{createName}
+            </if>
+            <if test="updateName != null and updateName != ''">
+                and d.update_name = #{updateName}
+            </if>
+            <if test="beginTime != null">
+                and d.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and d.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  dishes -->
+
+</mapper>

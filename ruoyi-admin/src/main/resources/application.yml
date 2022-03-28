@@ -66,7 +66,7 @@ spring:
     # 端口，默认为6379
     port: 6379
     # 数据库索引
-    database: 0
+    database: 11
     # 密码
     password: Talent123!
     # 连接超时时间
