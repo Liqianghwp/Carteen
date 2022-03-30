@@ -1,7 +1,7 @@
 package com.diandong.mapstruct;
 
-import com.diandong.domain.dto.RawMaterialDTO;
 import com.diandong.domain.po.RawMaterialPO;
+import com.diandong.domain.dto.RawMaterialDTO;
 import com.diandong.domain.vo.RawMaterialVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -12,7 +12,7 @@ import java.util.List;
  * Mapstruct
  *
  * @author YuLiu
- * @date 2022-03-24
+ * @date 2022-03-29
  */
 @Mapper
 public interface RawMaterialMsMapper {

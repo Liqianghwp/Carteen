@@ -9,6 +9,8 @@
         <result column="nutrition_id" jdbcType="BIGINT" property="nutritionId"/>
         <result column="nutrition_name" jdbcType="VARCHAR" property="nutritionName"/>
         <result column="number" jdbcType="DOUBLE" property="number"/>
+        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
         <result column="create_by" jdbcType="BIGINT" property="createBy"/>
         <result column="create_name" jdbcType="VARCHAR" property="createName"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
@@ -26,6 +28,8 @@
             ,dn.nutrition_id
             ,dn.nutrition_name
             ,dn.number
+            ,dn.data_state
+            ,dn.version
             ,dn.create_by
             ,dn.create_name
             ,dn.create_time
@@ -57,6 +61,12 @@
             <if test="number != null">
                 and dn.number = #{number}
             </if>
+            <if test="dataState != null">
+                and dn.data_state = #{dataState}
+            </if>
+            <if test="version != null">
+                and dn.version = #{version}
+            </if>
             <if test="createName != null and createName != ''">
                 and dn.create_name = #{createName}
             </if>
@@ -72,6 +82,6 @@
             </trim>
         </where>
     </sql>
-    <!-- tableName  dishes_nutrition -->
+    <!-- tableName  wis_dishes_nutrition -->
 
 </mapper>

@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
  * PO实体类
  *
  * @author YuLiu
- * @date 2022-03-25
+ * @date 2022-03-29
  */
-@TableName("payment_config")
+@TableName("wis_payment_config")
 @Data
 @ApiModel("PO实体类")
 @Accessors(chain = true)
@@ -30,24 +30,24 @@ public class PaymentConfigPO implements Serializable {
     private Long id;
 
     /**
-     * 支付方式
+     * 支付方式 包含但不限于（现金，微信，支付宝等等）
      */
     @TableField(value = "payment_method")
-    @ApiModelProperty(value = "支付方式")
+    @ApiModelProperty(value = "支付方式 包含但不限于（现金，微信，支付宝等等）")
     private String paymentMethod;
 
     /**
-     * 状态（0:停用；1:启用(默认)）
+     * 状态 默认为1。状态（0:停用；1:启用）
      */
     @TableField(value = "status")
-    @ApiModelProperty(value = "状态（0:停用；1:启用(默认)）")
+    @ApiModelProperty(value = "状态 默认为1。状态（0:停用；1:启用）")
     private Integer status;
 
     /**
-     * 介绍，备注
+     * 备注
      */
     @TableField(value = "remark")
-    @ApiModelProperty(value = "介绍，备注")
+    @ApiModelProperty(value = "备注")
     private String remark;
 
     /**
@@ -86,17 +86,17 @@ public class PaymentConfigPO implements Serializable {
     private String createName;
 
     /**
-     * 创建时间
+     * 创建日期 默认为当前时间
      */
     @TableField(value = "create_time", fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建时间")
+    @ApiModelProperty(value = "创建日期 默认为当前时间")
     private LocalDateTime createTime;
 
     /**
-     * 更新人id
+     * 更新者
      */
     @TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
-    @ApiModelProperty(value = "更新人id")
+    @ApiModelProperty(value = "更新者")
     private Long updateBy;
 
     /**

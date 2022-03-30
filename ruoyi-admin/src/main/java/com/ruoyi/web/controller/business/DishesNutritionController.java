@@ -49,8 +49,8 @@ public class DishesNutritionController extends BaseController {
         startPage();
         List<DishesNutritionPO> dataList = dishesNutritionMpService.lambdaQuery()
                 .eq(ObjectUtils.isNotEmpty(vo.getId()), DishesNutritionPO::getId, vo.getId())
-                .eq(ObjectUtils.isNotEmpty(vo.getDisherId()), DishesNutritionPO::getDisherId, vo.getDisherId())
-                .eq(ObjectUtils.isNotEmpty(vo.getDisherName()), DishesNutritionPO::getDisherName, vo.getDisherName())
+                .eq(ObjectUtils.isNotEmpty(vo.getDishesId()), DishesNutritionPO::getDishesId, vo.getDishesId())
+                .eq(ObjectUtils.isNotEmpty(vo.getDishesName()), DishesNutritionPO::getDishesName, vo.getDishesName())
                 .eq(ObjectUtils.isNotEmpty(vo.getNutritionId()), DishesNutritionPO::getNutritionId, vo.getNutritionId())
                 .eq(StringUtils.isNotBlank(vo.getNutritionName()), DishesNutritionPO::getNutritionName, vo.getNutritionName())
                 .eq(ObjectUtils.isNotEmpty(vo.getNumber()), DishesNutritionPO::getNumber, vo.getNumber())
@@ -90,7 +90,7 @@ public class DishesNutritionController extends BaseController {
     })
     @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
     @PostMapping
-    public BaseResult save(@Validated(Insert.class) DishesNutritionVO vo) {
+    public BaseResult save(@RequestBody @Validated(Insert.class) DishesNutritionVO vo) {
         DishesNutritionPO po = DishesNutritionMsMapper.INSTANCE.vo2po(vo);
         boolean result = dishesNutritionMpService.save(po);
         if (result) {
@@ -146,7 +146,7 @@ public class DishesNutritionController extends BaseController {
      *
      * @param idList 编号id集合
      * @return 返回结果
-    */
+     */
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
     })

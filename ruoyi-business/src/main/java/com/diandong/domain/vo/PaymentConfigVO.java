@@ -14,7 +14,7 @@ import java.io.Serializable;
  * VO实体类
  *
  * @author YuLiu
- * @date 2022-03-25
+ * @date 2022-03-29
  */
 @Data
 @ApiModel("VO实体类")
@@ -29,21 +29,21 @@ public class PaymentConfigVO implements Serializable {
     private Long id;
 
     /**
-     * 支付方式
+     * 支付方式 包含但不限于（现金，微信，支付宝等等）
      */
-    @ApiModelProperty(value = "支付方式")
+    @ApiModelProperty(value = "支付方式 包含但不限于（现金，微信，支付宝等等）")
     private String paymentMethod;
 
     /**
-     * 状态（0:停用；1:启用(默认)）
+     * 状态 默认为1。状态（0:停用；1:启用）
      */
-    @ApiModelProperty(value = "状态（0:停用；1:启用(默认)）")
+    @ApiModelProperty(value = "状态 默认为1。状态（0:停用；1:启用）")
     private Integer status;
 
     /**
-     * 介绍，备注
+     * 备注
      */
-    @ApiModelProperty(value = "介绍，备注")
+    @ApiModelProperty(value = "备注")
     private String remark;
 
     /**

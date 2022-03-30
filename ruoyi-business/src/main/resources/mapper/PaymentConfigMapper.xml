@@ -11,7 +11,7 @@
         <result column="canteen_name" jdbcType="VARCHAR" property="canteenName"/>
         <result column="version" jdbcType="INTEGER" property="version"/>
         <result column="create_by" jdbcType="BIGINT" property="createBy"/>
-        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="creat_name" jdbcType="VARCHAR" property="creatName"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
         <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
@@ -29,7 +29,7 @@
             ,pc.canteen_name
             ,pc.version
             ,pc.create_by
-            ,pc.create_name
+            ,pc.creat_name
             ,pc.create_time
             ,pc.update_by
             ,pc.update_name
@@ -62,8 +62,8 @@
             <if test="version != null">
                 and pc.version = #{version}
             </if>
-            <if test="createName != null and createName != ''">
-                and pc.create_name = #{createName}
+            <if test="creatName != null and creatName != ''">
+                and pc.creat_name = #{creatName}
             </if>
             <if test="updateName != null and updateName != ''">
                 and pc.update_name = #{updateName}
@@ -77,6 +77,6 @@
             </trim>
         </where>
     </sql>
-    <!-- tableName  payment_config -->
+    <!-- tableName  wis_payment_config -->
 
 </mapper>

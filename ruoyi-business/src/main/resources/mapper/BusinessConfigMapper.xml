@@ -67,6 +67,6 @@
             </trim>
         </where>
     </sql>
-    <!-- tableName  business_config -->
+    <!-- tableName  wis_business_config -->
 
 </mapper>

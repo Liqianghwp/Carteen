@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.GroupManagementMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.GroupManagementPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="content_name" jdbcType="VARCHAR" property="contentName"/>
+        <result column="content_phone" jdbcType="VARCHAR" property="contentPhone"/>
+        <result column="canteens_allowed" jdbcType="INTEGER" property="canteensAllowed"/>
+        <result column="group_address" jdbcType="VARCHAR" property="groupAddress"/>
+        <result column="business_license" jdbcType="VARCHAR" property="businessLicense"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="data_status" jdbcType="INTEGER" property="dataStatus"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,gm.id
+            ,gm.group_name
+            ,gm.content_name
+            ,gm.content_phone
+            ,gm.canteens_allowed
+            ,gm.group_address
+            ,gm.business_license
+            ,gm.status
+            ,gm.remark
+            ,gm.data_status
+            ,gm.version
+            ,gm.create_by
+            ,gm.create_name
+            ,gm.create_time
+            ,gm.update_by
+            ,gm.update_name
+            ,gm.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and gm.id = #{id}
+            </if>
+            <if test="groupName != null and groupName != ''">
+                and gm.group_name = #{groupName}
+            </if>
+            <if test="contentName != null and contentName != ''">
+                and gm.content_name = #{contentName}
+            </if>
+            <if test="contentPhone != null and contentPhone != ''">
+                and gm.content_phone = #{contentPhone}
+            </if>
+            <if test="canteensAllowed != null">
+                and gm.canteens_allowed = #{canteensAllowed}
+            </if>
+            <if test="groupAddress != null and groupAddress != ''">
+                and gm.group_address = #{groupAddress}
+            </if>
+            <if test="businessLicense != null and businessLicense != ''">
+                and gm.business_license = #{businessLicense}
+            </if>
+            <if test="status != null">
+                and gm.status = #{status}
+            </if>
+            <if test="remark != null and remark != ''">
+                and gm.remark = #{remark}
+            </if>
+            <if test="dataStatus != null">
+                and gm.data_status = #{dataStatus}
+            </if>
+            <if test="version != null">
+                and gm.version = #{version}
+            </if>
+            <if test="createName != null and createName != ''">
+                and gm.create_name = #{createName}
+            </if>
+            <if test="updateName != null and updateName != ''">
+                and gm.update_name = #{updateName}
+            </if>
+            <if test="beginTime != null">
+                and gm.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and gm.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_group_management -->
+
+</mapper>

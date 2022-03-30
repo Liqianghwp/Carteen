@@ -48,4 +48,10 @@ public class Constants {
      * 生成知情书编号前缀
      */
     public static final String GENERATE_ZHIQING_CODE_PREFIX = "XMZQ";
+
+    /**
+     * 未登录信息
+     */
+    public static final String ERROR_MESSAGE= "用户未登录，无法进行操作。请您重新登录!";
+
 }

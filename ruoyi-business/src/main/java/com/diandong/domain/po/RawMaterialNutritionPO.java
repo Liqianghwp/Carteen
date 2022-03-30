@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
  * PO实体类
  *
  * @author YuLiu
- * @date 2022-03-25
+ * @date 2022-03-29
  */
-@TableName("raw_material_nutrition")
+@TableName("wis_raw_material_nutrition")
 @Data
 @ApiModel("PO实体类")
 @Accessors(chain = true)
@@ -23,10 +23,10 @@ public class RawMaterialNutritionPO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键id
+     * 编号
      */
     @TableId(value = "id", type = IdType.AUTO)
-    @ApiModelProperty(value = "主键id")
+    @ApiModelProperty(value = "编号")
     private Long id;
 
     /**
@@ -37,6 +37,13 @@ public class RawMaterialNutritionPO implements Serializable {
     private Long rawMaterialId;
 
     /**
+     * 原材料名称
+     */
+    @TableField(value = "raw_material_name")
+    @ApiModelProperty(value = "原材料名称")
+    private String rawMaterialName;
+
+    /**
      * 营养参数id
      */
     @TableField(value = "nutrition_params_id")
@@ -44,39 +51,67 @@ public class RawMaterialNutritionPO implements Serializable {
     private Long nutritionParamsId;
 
     /**
+     * 营养参数名称
+     */
+    @TableField(value = "nutrition_params_name")
+    @ApiModelProperty(value = "营养参数名称")
+    private String nutritionParamsName;
+
+    /**
      * 数量
      */
     @TableField(value = "number")
     @ApiModelProperty(value = "数量")
-    private Integer number;
+    private Double number;
 
     /**
-     * 是否删除（0:未删除；1:删除）
+     * 数据状态
      */
-    @TableField(value = "is_del")
-    @ApiModelProperty(value = "是否删除（0:未删除；1:删除）")
-    private Integer isDel;
+    @TableField(value = "data_state")
+    @ApiModelProperty(value = "数据状态")
+    private Integer dataState;
 
     /**
-     * 创建者
+     * 乐观锁
+     */
+    @TableField(value = "version")
+    @ApiModelProperty(value = "乐观锁")
+    private Integer version;
+
+    /**
+     * 创建人id
      */
     @TableField(value = "create_by", fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建者")
-    private String createBy;
+    @ApiModelProperty(value = "创建人id")
+    private Long createBy;
 
     /**
-     * 创建时间
+     * 创建人姓名
+     */
+    @TableField(value = "create_name")
+    @ApiModelProperty(value = "创建人姓名")
+    private String createName;
+
+    /**
+     * 创建日期
      */
     @TableField(value = "create_time", fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建时间")
+    @ApiModelProperty(value = "创建日期")
     private LocalDateTime createTime;
 
     /**
-     * 更新者
+     * 更新者id
      */
     @TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
-    @ApiModelProperty(value = "更新者")
-    private String updateBy;
+    @ApiModelProperty(value = "更新者id")
+    private Long updateBy;
+
+    /**
+     * 更新者姓名
+     */
+    @TableField(value = "update_name")
+    @ApiModelProperty(value = "更新者姓名")
+    private String updateName;
 
     /**
      * 更新时间

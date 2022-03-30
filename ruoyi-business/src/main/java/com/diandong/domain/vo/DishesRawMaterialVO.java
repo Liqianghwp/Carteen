@@ -14,7 +14,7 @@ import java.io.Serializable;
  * VO实体类
  *
  * @author YuLiu
- * @date 2022-03-28
+ * @date 2022-03-29
  */
 @Data
 @ApiModel("VO实体类")
@@ -31,7 +31,6 @@ public class DishesRawMaterialVO implements Serializable {
     /**
      * 菜品id
      */
-    @NotNull(groups = {Insert.class},message = "菜品id不能为空")
     @ApiModelProperty(value = "菜品id")
     private Long dishesId;
 
@@ -44,7 +43,6 @@ public class DishesRawMaterialVO implements Serializable {
     /**
      * 原材料id
      */
-    @NotNull(groups = {Insert.class},message = "原材料id不能为空")
     @ApiModelProperty(value = "原材料id")
     private Long rawMaterialId;
 
@@ -57,9 +55,20 @@ public class DishesRawMaterialVO implements Serializable {
     /**
      * 数量
      */
-    @NotNull(groups = {Insert.class},message = "数量不能为空")
     @ApiModelProperty(value = "数量")
     private Double number;
+
+    /**
+     * 数据状态
+     */
+    @ApiModelProperty(value = "数据状态")
+    private Integer dataState;
+
+    /**
+     * 乐观锁
+     */
+    @ApiModelProperty(value = "乐观锁")
+    private Integer version;
 
     /**
      * 创建人姓名

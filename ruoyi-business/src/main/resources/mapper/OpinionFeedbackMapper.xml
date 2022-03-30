@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.OpinionFeedbackMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.OpinionFeedbackPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="opinion_id" jdbcType="BIGINT" property="opinionId"/>
+        <result column="opinion_type" jdbcType="VARCHAR" property="opinionType"/>
+        <result column="opinion_content" jdbcType="VARCHAR" property="opinionContent"/>
+        <result column="opinion_picture" jdbcType="VARCHAR" property="opinionPicture"/>
+        <result column="process_information" jdbcType="VARCHAR" property="processInformation"/>
+        <result column="process_time" jdbcType="TIMESTAMP" property="processTime"/>
+        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,of.id
+            ,of.opinion_id
+            ,of.opinion_type
+            ,of.opinion_content
+            ,of.opinion_picture
+            ,of.process_information
+            ,of.process_time
+            ,of.data_state
+            ,of.version
+            ,of.create_by
+            ,of.create_name
+            ,of.create_time
+            ,of.update_by
+            ,of.update_name
+            ,of.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and of.id = #{id}
+            </if>
+            <if test="opinionId != null">
+                and of.opinion_id = #{opinionId}
+            </if>
+            <if test="opinionType != null and opinionType != ''">
+                and of.opinion_type = #{opinionType}
+            </if>
+            <if test="opinionContent != null and opinionContent != ''">
+                and of.opinion_content = #{opinionContent}
+            </if>
+            <if test="opinionPicture != null and opinionPicture != ''">
+                and of.opinion_picture = #{opinionPicture}
+            </if>
+            <if test="processInformation != null and processInformation != ''">
+                and of.process_information = #{processInformation}
+            </if>
+            <if test="processTime != null">
+                and of.process_time = #{processTime}
+            </if>
+            <if test="dataState != null">
+                and of.data_state = #{dataState}
+            </if>
+            <if test="version != null">
+                and of.version = #{version}
+            </if>
+            <if test="createName != null and createName != ''">
+                and of.create_name = #{createName}
+            </if>
+            <if test="updateName != null and updateName != ''">
+                and of.update_name = #{updateName}
+            </if>
+            <if test="beginTime != null">
+                and of.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and of.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_opinion_feedback -->
+
+</mapper>

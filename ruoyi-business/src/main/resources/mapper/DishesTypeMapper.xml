@@ -102,6 +102,6 @@
             </trim>
         </where>
     </sql>
-    <!-- tableName  dishes_type -->
+    <!-- tableName  wis_dishes_type -->
 
 </mapper>

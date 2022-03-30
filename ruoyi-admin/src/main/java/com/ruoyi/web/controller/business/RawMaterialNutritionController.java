@@ -5,21 +5,25 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.constant.Constants;
 import com.diandong.domain.dto.RawMaterialNutritionDTO;
 import com.diandong.domain.po.RawMaterialNutritionPO;
 import com.diandong.domain.vo.RawMaterialNutritionListVO;
 import com.diandong.domain.vo.RawMaterialNutritionVO;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.diandong.service.RawMaterialNutritionMpService;
 import com.diandong.mapstruct.RawMaterialNutritionMsMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.Resource;
 
 /**
@@ -28,6 +32,7 @@ import javax.annotation.Resource;
  * @author YuLiu
  * @date 2022-03-24
  */
+@Slf4j
 @Validated
 @RestController
 @Api(value = "/rawMaterialNutrition", tags = {"原材料营养信息模块"})
@@ -102,34 +107,28 @@ public class RawMaterialNutritionController extends BaseController {
     /**
      * 保存
      *
-     * @param vo 参数对象
+     * @param voList 参数对象
      * @return 返回结果
      */
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "RawMaterialNutritionListVO", name = "vo", value = "参数对象")
+            @ApiImplicitParam(paramType = "query", dataType = "List<RawMaterialNutritionVO>", name = "voList", value = "参数对象")
     })
-    @ApiOperation(value = "保存集合", notes = "保存", httpMethod = "POST")
+    @ApiOperation(value = "保存原材料营养集合", notes = "保存", httpMethod = "POST")
     @PostMapping("/saveList")
-    public BaseResult saveList(@RequestBody @Validated RawMaterialNutritionListVO vo) {
+    public BaseResult saveList(@RequestBody @Validated List<RawMaterialNutritionVO> voList) {
 
-
-//        营养配料信息
-        List<RawMaterialNutritionVO> rmnList = vo.getRmnList();
-
-        if (CollectionUtils.isNotEmpty(rmnList)) {
-//            原材料id编码
-            Long rawMaterialId = vo.getRawMaterialId();
-            for (RawMaterialNutritionVO rawMaterialNutritionVO : rmnList) {
-                rawMaterialNutritionVO.setRawMaterialId(rawMaterialId);
-                RawMaterialNutritionPO po = RawMaterialNutritionMsMapper.INSTANCE.vo2po(rawMaterialNutritionVO);
-                boolean result = rawMaterialNutritionMpService.save(po);
-                if (!result) {
-                    return BaseResult.error("添加失败！");
-                }
-            }
+//
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
         }
-//        注：这个地方时当未设置营养配料信息时也显示成功
-        return BaseResult.successMsg("添加成功！");
+
+        try {
+            return rawMaterialNutritionMpService.addList(voList, loginUser);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return BaseResult.error(e.getMessage());
+        }
 
     }
 

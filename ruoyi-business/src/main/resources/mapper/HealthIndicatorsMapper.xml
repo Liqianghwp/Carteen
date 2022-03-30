@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.HealthIndicatorsMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.HealthIndicatorsPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="waistline" jdbcType="BIGINT" property="waistline"/>
+        <result column="body_weight" jdbcType="BIGINT" property="bodyWeight"/>
+        <result column="body_fat" jdbcType="BIGINT" property="bodyFat"/>
+        <result column="heart_rate" jdbcType="BIGINT" property="heartRate"/>
+        <result column="blood_pressure" jdbcType="BIGINT" property="bloodPressure"/>
+        <result column="blood_sugar" jdbcType="BIGINT" property="bloodSugar"/>
+        <result column="triglycerides" jdbcType="BIGINT" property="triglycerides"/>
+        <result column="total_cholesterol" jdbcType="BIGINT" property="totalCholesterol"/>
+        <result column="bad_cholesterol" jdbcType="BIGINT" property="badCholesterol"/>
+        <result column="blood_oxygen" jdbcType="BIGINT" property="bloodOxygen"/>
+        <result column="blood_viscosity" jdbcType="BIGINT" property="bloodViscosity"/>
+        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,hi.id
+            ,hi.waistline
+            ,hi.body_weight
+            ,hi.body_fat
+            ,hi.heart_rate
+            ,hi.blood_pressure
+            ,hi.blood_sugar
+            ,hi.triglycerides
+            ,hi.total_cholesterol
+            ,hi.bad_cholesterol
+            ,hi.blood_oxygen
+            ,hi.blood_viscosity
+            ,hi.data_state
+            ,hi.version
+            ,hi.create_by
+            ,hi.create_name
+            ,hi.create_time
+            ,hi.update_by
+            ,hi.update_name
+            ,hi.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and hi.id = #{id}
+            </if>
+            <if test="waistline != null">
+                and hi.waistline = #{waistline}
+            </if>
+            <if test="bodyWeight != null">
+                and hi.body_weight = #{bodyWeight}
+            </if>
+            <if test="bodyFat != null">
+                and hi.body_fat = #{bodyFat}
+            </if>
+            <if test="heartRate != null">
+                and hi.heart_rate = #{heartRate}
+            </if>
+            <if test="bloodPressure != null">
+                and hi.blood_pressure = #{bloodPressure}
+            </if>
+            <if test="bloodSugar != null">
+                and hi.blood_sugar = #{bloodSugar}
+            </if>
+            <if test="triglycerides != null">
+                and hi.triglycerides = #{triglycerides}
+            </if>
+            <if test="totalCholesterol != null">
+                and hi.total_cholesterol = #{totalCholesterol}
+            </if>
+            <if test="badCholesterol != null">
+                and hi.bad_cholesterol = #{badCholesterol}
+            </if>
+            <if test="bloodOxygen != null">
+                and hi.blood_oxygen = #{bloodOxygen}
+            </if>
+            <if test="bloodViscosity != null">
+                and hi.blood_viscosity = #{bloodViscosity}
+            </if>
+            <if test="dataState != null">
+                and hi.data_state = #{dataState}
+            </if>
+            <if test="version != null">
+                and hi.version = #{version}
+            </if>
+            <if test="createName != null and createName != ''">
+                and hi.create_name = #{createName}
+            </if>
+            <if test="updateName != null and updateName != ''">
+                and hi.update_name = #{updateName}
+            </if>
+            <if test="beginTime != null">
+                and hi.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and hi.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_health_indicators -->
+
+</mapper>

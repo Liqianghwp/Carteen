@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
  * PO实体类
  *
  * @author YuLiu
- * @date 2022-03-28
+ * @date 2022-03-29
  */
-@TableName("dishes_raw_material")
+@TableName("wis_dishes_raw_material")
 @Data
 @ApiModel("PO实体类")
 @Accessors(chain = true)
@@ -63,6 +63,20 @@ public class DishesRawMaterialPO implements Serializable {
     @TableField(value = "number")
     @ApiModelProperty(value = "数量")
     private Double number;
+
+    /**
+     * 数据状态
+     */
+    @TableField(value = "data_state")
+    @ApiModelProperty(value = "数据状态")
+    private Integer dataState;
+
+    /**
+     * 乐观锁
+     */
+    @TableField(value = "version")
+    @ApiModelProperty(value = "乐观锁")
+    private Integer version;
 
     /**
      * 创建人id

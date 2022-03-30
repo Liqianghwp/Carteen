@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
  * PO实体类
  *
  * @author YuLiu
- * @date 2022-03-25
+ * @date 2022-03-29
  */
-@TableName("dishes_type")
+@TableName("wis_dishes_type")
 @Data
 @ApiModel("PO实体类")
 @Accessors(chain = true)
@@ -23,10 +23,10 @@ public class DishesTypePO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键id
+     * 编号
      */
     @TableId(value = "id", type = IdType.AUTO)
-    @ApiModelProperty(value = "主键id")
+    @ApiModelProperty(value = "编号")
     private Long id;
 
     /**
@@ -58,10 +58,10 @@ public class DishesTypePO implements Serializable {
     private Integer sort;
 
     /**
-     * 是否显示
+     * 是否显示 （0:不显示，1:显示）
      */
     @TableField(value = "is_show")
-    @ApiModelProperty(value = "是否显示")
+    @ApiModelProperty(value = "是否显示 （0:不显示，1:显示）")
     private Integer isShow;
 
     /**
@@ -79,17 +79,17 @@ public class DishesTypePO implements Serializable {
     private Integer isPackage;
 
     /**
-     * uuid
+     * 当前类型的uuid （当前未知使用方式字段）
      */
     @TableField(value = "uuid")
-    @ApiModelProperty(value = "uuid")
+    @ApiModelProperty(value = "当前类型的uuid （当前未知使用方式字段）")
     private String uuid;
 
     /**
-     * 父级UUID
+     * 父级uuid (当前未知使用方式字段)
      */
     @TableField(value = "puuid")
-    @ApiModelProperty(value = "父级UUID")
+    @ApiModelProperty(value = "父级uuid (当前未知使用方式字段)")
     private String puuid;
 
     /**
@@ -107,10 +107,10 @@ public class DishesTypePO implements Serializable {
     private Integer version;
 
     /**
-     * 创建人
+     * 创建人id
      */
     @TableField(value = "create_by", fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建人")
+    @ApiModelProperty(value = "创建人id")
     private Long createBy;
 
     /**
@@ -128,10 +128,10 @@ public class DishesTypePO implements Serializable {
     private LocalDateTime createTime;
 
     /**
-     * 更新人id
+     * 更新者id
      */
     @TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
-    @ApiModelProperty(value = "更新人id")
+    @ApiModelProperty(value = "更新者id")
     private Long updateBy;
 
     /**

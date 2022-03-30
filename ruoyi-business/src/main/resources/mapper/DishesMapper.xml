@@ -9,10 +9,10 @@
         <result column="dishes_type_id" jdbcType="BIGINT" property="dishesTypeId"/>
         <result column="dishes_type_name" jdbcType="VARCHAR" property="dishesTypeName"/>
         <result column="dishes_name" jdbcType="VARCHAR" property="dishesName"/>
-        <result column="dishes_price" jdbcType="DECIMAL" property="dishesPrice"/>
+        <result column="dishes_price" jdbcType="DOUBLE" property="dishesPrice"/>
         <result column="dishes_unit" jdbcType="VARCHAR" property="dishesUnit"/>
         <result column="specification" jdbcType="VARCHAR" property="specification"/>
-        <result column="pre_price" jdbcType="DECIMAL" property="prePrice"/>
+        <result column="pre_price" jdbcType="DOUBLE" property="prePrice"/>
         <result column="origin" jdbcType="VARCHAR" property="origin"/>
         <result column="dishes_attr_id" jdbcType="BIGINT" property="dishesAttrId"/>
         <result column="dishes_attr_name" jdbcType="VARCHAR" property="dishesAttrName"/>
@@ -21,7 +21,7 @@
         <result column="dishes_introduction" jdbcType="VARCHAR" property="dishesIntroduction"/>
         <result column="state" jdbcType="INTEGER" property="state"/>
         <result column="data_state" jdbcType="INTEGER" property="dataState"/>
-        <result column="version" jdbcType="VARCHAR" property="version"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
         <result column="create_by" jdbcType="BIGINT" property="createBy"/>
         <result column="create_name" jdbcType="VARCHAR" property="createName"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
@@ -119,7 +119,7 @@
             <if test="dataState != null">
                 and d.data_state = #{dataState}
             </if>
-            <if test="version != null and version != ''">
+            <if test="version != null">
                 and d.version = #{version}
             </if>
             <if test="createName != null and createName != ''">
@@ -137,6 +137,6 @@
             </trim>
         </where>
     </sql>
-    <!-- tableName  dishes -->
+    <!-- tableName  wis_dishes -->
 
 </mapper>

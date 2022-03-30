@@ -4,11 +4,13 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.constant.Constants;
 import com.diandong.domain.dto.RawMaterialDTO;
 import com.diandong.domain.po.RawMaterialPO;
 import com.diandong.domain.vo.RawMaterialVO;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.diandong.service.RawMaterialMpService;
 import com.diandong.mapstruct.RawMaterialMsMapper;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.Resource;
 
 /**
@@ -50,15 +53,23 @@ public class RawMaterialController extends BaseController {
         List<RawMaterialPO> dataList = rawMaterialMpService.lambdaQuery()
                 .eq(ObjectUtils.isNotEmpty(vo.getId()), RawMaterialPO::getId, vo.getId())
                 .eq(ObjectUtils.isNotEmpty(vo.getCanteenId()), RawMaterialPO::getCanteenId, vo.getCanteenId())
-                .eq(ObjectUtils.isNotEmpty(vo.getCategoryId()), RawMaterialPO::getCategoryId, vo.getCategoryId())
+                .eq(StringUtils.isNotBlank(vo.getCanteenName()), RawMaterialPO::getCanteenName, vo.getCanteenName())
                 .eq(StringUtils.isNotBlank(vo.getRawMaterialName()), RawMaterialPO::getRawMaterialName, vo.getRawMaterialName())
+                .eq(ObjectUtils.isNotEmpty(vo.getCategoryId()), RawMaterialPO::getCategoryId, vo.getCategoryId())
+                .eq(StringUtils.isNotBlank(vo.getCategoryName()), RawMaterialPO::getCategoryName, vo.getCategoryName())
                 .eq(ObjectUtils.isNotEmpty(vo.getUnitId()), RawMaterialPO::getUnitId, vo.getUnitId())
+                .eq(StringUtils.isNotBlank(vo.getUnitName()), RawMaterialPO::getUnitName, vo.getUnitName())
                 .eq(ObjectUtils.isNotEmpty(vo.getPurchaseTypeId()), RawMaterialPO::getPurchaseTypeId, vo.getPurchaseTypeId())
+                .eq(StringUtils.isNotBlank(vo.getPurchaseTypeName()), RawMaterialPO::getPurchaseTypeName, vo.getPurchaseTypeName())
                 .eq(ObjectUtils.isNotEmpty(vo.getPrePrice()), RawMaterialPO::getPrePrice, vo.getPrePrice())
                 .eq(ObjectUtils.isNotEmpty(vo.getStorehouseId()), RawMaterialPO::getStorehouseId, vo.getStorehouseId())
                 .eq(StringUtils.isNotBlank(vo.getStorehouseName()), RawMaterialPO::getStorehouseName, vo.getStorehouseName())
                 .eq(StringUtils.isNotBlank(vo.getRemark()), RawMaterialPO::getRemark, vo.getRemark())
-                .eq(StringUtils.isNotBlank(vo.getStatus()), RawMaterialPO::getStatus, vo.getStatus())
+                .eq(ObjectUtils.isNotEmpty(vo.getStatus()), RawMaterialPO::getStatus, vo.getStatus())
+                .eq(ObjectUtils.isNotEmpty(vo.getDataState()), RawMaterialPO::getDataState, vo.getDataState())
+                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), RawMaterialPO::getVersion, vo.getVersion())
+                .eq(StringUtils.isNotBlank(vo.getCreateName()), RawMaterialPO::getCreateName, vo.getCreateName())
+                .eq(StringUtils.isNotBlank(vo.getUpdateName()), RawMaterialPO::getUpdateName, vo.getUpdateName())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(RawMaterialMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -91,10 +102,20 @@ public class RawMaterialController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "RawMaterialVO", name = "vo", value = "参数对象")
     })
-    @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
+    @ApiOperation(value = "添加原材料信息", notes = "添加原材料信息", httpMethod = "POST")
     @PostMapping
     public BaseResult save(@RequestBody @Validated(Insert.class) RawMaterialVO vo) {
-         RawMaterialPO po = RawMaterialMsMapper.INSTANCE.vo2po(vo);
+
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
+        RawMaterialPO po = RawMaterialMsMapper.INSTANCE.vo2po(vo);
+
+        po.setCreateBy(loginUser.getUserId());
+        po.setCreateName(loginUser.getUsername());
+
         boolean result = rawMaterialMpService.save(po);
         if (result) {
             return BaseResult.successMsg("添加成功！");

@@ -5,15 +5,24 @@
     <resultMap id="BaseResultMap" type="com.diandong.domain.po.CanteenPO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="canteen_name" jdbcType="VARCHAR" property="canteenName"/>
-        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="content_name" jdbcType="VARCHAR" property="contentName"/>
+        <result column="content_phone" jdbcType="VARCHAR" property="contentPhone"/>
+        <result column="canteen_address" jdbcType="VARCHAR" property="canteenAddress"/>
+        <result column="business_license" jdbcType="VARCHAR" property="businessLicense"/>
+        <result column="qr_code" jdbcType="VARCHAR" property="qrCode"/>
+        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
         <result column="canteen_picture" jdbcType="VARCHAR" property="canteenPicture"/>
         <result column="canteen_introduce" jdbcType="VARCHAR" property="canteenIntroduce"/>
-        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="p_id" jdbcType="BIGINT" property="pId"/>
+        <result column="p_name" jdbcType="VARCHAR" property="pName"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
-        <result column="uuid" jdbcType="VARCHAR" property="uuid"/>
-        <result column="puuid" jdbcType="VARCHAR" property="puuid"/>
     </resultMap>
 
     <!-- Select_Field -->
@@ -21,15 +30,24 @@
         <trim prefixOverrides=",">
             ,c.id
             ,c.canteen_name
-            ,c.status
+            ,c.content_name
+            ,c.content_phone
+            ,c.canteen_address
+            ,c.business_license
+            ,c.qr_code
+            ,c.data_state
             ,c.canteen_picture
             ,c.canteen_introduce
+            ,c.p_id
+            ,c.p_name
+            ,c.remark
+            ,c.version
             ,c.create_by
+            ,c.create_name
             ,c.create_time
             ,c.update_by
+            ,c.update_name
             ,c.update_time
-            ,c.uuid
-            ,c.puuid
         </trim>
     </sql>
 
@@ -43,8 +61,23 @@
             <if test="canteenName != null and canteenName != ''">
                 and c.canteen_name = #{canteenName}
             </if>
-            <if test="status != null and status != ''">
-                and c.status = #{status}
+            <if test="contentName != null and contentName != ''">
+                and c.content_name = #{contentName}
+            </if>
+            <if test="contentPhone != null and contentPhone != ''">
+                and c.content_phone = #{contentPhone}
+            </if>
+            <if test="canteenAddress != null and canteenAddress != ''">
+                and c.canteen_address = #{canteenAddress}
+            </if>
+            <if test="businessLicense != null and businessLicense != ''">
+                and c.business_license = #{businessLicense}
+            </if>
+            <if test="qrCode != null and qrCode != ''">
+                and c.qr_code = #{qrCode}
+            </if>
+            <if test="dataState != null">
+                and c.data_state = #{dataState}
             </if>
             <if test="canteenPicture != null and canteenPicture != ''">
                 and c.canteen_picture = #{canteenPicture}
@@ -52,11 +85,23 @@
             <if test="canteenIntroduce != null and canteenIntroduce != ''">
                 and c.canteen_introduce = #{canteenIntroduce}
             </if>
-            <if test="uuid != null and uuid != ''">
-                and c.uuid = #{uuid}
+            <if test="pId != null">
+                and c.p_id = #{pId}
             </if>
-            <if test="puuid != null and puuid != ''">
-                and c.puuid = #{puuid}
+            <if test="pName != null and pName != ''">
+                and c.p_name = #{pName}
+            </if>
+            <if test="remark != null and remark != ''">
+                and c.remark = #{remark}
+            </if>
+            <if test="version != null">
+                and c.version = #{version}
+            </if>
+            <if test="createName != null and createName != ''">
+                and c.create_name = #{createName}
+            </if>
+            <if test="updateName != null and updateName != ''">
+                and c.update_name = #{updateName}
             </if>
             <if test="beginTime != null">
                 and c.create_time <![CDATA[ >= ]]> #{beginTime}
@@ -67,6 +112,6 @@
             </trim>
         </where>
     </sql>
-    <!-- tableName  canteen -->
+    <!-- tableName  wis_canteen -->
 
 </mapper>

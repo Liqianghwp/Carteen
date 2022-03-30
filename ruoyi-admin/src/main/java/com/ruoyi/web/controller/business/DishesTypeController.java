@@ -4,20 +4,26 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.constant.Constants;
 import com.diandong.domain.dto.DishesTypeDTO;
 import com.diandong.domain.po.DishesTypePO;
 import com.diandong.domain.vo.DishesTypeVO;
+import com.diandong.mapstruct.DishesTypeMsMapper;
+import com.diandong.service.DishesTypeMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.DishesTypeMpService;
-import com.diandong.mapstruct.DishesTypeMsMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
-import java.util.List;
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Controller
@@ -27,7 +33,7 @@ import javax.annotation.Resource;
  */
 @Validated
 @RestController
-@Api(value = "/dishes_type", tags = {"菜品类型模块"})
+@Api(value = "/dishesType", tags = {"菜品类型模块"})
 @RequestMapping(value = "/dishesType")
 public class DishesTypeController extends BaseController {
 
@@ -96,8 +102,20 @@ public class DishesTypeController extends BaseController {
     })
     @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
     @PostMapping
-    public BaseResult save(@Validated(Insert.class) DishesTypeVO vo) {
+    public BaseResult save(@RequestBody @Validated(Insert.class) DishesTypeVO vo) {
+
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
+
         DishesTypePO po = DishesTypeMsMapper.INSTANCE.vo2po(vo);
+
+//        设置创建人信息
+        po.setCreateBy(loginUser.getUserId());
+        po.setCreateName(loginUser.getUsername());
+
         boolean result = dishesTypeMpService.save(po);
         if (result) {
             return BaseResult.successMsg("添加成功！");
@@ -152,7 +170,7 @@ public class DishesTypeController extends BaseController {
      *
      * @param idList 编号id集合
      * @return 返回结果
-    */
+     */
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
     })

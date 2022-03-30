@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * DTO实体类
  *
  * @author YuLiu
- * @date 2022-03-28
+ * @date 2022-03-29
  */
 @Data
 @ApiModel("DTO实体类")
@@ -49,10 +49,10 @@ public class NutritionParamsDTO implements Serializable {
     private String unit;
 
     /**
-     * 乐观锁
+     * 使用状态 （0:未使用；1:已使用）
      */
-    @ApiModelProperty(value = "乐观锁")
-    private Integer version;
+    @ApiModelProperty(value = "使用状态 （0:未使用；1:已使用）")
+    private Integer beUsed;
 
     /**
      * 数据状态
@@ -61,10 +61,10 @@ public class NutritionParamsDTO implements Serializable {
     private Integer dataState;
 
     /**
-     * 使用状态 （0:未使用；1:已使用）
+     * 乐观锁
      */
-    @ApiModelProperty(value = "使用状态 （0:未使用；1:已使用）")
-    private Integer beUsed;
+    @ApiModelProperty(value = "乐观锁")
+    private Integer version;
 
     /**
      * 创建人id
@@ -76,7 +76,7 @@ public class NutritionParamsDTO implements Serializable {
      * 创建人姓名
      */
     @ApiModelProperty(value = "创建人姓名")
-    private Integer createName;
+    private String createName;
 
     /**
      * 创建时间

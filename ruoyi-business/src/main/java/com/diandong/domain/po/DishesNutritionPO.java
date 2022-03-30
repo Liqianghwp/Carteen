@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
  * PO实体类
  *
  * @author YuLiu
- * @date 2022-03-28
+ * @date 2022-03-29
  */
-@TableName("dishes_nutrition")
+@TableName("wis_dishes_nutrition")
 @Data
 @ApiModel("PO实体类")
 @Accessors(chain = true)
@@ -32,16 +32,16 @@ public class DishesNutritionPO implements Serializable {
     /**
      * 菜品id
      */
-    @TableField(value = "disher_id")
+    @TableField(value = "dishes_id")
     @ApiModelProperty(value = "菜品id")
-    private Long disherId;
+    private Long dishesId;
 
     /**
      * 菜品名称
      */
-    @TableField(value = "disher_name")
+    @TableField(value = "dishes_name")
     @ApiModelProperty(value = "菜品名称")
-    private Long disherName;
+    private String dishesName;
 
     /**
      * 营养信息id
@@ -63,6 +63,20 @@ public class DishesNutritionPO implements Serializable {
     @TableField(value = "number")
     @ApiModelProperty(value = "数量")
     private Double number;
+
+    /**
+     * 数据状态
+     */
+    @TableField(value = "data_state")
+    @ApiModelProperty(value = "数据状态")
+    private Integer dataState;
+
+    /**
+     * 乐观锁
+     */
+    @TableField(value = "version")
+    @ApiModelProperty(value = "乐观锁")
+    private Integer version;
 
     /**
      * 创建人编号 当前用户ID

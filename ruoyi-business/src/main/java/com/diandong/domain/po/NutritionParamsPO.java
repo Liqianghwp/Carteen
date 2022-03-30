@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
  * PO实体类
  *
  * @author YuLiu
- * @date 2022-03-28
+ * @date 2022-03-29
  */
-@TableName("nutrition_params")
+@TableName("wis_nutrition_params")
 @Data
 @ApiModel("PO实体类")
 @Accessors(chain = true)
@@ -58,11 +58,11 @@ public class NutritionParamsPO implements Serializable {
     private String unit;
 
     /**
-     * 乐观锁
+     * 使用状态 （0:未使用；1:已使用）
      */
-    @TableField(value = "version")
-    @ApiModelProperty(value = "乐观锁")
-    private Integer version;
+    @TableField(value = "be_used")
+    @ApiModelProperty(value = "使用状态 （0:未使用；1:已使用）")
+    private Integer beUsed;
 
     /**
      * 数据状态
@@ -72,11 +72,11 @@ public class NutritionParamsPO implements Serializable {
     private Integer dataState;
 
     /**
-     * 使用状态 （0:未使用；1:已使用）
+     * 乐观锁
      */
-    @TableField(value = "be_used")
-    @ApiModelProperty(value = "使用状态 （0:未使用；1:已使用）")
-    private Integer beUsed;
+    @TableField(value = "version")
+    @ApiModelProperty(value = "乐观锁")
+    private Integer version;
 
     /**
      * 创建人id
@@ -90,7 +90,7 @@ public class NutritionParamsPO implements Serializable {
      */
     @TableField(value = "create_name")
     @ApiModelProperty(value = "创建人姓名")
-    private Integer createName;
+    private String createName;
 
     /**
      * 创建时间

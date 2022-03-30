@@ -8,11 +8,11 @@
         <result column="canteen_name" jdbcType="VARCHAR" property="canteenName"/>
         <result column="nutrition_name" jdbcType="VARCHAR" property="nutritionName"/>
         <result column="unit" jdbcType="VARCHAR" property="unit"/>
-        <result column="version" jdbcType="INTEGER" property="version"/>
-        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
         <result column="be_used" jdbcType="INTEGER" property="beUsed"/>
+        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
         <result column="create_by" jdbcType="BIGINT" property="createBy"/>
-        <result column="create_name" jdbcType="INTEGER" property="createName"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
         <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
@@ -27,9 +27,9 @@
             ,np.canteen_name
             ,np.nutrition_name
             ,np.unit
-            ,np.version
-            ,np.data_state
             ,np.be_used
+            ,np.data_state
+            ,np.version
             ,np.create_by
             ,np.create_name
             ,np.create_time
@@ -58,16 +58,16 @@
             <if test="unit != null and unit != ''">
                 and np.unit = #{unit}
             </if>
-            <if test="version != null">
-                and np.version = #{version}
+            <if test="beUsed != null">
+                and np.be_used = #{beUsed}
             </if>
             <if test="dataState != null">
                 and np.data_state = #{dataState}
             </if>
-            <if test="beUsed != null">
-                and np.be_used = #{beUsed}
+            <if test="version != null">
+                and np.version = #{version}
             </if>
-            <if test="createName != null">
+            <if test="createName != null and createName != ''">
                 and np.create_name = #{createName}
             </if>
             <if test="updateName != null and updateName != ''">
@@ -82,6 +82,6 @@
             </trim>
         </where>
     </sql>
-    <!-- tableName  nutrition_params -->
+    <!-- tableName  wis_nutrition_params -->
 
 </mapper>

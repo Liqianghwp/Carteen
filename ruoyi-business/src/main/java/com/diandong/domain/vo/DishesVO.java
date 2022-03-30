@@ -7,7 +7,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 
@@ -15,7 +14,7 @@ import java.io.Serializable;
  * VO实体类
  *
  * @author YuLiu
- * @date 2022-03-25
+ * @date 2022-03-29
  */
 @Data
 @ApiModel("VO实体类")
@@ -23,10 +22,10 @@ public class DishesVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键id
+     * 编号
      */
     @NotNull(groups = {Update.class})
-    @ApiModelProperty(value = "主键id")
+    @ApiModelProperty(value = "编号")
     private Long id;
 
     /**
@@ -63,7 +62,7 @@ public class DishesVO implements Serializable {
      * 菜品价格
      */
     @ApiModelProperty(value = "菜品价格")
-    private BigDecimal dishesPrice;
+    private Double dishesPrice;
 
     /**
      * 菜品单位
@@ -81,7 +80,7 @@ public class DishesVO implements Serializable {
      * 预估价
      */
     @ApiModelProperty(value = "预估价")
-    private BigDecimal prePrice;
+    private Double prePrice;
 
     /**
      * 产地
@@ -90,9 +89,9 @@ public class DishesVO implements Serializable {
     private String origin;
 
     /**
-     * 菜品属性id(早中晚餐的那个id）
+     * 菜品属性id
      */
-    @ApiModelProperty(value = "菜品属性id(早中晚餐的那个id）")
+    @ApiModelProperty(value = "菜品属性id")
     private Long dishesAttrId;
 
     /**
@@ -120,9 +119,9 @@ public class DishesVO implements Serializable {
     private String dishesIntroduction;
 
     /**
-     * 状态（上下架）
+     * 状态
      */
-    @ApiModelProperty(value = "状态（上下架）")
+    @ApiModelProperty(value = "状态")
     private Integer state;
 
     /**
@@ -135,7 +134,7 @@ public class DishesVO implements Serializable {
      * 乐观锁
      */
     @ApiModelProperty(value = "乐观锁")
-    private String version;
+    private Integer version;
 
     /**
      * 创建人姓名

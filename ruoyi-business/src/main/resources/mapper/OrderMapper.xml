@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.OrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.OrderPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="canteen_id" jdbcType="BIGINT" property="canteenId"/>
+        <result column="canteen_name" jdbcType="VARCHAR" property="canteenName"/>
+        <result column="dishes_id" jdbcType="BIGINT" property="dishesId"/>
+        <result column="dishes_price" jdbcType="DOUBLE" property="dishesPrice"/>
+        <result column="dishes_count" jdbcType="INTEGER" property="dishesCount"/>
+        <result column="dishes_total_price" jdbcType="DOUBLE" property="dishesTotalPrice"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="order_time" jdbcType="TIMESTAMP" property="orderTime"/>
+        <result column="evaluation_status" jdbcType="INTEGER" property="evaluationStatus"/>
+        <result column="payment_method_id" jdbcType="BIGINT" property="paymentMethodId"/>
+        <result column="payment_method_name" jdbcType="VARCHAR" property="paymentMethodName"/>
+        <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime"/>
+        <result column="data_status" jdbcType="INTEGER" property="dataStatus"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,o.id
+            ,o.canteen_id
+            ,o.canteen_name
+            ,o.dishes_id
+            ,o.dishes_price
+            ,o.dishes_count
+            ,o.dishes_total_price
+            ,o.status
+            ,o.order_time
+            ,o.evaluation_status
+            ,o.payment_method_id
+            ,o.payment_method_name
+            ,o.payment_time
+            ,o.data_status
+            ,o.version
+            ,o.create_by
+            ,o.create_name
+            ,o.create_time
+            ,o.update_by
+            ,o.update_name
+            ,o.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and o.id = #{id}
+            </if>
+            <if test="canteenId != null">
+                and o.canteen_id = #{canteenId}
+            </if>
+            <if test="canteenName != null and canteenName != ''">
+                and o.canteen_name = #{canteenName}
+            </if>
+            <if test="dishesId != null">
+                and o.dishes_id = #{dishesId}
+            </if>
+            <if test="dishesPrice != null">
+                and o.dishes_price = #{dishesPrice}
+            </if>
+            <if test="dishesCount != null">
+                and o.dishes_count = #{dishesCount}
+            </if>
+            <if test="dishesTotalPrice != null">
+                and o.dishes_total_price = #{dishesTotalPrice}
+            </if>
+            <if test="status != null and status != ''">
+                and o.status = #{status}
+            </if>
+            <if test="orderTime != null">
+                and o.order_time = #{orderTime}
+            </if>
+            <if test="evaluationStatus != null">
+                and o.evaluation_status = #{evaluationStatus}
+            </if>
+            <if test="paymentMethodId != null">
+                and o.payment_method_id = #{paymentMethodId}
+            </if>
+            <if test="paymentMethodName != null and paymentMethodName != ''">
+                and o.payment_method_name = #{paymentMethodName}
+            </if>
+            <if test="paymentTime != null">
+                and o.payment_time = #{paymentTime}
+            </if>
+            <if test="dataStatus != null">
+                and o.data_status = #{dataStatus}
+            </if>
+            <if test="version != null">
+                and o.version = #{version}
+            </if>
+            <if test="createName != null and createName != ''">
+                and o.create_name = #{createName}
+            </if>
+            <if test="updateName != null and updateName != ''">
+                and o.update_name = #{updateName}
+            </if>
+            <if test="beginTime != null">
+                and o.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and o.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_order -->
+
+</mapper>

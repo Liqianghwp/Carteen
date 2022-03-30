@@ -4,11 +4,14 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.constant.Constants;
 import com.diandong.domain.dto.DishesDTO;
 import com.diandong.domain.po.DishesPO;
 import com.diandong.domain.vo.DishesVO;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.diandong.service.DishesMpService;
 import com.diandong.mapstruct.DishesMsMapper;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.Resource;
 
 /**
@@ -66,7 +70,7 @@ public class DishesController extends BaseController {
                 .eq(StringUtils.isNotBlank(vo.getDishesIntroduction()), DishesPO::getDishesIntroduction, vo.getDishesIntroduction())
                 .eq(ObjectUtils.isNotEmpty(vo.getState()), DishesPO::getState, vo.getState())
                 .eq(ObjectUtils.isNotEmpty(vo.getDataState()), DishesPO::getDataState, vo.getDataState())
-                .eq(StringUtils.isNotBlank(vo.getVersion()), DishesPO::getVersion, vo.getVersion())
+                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), DishesPO::getVersion, vo.getVersion())
                 .eq(StringUtils.isNotBlank(vo.getCreateName()), DishesPO::getCreateName, vo.getCreateName())
                 .eq(StringUtils.isNotBlank(vo.getUpdateName()), DishesPO::getUpdateName, vo.getUpdateName())
                 .list();
@@ -104,7 +108,19 @@ public class DishesController extends BaseController {
     @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
     @PostMapping
     public BaseResult save(@RequestBody @Validated(Insert.class) DishesVO vo) {
+
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
+
         DishesPO po = DishesMsMapper.INSTANCE.vo2po(vo);
+
+//        设置创建人信息
+        po.setCreateBy(loginUser.getUserId());
+        po.setCreateName(loginUser.getUsername());
+
         boolean result = dishesMpService.save(po);
         if (result) {
             return BaseResult.successMsg("添加成功！");
@@ -159,7 +175,7 @@ public class DishesController extends BaseController {
      *
      * @param idList 编号id集合
      * @return 返回结果
-    */
+     */
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
     })

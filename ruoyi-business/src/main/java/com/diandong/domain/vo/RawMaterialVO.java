@@ -7,7 +7,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 
@@ -15,7 +14,7 @@ import java.io.Serializable;
  * VO实体类
  *
  * @author YuLiu
- * @date 2022-03-25
+ * @date 2022-03-29
  */
 @Data
 @ApiModel("VO实体类")
@@ -23,10 +22,10 @@ public class RawMaterialVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键id
+     * 编号
      */
     @NotNull(groups = {Update.class})
-    @ApiModelProperty(value = "主键id")
+    @ApiModelProperty(value = "编号")
     private Long id;
 
     /**
@@ -36,10 +35,10 @@ public class RawMaterialVO implements Serializable {
     private Long canteenId;
 
     /**
-     * 原材料类别id
+     * 食堂姓名
      */
-    @ApiModelProperty(value = "原材料类别id")
-    private Long categoryId;
+    @ApiModelProperty(value = "食堂姓名")
+    private String canteenName;
 
     /**
      * 原材料名称
@@ -48,10 +47,28 @@ public class RawMaterialVO implements Serializable {
     private String rawMaterialName;
 
     /**
+     * 原材料类别id
+     */
+    @ApiModelProperty(value = "原材料类别id")
+    private Long categoryId;
+
+    /**
+     * 原材料类别名称
+     */
+    @ApiModelProperty(value = "原材料类别名称")
+    private String categoryName;
+
+    /**
      * 单位id
      */
     @ApiModelProperty(value = "单位id")
     private Long unitId;
+
+    /**
+     * 单位名称
+     */
+    @ApiModelProperty(value = "单位名称")
+    private String unitName;
 
     /**
      * 采购类型id
@@ -60,10 +77,16 @@ public class RawMaterialVO implements Serializable {
     private Long purchaseTypeId;
 
     /**
+     * 采购类型名称
+     */
+    @ApiModelProperty(value = "采购类型名称")
+    private String purchaseTypeName;
+
+    /**
      * 预估进价
      */
     @ApiModelProperty(value = "预估进价")
-    private BigDecimal prePrice;
+    private Double prePrice;
 
     /**
      * 仓库id
@@ -78,16 +101,40 @@ public class RawMaterialVO implements Serializable {
     private String storehouseName;
 
     /**
-     * 其他描述
+     * 备注
      */
-    @ApiModelProperty(value = "其他描述")
+    @ApiModelProperty(value = "备注")
     private String remark;
 
     /**
-     * 状态（0:停用，1：启用）
+     * 状态 （0:停用；1:启用）
      */
-    @ApiModelProperty(value = "状态（0:停用，1：启用）")
-    private String status;
+    @ApiModelProperty(value = "状态 （0:停用；1:启用）")
+    private Integer status;
+
+    /**
+     * 数据状态（0:未删除；1:已删除）
+     */
+    @ApiModelProperty(value = "数据状态（0:未删除；1:已删除）")
+    private Integer dataState;
+
+    /**
+     * 乐观锁
+     */
+    @ApiModelProperty(value = "乐观锁")
+    private Integer version;
+
+    /**
+     * 创建人姓名
+     */
+    @ApiModelProperty(value = "创建人姓名")
+    private String createName;
+
+    /**
+     * 更新者姓名
+     */
+    @ApiModelProperty(value = "更新者姓名")
+    private String updateName;
 
 
 }

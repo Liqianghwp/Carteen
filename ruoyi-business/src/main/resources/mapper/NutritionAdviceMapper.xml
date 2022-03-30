@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.NutritionAdviceMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.NutritionAdvicePO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="meal_times_id" jdbcType="BIGINT" property="mealTimesId"/>
+        <result column="meal_times_name" jdbcType="BIGINT" property="mealTimesName"/>
+        <result column="nutritional_name" jdbcType="VARCHAR" property="nutritionalName"/>
+        <result column="unit" jdbcType="VARCHAR" property="unit"/>
+        <result column="number" jdbcType="INTEGER" property="number"/>
+        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,na.id
+            ,na.meal_times_id
+            ,na.meal_times_name
+            ,na.nutritional_name
+            ,na.unit
+            ,na.number
+            ,na.data_state
+            ,na.version
+            ,na.create_by
+            ,na.create_name
+            ,na.create_time
+            ,na.update_by
+            ,na.update_name
+            ,na.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and na.id = #{id}
+            </if>
+            <if test="mealTimesId != null">
+                and na.meal_times_id = #{mealTimesId}
+            </if>
+            <if test="mealTimesName != null">
+                and na.meal_times_name = #{mealTimesName}
+            </if>
+            <if test="nutritionalName != null and nutritionalName != ''">
+                and na.nutritional_name = #{nutritionalName}
+            </if>
+            <if test="unit != null and unit != ''">
+                and na.unit = #{unit}
+            </if>
+            <if test="number != null">
+                and na.number = #{number}
+            </if>
+            <if test="dataState != null">
+                and na.data_state = #{dataState}
+            </if>
+            <if test="version != null">
+                and na.version = #{version}
+            </if>
+            <if test="createName != null and createName != ''">
+                and na.create_name = #{createName}
+            </if>
+            <if test="updateName != null and updateName != ''">
+                and na.update_name = #{updateName}
+            </if>
+            <if test="beginTime != null">
+                and na.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and na.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_nutrition_advice -->
+
+</mapper>

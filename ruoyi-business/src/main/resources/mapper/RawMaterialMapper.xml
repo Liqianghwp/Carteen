@@ -5,18 +5,26 @@
     <resultMap id="BaseResultMap" type="com.diandong.domain.po.RawMaterialPO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="canteen_id" jdbcType="BIGINT" property="canteenId"/>
-        <result column="category_id" jdbcType="BIGINT" property="categoryId"/>
+        <result column="canteen_name" jdbcType="VARCHAR" property="canteenName"/>
         <result column="raw_material_name" jdbcType="VARCHAR" property="rawMaterialName"/>
+        <result column="category_id" jdbcType="BIGINT" property="categoryId"/>
+        <result column="category_name" jdbcType="VARCHAR" property="categoryName"/>
         <result column="unit_id" jdbcType="BIGINT" property="unitId"/>
+        <result column="unit_name" jdbcType="VARCHAR" property="unitName"/>
         <result column="purchase_type_id" jdbcType="BIGINT" property="purchaseTypeId"/>
-        <result column="pre_price" jdbcType="DECIMAL" property="prePrice"/>
+        <result column="purchase_type_name" jdbcType="VARCHAR" property="purchaseTypeName"/>
+        <result column="pre_price" jdbcType="DOUBLE" property="prePrice"/>
         <result column="storehouse_id" jdbcType="BIGINT" property="storehouseId"/>
         <result column="storehouse_name" jdbcType="VARCHAR" property="storehouseName"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
-        <result column="status" jdbcType="VARCHAR" property="status"/>
-        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
@@ -25,18 +33,26 @@
         <trim prefixOverrides=",">
             ,rm.id
             ,rm.canteen_id
-            ,rm.category_id
+            ,rm.canteen_name
             ,rm.raw_material_name
+            ,rm.category_id
+            ,rm.category_name
             ,rm.unit_id
+            ,rm.unit_name
             ,rm.purchase_type_id
+            ,rm.purchase_type_name
             ,rm.pre_price
             ,rm.storehouse_id
             ,rm.storehouse_name
             ,rm.remark
             ,rm.status
+            ,rm.data_state
+            ,rm.version
             ,rm.create_by
+            ,rm.create_name
             ,rm.create_time
             ,rm.update_by
+            ,rm.update_name
             ,rm.update_time
         </trim>
     </sql>
@@ -51,17 +67,29 @@
             <if test="canteenId != null">
                 and rm.canteen_id = #{canteenId}
             </if>
-            <if test="categoryId != null">
-                and rm.category_id = #{categoryId}
+            <if test="canteenName != null and canteenName != ''">
+                and rm.canteen_name = #{canteenName}
             </if>
             <if test="rawMaterialName != null and rawMaterialName != ''">
                 and rm.raw_material_name = #{rawMaterialName}
             </if>
+            <if test="categoryId != null">
+                and rm.category_id = #{categoryId}
+            </if>
+            <if test="categoryName != null and categoryName != ''">
+                and rm.category_name = #{categoryName}
+            </if>
             <if test="unitId != null">
                 and rm.unit_id = #{unitId}
             </if>
+            <if test="unitName != null and unitName != ''">
+                and rm.unit_name = #{unitName}
+            </if>
             <if test="purchaseTypeId != null">
                 and rm.purchase_type_id = #{purchaseTypeId}
+            </if>
+            <if test="purchaseTypeName != null and purchaseTypeName != ''">
+                and rm.purchase_type_name = #{purchaseTypeName}
             </if>
             <if test="prePrice != null">
                 and rm.pre_price = #{prePrice}
@@ -75,8 +103,20 @@
             <if test="remark != null and remark != ''">
                 and rm.remark = #{remark}
             </if>
-            <if test="status != null and status != ''">
+            <if test="status != null">
                 and rm.status = #{status}
+            </if>
+            <if test="dataState != null">
+                and rm.data_state = #{dataState}
+            </if>
+            <if test="version != null">
+                and rm.version = #{version}
+            </if>
+            <if test="createName != null and createName != ''">
+                and rm.create_name = #{createName}
+            </if>
+            <if test="updateName != null and updateName != ''">
+                and rm.update_name = #{updateName}
             </if>
             <if test="beginTime != null">
                 and rm.create_time <![CDATA[ >= ]]> #{beginTime}
@@ -87,6 +127,6 @@
             </trim>
         </where>
     </sql>
-    <!-- tableName  raw_material -->
+    <!-- tableName  wis_raw_material -->
 
 </mapper>

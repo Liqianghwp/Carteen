@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * DTO实体类
  *
  * @author YuLiu
- * @date 2022-03-28
+ * @date 2022-03-29
  */
 @Data
 @ApiModel("DTO实体类")
@@ -53,6 +53,18 @@ public class DishesRawMaterialDTO implements Serializable {
      */
     @ApiModelProperty(value = "数量")
     private Double number;
+
+    /**
+     * 数据状态
+     */
+    @ApiModelProperty(value = "数据状态")
+    private Integer dataState;
+
+    /**
+     * 乐观锁
+     */
+    @ApiModelProperty(value = "乐观锁")
+    private Integer version;
 
     /**
      * 创建人id

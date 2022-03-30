@@ -7,16 +7,15 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
  * PO实体类
  *
  * @author YuLiu
- * @date 2022-03-25
+ * @date 2022-03-29
  */
-@TableName("dishes")
+@TableName("wis_dishes")
 @Data
 @ApiModel("PO实体类")
 @Accessors(chain = true)
@@ -24,10 +23,10 @@ public class DishesPO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键id
+     * 编号
      */
     @TableId(value = "id", type = IdType.AUTO)
-    @ApiModelProperty(value = "主键id")
+    @ApiModelProperty(value = "编号")
     private Long id;
 
     /**
@@ -70,7 +69,7 @@ public class DishesPO implements Serializable {
      */
     @TableField(value = "dishes_price")
     @ApiModelProperty(value = "菜品价格")
-    private BigDecimal dishesPrice;
+    private Double dishesPrice;
 
     /**
      * 菜品单位
@@ -91,7 +90,7 @@ public class DishesPO implements Serializable {
      */
     @TableField(value = "pre_price")
     @ApiModelProperty(value = "预估价")
-    private BigDecimal prePrice;
+    private Double prePrice;
 
     /**
      * 产地
@@ -101,10 +100,10 @@ public class DishesPO implements Serializable {
     private String origin;
 
     /**
-     * 菜品属性id(早中晚餐的那个id）
+     * 菜品属性id
      */
     @TableField(value = "dishes_attr_id")
-    @ApiModelProperty(value = "菜品属性id(早中晚餐的那个id）")
+    @ApiModelProperty(value = "菜品属性id")
     private Long dishesAttrId;
 
     /**
@@ -136,10 +135,10 @@ public class DishesPO implements Serializable {
     private String dishesIntroduction;
 
     /**
-     * 状态（上下架）
+     * 状态
      */
     @TableField(value = "state")
-    @ApiModelProperty(value = "状态（上下架）")
+    @ApiModelProperty(value = "状态")
     private Integer state;
 
     /**
@@ -154,7 +153,7 @@ public class DishesPO implements Serializable {
      */
     @TableField(value = "version")
     @ApiModelProperty(value = "乐观锁")
-    private String version;
+    private Integer version;
 
     /**
      * 创建人id
@@ -171,17 +170,17 @@ public class DishesPO implements Serializable {
     private String createName;
 
     /**
-     * 创建时间
+     * 创建时间 默认为当前时间
      */
     @TableField(value = "create_time", fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建时间")
+    @ApiModelProperty(value = "创建时间 默认为当前时间")
     private LocalDateTime createTime;
 
     /**
-     * 更新人id
+     * 更新者id
      */
     @TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
-    @ApiModelProperty(value = "更新人id")
+    @ApiModelProperty(value = "更新者id")
     private Long updateBy;
 
     /**

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * DTO实体类
  *
  * @author YuLiu
- * @date 2022-03-25
+ * @date 2022-03-29
  */
 @Data
 @ApiModel("DTO实体类")
@@ -19,9 +19,9 @@ public class RawMaterialNutritionDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键id
+     * 编号
      */
-    @ApiModelProperty(value = "主键id")
+    @ApiModelProperty(value = "编号")
     private Long id;
 
     /**
@@ -31,34 +31,70 @@ public class RawMaterialNutritionDTO implements Serializable {
     private Long rawMaterialId;
 
     /**
+     * 原材料名称
+     */
+    @ApiModelProperty(value = "原材料名称")
+    private String rawMaterialName;
+
+    /**
      * 营养参数id
      */
     @ApiModelProperty(value = "营养参数id")
     private Long nutritionParamsId;
 
     /**
+     * 营养参数名称
+     */
+    @ApiModelProperty(value = "营养参数名称")
+    private String nutritionParamsName;
+
+    /**
      * 数量
      */
     @ApiModelProperty(value = "数量")
-    private Integer number;
+    private Double number;
 
     /**
-     * 创建者
+     * 数据状态
      */
-    @ApiModelProperty(value = "创建者")
-    private String createBy;
+    @ApiModelProperty(value = "数据状态")
+    private Integer dataState;
 
     /**
-     * 创建时间
+     * 乐观锁
      */
-    @ApiModelProperty(value = "创建时间")
+    @ApiModelProperty(value = "乐观锁")
+    private Integer version;
+
+    /**
+     * 创建人id
+     */
+    @ApiModelProperty(value = "创建人id")
+    private Long createBy;
+
+    /**
+     * 创建人姓名
+     */
+    @ApiModelProperty(value = "创建人姓名")
+    private String createName;
+
+    /**
+     * 创建日期
+     */
+    @ApiModelProperty(value = "创建日期")
     private LocalDateTime createTime;
 
     /**
-     * 更新者
+     * 更新者id
      */
-    @ApiModelProperty(value = "更新者")
-    private String updateBy;
+    @ApiModelProperty(value = "更新者id")
+    private Long updateBy;
+
+    /**
+     * 更新者姓名
+     */
+    @ApiModelProperty(value = "更新者姓名")
+    private String updateName;
 
     /**
      * 更新时间

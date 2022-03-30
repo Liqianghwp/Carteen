@@ -12,7 +12,7 @@ import java.util.List;
  * Mapstruct
  *
  * @author YuLiu
- * @date 2022-03-28
+ * @date 2022-03-29
  */
 @Mapper
 public interface NutritionParamsMsMapper {

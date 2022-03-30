@@ -5,12 +5,17 @@
     <resultMap id="BaseResultMap" type="com.diandong.domain.po.RawMaterialNutritionPO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="raw_material_id" jdbcType="BIGINT" property="rawMaterialId"/>
+        <result column="raw_material_name" jdbcType="VARCHAR" property="rawMaterialName"/>
         <result column="nutrition_params_id" jdbcType="BIGINT" property="nutritionParamsId"/>
-        <result column="number" jdbcType="INTEGER" property="number"/>
-        <result column="is_del" jdbcType="INTEGER" property="isDel"/>
-        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="nutrition_params_name" jdbcType="VARCHAR" property="nutritionParamsName"/>
+        <result column="number" jdbcType="DOUBLE" property="number"/>
+        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
@@ -19,12 +24,17 @@
         <trim prefixOverrides=",">
             ,rmn.id
             ,rmn.raw_material_id
+            ,rmn.raw_material_name
             ,rmn.nutrition_params_id
+            ,rmn.nutrition_params_name
             ,rmn.number
-            ,rmn.is_del
+            ,rmn.data_state
+            ,rmn.version
             ,rmn.create_by
+            ,rmn.create_name
             ,rmn.create_time
             ,rmn.update_by
+            ,rmn.update_name
             ,rmn.update_time
         </trim>
     </sql>
@@ -39,14 +49,29 @@
             <if test="rawMaterialId != null">
                 and rmn.raw_material_id = #{rawMaterialId}
             </if>
+            <if test="rawMaterialName != null and rawMaterialName != ''">
+                and rmn.raw_material_name = #{rawMaterialName}
+            </if>
             <if test="nutritionParamsId != null">
                 and rmn.nutrition_params_id = #{nutritionParamsId}
+            </if>
+            <if test="nutritionParamsName != null and nutritionParamsName != ''">
+                and rmn.nutrition_params_name = #{nutritionParamsName}
             </if>
             <if test="number != null">
                 and rmn.number = #{number}
             </if>
-            <if test="isDel != null">
-                and rmn.is_del = #{isDel}
+            <if test="dataState != null">
+                and rmn.data_state = #{dataState}
+            </if>
+            <if test="version != null">
+                and rmn.version = #{version}
+            </if>
+            <if test="createName != null and createName != ''">
+                and rmn.create_name = #{createName}
+            </if>
+            <if test="updateName != null and updateName != ''">
+                and rmn.update_name = #{updateName}
             </if>
             <if test="beginTime != null">
                 and rmn.create_time <![CDATA[ >= ]]> #{beginTime}
@@ -57,6 +82,6 @@
             </trim>
         </where>
     </sql>
-    <!-- tableName  raw_material_nutrition -->
+    <!-- tableName  wis_raw_material_nutrition -->
 
 </mapper>

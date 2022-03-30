@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.constant.Constants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.diandong.service.NutritionParamsMpService;
 import com.diandong.domain.po.NutritionParamsPO;
@@ -16,7 +18,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
+import java.net.ContentHandler;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.Resource;
 
 /**
@@ -90,10 +94,22 @@ public class NutritionParamsController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "NutritionParamsVO", name = "vo", value = "参数对象")
     })
-    @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
+    @ApiOperation(value = "添加营养信息", notes = "添加营养信息", httpMethod = "POST")
     @PostMapping
-    public BaseResult save(@Validated(Insert.class) NutritionParamsVO vo) {
+    public BaseResult save(@RequestBody @Validated(Insert.class) NutritionParamsVO vo) {
+
+//        获取登录信息
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
         NutritionParamsPO po = NutritionParamsMsMapper.INSTANCE.vo2po(vo);
+
+//        设置创建人信息
+        po.setCreateBy(loginUser.getUserId());
+        po.setCreateName(loginUser.getUsername());
+
         boolean result = nutritionParamsMpService.save(po);
         if (result) {
             return BaseResult.successMsg("添加成功！");

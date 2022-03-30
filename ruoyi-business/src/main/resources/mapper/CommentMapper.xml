@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.CommentMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.CommentPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="order_id" jdbcType="BIGINT" property="orderId"/>
+        <result column="comment_content" jdbcType="VARCHAR" property="commentContent"/>
+        <result column="comment_picture" jdbcType="VARCHAR" property="commentPicture"/>
+        <result column="delicious_dishes" jdbcType="VARCHAR" property="deliciousDishes"/>
+        <result column="undelicious_dishes" jdbcType="VARCHAR" property="undeliciousDishes"/>
+        <result column="process_description" jdbcType="VARCHAR" property="processDescription"/>
+        <result column="process_time" jdbcType="TIMESTAMP" property="processTime"/>
+        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,c.id
+            ,c.order_id
+            ,c.comment_content
+            ,c.comment_picture
+            ,c.delicious_dishes
+            ,c.undelicious_dishes
+            ,c.process_description
+            ,c.process_time
+            ,c.data_state
+            ,c.version
+            ,c.create_by
+            ,c.create_name
+            ,c.create_time
+            ,c.update_by
+            ,c.update_name
+            ,c.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and c.id = #{id}
+            </if>
+            <if test="orderId != null">
+                and c.order_id = #{orderId}
+            </if>
+            <if test="commentContent != null and commentContent != ''">
+                and c.comment_content = #{commentContent}
+            </if>
+            <if test="commentPicture != null and commentPicture != ''">
+                and c.comment_picture = #{commentPicture}
+            </if>
+            <if test="deliciousDishes != null and deliciousDishes != ''">
+                and c.delicious_dishes = #{deliciousDishes}
+            </if>
+            <if test="undeliciousDishes != null and undeliciousDishes != ''">
+                and c.undelicious_dishes = #{undeliciousDishes}
+            </if>
+            <if test="processDescription != null and processDescription != ''">
+                and c.process_description = #{processDescription}
+            </if>
+            <if test="processTime != null">
+                and c.process_time = #{processTime}
+            </if>
+            <if test="dataState != null">
+                and c.data_state = #{dataState}
+            </if>
+            <if test="version != null">
+                and c.version = #{version}
+            </if>
+            <if test="createName != null and createName != ''">
+                and c.create_name = #{createName}
+            </if>
+            <if test="updateName != null and updateName != ''">
+                and c.update_name = #{updateName}
+            </if>
+            <if test="beginTime != null">
+                and c.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and c.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_comment -->
+
+</mapper>
