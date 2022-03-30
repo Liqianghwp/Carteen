@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.OrderDetailMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.OrderDetailPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="order_id" jdbcType="BIGINT" property="orderId"/>
+        <result column="dishes_id" jdbcType="BIGINT" property="dishesId"/>
+        <result column="dishes_name" jdbcType="VARCHAR" property="dishesName"/>
+        <result column="dishes_price" jdbcType="DOUBLE" property="dishesPrice"/>
+        <result column="dishes_count" jdbcType="INTEGER" property="dishesCount"/>
+        <result column="dishes_total_price" jdbcType="DOUBLE" property="dishesTotalPrice"/>
+        <result column="dishes_picture" jdbcType="VARCHAR" property="dishesPicture"/>
+        <result column="data_status" jdbcType="INTEGER" property="dataStatus"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,od.id
+            ,od.order_id
+            ,od.dishes_id
+            ,od.dishes_name
+            ,od.dishes_price
+            ,od.dishes_count
+            ,od.dishes_total_price
+            ,od.dishes_picture
+            ,od.data_status
+            ,od.version
+            ,od.create_by
+            ,od.create_name
+            ,od.create_time
+            ,od.update_by
+            ,od.update_name
+            ,od.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and od.id = #{id}
+            </if>
+            <if test="orderId != null">
+                and od.order_id = #{orderId}
+            </if>
+            <if test="dishesId != null">
+                and od.dishes_id = #{dishesId}
+            </if>
+            <if test="dishesName != null and dishesName != ''">
+                and od.dishes_name = #{dishesName}
+            </if>
+            <if test="dishesPrice != null">
+                and od.dishes_price = #{dishesPrice}
+            </if>
+            <if test="dishesCount != null">
+                and od.dishes_count = #{dishesCount}
+            </if>
+            <if test="dishesTotalPrice != null">
+                and od.dishes_total_price = #{dishesTotalPrice}
+            </if>
+            <if test="dishesPicture != null and dishesPicture != ''">
+                and od.dishes_picture = #{dishesPicture}
+            </if>
+            <if test="dataStatus != null">
+                and od.data_status = #{dataStatus}
+            </if>
+            <if test="version != null">
+                and od.version = #{version}
+            </if>
+            <if test="createName != null and createName != ''">
+                and od.create_name = #{createName}
+            </if>
+            <if test="updateName != null and updateName != ''">
+                and od.update_name = #{updateName}
+            </if>
+            <if test="beginTime != null">
+                and od.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and od.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_order_detail -->
+
+</mapper>

@@ -18,7 +18,7 @@ import java.io.Serializable;
  */
 @Data
 @ApiModel("VO实体类")
-public class OrderVO implements Serializable {
+public class OrderDetailVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -29,52 +29,46 @@ public class OrderVO implements Serializable {
     private Long id;
 
     /**
-     * 食堂编号
+     * 订单id
      */
-    @ApiModelProperty(value = "食堂编号")
-    private Long canteenId;
+    @ApiModelProperty(value = "订单id")
+    private Long orderId;
 
     /**
-     * 食堂名称
+     * 菜品id
      */
-    @ApiModelProperty(value = "食堂名称")
-    private String canteenName;
+    @ApiModelProperty(value = "菜品id")
+    private Long dishesId;
 
     /**
-     * 订单状态
+     * 菜品名称
      */
-    @ApiModelProperty(value = "订单状态")
-    private Integer status;
+    @ApiModelProperty(value = "菜品名称")
+    private String dishesName;
 
     /**
-     * 下单时间
+     * 菜品价格
      */
-    @ApiModelProperty(value = "下单时间")
-    private LocalDateTime orderTime;
+    @ApiModelProperty(value = "菜品价格")
+    private Double dishesPrice;
 
     /**
-     * 评价状态
+     * 菜品数量
      */
-    @ApiModelProperty(value = "评价状态")
-    private Integer evaluationStatus;
+    @ApiModelProperty(value = "菜品数量")
+    private Integer dishesCount;
 
     /**
-     * 支付方式id
+     * 菜品总价
      */
-    @ApiModelProperty(value = "支付方式id")
-    private Long paymentMethodId;
+    @ApiModelProperty(value = "菜品总价")
+    private Double dishesTotalPrice;
 
     /**
-     * 支付方式名称
+     * 菜品图片 图片地址（后期如果没有了怎么办）
      */
-    @ApiModelProperty(value = "支付方式名称")
-    private String paymentMethodName;
-
-    /**
-     * 支付时间
-     */
-    @ApiModelProperty(value = "支付时间")
-    private LocalDateTime paymentTime;
+    @ApiModelProperty(value = "菜品图片 图片地址（后期如果没有了怎么办）")
+    private String dishesPicture;
 
     /**
      * 数据状态

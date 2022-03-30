@@ -8,7 +8,6 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * PO实体类
@@ -16,11 +15,11 @@ import java.util.List;
  * @author YuLiu
  * @date 2022-03-30
  */
-@TableName("wis_order")
+@TableName("wis_order_detail")
 @Data
 @ApiModel("PO实体类")
 @Accessors(chain = true)
-public class OrderPO implements Serializable {
+public class OrderDetailPO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -31,60 +30,53 @@ public class OrderPO implements Serializable {
     private Long id;
 
     /**
-     * 食堂编号
+     * 订单id
      */
-    @TableField(value = "canteen_id")
-    @ApiModelProperty(value = "食堂编号")
-    private Long canteenId;
+    @TableField(value = "order_id")
+    @ApiModelProperty(value = "订单id")
+    private Long orderId;
 
     /**
-     * 食堂名称
+     * 菜品id
      */
-    @TableField(value = "canteen_name")
-    @ApiModelProperty(value = "食堂名称")
-    private String canteenName;
+    @TableField(value = "dishes_id")
+    @ApiModelProperty(value = "菜品id")
+    private Long dishesId;
 
     /**
-     * 订单状态
+     * 菜品名称
      */
-    @TableField(value = "status")
-    @ApiModelProperty(value = "订单状态")
-    private Integer status;
+    @TableField(value = "dishes_name")
+    @ApiModelProperty(value = "菜品名称")
+    private String dishesName;
 
     /**
-     * 下单时间
+     * 菜品价格
      */
-    @TableField(value = "order_time")
-    @ApiModelProperty(value = "下单时间")
-    private LocalDateTime orderTime;
+    @TableField(value = "dishes_price")
+    @ApiModelProperty(value = "菜品价格")
+    private Double dishesPrice;
 
     /**
-     * 评价状态
+     * 菜品数量
      */
-    @TableField(value = "evaluation_status")
-    @ApiModelProperty(value = "评价状态")
-    private Integer evaluationStatus;
+    @TableField(value = "dishes_count")
+    @ApiModelProperty(value = "菜品数量")
+    private Integer dishesCount;
 
     /**
-     * 支付方式id
+     * 菜品总价
      */
-    @TableField(value = "payment_method_id")
-    @ApiModelProperty(value = "支付方式id")
-    private Long paymentMethodId;
+    @TableField(value = "dishes_total_price")
+    @ApiModelProperty(value = "菜品总价")
+    private Double dishesTotalPrice;
 
     /**
-     * 支付方式名称
+     * 菜品图片 图片地址（后期如果没有了怎么办）
      */
-    @TableField(value = "payment_method_name")
-    @ApiModelProperty(value = "支付方式名称")
-    private String paymentMethodName;
-
-    /**
-     * 支付时间
-     */
-    @TableField(value = "payment_time")
-    @ApiModelProperty(value = "支付时间")
-    private LocalDateTime paymentTime;
+    @TableField(value = "dishes_picture")
+    @ApiModelProperty(value = "菜品图片 图片地址（后期如果没有了怎么办）")
+    private String dishesPicture;
 
     /**
      * 数据状态
@@ -141,12 +133,5 @@ public class OrderPO implements Serializable {
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
-
-    /**
-     * 订单菜品集合
-     */
-    @TableField(exist = false)
-    @ApiModelProperty(value = "订单菜品集合")
-    private List<OrderDetailPO> orderDetailList;
 
 }

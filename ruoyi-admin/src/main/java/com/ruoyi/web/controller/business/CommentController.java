@@ -27,7 +27,7 @@ import javax.annotation.Resource;
  */
 @Validated
 @RestController
-@Api(value = "/comment", tags = {"模块"})
+@Api(value = "/comment", tags = {"评价处理模块"})
 @RequestMapping(value = "/comment")
 public class CommentController extends BaseController {
 

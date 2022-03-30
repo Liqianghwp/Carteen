@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.constant.Constants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
@@ -99,16 +100,18 @@ public class CanteenController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "CanteenVO", name = "vo", value = "参数对象")
     })
-    @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
+    @ApiOperation(value = "新增食堂", notes = "新增食堂", httpMethod = "POST")
     @PostMapping
     public BaseResult save(@RequestBody @Validated(Insert.class) CanteenVO vo) {
-        CanteenPO po = CanteenMsMapper.INSTANCE.vo2po(vo);
-        boolean result = canteenMpService.save(po);
-        if (result) {
-            return BaseResult.successMsg("添加成功！");
-        } else {
-            return BaseResult.error("添加失败！");
+
+        LoginUser loginUser = getLoginUser();
+        if(Objects.isNull(loginUser)){
+            return BaseResult.error(Constants.ERROR_MESSAGE);
         }
+
+
+        return canteenMpService.addCanteen(vo,loginUser);
+
     }
 
     /**

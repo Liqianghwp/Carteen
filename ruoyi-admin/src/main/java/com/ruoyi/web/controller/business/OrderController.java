@@ -1,30 +1,38 @@
 package com.ruoyi.web.controller.business;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.constant.Constants;
+import com.diandong.domain.vo.ShopCartVO;
+import com.diandong.enums.OrderStatusEnum;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.diandong.service.OrderMpService;
 import com.diandong.domain.po.OrderPO;
 import com.diandong.domain.dto.OrderDTO;
 import com.diandong.domain.vo.OrderVO;
 import com.diandong.mapstruct.OrderMsMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.Resource;
 
 /**
  * Controller
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-03-30
  */
+@Slf4j
 @Validated
 @RestController
 @Api(value = "/order", tags = {"模块"})
@@ -51,11 +59,7 @@ public class OrderController extends BaseController {
                 .eq(ObjectUtils.isNotEmpty(vo.getId()), OrderPO::getId, vo.getId())
                 .eq(ObjectUtils.isNotEmpty(vo.getCanteenId()), OrderPO::getCanteenId, vo.getCanteenId())
                 .eq(StringUtils.isNotBlank(vo.getCanteenName()), OrderPO::getCanteenName, vo.getCanteenName())
-                .eq(ObjectUtils.isNotEmpty(vo.getDishesId()), OrderPO::getDishesId, vo.getDishesId())
-                .eq(ObjectUtils.isNotEmpty(vo.getDishesPrice()), OrderPO::getDishesPrice, vo.getDishesPrice())
-                .eq(ObjectUtils.isNotEmpty(vo.getDishesCount()), OrderPO::getDishesCount, vo.getDishesCount())
-                .eq(ObjectUtils.isNotEmpty(vo.getDishesTotalPrice()), OrderPO::getDishesTotalPrice, vo.getDishesTotalPrice())
-                .eq(StringUtils.isNotBlank(vo.getStatus()), OrderPO::getStatus, vo.getStatus())
+                .eq(ObjectUtils.isNotEmpty(vo.getStatus()), OrderPO::getStatus, vo.getStatus())
                 .eq(ObjectUtils.isNotEmpty(vo.getOrderTime()), OrderPO::getOrderTime, vo.getOrderTime())
                 .eq(ObjectUtils.isNotEmpty(vo.getEvaluationStatus()), OrderPO::getEvaluationStatus, vo.getEvaluationStatus())
                 .eq(ObjectUtils.isNotEmpty(vo.getPaymentMethodId()), OrderPO::getPaymentMethodId, vo.getPaymentMethodId())
@@ -97,15 +101,48 @@ public class OrderController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "OrderVO", name = "vo", value = "参数对象")
     })
-    @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
+    @ApiOperation(value = "生成订单", notes = "生成订单", httpMethod = "POST")
     @PostMapping
     public BaseResult save(@Validated(Insert.class) OrderVO vo) {
+
+
         OrderPO po = OrderMsMapper.INSTANCE.vo2po(vo);
         boolean result = orderMpService.save(po);
         if (result) {
             return BaseResult.successMsg("添加成功！");
         } else {
             return BaseResult.error("添加失败！");
+        }
+    }
+
+
+    /**
+     * 创建订单
+     *
+     * @param cartList 购物车集合
+     * @return 返回结果
+     */
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "cartList", value = "参数对象")
+    })
+    @ApiOperation(value = "生成订单", notes = "生成订单", httpMethod = "POST")
+    @PostMapping("/createOrder")
+    public BaseResult createOrder(@RequestBody List<Long> cartList) {
+//        判断登录状态
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
+        if (CollectionUtils.isEmpty(cartList)) {
+            return BaseResult.error("没有选好的菜品，请您选择菜品");
+        }
+        try {
+            return orderMpService.createOrder(cartList, loginUser);
+        } catch (Exception e) {
+//            当保存失败后处理的信息
+            log.error(e.getMessage(), e);
+            return BaseResult.error(e.getMessage());
         }
     }
 
@@ -131,6 +168,50 @@ public class OrderController extends BaseController {
     }
 
     /**
+     * 支付订单
+     *
+     * @param orderId 参数对象
+     * @return 返回结果
+     */
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Long", name = "id", value = "参数对象")
+    })
+    @ApiOperation(value = "支付订单", notes = "支付订单", httpMethod = "POST")
+    @PostMapping("/payOrder/{id}")
+    public BaseResult payOrder(@PathVariable("id") Long orderId) {
+
+//        判断登录状态
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
+//        return orderMpService.payOrder(orderId, loginUser);
+        return orderMpService.processOrders(orderId, loginUser, OrderStatusEnum.COMPLETED.value());
+    }
+
+
+    /**
+     * 订单详情
+     *
+     * @param orderId 参数对象
+     * @return 返回结果
+     */
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Long", name = "id", value = "参数对象")
+    })
+    @ApiOperation(value = "订单详情", notes = "订单详情", httpMethod = "Get")
+    @GetMapping("/detail/{id}")
+    public BaseResult getOrderDetail(@PathVariable("id") Long orderId) {
+
+//        返回订单详情
+        return orderMpService.getOrderDetail(orderId);
+
+//        return BaseResult.successMsg("订单详情");
+    }
+
+
+    /**
      * 删除
      *
      * @param id 编号id
@@ -150,12 +231,35 @@ public class OrderController extends BaseController {
         }
     }
 
+
+    /**
+     * 取消订单
+     *
+     * @param orderId 订单编号
+     * @return 返回结果
+     */
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", dataType = "long", name = "orderId", value = "编号id")
+    })
+    @ApiOperation(value = "取消订单", notes = "取消订单", httpMethod = "GET")
+    @GetMapping("/cancelOrder/{id}")
+    public BaseResult cancelOrder(@PathVariable("id") Long orderId) {
+
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+//        取消订单
+//        return orderMpService.cancelOrder(orderId, loginUser);
+        return orderMpService.processOrders(orderId, loginUser, OrderStatusEnum.CANCELLED.value());
+    }
+
     /**
      * 批量删除
      *
      * @param idList 编号id集合
      * @return 返回结果
-    */
+     */
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
     })

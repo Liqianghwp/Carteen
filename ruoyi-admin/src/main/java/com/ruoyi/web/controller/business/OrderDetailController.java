@@ -4,38 +4,35 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
-import com.diandong.constant.Constants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
-import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.ShopCartMpService;
-import com.diandong.domain.po.ShopCartPO;
-import com.diandong.domain.dto.ShopCartDTO;
-import com.diandong.domain.vo.ShopCartVO;
-import com.diandong.mapstruct.ShopCartMsMapper;
+import com.diandong.service.OrderDetailMpService;
+import com.diandong.domain.po.OrderDetailPO;
+import com.diandong.domain.dto.OrderDetailDTO;
+import com.diandong.domain.vo.OrderDetailVO;
+import com.diandong.mapstruct.OrderDetailMsMapper;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
 import java.util.List;
-import java.util.Objects;
 import javax.annotation.Resource;
 
 /**
  * Controller
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-03-30
  */
 @Validated
 @RestController
-@Api(value = "/shopCart", tags = {"购物车模块"})
-@RequestMapping(value = "/shopCart")
-public class ShopCartController extends BaseController {
+@Api(value = "/order_detail", tags = {"模块"})
+@RequestMapping(value = "/order_detail")
+public class OrderDetailController extends BaseController {
 
     @Resource
-    private ShopCartMpService shopCartMpService;
+    private OrderDetailMpService orderDetailMpService;
 
     /**
      * 分页查询
@@ -44,25 +41,28 @@ public class ShopCartController extends BaseController {
      * @return 分页数据结果
      */
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "ShopCartVO", name = "vo", value = "查询参数")
+            @ApiImplicitParam(paramType = "query", dataType = "OrderDetailVO", name = "vo", value = "查询参数")
     })
     @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
     @GetMapping
-    public TableDataInfo<ShopCartDTO> getList(ShopCartVO vo) {
+    public TableDataInfo<OrderDetailDTO> getList(OrderDetailVO vo) {
         startPage();
-        List<ShopCartPO> dataList = shopCartMpService.lambdaQuery()
-                .eq(ObjectUtils.isNotEmpty(vo.getId()), ShopCartPO::getId, vo.getId())
-                .eq(ObjectUtils.isNotEmpty(vo.getCanteenId()), ShopCartPO::getCanteenId, vo.getCanteenId())
-                .eq(StringUtils.isNotBlank(vo.getCanteenName()), ShopCartPO::getCanteenName, vo.getCanteenName())
-                .eq(ObjectUtils.isNotEmpty(vo.getDishesId()), ShopCartPO::getDishesId, vo.getDishesId())
-                .eq(ObjectUtils.isNotEmpty(vo.getNumber()), ShopCartPO::getNumber, vo.getNumber())
-                .eq(ObjectUtils.isNotEmpty(vo.getDateStatus()), ShopCartPO::getDateStatus, vo.getDateStatus())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), ShopCartPO::getVersion, vo.getVersion())
-                .eq(StringUtils.isNotBlank(vo.getCreateName()), ShopCartPO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), ShopCartPO::getUpdateName, vo.getUpdateName())
+        List<OrderDetailPO> dataList = orderDetailMpService.lambdaQuery()
+                .eq(ObjectUtils.isNotEmpty(vo.getId()), OrderDetailPO::getId, vo.getId())
+                .eq(ObjectUtils.isNotEmpty(vo.getOrderId()), OrderDetailPO::getOrderId, vo.getOrderId())
+                .eq(ObjectUtils.isNotEmpty(vo.getDishesId()), OrderDetailPO::getDishesId, vo.getDishesId())
+                .eq(StringUtils.isNotBlank(vo.getDishesName()), OrderDetailPO::getDishesName, vo.getDishesName())
+                .eq(ObjectUtils.isNotEmpty(vo.getDishesPrice()), OrderDetailPO::getDishesPrice, vo.getDishesPrice())
+                .eq(ObjectUtils.isNotEmpty(vo.getDishesCount()), OrderDetailPO::getDishesCount, vo.getDishesCount())
+                .eq(ObjectUtils.isNotEmpty(vo.getDishesTotalPrice()), OrderDetailPO::getDishesTotalPrice, vo.getDishesTotalPrice())
+                .eq(StringUtils.isNotBlank(vo.getDishesPicture()), OrderDetailPO::getDishesPicture, vo.getDishesPicture())
+                .eq(ObjectUtils.isNotEmpty(vo.getDataStatus()), OrderDetailPO::getDataStatus, vo.getDataStatus())
+                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), OrderDetailPO::getVersion, vo.getVersion())
+                .eq(StringUtils.isNotBlank(vo.getCreateName()), OrderDetailPO::getCreateName, vo.getCreateName())
+                .eq(StringUtils.isNotBlank(vo.getUpdateName()), OrderDetailPO::getUpdateName, vo.getUpdateName())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
-        pageData.setRows(ShopCartMsMapper.INSTANCE.poList2dtoList(dataList));
+        pageData.setRows(OrderDetailMsMapper.INSTANCE.poList2dtoList(dataList));
         return pageData;
     }
 
@@ -77,9 +77,9 @@ public class ShopCartController extends BaseController {
     })
     @ApiOperation(value = "根据id查询", notes = "根据id查询", httpMethod = "GET")
     @GetMapping(value = "/{id}")
-    public BaseResult<ShopCartDTO> getById(@PathVariable("id") Long id) {
-        ShopCartDTO dto = ShopCartMsMapper.INSTANCE
-                .po2dto(shopCartMpService.getById(id));
+    public BaseResult<OrderDetailDTO> getById(@PathVariable("id") Long id) {
+        OrderDetailDTO dto = OrderDetailMsMapper.INSTANCE
+                .po2dto(orderDetailMpService.getById(id));
         return BaseResult.success(dto);
     }
 
@@ -90,24 +90,13 @@ public class ShopCartController extends BaseController {
      * @return 返回结果
      */
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "ShopCartVO", name = "vo", value = "参数对象")
+            @ApiImplicitParam(paramType = "query", dataType = "OrderDetailVO", name = "vo", value = "参数对象")
     })
-    @ApiOperation(value = "添加购物车", notes = "添加购物车", httpMethod = "POST")
+    @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
     @PostMapping
-    public BaseResult save(@RequestBody @Validated(Insert.class) ShopCartVO vo) {
-
-//        查看当前是否有用户登录
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
-
-        ShopCartPO po = ShopCartMsMapper.INSTANCE.vo2po(vo);
-//        设置创建人信息
-        po.setCreateBy(loginUser.getUserId());
-        po.setCreateName(loginUser.getUsername());
-
-        boolean result = shopCartMpService.save(po);
+    public BaseResult save(@Validated(Insert.class) OrderDetailVO vo) {
+        OrderDetailPO po = OrderDetailMsMapper.INSTANCE.vo2po(vo);
+        boolean result = orderDetailMpService.save(po);
         if (result) {
             return BaseResult.successMsg("添加成功！");
         } else {
@@ -122,13 +111,13 @@ public class ShopCartController extends BaseController {
      * @return 返回结果
      */
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "ShopCartVO", name = "vo", value = "参数对象")
+            @ApiImplicitParam(paramType = "query", dataType = "OrderDetailVO", name = "vo", value = "参数对象")
     })
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
-    public BaseResult update(@Validated(Update.class) ShopCartVO vo) {
-        ShopCartPO po = ShopCartMsMapper.INSTANCE.vo2po(vo);
-        boolean result = shopCartMpService.updateById(po);
+    public BaseResult update(@Validated(Update.class) OrderDetailVO vo) {
+        OrderDetailPO po = OrderDetailMsMapper.INSTANCE.vo2po(vo);
+        boolean result = orderDetailMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");
         } else {
@@ -148,7 +137,7 @@ public class ShopCartController extends BaseController {
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
     @DeleteMapping(value = "/{id}")
     public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = shopCartMpService.removeById(id);
+        boolean result = orderDetailMpService.removeById(id);
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {
@@ -161,14 +150,14 @@ public class ShopCartController extends BaseController {
      *
      * @param idList 编号id集合
      * @return 返回结果
-     */
+    */
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
     })
     @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
     @DeleteMapping
     public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = shopCartMpService.removeByIds(idList);
+        boolean result = orderDetailMpService.removeByIds(idList);
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {
