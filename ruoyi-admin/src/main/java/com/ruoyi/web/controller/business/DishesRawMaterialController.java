@@ -1,17 +1,20 @@
 package com.ruoyi.web.controller.business;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.diandong.service.DishesRawMaterialMpService;
 import com.diandong.domain.po.DishesRawMaterialPO;
 import com.diandong.domain.dto.DishesRawMaterialDTO;
 import com.diandong.domain.vo.DishesRawMaterialVO;
 import com.diandong.mapstruct.DishesRawMaterialMsMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
@@ -25,6 +28,7 @@ import javax.annotation.Resource;
  * @author YuLiu
  * @date 2022-03-28
  */
+@Slf4j
 @Validated
 @RestController
 @Api(value = "/dishesRawMaterial", tags = {"菜品原材料模块"})
@@ -101,22 +105,30 @@ public class DishesRawMaterialController extends BaseController {
     }
 
     /**
-     * 保存
+     * 菜品原材料信息批量保存
      *
-     * @param vo 参数对象
+     * @param voList 参数对象
      * @return 返回结果
      */
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "DishesRawMaterialVO", name = "vo", value = "参数对象")
     })
-    @ApiOperation(value = "保存原材料信息",notes = "保存原材料信息",httpMethod = "POST")
+    @ApiOperation(value = "保存原材料信息", notes = "保存原材料信息", httpMethod = "POST")
     @PostMapping("/saveList")
-    public BaseResult saveList(@RequestBody @Validated List<DishesRawMaterialVO> voList){
+    public BaseResult saveList(@RequestBody @Validated(Insert.class) List<DishesRawMaterialVO> voList) {
 
+        Boolean result = false;
 
-
-
-        return BaseResult.success("添加成功");
+        try {
+            result = dishesRawMaterialMpService.saveList(voList, getLoginUser());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        if (result) {
+            return BaseResult.success("添加成功");
+        } else {
+            return BaseResult.error("添加失败");
+        }
     }
 
 
@@ -166,7 +178,7 @@ public class DishesRawMaterialController extends BaseController {
      *
      * @param idList 编号id集合
      * @return 返回结果
-    */
+     */
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
     })
