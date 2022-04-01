@@ -127,7 +127,17 @@ public class ShopCartController extends BaseController {
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
     public BaseResult update(@Validated(Update.class) ShopCartVO vo) {
+
+//        判断登录状态
+        LoginUser loginUser = getLoginUser();
+        if(Objects.isNull(loginUser)){
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
         ShopCartPO po = ShopCartMsMapper.INSTANCE.vo2po(vo);
+
+        po.setUpdateBy(loginUser.getUserId());
+        po.setUpdateName(loginUser.getUsername());
         boolean result = shopCartMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");

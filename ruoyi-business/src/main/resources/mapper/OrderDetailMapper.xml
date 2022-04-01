@@ -7,9 +7,9 @@
         <result column="order_id" jdbcType="BIGINT" property="orderId"/>
         <result column="dishes_id" jdbcType="BIGINT" property="dishesId"/>
         <result column="dishes_name" jdbcType="VARCHAR" property="dishesName"/>
-        <result column="dishes_price" jdbcType="DOUBLE" property="dishesPrice"/>
+        <result column="dishes_price" jdbcType="DECIMAL" property="dishesPrice"/>
         <result column="dishes_count" jdbcType="INTEGER" property="dishesCount"/>
-        <result column="dishes_total_price" jdbcType="DOUBLE" property="dishesTotalPrice"/>
+        <result column="dishes_total_price" jdbcType="DECIMAL" property="dishesTotalPrice"/>
         <result column="dishes_picture" jdbcType="VARCHAR" property="dishesPicture"/>
         <result column="data_status" jdbcType="INTEGER" property="dataStatus"/>
         <result column="version" jdbcType="INTEGER" property="version"/>

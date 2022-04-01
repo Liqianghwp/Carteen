@@ -136,7 +136,15 @@ public class DishesTypeController extends BaseController {
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
     public BaseResult update(@Validated(Update.class) DishesTypeVO vo) {
+//        判断更新状态
+        LoginUser loginUser = getLoginUser();
+        if(Objects.isNull(loginUser)){
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
         DishesTypePO po = DishesTypeMsMapper.INSTANCE.vo2po(vo);
+        po.setUpdateBy(loginUser.getUserId());
+        po.setUpdateName(loginUser.getUsername());
         boolean result = dishesTypeMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");

@@ -5,13 +5,14 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
  * DTO实体类
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-03-31
  */
 @Data
 @ApiModel("DTO实体类")
@@ -58,7 +59,7 @@ public class DishesDTO implements Serializable {
      * 菜品价格
      */
     @ApiModelProperty(value = "菜品价格")
-    private Double dishesPrice;
+    private BigDecimal dishesPrice;
 
     /**
      * 菜品单位
@@ -76,7 +77,7 @@ public class DishesDTO implements Serializable {
      * 预估价
      */
     @ApiModelProperty(value = "预估价")
-    private Double prePrice;
+    private BigDecimal prePrice;
 
     /**
      * 产地

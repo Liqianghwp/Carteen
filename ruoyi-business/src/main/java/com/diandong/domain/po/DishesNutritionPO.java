@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * PO实体类
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-03-31
  */
 @TableName("wis_dishes_nutrition")
 @Data

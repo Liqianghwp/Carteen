@@ -200,7 +200,7 @@ public class OrderController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "Long", name = "id", value = "参数对象")
     })
-    @ApiOperation(value = "订单详情", notes = "订单详情", httpMethod = "Get")
+    @ApiOperation(value = "订单详情", notes = "订单详情", httpMethod = "GET")
     @GetMapping("/detail/{id}")
     public BaseResult getOrderDetail(@PathVariable("id") Long orderId) {
 

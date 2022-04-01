@@ -7,13 +7,14 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
  * PO实体类
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-03-31
  */
 @TableName("wis_raw_material")
 @Data
@@ -97,7 +98,7 @@ public class RawMaterialPO implements Serializable {
      */
     @TableField(value = "pre_price")
     @ApiModelProperty(value = "预估进价")
-    private Double prePrice;
+    private BigDecimal prePrice;
 
     /**
      * 仓库id

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * PO实体类
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-03-31
  */
 @TableName("wis_health_indicators")
 @Data
@@ -34,77 +34,77 @@ public class HealthIndicatorsPO implements Serializable {
      */
     @TableField(value = "waistline")
     @ApiModelProperty(value = "腰围")
-    private Long waistline;
+    private Double waistline;
 
     /**
      * 体重
      */
     @TableField(value = "body_weight")
     @ApiModelProperty(value = "体重")
-    private Long bodyWeight;
+    private Double bodyWeight;
 
     /**
      * 体脂
      */
     @TableField(value = "body_fat")
     @ApiModelProperty(value = "体脂")
-    private Long bodyFat;
+    private Double bodyFat;
 
     /**
      * 心率
      */
     @TableField(value = "heart_rate")
     @ApiModelProperty(value = "心率")
-    private Long heartRate;
+    private Double heartRate;
 
     /**
      * 血压
      */
     @TableField(value = "blood_pressure")
     @ApiModelProperty(value = "血压")
-    private Long bloodPressure;
+    private Double bloodPressure;
 
     /**
      * 血糖
      */
     @TableField(value = "blood_sugar")
     @ApiModelProperty(value = "血糖")
-    private Long bloodSugar;
+    private Double bloodSugar;
 
     /**
      * 甘油三酯
      */
     @TableField(value = "triglycerides")
     @ApiModelProperty(value = "甘油三酯")
-    private Long triglycerides;
+    private Double triglycerides;
 
     /**
      * 总胆固醇
      */
     @TableField(value = "total_cholesterol")
     @ApiModelProperty(value = "总胆固醇")
-    private Long totalCholesterol;
+    private Double totalCholesterol;
 
     /**
      * 坏胆固醇
      */
     @TableField(value = "bad_cholesterol")
     @ApiModelProperty(value = "坏胆固醇")
-    private Long badCholesterol;
+    private Double badCholesterol;
 
     /**
      * 血氧
      */
     @TableField(value = "blood_oxygen")
     @ApiModelProperty(value = "血氧")
-    private Long bloodOxygen;
+    private Double bloodOxygen;
 
     /**
      * 血粘稠度
      */
     @TableField(value = "blood_viscosity")
     @ApiModelProperty(value = "血粘稠度")
-    private Long bloodViscosity;
+    private Double bloodViscosity;
 
     /**
      * 数据状态

@@ -9,10 +9,10 @@
         <result column="dishes_type_id" jdbcType="BIGINT" property="dishesTypeId"/>
         <result column="dishes_type_name" jdbcType="VARCHAR" property="dishesTypeName"/>
         <result column="dishes_name" jdbcType="VARCHAR" property="dishesName"/>
-        <result column="dishes_price" jdbcType="DOUBLE" property="dishesPrice"/>
+        <result column="dishes_price" jdbcType="DECIMAL" property="dishesPrice"/>
         <result column="dishes_unit" jdbcType="VARCHAR" property="dishesUnit"/>
         <result column="specification" jdbcType="VARCHAR" property="specification"/>
-        <result column="pre_price" jdbcType="DOUBLE" property="prePrice"/>
+        <result column="pre_price" jdbcType="DECIMAL" property="prePrice"/>
         <result column="origin" jdbcType="VARCHAR" property="origin"/>
         <result column="dishes_attr_id" jdbcType="BIGINT" property="dishesAttrId"/>
         <result column="dishes_attr_name" jdbcType="VARCHAR" property="dishesAttrName"/>

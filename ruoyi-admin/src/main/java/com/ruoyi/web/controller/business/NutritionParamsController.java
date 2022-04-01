@@ -130,7 +130,16 @@ public class NutritionParamsController extends BaseController {
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
     public BaseResult update(@Validated(Update.class) NutritionParamsVO vo) {
+//        判断登录状态
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
         NutritionParamsPO po = NutritionParamsMsMapper.INSTANCE.vo2po(vo);
+//        设置更新人信息
+        po.setUpdateBy(loginUser.getUserId());
+        po.setUpdateName(loginUser.getUsername());
         boolean result = nutritionParamsMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");

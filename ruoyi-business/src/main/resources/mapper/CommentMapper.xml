@@ -10,6 +10,7 @@
         <result column="delicious_dishes" jdbcType="VARCHAR" property="deliciousDishes"/>
         <result column="undelicious_dishes" jdbcType="VARCHAR" property="undeliciousDishes"/>
         <result column="process_description" jdbcType="VARCHAR" property="processDescription"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
         <result column="process_time" jdbcType="TIMESTAMP" property="processTime"/>
         <result column="data_state" jdbcType="INTEGER" property="dataState"/>
         <result column="version" jdbcType="INTEGER" property="version"/>
@@ -31,6 +32,7 @@
             ,c.delicious_dishes
             ,c.undelicious_dishes
             ,c.process_description
+            ,c.status
             ,c.process_time
             ,c.data_state
             ,c.version
@@ -67,6 +69,9 @@
             </if>
             <if test="processDescription != null and processDescription != ''">
                 and c.process_description = #{processDescription}
+            </if>
+            <if test="status != null">
+                and c.status = #{status}
             </if>
             <if test="processTime != null">
                 and c.process_time = #{processTime}

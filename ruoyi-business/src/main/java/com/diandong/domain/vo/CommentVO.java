@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.io.Serializable;
@@ -14,7 +15,7 @@ import java.io.Serializable;
  * VO实体类
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-04-01
  */
 @Data
 @ApiModel("VO实体类")
@@ -31,12 +32,14 @@ public class CommentVO implements Serializable {
     /**
      * 订单编号
      */
+    @NotNull(groups = {Insert.class}, message = "提交评价，订单编号不能为空")
     @ApiModelProperty(value = "订单编号")
     private Long orderId;
 
     /**
      * 评价内容
      */
+    @NotEmpty(groups = {Insert.class}, message = "评价内容不能为空")
     @ApiModelProperty(value = "评价内容")
     private String commentContent;
 
@@ -65,15 +68,21 @@ public class CommentVO implements Serializable {
     private String processDescription;
 
     /**
+     * 处理状态 0：未处理；1：处理中；2：已处理
+     */
+    @ApiModelProperty(value = "处理状态 0：未处理；1：处理中；2：已处理")
+    private Integer status;
+
+    /**
      * 处理时间
      */
     @ApiModelProperty(value = "处理时间")
     private LocalDateTime processTime;
 
     /**
-     * 数据状态
+     * 数据状态 0：未删除；1：已删除
      */
-    @ApiModelProperty(value = "数据状态")
+    @ApiModelProperty(value = "数据状态 0：未删除；1：已删除")
     private Integer dataState;
 
     /**

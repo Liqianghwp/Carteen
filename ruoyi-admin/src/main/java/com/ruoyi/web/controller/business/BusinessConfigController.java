@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.constant.Constants;
 import com.diandong.domain.dto.BusinessConfigDTO;
 import com.diandong.domain.po.BusinessConfigPO;
 import com.diandong.domain.vo.BusinessConfigVO;
@@ -12,6 +13,7 @@ import com.diandong.mapstruct.BusinessConfigMsMapper;
 import com.diandong.service.BusinessConfigMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -22,10 +24,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Controller
- *  这个是配置富文本的访问接口信息
+ * 这个是配置富文本的访问接口信息
+ *
  * @author YuLiu
  * @date 2022-03-24
  */
@@ -94,7 +98,17 @@ public class BusinessConfigController extends BaseController {
     @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
     @PostMapping
     public BaseResult save(@Validated(Insert.class) BusinessConfigVO vo) {
+
+//        判断登录状态
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
         BusinessConfigPO po = BusinessConfigMsMapper.INSTANCE.vo2po(vo);
+//        设置创建人信息
+        po.setCreateBy(loginUser.getUserId());
+        po.setCreateName(loginUser.getUsername());
         boolean result = businessConfigMpService.save(po);
         if (result) {
             return BaseResult.successMsg("添加成功！");
@@ -171,7 +185,16 @@ public class BusinessConfigController extends BaseController {
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
     public BaseResult update(@Validated(Update.class) BusinessConfigVO vo) {
+//        判断登录状态
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
         BusinessConfigPO po = BusinessConfigMsMapper.INSTANCE.vo2po(vo);
+        po.setUpdateBy(loginUser.getUserId());
+        po.setUpdateName(loginUser.getUsername());
+
         boolean result = businessConfigMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");

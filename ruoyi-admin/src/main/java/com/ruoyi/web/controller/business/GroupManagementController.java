@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.constant.Constants;
 import com.diandong.domain.dto.GroupManagementDTO;
 import com.diandong.domain.po.GroupManagementPO;
 import com.diandong.domain.vo.GroupManagementVO;
@@ -32,7 +33,7 @@ import java.util.Objects;
  */
 @Validated
 @RestController
-@Api(value = "/groupManagement", tags = {"模块"})
+@Api(value = "/groupManagement", tags = {"集团管理模块"})
 @RequestMapping(value = "/groupManagement")
 public class GroupManagementController extends BaseController {
 
@@ -132,7 +133,16 @@ public class GroupManagementController extends BaseController {
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
     public BaseResult update(@Validated(Update.class) GroupManagementVO vo) {
+
+//        判断更新状态
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
         GroupManagementPO po = GroupManagementMsMapper.INSTANCE.vo2po(vo);
+        po.setUpdateBy(loginUser.getUserId());
+        po.setUpdateName(loginUser.getUsername());
         boolean result = groupManagementMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");

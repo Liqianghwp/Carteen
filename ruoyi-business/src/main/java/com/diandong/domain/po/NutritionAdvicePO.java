@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * PO实体类
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-03-31
  */
 @TableName("wis_nutrition_advice")
 @Data
@@ -41,13 +41,20 @@ public class NutritionAdvicePO implements Serializable {
      */
     @TableField(value = "meal_times_name")
     @ApiModelProperty(value = "餐次名称")
-    private Long mealTimesName;
+    private String mealTimesName;
 
     /**
-     * 营养名称
+     * 营养信息id
+     */
+    @TableField(value = "nutritional_id")
+    @ApiModelProperty(value = "营养信息id")
+    private Long nutritionalId;
+
+    /**
+     * 营养信息名称
      */
     @TableField(value = "nutritional_name")
-    @ApiModelProperty(value = "营养名称")
+    @ApiModelProperty(value = "营养信息名称")
     private String nutritionalName;
 
     /**
@@ -62,7 +69,7 @@ public class NutritionAdvicePO implements Serializable {
      */
     @TableField(value = "number")
     @ApiModelProperty(value = "数量")
-    private Integer number;
+    private Double number;
 
     /**
      * 数据状态

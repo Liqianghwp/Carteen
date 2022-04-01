@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.constant.Constants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.Resource;
 
 /**
@@ -58,6 +60,8 @@ public class DishesRawMaterialController extends BaseController {
                 .eq(ObjectUtils.isNotEmpty(vo.getRawMaterialId()), DishesRawMaterialPO::getRawMaterialId, vo.getRawMaterialId())
                 .eq(StringUtils.isNotBlank(vo.getRawMaterialName()), DishesRawMaterialPO::getRawMaterialName, vo.getRawMaterialName())
                 .eq(ObjectUtils.isNotEmpty(vo.getNumber()), DishesRawMaterialPO::getNumber, vo.getNumber())
+                .eq(ObjectUtils.isNotEmpty(vo.getDataState()), DishesRawMaterialPO::getDataState, vo.getDataState())
+                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), DishesRawMaterialPO::getVersion, vo.getVersion())
                 .eq(StringUtils.isNotBlank(vo.getCreateName()), DishesRawMaterialPO::getCreateName, vo.getCreateName())
                 .eq(StringUtils.isNotBlank(vo.getUpdateName()), DishesRawMaterialPO::getUpdateName, vo.getUpdateName())
                 .list();
@@ -144,7 +148,17 @@ public class DishesRawMaterialController extends BaseController {
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
     public BaseResult update(@Validated(Update.class) DishesRawMaterialVO vo) {
+
+//        判断登录状态
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
         DishesRawMaterialPO po = DishesRawMaterialMsMapper.INSTANCE.vo2po(vo);
+//        设置更新人状态
+        po.setUpdateBy(loginUser.getUserId());
+        po.setUpdateName(loginUser.getUsername());
         boolean result = dishesRawMaterialMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");

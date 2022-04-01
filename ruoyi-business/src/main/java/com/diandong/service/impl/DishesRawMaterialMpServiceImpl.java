@@ -2,32 +2,26 @@ package com.diandong.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.diandong.configuration.CommonServiceImpl;
-import com.diandong.domain.dto.RawMaterialDTO;
 import com.diandong.domain.po.DishesNutritionPO;
 import com.diandong.domain.po.DishesRawMaterialPO;
 import com.diandong.domain.po.RawMaterialNutritionPO;
-import com.diandong.domain.po.RawMaterialPO;
 import com.diandong.domain.vo.DishesRawMaterialVO;
 import com.diandong.mapper.DishesRawMaterialMapper;
 import com.diandong.mapstruct.DishesRawMaterialMsMapper;
 import com.diandong.service.DishesNutritionMpService;
 import com.diandong.service.DishesRawMaterialMpService;
-import com.diandong.service.RawMaterialMpService;
 import com.diandong.service.RawMaterialNutritionMpService;
 import com.ruoyi.common.core.domain.model.LoginUser;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * service实现类
@@ -85,7 +79,8 @@ public class DishesRawMaterialMpServiceImpl extends CommonServiceImpl<DishesRawM
                 for (RawMaterialNutritionPO rawMaterialNutritionPO : list) {
 //                    某个菜品某样原材料的某个营养信息的含量
 
-                    double needNumber = dishesRawMaterialVO.getNumber() * rawMaterialNutritionPO.getNumber();
+//                     needNumber =
+                    Double needNumber = dishesRawMaterialVO.getNumber() * rawMaterialNutritionPO.getNumber();
 
                     List<DishesNutritionPO> collect = dnList.stream().filter(dishesNutritionPO -> Objects.equals(dishesNutritionPO.getNutritionId(), rawMaterialNutritionPO.getNutritionParamsId())).collect(Collectors.toList());
 

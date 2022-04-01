@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
  * Mapper
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-03-31
  */
 @Mapper
 public interface NutritionAdviceMapper extends CommonMapper<NutritionAdvicePO> {

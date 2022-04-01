@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -87,7 +88,7 @@ public class OrderMpServiceImpl extends CommonServiceImpl<OrderMapper, OrderPO>
             orderDetail.setDishesPrice(dishes.getDishesPrice());
             orderDetail.setDishesCount(shopCartPO.getNumber());
 //            计算当前菜品的总价格
-            orderDetail.setDishesTotalPrice(orderDetail.getDishesPrice() * orderDetail.getDishesCount());
+            orderDetail.setDishesTotalPrice(orderDetail.getDishesPrice().multiply(BigDecimal.valueOf(orderDetail.getDishesCount())));
             orderDetail.setCreateBy(loginUser.getUserId());
             orderDetail.setCreateName(loginUser.getUsername());
 

@@ -16,6 +16,7 @@ import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.diandong.service.RawMaterialNutritionMpService;
 import com.diandong.mapstruct.RawMaterialNutritionMsMapper;
+import com.ruoyi.common.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -58,8 +59,14 @@ public class RawMaterialNutritionController extends BaseController {
         List<RawMaterialNutritionPO> dataList = rawMaterialNutritionMpService.lambdaQuery()
                 .eq(ObjectUtils.isNotEmpty(vo.getId()), RawMaterialNutritionPO::getId, vo.getId())
                 .eq(ObjectUtils.isNotEmpty(vo.getRawMaterialId()), RawMaterialNutritionPO::getRawMaterialId, vo.getRawMaterialId())
+                .eq(StringUtils.isNotBlank(vo.getRawMaterialName()), RawMaterialNutritionPO::getRawMaterialName, vo.getRawMaterialName())
                 .eq(ObjectUtils.isNotEmpty(vo.getNutritionParamsId()), RawMaterialNutritionPO::getNutritionParamsId, vo.getNutritionParamsId())
+                .eq(StringUtils.isNotBlank(vo.getNutritionParamsName()), RawMaterialNutritionPO::getNutritionParamsName, vo.getNutritionParamsName())
                 .eq(ObjectUtils.isNotEmpty(vo.getNumber()), RawMaterialNutritionPO::getNumber, vo.getNumber())
+                .eq(ObjectUtils.isNotEmpty(vo.getDataState()), RawMaterialNutritionPO::getDataState, vo.getDataState())
+                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), RawMaterialNutritionPO::getVersion, vo.getVersion())
+                .eq(StringUtils.isNotBlank(vo.getCreateName()), RawMaterialNutritionPO::getCreateName, vo.getCreateName())
+                .eq(StringUtils.isNotBlank(vo.getUpdateName()), RawMaterialNutritionPO::getUpdateName, vo.getUpdateName())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(RawMaterialNutritionMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -145,7 +152,16 @@ public class RawMaterialNutritionController extends BaseController {
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
     public BaseResult update(@Validated(Update.class) RawMaterialNutritionVO vo) {
+//        判断登录状态
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
         RawMaterialNutritionPO po = RawMaterialNutritionMsMapper.INSTANCE.vo2po(vo);
+
+        po.setUpdateBy(loginUser.getUserId());
+        po.setUpdateName(loginUser.getUsername());
         boolean result = rawMaterialNutritionMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");

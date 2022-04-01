@@ -4,19 +4,23 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.constant.Constants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.diandong.service.DishesNutritionMpService;
 import com.diandong.domain.po.DishesNutritionPO;
 import com.diandong.domain.dto.DishesNutritionDTO;
 import com.diandong.domain.vo.DishesNutritionVO;
 import com.diandong.mapstruct.DishesNutritionMsMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.Resource;
 
 /**
@@ -25,6 +29,7 @@ import javax.annotation.Resource;
  * @author YuLiu
  * @date 2022-03-28
  */
+@Slf4j
 @Validated
 @RestController
 @Api(value = "/dishesNutrition", tags = {"菜品营养信息模块"})
@@ -50,10 +55,12 @@ public class DishesNutritionController extends BaseController {
         List<DishesNutritionPO> dataList = dishesNutritionMpService.lambdaQuery()
                 .eq(ObjectUtils.isNotEmpty(vo.getId()), DishesNutritionPO::getId, vo.getId())
                 .eq(ObjectUtils.isNotEmpty(vo.getDishesId()), DishesNutritionPO::getDishesId, vo.getDishesId())
-                .eq(ObjectUtils.isNotEmpty(vo.getDishesName()), DishesNutritionPO::getDishesName, vo.getDishesName())
+                .eq(StringUtils.isNotBlank(vo.getDishesName()), DishesNutritionPO::getDishesName, vo.getDishesName())
                 .eq(ObjectUtils.isNotEmpty(vo.getNutritionId()), DishesNutritionPO::getNutritionId, vo.getNutritionId())
                 .eq(StringUtils.isNotBlank(vo.getNutritionName()), DishesNutritionPO::getNutritionName, vo.getNutritionName())
                 .eq(ObjectUtils.isNotEmpty(vo.getNumber()), DishesNutritionPO::getNumber, vo.getNumber())
+                .eq(ObjectUtils.isNotEmpty(vo.getDataState()), DishesNutritionPO::getDataState, vo.getDataState())
+                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), DishesNutritionPO::getVersion, vo.getVersion())
                 .eq(StringUtils.isNotBlank(vo.getCreateName()), DishesNutritionPO::getCreateName, vo.getCreateName())
                 .eq(StringUtils.isNotBlank(vo.getUpdateName()), DishesNutritionPO::getUpdateName, vo.getUpdateName())
                 .list();
@@ -100,6 +107,35 @@ public class DishesNutritionController extends BaseController {
         }
     }
 
+
+    /**
+     * 保存
+     *
+     * @param voList 参数对象
+     * @return 返回结果
+     */
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "List<DishesNutritionVO>", name = "voList", value = "参数对象")
+    })
+    @ApiOperation(value = "批量保存菜品营养信息", notes = "批量保存菜品营养信息", httpMethod = "POST")
+    @PostMapping("/saveList")
+    public BaseResult saveList(@RequestBody @Validated(Insert.class) List<DishesNutritionVO> voList) {
+
+//        判断登录状态
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
+        try {
+            return dishesNutritionMpService.saveDishesNutritionList(voList, loginUser);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return BaseResult.error(e.getMessage());
+        }
+    }
+
+
     /**
      * 更新
      *
@@ -112,7 +148,17 @@ public class DishesNutritionController extends BaseController {
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
     public BaseResult update(@Validated(Update.class) DishesNutritionVO vo) {
+
+//        判断登录状态
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
         DishesNutritionPO po = DishesNutritionMsMapper.INSTANCE.vo2po(vo);
+
+        po.setUpdateBy(loginUser.getUserId());
+        po.setUpdateName(loginUser.getUsername());
         boolean result = dishesNutritionMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");

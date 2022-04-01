@@ -1,11 +1,14 @@
 package com.ruoyi.web.controller.business;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.constant.Constants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.diandong.service.HealthIndicatorsMpService;
 import com.diandong.domain.po.HealthIndicatorsPO;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.Resource;
 
 /**
@@ -27,8 +31,8 @@ import javax.annotation.Resource;
  */
 @Validated
 @RestController
-@Api(value = "/health_indicators", tags = {"模块"})
-@RequestMapping(value = "/health_indicators")
+@Api(value = "/healthIndicators", tags = {"我的-健康指标模块"})
+@RequestMapping(value = "/healthIndicators")
 public class HealthIndicatorsController extends BaseController {
 
     @Resource
@@ -88,6 +92,30 @@ public class HealthIndicatorsController extends BaseController {
     }
 
     /**
+     * 获取健康指标
+     *
+     * @return 返回结果
+     */
+    @ApiOperation(value = "根据id查询", notes = "根据id查询", httpMethod = "GET")
+    @GetMapping(value = "/getHealthIndicator")
+    public BaseResult getHealthIndicator() {
+
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+        List<HealthIndicatorsPO> list = healthIndicatorsMpService.lambdaQuery()
+                .eq(HealthIndicatorsPO::getCreateBy, loginUser.getUserId())
+                .list();
+
+        if (CollectionUtils.isEmpty(list)) {
+            return BaseResult.success();
+        }
+        return BaseResult.success(list.get(0));
+    }
+
+
+    /**
      * 保存
      *
      * @param vo 参数对象
@@ -96,10 +124,22 @@ public class HealthIndicatorsController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "HealthIndicatorsVO", name = "vo", value = "参数对象")
     })
-    @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
+    @ApiOperation(value = "保存健康指标", notes = "保存健康指标", httpMethod = "POST")
     @PostMapping
-    public BaseResult save(@Validated(Insert.class) HealthIndicatorsVO vo) {
+    public BaseResult save(@RequestBody @Validated(Insert.class) HealthIndicatorsVO vo) {
+
+//        判断登录状态
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
         HealthIndicatorsPO po = HealthIndicatorsMsMapper.INSTANCE.vo2po(vo);
+
+//        设置创建人信息
+        po.setCreateBy(loginUser.getUserId());
+        po.setCreateName(loginUser.getUsername());
+
         boolean result = healthIndicatorsMpService.save(po);
         if (result) {
             return BaseResult.successMsg("添加成功！");
@@ -120,7 +160,18 @@ public class HealthIndicatorsController extends BaseController {
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
     public BaseResult update(@Validated(Update.class) HealthIndicatorsVO vo) {
+
+//        判断登录状态
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
         HealthIndicatorsPO po = HealthIndicatorsMsMapper.INSTANCE.vo2po(vo);
+//        设置更新人信息
+        po.setUpdateBy(loginUser.getUserId());
+        po.setUpdateName(loginUser.getUsername());
+
         boolean result = healthIndicatorsMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");
@@ -154,7 +205,7 @@ public class HealthIndicatorsController extends BaseController {
      *
      * @param idList 编号id集合
      * @return 返回结果
-    */
+     */
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
     })

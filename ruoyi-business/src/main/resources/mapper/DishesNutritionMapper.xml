@@ -4,8 +4,8 @@
 
     <resultMap id="BaseResultMap" type="com.diandong.domain.po.DishesNutritionPO">
         <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="disher_id" jdbcType="BIGINT" property="disherId"/>
-        <result column="disher_name" jdbcType="BIGINT" property="disherName"/>
+        <result column="dishes_id" jdbcType="BIGINT" property="dishesId"/>
+        <result column="dishes_name" jdbcType="VARCHAR" property="dishesName"/>
         <result column="nutrition_id" jdbcType="BIGINT" property="nutritionId"/>
         <result column="nutrition_name" jdbcType="VARCHAR" property="nutritionName"/>
         <result column="number" jdbcType="DOUBLE" property="number"/>
@@ -23,8 +23,8 @@
     <sql id="BaseSelectField">
         <trim prefixOverrides=",">
             ,dn.id
-            ,dn.disher_id
-            ,dn.disher_name
+            ,dn.dishes_id
+            ,dn.dishes_name
             ,dn.nutrition_id
             ,dn.nutrition_name
             ,dn.number
@@ -46,11 +46,11 @@
             <if test="id != null">
                 and dn.id = #{id}
             </if>
-            <if test="disherId != null">
-                and dn.disher_id = #{disherId}
+            <if test="dishesId != null">
+                and dn.dishes_id = #{dishesId}
             </if>
-            <if test="disherName != null">
-                and dn.disher_name = #{disherName}
+            <if test="dishesName != null and dishesName != ''">
+                and dn.dishes_name = #{dishesName}
             </if>
             <if test="nutritionId != null">
                 and dn.nutrition_id = #{nutritionId}

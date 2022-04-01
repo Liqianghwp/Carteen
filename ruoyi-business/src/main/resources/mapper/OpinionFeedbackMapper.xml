@@ -4,11 +4,15 @@
 
     <resultMap id="BaseResultMap" type="com.diandong.domain.po.OpinionFeedbackPO">
         <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="canteen_id" jdbcType="BIGINT" property="canteenId"/>
+        <result column="canteen_name" jdbcType="VARCHAR" property="canteenName"/>
         <result column="opinion_id" jdbcType="BIGINT" property="opinionId"/>
         <result column="opinion_type" jdbcType="VARCHAR" property="opinionType"/>
         <result column="opinion_content" jdbcType="VARCHAR" property="opinionContent"/>
         <result column="opinion_picture" jdbcType="VARCHAR" property="opinionPicture"/>
         <result column="process_information" jdbcType="VARCHAR" property="processInformation"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="anonymous" jdbcType="INTEGER" property="anonymous"/>
         <result column="process_time" jdbcType="TIMESTAMP" property="processTime"/>
         <result column="data_state" jdbcType="INTEGER" property="dataState"/>
         <result column="version" jdbcType="INTEGER" property="version"/>
@@ -24,11 +28,15 @@
     <sql id="BaseSelectField">
         <trim prefixOverrides=",">
             ,of.id
+            ,of.canteen_id
+            ,of.canteen_name
             ,of.opinion_id
             ,of.opinion_type
             ,of.opinion_content
             ,of.opinion_picture
             ,of.process_information
+            ,of.status
+            ,of.anonymous
             ,of.process_time
             ,of.data_state
             ,of.version
@@ -48,6 +56,12 @@
             <if test="id != null">
                 and of.id = #{id}
             </if>
+            <if test="canteenId != null">
+                and of.canteen_id = #{canteenId}
+            </if>
+            <if test="canteenName != null and canteenName != ''">
+                and of.canteen_name = #{canteenName}
+            </if>
             <if test="opinionId != null">
                 and of.opinion_id = #{opinionId}
             </if>
@@ -62,6 +76,12 @@
             </if>
             <if test="processInformation != null and processInformation != ''">
                 and of.process_information = #{processInformation}
+            </if>
+            <if test="status != null">
+                and of.status = #{status}
+            </if>
+            <if test="anonymous != null">
+                and of.anonymous = #{anonymous}
             </if>
             <if test="processTime != null">
                 and of.process_time = #{processTime}

@@ -5,10 +5,11 @@
     <resultMap id="BaseResultMap" type="com.diandong.domain.po.NutritionAdvicePO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="meal_times_id" jdbcType="BIGINT" property="mealTimesId"/>
-        <result column="meal_times_name" jdbcType="BIGINT" property="mealTimesName"/>
+        <result column="meal_times_name" jdbcType="VARCHAR" property="mealTimesName"/>
+        <result column="nutritional_id" jdbcType="BIGINT" property="nutritionalId"/>
         <result column="nutritional_name" jdbcType="VARCHAR" property="nutritionalName"/>
         <result column="unit" jdbcType="VARCHAR" property="unit"/>
-        <result column="number" jdbcType="INTEGER" property="number"/>
+        <result column="number" jdbcType="DOUBLE" property="number"/>
         <result column="data_state" jdbcType="INTEGER" property="dataState"/>
         <result column="version" jdbcType="INTEGER" property="version"/>
         <result column="create_by" jdbcType="BIGINT" property="createBy"/>
@@ -25,6 +26,7 @@
             ,na.id
             ,na.meal_times_id
             ,na.meal_times_name
+            ,na.nutritional_id
             ,na.nutritional_name
             ,na.unit
             ,na.number
@@ -49,8 +51,11 @@
             <if test="mealTimesId != null">
                 and na.meal_times_id = #{mealTimesId}
             </if>
-            <if test="mealTimesName != null">
+            <if test="mealTimesName != null and mealTimesName != ''">
                 and na.meal_times_name = #{mealTimesName}
+            </if>
+            <if test="nutritionalId != null">
+                and na.nutritional_id = #{nutritionalId}
             </if>
             <if test="nutritionalName != null and nutritionalName != ''">
                 and na.nutritional_name = #{nutritionalName}

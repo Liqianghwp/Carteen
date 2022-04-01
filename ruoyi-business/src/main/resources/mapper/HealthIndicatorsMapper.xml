@@ -4,17 +4,17 @@
 
     <resultMap id="BaseResultMap" type="com.diandong.domain.po.HealthIndicatorsPO">
         <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="waistline" jdbcType="BIGINT" property="waistline"/>
-        <result column="body_weight" jdbcType="BIGINT" property="bodyWeight"/>
-        <result column="body_fat" jdbcType="BIGINT" property="bodyFat"/>
-        <result column="heart_rate" jdbcType="BIGINT" property="heartRate"/>
-        <result column="blood_pressure" jdbcType="BIGINT" property="bloodPressure"/>
-        <result column="blood_sugar" jdbcType="BIGINT" property="bloodSugar"/>
-        <result column="triglycerides" jdbcType="BIGINT" property="triglycerides"/>
-        <result column="total_cholesterol" jdbcType="BIGINT" property="totalCholesterol"/>
-        <result column="bad_cholesterol" jdbcType="BIGINT" property="badCholesterol"/>
-        <result column="blood_oxygen" jdbcType="BIGINT" property="bloodOxygen"/>
-        <result column="blood_viscosity" jdbcType="BIGINT" property="bloodViscosity"/>
+        <result column="waistline" jdbcType="DOUBLE" property="waistline"/>
+        <result column="body_weight" jdbcType="DOUBLE" property="bodyWeight"/>
+        <result column="body_fat" jdbcType="DOUBLE" property="bodyFat"/>
+        <result column="heart_rate" jdbcType="DOUBLE" property="heartRate"/>
+        <result column="blood_pressure" jdbcType="DOUBLE" property="bloodPressure"/>
+        <result column="blood_sugar" jdbcType="DOUBLE" property="bloodSugar"/>
+        <result column="triglycerides" jdbcType="DOUBLE" property="triglycerides"/>
+        <result column="total_cholesterol" jdbcType="DOUBLE" property="totalCholesterol"/>
+        <result column="bad_cholesterol" jdbcType="DOUBLE" property="badCholesterol"/>
+        <result column="blood_oxygen" jdbcType="DOUBLE" property="bloodOxygen"/>
+        <result column="blood_viscosity" jdbcType="DOUBLE" property="bloodViscosity"/>
         <result column="data_state" jdbcType="INTEGER" property="dataState"/>
         <result column="version" jdbcType="INTEGER" property="version"/>
         <result column="create_by" jdbcType="BIGINT" property="createBy"/>

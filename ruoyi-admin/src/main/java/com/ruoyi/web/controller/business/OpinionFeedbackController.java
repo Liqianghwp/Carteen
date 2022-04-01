@@ -4,8 +4,12 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.constant.Constants;
+import com.diandong.domain.vo.OpinionFeedbackResponseVO;
+import com.diandong.enums.OpinionStatusEnum;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.diandong.service.OpinionFeedbackMpService;
 import com.diandong.domain.po.OpinionFeedbackPO;
@@ -17,18 +21,19 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.Resource;
 
 /**
  * Controller
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-04-01
  */
 @Validated
 @RestController
-@Api(value = "/opinion_feedback", tags = {"模块"})
-@RequestMapping(value = "/opinion_feedback")
+@Api(value = "/opinionFeedback", tags = {"意见反馈模块"})
+@RequestMapping(value = "/opinionFeedback")
 public class OpinionFeedbackController extends BaseController {
 
     @Resource
@@ -49,11 +54,15 @@ public class OpinionFeedbackController extends BaseController {
         startPage();
         List<OpinionFeedbackPO> dataList = opinionFeedbackMpService.lambdaQuery()
                 .eq(ObjectUtils.isNotEmpty(vo.getId()), OpinionFeedbackPO::getId, vo.getId())
+                .eq(ObjectUtils.isNotEmpty(vo.getCanteenId()), OpinionFeedbackPO::getCanteenId, vo.getCanteenId())
+                .eq(StringUtils.isNotBlank(vo.getCanteenName()), OpinionFeedbackPO::getCanteenName, vo.getCanteenName())
                 .eq(ObjectUtils.isNotEmpty(vo.getOpinionId()), OpinionFeedbackPO::getOpinionId, vo.getOpinionId())
                 .eq(StringUtils.isNotBlank(vo.getOpinionType()), OpinionFeedbackPO::getOpinionType, vo.getOpinionType())
                 .eq(StringUtils.isNotBlank(vo.getOpinionContent()), OpinionFeedbackPO::getOpinionContent, vo.getOpinionContent())
                 .eq(StringUtils.isNotBlank(vo.getOpinionPicture()), OpinionFeedbackPO::getOpinionPicture, vo.getOpinionPicture())
                 .eq(StringUtils.isNotBlank(vo.getProcessInformation()), OpinionFeedbackPO::getProcessInformation, vo.getProcessInformation())
+                .eq(ObjectUtils.isNotEmpty(vo.getStatus()), OpinionFeedbackPO::getStatus, vo.getStatus())
+                .eq(ObjectUtils.isNotEmpty(vo.getAnonymous()), OpinionFeedbackPO::getAnonymous, vo.getAnonymous())
                 .eq(ObjectUtils.isNotEmpty(vo.getProcessTime()), OpinionFeedbackPO::getProcessTime, vo.getProcessTime())
                 .eq(ObjectUtils.isNotEmpty(vo.getDataState()), OpinionFeedbackPO::getDataState, vo.getDataState())
                 .eq(ObjectUtils.isNotEmpty(vo.getVersion()), OpinionFeedbackPO::getVersion, vo.getVersion())
@@ -77,13 +86,28 @@ public class OpinionFeedbackController extends BaseController {
     @ApiOperation(value = "根据id查询", notes = "根据id查询", httpMethod = "GET")
     @GetMapping(value = "/{id}")
     public BaseResult<OpinionFeedbackDTO> getById(@PathVariable("id") Long id) {
-        OpinionFeedbackDTO dto = OpinionFeedbackMsMapper.INSTANCE
-                .po2dto(opinionFeedbackMpService.getById(id));
+
+//        判断登录状态
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
+        OpinionFeedbackPO opinionFeedback = opinionFeedbackMpService.getById(id);
+
+        OpinionFeedbackDTO dto = OpinionFeedbackMsMapper.INSTANCE.po2dto(opinionFeedback);
+
+//        设置已查看和修改人信息
+//        opinionFeedback.setStatus(OpinionStatusEnum.VIEWED.value());
+//        opinionFeedback.setUpdateBy(loginUser.getUserId());
+//        opinionFeedback.setUpdateName(loginUser.getUsername());
+//        opinionFeedbackMpService.updateById(opinionFeedback);
+
         return BaseResult.success(dto);
     }
 
     /**
-     * 保存
+     * 移动端添加意见反馈
      *
      * @param vo 参数对象
      * @return 返回结果
@@ -91,10 +115,20 @@ public class OpinionFeedbackController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "OpinionFeedbackVO", name = "vo", value = "参数对象")
     })
-    @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
+    @ApiOperation(value = "添加意见反馈", notes = "添加意见反馈", httpMethod = "POST")
     @PostMapping
-    public BaseResult save(@Validated(Insert.class) OpinionFeedbackVO vo) {
+    public BaseResult save(@RequestBody @Validated(Insert.class) OpinionFeedbackVO vo) {
+
+//        判断登录状态
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
         OpinionFeedbackPO po = OpinionFeedbackMsMapper.INSTANCE.vo2po(vo);
+//        设置创建人信息
+        po.setCreateBy(loginUser.getUserId());
+        po.setCreateName(loginUser.getUsername());
         boolean result = opinionFeedbackMpService.save(po);
         if (result) {
             return BaseResult.successMsg("添加成功！");
@@ -102,6 +136,41 @@ public class OpinionFeedbackController extends BaseController {
             return BaseResult.error("添加失败！");
         }
     }
+
+
+    /**
+     * 获取当前食堂的列表信息
+     *
+     * @return
+     */
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "OpinionFeedbackVO", name = "vo", value = "参数对象")
+    })
+    @ApiOperation(value = "集团后台pc端查看列表", notes = "后台系统pc端查看列表", httpMethod = "POST")
+    @GetMapping("/getPcOpinionList")
+    public TableDataInfo getPcOpinionList(Long canteenId) {
+        startPage();
+        List<OpinionFeedbackResponseVO> pcOpinionList = opinionFeedbackMpService.getPcOpinionList(canteenId);
+        return getDataTable(pcOpinionList);
+    }
+
+
+    /**
+     * 获取当前食堂的列表信息
+     *
+     * @return
+     */
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "OpinionFeedbackVO", name = "vo", value = "参数对象")
+    })
+    @ApiOperation(value = "集团后台pc端查看列表", notes = "后台系统pc端查看列表", httpMethod = "POST")
+    @GetMapping("/getGroupPcOpinionList")
+    public TableDataInfo getGroupPcOpinionList(Long groupId) {
+        startPage();
+        List<OpinionFeedbackResponseVO> pcOpinionList = opinionFeedbackMpService.getGroupPcOpinionList(groupId);
+        return getDataTable(pcOpinionList);
+    }
+
 
     /**
      * 更新
@@ -112,10 +181,18 @@ public class OpinionFeedbackController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "OpinionFeedbackVO", name = "vo", value = "参数对象")
     })
-    @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
+    @ApiOperation(value = "处理意见反馈", notes = "处理意见反馈", httpMethod = "PUT")
     @PutMapping
     public BaseResult update(@Validated(Update.class) OpinionFeedbackVO vo) {
+//        判断登录状态
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
         OpinionFeedbackPO po = OpinionFeedbackMsMapper.INSTANCE.vo2po(vo);
+        po.setUpdateBy(loginUser.getUserId());
+        po.setUpdateName(loginUser.getUsername());
         boolean result = opinionFeedbackMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");
@@ -149,7 +226,7 @@ public class OpinionFeedbackController extends BaseController {
      *
      * @param idList 编号id集合
      * @return 返回结果
-    */
+     */
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
     })

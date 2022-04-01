@@ -12,7 +12,7 @@ import java.util.List;
  * Mapstruct
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-04-01
  */
 @Mapper
 public interface OpinionFeedbackMsMapper {

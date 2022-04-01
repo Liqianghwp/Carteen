@@ -109,9 +109,7 @@ public class CanteenController extends BaseController {
             return BaseResult.error(Constants.ERROR_MESSAGE);
         }
 
-
         return canteenMpService.addCanteen(vo,loginUser);
-
     }
 
     /**

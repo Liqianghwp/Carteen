@@ -1,6 +1,7 @@
 package com.ruoyi.system.service.impl;
 
 import com.ruoyi.common.core.domain.entity.SysDictData;
+import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.DictUtils;
 import com.ruoyi.system.mapper.SysDictDataMapper;
 import com.ruoyi.system.service.ISysDictDataService;
@@ -63,6 +64,11 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
     public void deleteDictDataByIds(Long[] dictCodes) {
         for (Long dictCode : dictCodes) {
             SysDictData data = selectDictDataById(dictCode);
+
+//            TODO 改造 被占用的无法进行删除操作
+            if (selectUsedDictData(dictCodes) > 0) {
+                throw new ServiceException(String.format("%1$s已分配,不能删除", data.getDictLabel()));
+            }
             dictDataMapper.deleteDictDataById(dictCode);
             List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(data.getDictType());
             DictUtils.setDictCache(data.getDictType(), dictDatas);
@@ -100,4 +106,10 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
         }
         return row;
     }
+
+    @Override
+    public int selectUsedDictData(Long[] dictCodes) {
+        return dictDataMapper.deleteDictDataByIds(dictCodes);
+    }
+
 }

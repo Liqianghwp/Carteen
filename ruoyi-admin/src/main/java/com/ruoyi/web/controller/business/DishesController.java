@@ -114,7 +114,6 @@ public class DishesController extends BaseController {
             return BaseResult.error(Constants.ERROR_MESSAGE);
         }
 
-
         DishesPO po = DishesMsMapper.INSTANCE.vo2po(vo);
 
 //        设置创建人信息
@@ -141,7 +140,17 @@ public class DishesController extends BaseController {
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
     public BaseResult update(@Validated(Update.class) DishesVO vo) {
+//        判断登录状态
+        LoginUser loginUser = getLoginUser();
+        if(Objects.isNull(loginUser)){
+            return BaseResult.error(Constants.ERROR_MESSAGE);
+        }
+
         DishesPO po = DishesMsMapper.INSTANCE.vo2po(vo);
+//        设置更新人信息
+        po.setUpdateBy(loginUser.getUserId());
+        po.setUpdateName(loginUser.getUsername());
+
         boolean result = dishesMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");

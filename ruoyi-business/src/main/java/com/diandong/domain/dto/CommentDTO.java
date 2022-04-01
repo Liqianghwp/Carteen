@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * DTO实体类
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-04-01
  */
 @Data
 @ApiModel("DTO实体类")
@@ -61,15 +61,21 @@ public class CommentDTO implements Serializable {
     private String processDescription;
 
     /**
+     * 处理状态 0：未处理；1：处理中；2：已处理
+     */
+    @ApiModelProperty(value = "处理状态 0：未处理；1：处理中；2：已处理")
+    private Integer status;
+
+    /**
      * 处理时间
      */
     @ApiModelProperty(value = "处理时间")
     private LocalDateTime processTime;
 
     /**
-     * 数据状态
+     * 数据状态 0：未删除；1：已删除
      */
-    @ApiModelProperty(value = "数据状态")
+    @ApiModelProperty(value = "数据状态 0：未删除；1：已删除")
     private Integer dataState;
 
     /**

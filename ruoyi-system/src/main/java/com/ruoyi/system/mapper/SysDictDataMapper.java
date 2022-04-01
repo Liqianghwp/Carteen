@@ -69,6 +69,14 @@ public interface SysDictDataMapper {
     public int deleteDictDataByIds(Long[] dictCodes);
 
     /**
+     * 批量查询字典数据信息
+     *
+     * @param dictCodes 需要查询的字典数据ID集合
+     * @return 结果
+     */
+    public int selectDictDataByIds(Long[] dictCodes);
+
+    /**
      * 新增字典数据信息
      *
      * @param dictData 字典数据信息

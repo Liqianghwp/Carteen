@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * DTO实体类
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-03-31
  */
 @Data
 @ApiModel("DTO实体类")
@@ -28,13 +28,13 @@ public class DishesNutritionDTO implements Serializable {
      * 菜品id
      */
     @ApiModelProperty(value = "菜品id")
-    private Long disherId;
+    private Long dishesId;
 
     /**
      * 菜品名称
      */
     @ApiModelProperty(value = "菜品名称")
-    private Long disherName;
+    private String dishesName;
 
     /**
      * 营养信息id

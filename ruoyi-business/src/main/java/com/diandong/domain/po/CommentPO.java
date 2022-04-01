@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * PO实体类
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-04-01
  */
 @TableName("wis_comment")
 @Data
@@ -72,6 +72,13 @@ public class CommentPO implements Serializable {
     private String processDescription;
 
     /**
+     * 处理状态 0：未处理；1：处理中；2：已处理
+     */
+    @TableField(value = "status")
+    @ApiModelProperty(value = "处理状态 0：未处理；1：处理中；2：已处理")
+    private Integer status;
+
+    /**
      * 处理时间
      */
     @TableField(value = "process_time")
@@ -79,10 +86,10 @@ public class CommentPO implements Serializable {
     private LocalDateTime processTime;
 
     /**
-     * 数据状态
+     * 数据状态 0：未删除；1：已删除
      */
     @TableField(value = "data_state")
-    @ApiModelProperty(value = "数据状态")
+    @ApiModelProperty(value = "数据状态 0：未删除；1：已删除")
     private Integer dataState;
 
     /**

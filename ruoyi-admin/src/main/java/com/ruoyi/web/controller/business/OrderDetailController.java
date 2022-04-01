@@ -27,8 +27,8 @@ import javax.annotation.Resource;
  */
 @Validated
 @RestController
-@Api(value = "/order_detail", tags = {"模块"})
-@RequestMapping(value = "/order_detail")
+@Api(value = "/orderDetail", tags = {"模块"})
+@RequestMapping(value = "/orderDetail")
 public class OrderDetailController extends BaseController {
 
     @Resource

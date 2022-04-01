@@ -58,4 +58,12 @@ public interface ISysDictDataService {
      * @return 结果
      */
     public int updateDictData(SysDictData dictData);
+
+    /**
+     * 检查当前选中id是否被使用
+     *
+     * @param dictCodes 字典数据信息
+     * @return
+     */
+    int selectUsedDictData(Long[] dictCodes);
 }

@@ -13,7 +13,7 @@
         <result column="unit_name" jdbcType="VARCHAR" property="unitName"/>
         <result column="purchase_type_id" jdbcType="BIGINT" property="purchaseTypeId"/>
         <result column="purchase_type_name" jdbcType="VARCHAR" property="purchaseTypeName"/>
-        <result column="pre_price" jdbcType="DOUBLE" property="prePrice"/>
+        <result column="pre_price" jdbcType="DECIMAL" property="prePrice"/>
         <result column="storehouse_id" jdbcType="BIGINT" property="storehouseId"/>
         <result column="storehouse_name" jdbcType="VARCHAR" property="storehouseName"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>

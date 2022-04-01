@@ -14,7 +14,7 @@ import java.io.Serializable;
  * VO实体类
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-03-31
  */
 @Data
 @ApiModel("VO实体类")
@@ -32,67 +32,67 @@ public class HealthIndicatorsVO implements Serializable {
      * 腰围
      */
     @ApiModelProperty(value = "腰围")
-    private Long waistline;
+    private Double waistline;
 
     /**
      * 体重
      */
     @ApiModelProperty(value = "体重")
-    private Long bodyWeight;
+    private Double bodyWeight;
 
     /**
      * 体脂
      */
     @ApiModelProperty(value = "体脂")
-    private Long bodyFat;
+    private Double bodyFat;
 
     /**
      * 心率
      */
     @ApiModelProperty(value = "心率")
-    private Long heartRate;
+    private Double heartRate;
 
     /**
      * 血压
      */
     @ApiModelProperty(value = "血压")
-    private Long bloodPressure;
+    private Double bloodPressure;
 
     /**
      * 血糖
      */
     @ApiModelProperty(value = "血糖")
-    private Long bloodSugar;
+    private Double bloodSugar;
 
     /**
      * 甘油三酯
      */
     @ApiModelProperty(value = "甘油三酯")
-    private Long triglycerides;
+    private Double triglycerides;
 
     /**
      * 总胆固醇
      */
     @ApiModelProperty(value = "总胆固醇")
-    private Long totalCholesterol;
+    private Double totalCholesterol;
 
     /**
      * 坏胆固醇
      */
     @ApiModelProperty(value = "坏胆固醇")
-    private Long badCholesterol;
+    private Double badCholesterol;
 
     /**
      * 血氧
      */
     @ApiModelProperty(value = "血氧")
-    private Long bloodOxygen;
+    private Double bloodOxygen;
 
     /**
      * 血粘稠度
      */
     @ApiModelProperty(value = "血粘稠度")
-    private Long bloodViscosity;
+    private Double bloodViscosity;
 
     /**
      * 数据状态
