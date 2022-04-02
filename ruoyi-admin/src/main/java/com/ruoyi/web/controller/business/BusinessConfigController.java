@@ -35,8 +35,8 @@ import java.util.Objects;
  */
 @Validated
 @RestController
-@Api(value = "/businessConfig", tags = {"富文本设置"})
-@RequestMapping(value = "/businessConfig")
+@Api(value = "/business_config", tags = {"富文本设置"})
+@RequestMapping(value = "/business_config")
 public class BusinessConfigController extends BaseController {
 
     @Resource

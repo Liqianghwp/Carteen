@@ -4,15 +4,13 @@
 
     <resultMap id="BaseResultMap" type="com.diandong.domain.po.RecipePO">
         <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="meal_times_id" jdbcType="BIGINT" property="mealTimesId"/>
-        <result column="meal_times_name" jdbcType="VARCHAR" property="mealTimesName"/>
-        <result column="dishes_id" jdbcType="BIGINT" property="dishesId"/>
-        <result column="dishes_name" jdbcType="VARCHAR" property="dishesName"/>
-        <result column="number" jdbcType="INTEGER" property="number"/>
+        <result column="recipe_name" jdbcType="VARCHAR" property="recipeName"/>
         <result column="recipe_date" jdbcType="TIMESTAMP" property="recipeDate"/>
-        <result column="add_way" jdbcType="VARCHAR" property="addWay"/>
-        <result column="version" jdbcType="BIGINT" property="version"/>
+        <result column="add_way_id" jdbcType="BIGINT" property="addWayId"/>
+        <result column="add_way_name" jdbcType="VARCHAR" property="addWayName"/>
         <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
         <result column="create_by" jdbcType="BIGINT" property="createBy"/>
         <result column="create_name" jdbcType="VARCHAR" property="createName"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
@@ -25,15 +23,13 @@
     <sql id="BaseSelectField">
         <trim prefixOverrides=",">
             ,r.id
-            ,r.meal_times_id
-            ,r.meal_times_name
-            ,r.dishes_id
-            ,r.dishes_name
-            ,r.number
+            ,r.recipe_name
             ,r.recipe_date
-            ,r.add_way
-            ,r.version
+            ,r.add_way_id
+            ,r.add_way_name
             ,r.status
+            ,r.data_state
+            ,r.version
             ,r.create_by
             ,r.create_name
             ,r.create_time
@@ -50,32 +46,26 @@
             <if test="id != null">
                 and r.id = #{id}
             </if>
-            <if test="mealTimesId != null">
-                and r.meal_times_id = #{mealTimesId}
-            </if>
-            <if test="mealTimesName != null and mealTimesName != ''">
-                and r.meal_times_name = #{mealTimesName}
-            </if>
-            <if test="dishesId != null">
-                and r.dishes_id = #{dishesId}
-            </if>
-            <if test="dishesName != null and dishesName != ''">
-                and r.dishes_name = #{dishesName}
-            </if>
-            <if test="number != null">
-                and r.number = #{number}
+            <if test="recipeName != null and recipeName != ''">
+                and r.recipe_name = #{recipeName}
             </if>
             <if test="recipeDate != null">
                 and r.recipe_date = #{recipeDate}
             </if>
-            <if test="addWay != null and addWay != ''">
-                and r.add_way = #{addWay}
+            <if test="addWayId != null">
+                and r.add_way_id = #{addWayId}
             </if>
-            <if test="version != null">
-                and r.version = #{version}
+            <if test="addWayName != null and addWayName != ''">
+                and r.add_way_name = #{addWayName}
             </if>
             <if test="status != null">
                 and r.status = #{status}
+            </if>
+            <if test="dataState != null">
+                and r.data_state = #{dataState}
+            </if>
+            <if test="version != null">
+                and r.version = #{version}
             </if>
             <if test="createName != null and createName != ''">
                 and r.create_name = #{createName}

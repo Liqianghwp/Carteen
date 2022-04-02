@@ -7,8 +7,10 @@ import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
 import com.diandong.domain.vo.OpinionFeedbackResponseVO;
 import com.diandong.enums.OpinionStatusEnum;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.diandong.service.OpinionFeedbackMpService;
@@ -16,13 +18,19 @@ import com.diandong.domain.po.OpinionFeedbackPO;
 import com.diandong.domain.dto.OpinionFeedbackDTO;
 import com.diandong.domain.vo.OpinionFeedbackVO;
 import com.diandong.mapstruct.OpinionFeedbackMsMapper;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Controller
@@ -92,16 +100,8 @@ public class OpinionFeedbackController extends BaseController {
         if (Objects.isNull(loginUser)) {
             return BaseResult.error(Constants.ERROR_MESSAGE);
         }
-
         OpinionFeedbackPO opinionFeedback = opinionFeedbackMpService.getById(id);
-
         OpinionFeedbackDTO dto = OpinionFeedbackMsMapper.INSTANCE.po2dto(opinionFeedback);
-
-//        设置已查看和修改人信息
-//        opinionFeedback.setStatus(OpinionStatusEnum.VIEWED.value());
-//        opinionFeedback.setUpdateBy(loginUser.getUserId());
-//        opinionFeedback.setUpdateName(loginUser.getUsername());
-//        opinionFeedbackMpService.updateById(opinionFeedback);
 
         return BaseResult.success(dto);
     }
@@ -148,9 +148,9 @@ public class OpinionFeedbackController extends BaseController {
     })
     @ApiOperation(value = "集团后台pc端查看列表", notes = "后台系统pc端查看列表", httpMethod = "POST")
     @GetMapping("/getPcOpinionList")
-    public TableDataInfo getPcOpinionList(Long canteenId) {
+    public TableDataInfo getPcOpinionList(OpinionFeedbackVO vo) {
         startPage();
-        List<OpinionFeedbackResponseVO> pcOpinionList = opinionFeedbackMpService.getPcOpinionList(canteenId);
+        List<OpinionFeedbackResponseVO> pcOpinionList = opinionFeedbackMpService.getPcOpinionList(vo);
         return getDataTable(pcOpinionList);
     }
 
@@ -165,9 +165,9 @@ public class OpinionFeedbackController extends BaseController {
     })
     @ApiOperation(value = "集团后台pc端查看列表", notes = "后台系统pc端查看列表", httpMethod = "POST")
     @GetMapping("/getGroupPcOpinionList")
-    public TableDataInfo getGroupPcOpinionList(Long groupId) {
+    public TableDataInfo getGroupPcOpinionList(Long groupId, OpinionFeedbackVO vo) {
         startPage();
-        List<OpinionFeedbackResponseVO> pcOpinionList = opinionFeedbackMpService.getGroupPcOpinionList(groupId);
+        List<OpinionFeedbackResponseVO> pcOpinionList = opinionFeedbackMpService.getGroupPcOpinionList(groupId, vo);
         return getDataTable(pcOpinionList);
     }
 
@@ -239,6 +239,23 @@ public class OpinionFeedbackController extends BaseController {
         } else {
             return BaseResult.error("删除失败");
         }
+    }
+
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "HttpServletResponse", name = "response", value = ""),
+            @ApiImplicitParam(paramType = "query", dataType = "OpinionFeedbackVO", name = "vo", value = "")
+    })
+    @ApiOperation(value = "", notes = "", httpMethod = "POST")
+    @Log(title = "意见反馈", businessType = BusinessType.EXPORT)
+//    @PreAuthorize("@ss.hasPermi('system:user:export')")
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, OpinionFeedbackVO vo) {
+
+        List<OpinionFeedbackResponseVO> list = opinionFeedbackMpService.getGroupPcOpinionList(vo.getGroupId(), vo);
+
+        ExcelUtil<OpinionFeedbackResponseVO> util = new ExcelUtil<OpinionFeedbackResponseVO>(OpinionFeedbackResponseVO.class);
+        util.exportExcel(response, list, "意见反馈");
     }
 
 }

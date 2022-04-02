@@ -1,11 +1,13 @@
 package com.ruoyi.web.controller.system;
 
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.entity.SysRole;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.SecurityUtils;
@@ -29,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -271,4 +274,26 @@ public class SysUserController extends BaseController {
         userService.insertUserAuth(userId, roleIds);
         return success();
     }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "SysUser", name = "user", value = "")
+    })
+    @ApiOperation(value = "用户授权角色", notes = "用户授权角色", httpMethod = "PUT")
+    @PutMapping("/changeUserMsg")
+    public BaseResult changeUserMsg(SysUser user) {
+//        判断登录状态
+        LoginUser loginUser = getLoginUser();
+        if (Objects.isNull(loginUser)) {
+            return BaseResult.error("用户未登录，无法进行操作");
+        }
+        if (Objects.isNull(user.getUserId())) {
+            return BaseResult.error("用户id不能为空");
+        }
+        user.setUpdateBy(loginUser.getUsername());
+
+        userService.updateUser(user);
+
+        return success();
+    }
+
 }

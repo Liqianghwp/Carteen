@@ -58,10 +58,6 @@ public class DishesRawMaterialMpServiceImpl extends CommonServiceImpl<DishesRawM
             if (!result) {
                 throw new Exception("保存菜品原材料信息失败");
             }
-//            rawMaterialMpService.lambdaQuery()
-//                    .eq(RawMaterialPO::getId,dishesRawMaterialVO.getRawMaterialId())
-//                    .eq()
-
 
 //            查询原材料营养信息
 //            查询原材料未删除的营养信息
@@ -75,13 +71,10 @@ public class DishesRawMaterialMpServiceImpl extends CommonServiceImpl<DishesRawM
 
             if (CollectionUtils.isNotEmpty(list)) {
 
-
                 for (RawMaterialNutritionPO rawMaterialNutritionPO : list) {
 //                    某个菜品某样原材料的某个营养信息的含量
 
-//                     needNumber =
                     Double needNumber = dishesRawMaterialVO.getNumber() * rawMaterialNutritionPO.getNumber();
-
                     List<DishesNutritionPO> collect = dnList.stream().filter(dishesNutritionPO -> Objects.equals(dishesNutritionPO.getNutritionId(), rawMaterialNutritionPO.getNutritionParamsId())).collect(Collectors.toList());
 
                     if (CollectionUtils.isNotEmpty(collect)) {

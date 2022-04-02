@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.RecipeDetailMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.RecipeDetailPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="recipe_id" jdbcType="BIGINT" property="recipeId"/>
+        <result column="recipe_name" jdbcType="VARCHAR" property="recipeName"/>
+        <result column="meal_times_id" jdbcType="BIGINT" property="mealTimesId"/>
+        <result column="meal_times_name" jdbcType="VARCHAR" property="mealTimesName"/>
+        <result column="dishes_id" jdbcType="BIGINT" property="dishesId"/>
+        <result column="dishes_name" jdbcType="VARCHAR" property="dishesName"/>
+        <result column="number" jdbcType="INTEGER" property="number"/>
+        <result column="version" jdbcType="BIGINT" property="version"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,rd.id
+            ,rd.recipe_id
+            ,rd.recipe_name
+            ,rd.meal_times_id
+            ,rd.meal_times_name
+            ,rd.dishes_id
+            ,rd.dishes_name
+            ,rd.number
+            ,rd.version
+            ,rd.status
+            ,rd.create_by
+            ,rd.create_name
+            ,rd.create_time
+            ,rd.update_by
+            ,rd.update_name
+            ,rd.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and rd.id = #{id}
+            </if>
+            <if test="recipeId != null">
+                and rd.recipe_id = #{recipeId}
+            </if>
+            <if test="recipeName != null and recipeName != ''">
+                and rd.recipe_name = #{recipeName}
+            </if>
+            <if test="mealTimesId != null">
+                and rd.meal_times_id = #{mealTimesId}
+            </if>
+            <if test="mealTimesName != null and mealTimesName != ''">
+                and rd.meal_times_name = #{mealTimesName}
+            </if>
+            <if test="dishesId != null">
+                and rd.dishes_id = #{dishesId}
+            </if>
+            <if test="dishesName != null and dishesName != ''">
+                and rd.dishes_name = #{dishesName}
+            </if>
+            <if test="number != null">
+                and rd.number = #{number}
+            </if>
+            <if test="version != null">
+                and rd.version = #{version}
+            </if>
+            <if test="status != null">
+                and rd.status = #{status}
+            </if>
+            <if test="createName != null and createName != ''">
+                and rd.create_name = #{createName}
+            </if>
+            <if test="updateName != null and updateName != ''">
+                and rd.update_name = #{updateName}
+            </if>
+            <if test="beginTime != null">
+                and rd.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and rd.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_recipe_detail -->
+
+</mapper>

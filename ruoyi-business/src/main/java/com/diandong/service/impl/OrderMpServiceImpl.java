@@ -50,7 +50,7 @@ public class OrderMpServiceImpl extends CommonServiceImpl<OrderMapper, OrderPO>
 
 //        查询购物车列表信息
         List<ShopCartPO> shopCartList = shopCartMpService.listByIds(cartIds);
-
+//        TODO 这个地方应该怎么处理呢？
         Long canteenId = shopCartList.get(0).getCanteenId();
         String canteenName = shopCartList.get(0).getCanteenName();
 

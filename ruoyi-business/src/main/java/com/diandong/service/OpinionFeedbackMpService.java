@@ -3,6 +3,7 @@ package com.diandong.service;
 import com.diandong.configuration.CommonService;
 import com.diandong.domain.po.OpinionFeedbackPO;
 import com.diandong.domain.vo.OpinionFeedbackResponseVO;
+import com.diandong.domain.vo.OpinionFeedbackVO;
 import com.ruoyi.common.core.domain.BaseResult;
 
 import java.util.List;
@@ -22,12 +23,14 @@ public interface OpinionFeedbackMpService extends CommonService<OpinionFeedbackP
      * @param canteenId 食堂id
      * @return BaseResult
      */
-    List<OpinionFeedbackResponseVO> getPcOpinionList(Long canteenId);
+//    List<OpinionFeedbackResponseVO> getPcOpinionList(Long canteenId);
+    List<OpinionFeedbackResponseVO> getPcOpinionList(OpinionFeedbackVO vo);
 
     /**
      * 根据集团id查看意见列表
      * @param groupId
      * @return
      */
-    List<OpinionFeedbackResponseVO> getGroupPcOpinionList(Long groupId);
+//    List<OpinionFeedbackResponseVO> getGroupPcOpinionList(Long groupId);
+    List<OpinionFeedbackResponseVO> getGroupPcOpinionList(Long groupId,OpinionFeedbackVO vo);
 }

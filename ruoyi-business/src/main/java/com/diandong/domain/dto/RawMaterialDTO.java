@@ -157,4 +157,10 @@ public class RawMaterialDTO implements Serializable {
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 
+    /**
+     * 菜谱生成原材料清单 原材料重量
+     */
+    @ApiModelProperty(value = "重量信息")
+    private Double number;
+
 }

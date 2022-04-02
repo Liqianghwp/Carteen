@@ -1,6 +1,7 @@
 package com.diandong.domain.po;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.ruoyi.common.annotation.Excel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -39,6 +40,7 @@ public class OpinionFeedbackPO implements Serializable {
     /**
      * 食堂名称
      */
+    @Excel(sort = 0, name = "食堂名称", prompt = "食堂名称")
     @TableField(value = "canteen_name")
     @ApiModelProperty(value = "食堂名称")
     private String canteenName;
@@ -53,6 +55,7 @@ public class OpinionFeedbackPO implements Serializable {
     /**
      * 意见类型
      */
+    @Excel(sort = 1, name = "意见类型", prompt = "意见类型")
     @TableField(value = "opinion_type")
     @ApiModelProperty(value = "意见类型")
     private String opinionType;
@@ -60,6 +63,7 @@ public class OpinionFeedbackPO implements Serializable {
     /**
      * 意见内容
      */
+    @Excel(sort = 3, name = "内容", prompt = "内容")
     @TableField(value = "opinion_content")
     @ApiModelProperty(value = "意见内容")
     private String opinionContent;
@@ -81,6 +85,7 @@ public class OpinionFeedbackPO implements Serializable {
     /**
      * 状态 0：未处理；1：已查看；2：已处理
      */
+    @Excel(sort = 6, name = "状态", readConverterExp = "0=未处理,1=已查看,2=已处理")
     @TableField(value = "status")
     @ApiModelProperty(value = "状态 0：未处理；1：已查看；2：已处理")
     private Integer status;
@@ -123,6 +128,7 @@ public class OpinionFeedbackPO implements Serializable {
     /**
      * 创建人姓名
      */
+    @Excel(sort = 4, name = "用户名称", prompt = "用户名称")
     @TableField(value = "create_name")
     @ApiModelProperty(value = "创建人姓名")
     private String createName;
@@ -130,6 +136,7 @@ public class OpinionFeedbackPO implements Serializable {
     /**
      * 创建时间 默认为当前时间
      */
+    @Excel(sort = 2, name = "反馈时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     @ApiModelProperty(value = "创建时间 默认为当前时间")
     private LocalDateTime createTime;

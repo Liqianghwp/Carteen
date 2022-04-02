@@ -105,6 +105,26 @@ public class SysUser extends BaseEntity {
     @Excel(name = "最后登录时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Type.EXPORT)
     private Date loginDate;
 
+
+//    新增用户属性
+    /**
+     * 用户所在区域
+     */
+    private String userArea;
+    /**
+     * 用户身高
+     */
+    private String userHeight;
+    /**
+     * 用户体重
+     */
+    private String userWeight;
+    /**
+     * 用户生日
+     */
+    private String userBirthday;
+
+
     /**
      * 部门对象
      */
@@ -312,6 +332,39 @@ public class SysUser extends BaseEntity {
         this.roleId = roleId;
     }
 
+
+    public String getUserArea() {
+        return userArea;
+    }
+
+    public void setUserArea(String userArea) {
+        this.userArea = userArea;
+    }
+
+    public String getUserHeight() {
+        return userHeight;
+    }
+
+    public void setUserHeight(String userHeight) {
+        this.userHeight = userHeight;
+    }
+
+    public String getUserWeight() {
+        return userWeight;
+    }
+
+    public void setUserWeight(String userWeight) {
+        this.userWeight = userWeight;
+    }
+
+    public String getUserBirthday() {
+        return userBirthday;
+    }
+
+    public void setUserBirthday(String userBirthday) {
+        this.userBirthday = userBirthday;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -335,6 +388,11 @@ public class SysUser extends BaseEntity {
                 .append("updateTime", getUpdateTime())
                 .append("remark", getRemark())
                 .append("dept", getDept())
+
+                .append("userArea", getUserArea())
+                .append("userHeight", getUserHeight())
+                .append("userWeight", getUserWeight())
+                .append("userBirthday", getUserBirthday())
                 .toString();
     }
 }

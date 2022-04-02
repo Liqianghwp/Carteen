@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.FaceRecognitionMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.FaceRecognitionPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="face_picture" jdbcType="VARCHAR" property="facePicture"/>
+        <result column="data_status" jdbcType="INTEGER" property="dataStatus"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,fr.id
+            ,fr.face_picture
+            ,fr.data_status
+            ,fr.version
+            ,fr.create_by
+            ,fr.create_name
+            ,fr.create_time
+            ,fr.update_by
+            ,fr.update_name
+            ,fr.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and fr.id = #{id}
+            </if>
+            <if test="facePicture != null and facePicture != ''">
+                and fr.face_picture = #{facePicture}
+            </if>
+            <if test="dataStatus != null">
+                and fr.data_status = #{dataStatus}
+            </if>
+            <if test="version != null">
+                and fr.version = #{version}
+            </if>
+            <if test="createName != null and createName != ''">
+                and fr.create_name = #{createName}
+            </if>
+            <if test="updateName != null and updateName != ''">
+                and fr.update_name = #{updateName}
+            </if>
+            <if test="beginTime != null">
+                and fr.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and fr.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_face_recognition -->
+
+</mapper>

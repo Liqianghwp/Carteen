@@ -2,16 +2,13 @@ package com.diandong.domain.vo;
 
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
-import com.diandong.domain.po.RecipeDetailPO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * VO实体类
@@ -21,7 +18,7 @@ import java.util.List;
  */
 @Data
 @ApiModel("VO实体类")
-public class RecipeVO implements Serializable {
+public class RecipeDetailVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -32,28 +29,52 @@ public class RecipeVO implements Serializable {
     private Long id;
 
     /**
+     * 食谱id
+     */
+    @ApiModelProperty(value = "食谱id")
+    private Long recipeId;
+
+    /**
      * 食谱名称
      */
     @ApiModelProperty(value = "食谱名称")
     private String recipeName;
 
     /**
-     * 食谱日期
+     * 餐次编号
      */
-    @ApiModelProperty(value = "食谱日期")
-    private LocalDate recipeDate;
+    @ApiModelProperty(value = "餐次编号")
+    private Long mealTimesId;
 
     /**
-     * 添加方式id
+     * 餐次名称
      */
-    @ApiModelProperty(value = "添加方式id")
-    private Long addWayId;
+    @ApiModelProperty(value = "餐次名称")
+    private String mealTimesName;
 
     /**
-     * 添加方式名称
+     * 菜品id
      */
-    @ApiModelProperty(value = "添加方式名称")
-    private String addWayName;
+    @ApiModelProperty(value = "菜品id")
+    private Long dishesId;
+
+    /**
+     * 菜品名称
+     */
+    @ApiModelProperty(value = "菜品名称")
+    private String dishesName;
+
+    /**
+     * 数量
+     */
+    @ApiModelProperty(value = "数量")
+    private Integer number;
+
+    /**
+     * 乐观锁
+     */
+    @ApiModelProperty(value = "乐观锁")
+    private Long version;
 
     /**
      * 状态
@@ -62,38 +83,16 @@ public class RecipeVO implements Serializable {
     private Integer status;
 
     /**
-     * 数据状态
-     */
-    @ApiModelProperty(value = "数据状态")
-    private Integer dataState;
-
-    /**
-     * 乐观锁
-     */
-    @ApiModelProperty(value = "乐观锁")
-    private Integer version;
-
-    /**
      * 创建人姓名
      */
     @ApiModelProperty(value = "创建人姓名")
     private String createName;
 
     /**
-     * 更新人姓名
+     * 更新者姓名
      */
-    @ApiModelProperty(value = "更新人姓名")
+    @ApiModelProperty(value = "更新者姓名")
     private String updateName;
 
-    /**
-     * 食谱菜品详情
-     */
-    @ApiModelProperty(value = "食谱菜品详情")
-    private List<RecipeDetailVO> recipeDetailList;
-    /**
-     * 删除的菜品详情
-     */
-    @ApiModelProperty(value = "要删除的菜品详情ID集合")
-    private List<Long> delRecipeDetailIdList;
 
 }

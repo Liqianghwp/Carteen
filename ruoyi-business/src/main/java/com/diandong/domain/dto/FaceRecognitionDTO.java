@@ -5,19 +5,17 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * DTO实体类
  *
  * @author YuLiu
- * @date 2022-04-02
+ * @date 2022-04-01
  */
 @Data
 @ApiModel("DTO实体类")
-public class RecipeDTO implements Serializable {
+public class FaceRecognitionDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -27,40 +25,16 @@ public class RecipeDTO implements Serializable {
     private Long id;
 
     /**
-     * 食谱名称
+     * 人脸照片
      */
-    @ApiModelProperty(value = "食谱名称")
-    private String recipeName;
-
-    /**
-     * 食谱日期
-     */
-    @ApiModelProperty(value = "食谱日期")
-    private LocalDate recipeDate;
-
-    /**
-     * 添加方式id
-     */
-    @ApiModelProperty(value = "添加方式id")
-    private Long addWayId;
-
-    /**
-     * 添加方式名称
-     */
-    @ApiModelProperty(value = "添加方式名称")
-    private String addWayName;
-
-    /**
-     * 状态
-     */
-    @ApiModelProperty(value = "状态")
-    private Integer status;
+    @ApiModelProperty(value = "人脸照片")
+    private String facePicture;
 
     /**
      * 数据状态
      */
     @ApiModelProperty(value = "数据状态")
-    private Integer dataState;
+    private Integer dataStatus;
 
     /**
      * 乐观锁
@@ -104,9 +78,4 @@ public class RecipeDTO implements Serializable {
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 
-    /**
-     * 菜谱菜品信息
-     */
-    @ApiModelProperty(value = "菜谱菜品信息")
-    private List<RecipeDetailDTO> recipeDetailDTOList;
 }

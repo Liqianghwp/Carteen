@@ -2,6 +2,7 @@ package com.diandong.domain.vo;
 
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.ruoyi.common.annotation.Excel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -112,5 +113,10 @@ public class OpinionFeedbackVO implements Serializable {
     @ApiModelProperty(value = "更新人姓名")
     private String updateName;
 
+    /**
+     * 集团id
+     */
+    @ApiModelProperty(value = "集团id")
+    private Long groupId;
 
 }
