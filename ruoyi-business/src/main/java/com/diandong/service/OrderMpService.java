@@ -21,10 +21,11 @@ public interface OrderMpService extends CommonService<OrderPO> {
     /**
      * 生成订单
      *
-     * @param cartIds 购物车id集合
+     * @param shopCartVO 购物车信息
+     * @param loginUser  登录人信息
      * @return BaseResult
      */
-    BaseResult createOrder(List<Long> cartIds, LoginUser loginUser) throws Exception;
+    BaseResult createOrder(ShopCartVO shopCartVO, LoginUser loginUser) throws Exception;
 
     /**
      * 取消订单

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * DTO实体类
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-04-06
  */
 @Data
 @ApiModel("DTO实体类")
@@ -37,22 +37,10 @@ public class ShopCartDTO implements Serializable {
     private String canteenName;
 
     /**
-     * 菜品id
-     */
-    @ApiModelProperty(value = "菜品id")
-    private Long dishesId;
-
-    /**
-     * 数量
-     */
-    @ApiModelProperty(value = "数量")
-    private Integer number;
-
-    /**
      * 数据状态
      */
     @ApiModelProperty(value = "数据状态")
-    private Integer dateStatus;
+    private Integer dataState;
 
     /**
      * 乐观锁

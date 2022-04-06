@@ -15,11 +15,11 @@ import java.time.LocalDateTime;
  * @author YuLiu
  * @date 2022-04-06
  */
-@TableName("wis_shop_cart")
+@TableName("wis_shop_cart_detail")
 @Data
 @ApiModel("PO实体类")
 @Accessors(chain = true)
-public class ShopCartPO implements Serializable {
+public class ShopCartDetailPO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -30,25 +30,39 @@ public class ShopCartPO implements Serializable {
     private Long id;
 
     /**
-     * 食堂id
+     * 购物车id
      */
-    @TableField(value = "canteen_id")
-    @ApiModelProperty(value = "食堂id")
-    private Long canteenId;
+    @TableField(value = "shop_cart_id")
+    @ApiModelProperty(value = "购物车id")
+    private Long shopCartId;
 
     /**
-     * 食堂名称
+     * 菜品id
      */
-    @TableField(value = "canteen_name")
-    @ApiModelProperty(value = "食堂名称")
-    private String canteenName;
+    @TableField(value = "dishes_id")
+    @ApiModelProperty(value = "菜品id")
+    private Long dishesId;
+
+    /**
+     * 菜品名称
+     */
+    @TableField(value = "dishes_name")
+    @ApiModelProperty(value = "菜品名称")
+    private String dishesName;
+
+    /**
+     * 数量
+     */
+    @TableField(value = "number")
+    @ApiModelProperty(value = "数量")
+    private Integer number;
 
     /**
      * 数据状态
      */
-    @TableField(value = "data_state")
+    @TableField(value = "data_status")
     @ApiModelProperty(value = "数据状态")
-    private Integer dataState;
+    private Integer dataStatus;
 
     /**
      * 乐观锁

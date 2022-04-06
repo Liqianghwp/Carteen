@@ -1,19 +1,14 @@
 package com.diandong.service.impl;
 
 import com.diandong.configuration.CommonServiceImpl;
-import com.diandong.domain.po.DishesPO;
-import com.diandong.domain.po.OrderDetailPO;
-import com.diandong.domain.po.OrderPO;
-import com.diandong.domain.po.ShopCartPO;
+import com.diandong.domain.po.*;
+import com.diandong.domain.vo.ShopCartDetailVO;
 import com.diandong.domain.vo.ShopCartVO;
 import com.diandong.enums.EvaluateEnum;
 import com.diandong.enums.OrderStatusEnum;
 import com.diandong.mapper.OrderMapper;
 import com.diandong.mapstruct.ShopCartMsMapper;
-import com.diandong.service.DishesMpService;
-import com.diandong.service.OrderDetailMpService;
-import com.diandong.service.OrderMpService;
-import com.diandong.service.ShopCartMpService;
+import com.diandong.service.*;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +18,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * service实现类
@@ -44,21 +40,27 @@ public class OrderMpServiceImpl extends CommonServiceImpl<OrderMapper, OrderPO>
     //    购物车Service
     @Resource
     private ShopCartMpService shopCartMpService;
+    //    购物车详情Service
+    @Resource
+    private ShopCartDetailMpService shopCartDetailMpService;
 
     @Override
-    public BaseResult createOrder(List<Long> cartIds, LoginUser loginUser) throws Exception {
+    public BaseResult createOrder(ShopCartVO shopCartVO, LoginUser loginUser) throws Exception {
 
-//        查询购物车列表信息
-        List<ShopCartPO> shopCartList = shopCartMpService.listByIds(cartIds);
-//        TODO 这个地方应该怎么处理呢？
-        Long canteenId = shopCartList.get(0).getCanteenId();
-        String canteenName = shopCartList.get(0).getCanteenName();
+
+//        查询购物车信息
+        ShopCartPO shopCartPO = shopCartMpService.getById(shopCartVO.getId());
+//        查询购物车详情
+//        购物车详情id集合
+        List<Long> shopCartDetailIds = shopCartVO.getShopCartDetailVOList().stream().map(ShopCartDetailVO::getId).collect(Collectors.toList());
+
+        List<ShopCartDetailPO> detailPOList = shopCartDetailMpService.listByIds(shopCartDetailIds);
 
 //        订单表
         OrderPO order = new OrderPO();
 
-        order.setCanteenId(canteenId);
-        order.setCanteenName(canteenName);
+        order.setCanteenId(shopCartPO.getCanteenId());
+        order.setCanteenName(shopCartPO.getCanteenName());
         order.setStatus(OrderStatusEnum.WAIT_PAYMENT.value());
 //        下单时间（当前时间）
         order.setOrderTime(LocalDateTime.now());
@@ -72,21 +74,22 @@ public class OrderMpServiceImpl extends CommonServiceImpl<OrderMapper, OrderPO>
             return BaseResult.error("生成订单失败,请您重新下单");
         }
 //        设置订单详情
-        for (ShopCartPO shopCartPO : shopCartList) {
+
+        for (ShopCartDetailPO shopCartDetailPO : detailPOList) {
 
 //           订单详情
             OrderDetailPO orderDetail = new OrderDetailPO();
 //            设置订单id
             orderDetail.setOrderId(order.getId());
 //            获取菜品id
-            Long dishesId = shopCartPO.getDishesId();
+            Long dishesId = shopCartDetailPO.getDishesId();
 
             DishesPO dishes = dishesMpService.getById(dishesId);
 
             orderDetail.setDishesId(dishesId);
             orderDetail.setDishesName(dishes.getDishesName());
             orderDetail.setDishesPrice(dishes.getDishesPrice());
-            orderDetail.setDishesCount(shopCartPO.getNumber());
+            orderDetail.setDishesCount(shopCartDetailPO.getNumber());
 //            计算当前菜品的总价格
             orderDetail.setDishesTotalPrice(orderDetail.getDishesPrice().multiply(BigDecimal.valueOf(orderDetail.getDishesCount())));
             orderDetail.setCreateBy(loginUser.getUserId());
@@ -98,14 +101,14 @@ public class OrderMpServiceImpl extends CommonServiceImpl<OrderMapper, OrderPO>
             }
 
 //            更新购物车信息
-            shopCartPO.setDateStatus(1);
-            shopCartPO.setUpdateBy(loginUser.getUserId());
-            shopCartPO.setUpdateName(loginUser.getUsername());
-            shopCartPO.setUpdateTime(LocalDateTime.now());
-            result = shopCartMpService.updateById(shopCartPO);
+            result = shopCartDetailMpService.removeById(shopCartDetailPO.getId());
             if (!result) {
                 throw new Exception("订单详情添加失败");
             }
+
+        }
+        if (result) {
+            shopCartMpService.removeById(shopCartPO);
         }
 
         return BaseResult.successMsg("添加成功");

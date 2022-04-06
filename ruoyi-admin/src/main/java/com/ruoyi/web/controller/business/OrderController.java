@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
+import com.diandong.domain.vo.ShopCartDetailVO;
 import com.diandong.domain.vo.ShopCartVO;
 import com.diandong.enums.OrderStatusEnum;
 import com.ruoyi.common.core.controller.BaseController;
@@ -24,6 +25,7 @@ import io.swagger.annotations.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import javax.annotation.Resource;
 
 /**
@@ -92,53 +94,62 @@ public class OrderController extends BaseController {
         return BaseResult.success(dto);
     }
 
-    /**
-     * 保存
-     *
-     * @param vo 参数对象
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "OrderVO", name = "vo", value = "参数对象")
-    })
-    @ApiOperation(value = "生成订单", notes = "生成订单", httpMethod = "POST")
-    @PostMapping
-    public BaseResult save(@Validated(Insert.class) OrderVO vo) {
-
-
-        OrderPO po = OrderMsMapper.INSTANCE.vo2po(vo);
-        boolean result = orderMpService.save(po);
-        if (result) {
-            return BaseResult.successMsg("添加成功！");
-        } else {
-            return BaseResult.error("添加失败！");
-        }
-    }
+//    /**
+//     * 保存
+//     *
+//     * @param vo 参数对象
+//     * @return 返回结果
+//     */
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(paramType = "query", dataType = "OrderVO", name = "vo", value = "参数对象")
+//    })
+//    @ApiOperation(value = "生成订单", notes = "生成订单", httpMethod = "POST")
+//    @PostMapping
+//    public BaseResult save(@Validated(Insert.class) OrderVO vo) {
+//
+//
+//        OrderPO po = OrderMsMapper.INSTANCE.vo2po(vo);
+//        boolean result = orderMpService.save(po);
+//        if (result) {
+//            return BaseResult.successMsg("添加成功！");
+//        } else {
+//            return BaseResult.error("添加失败！");
+//        }
+//    }
 
 
     /**
      * 创建订单
      *
-     * @param cartList 购物车集合
+     * @param shopCartVO 购物车集合
      * @return 返回结果
      */
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "cartList", value = "参数对象")
+            @ApiImplicitParam(paramType = "query", dataType = "ShopCartVO", name = "shopCartVO", value = "参数对象")
     })
     @ApiOperation(value = "生成订单", notes = "生成订单", httpMethod = "POST")
     @PostMapping("/createOrder")
-    public BaseResult createOrder(@RequestBody List<Long> cartList) {
+    public BaseResult createOrder(@RequestBody ShopCartVO shopCartVO) {
 //        判断登录状态
         LoginUser loginUser = getLoginUser();
         if (Objects.isNull(loginUser)) {
             return BaseResult.error(Constants.ERROR_MESSAGE);
         }
 
-        if (CollectionUtils.isEmpty(cartList)) {
+
+        List<ShopCartDetailVO> shopCartDetailVOList = shopCartVO.getShopCartDetailVOList();
+
+        if (CollectionUtils.isEmpty(shopCartDetailVOList)) {
             return BaseResult.error("没有选好的菜品，请您选择菜品");
+        } else {
+            List<Long> collect = shopCartDetailVOList.stream().map(ShopCartDetailVO::getId).collect(Collectors.toList());
+            if (CollectionUtils.isEmpty(collect)) {
+                return BaseResult.error("没有选好的菜品，请您选择菜品");
+            }
         }
         try {
-            return orderMpService.createOrder(cartList, loginUser);
+//            生成订单操作
+            return orderMpService.createOrder(shopCartVO, loginUser);
         } catch (Exception e) {
 //            当保存失败后处理的信息
             log.error(e.getMessage(), e);

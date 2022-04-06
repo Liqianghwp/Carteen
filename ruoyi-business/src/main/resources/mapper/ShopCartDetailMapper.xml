@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.ShopCartDetailMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.ShopCartDetailPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="shop_cart_id" jdbcType="BIGINT" property="shopCartId"/>
+        <result column="dishes_id" jdbcType="BIGINT" property="dishesId"/>
+        <result column="dishes_name" jdbcType="VARCHAR" property="dishesName"/>
+        <result column="number" jdbcType="INTEGER" property="number"/>
+        <result column="data_status" jdbcType="INTEGER" property="dataStatus"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,scd.id
+            ,scd.shop_cart_id
+            ,scd.dishes_id
+            ,scd.dishes_name
+            ,scd.number
+            ,scd.data_status
+            ,scd.version
+            ,scd.create_by
+            ,scd.create_name
+            ,scd.create_time
+            ,scd.update_by
+            ,scd.update_name
+            ,scd.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and scd.id = #{id}
+            </if>
+            <if test="shopCartId != null">
+                and scd.shop_cart_id = #{shopCartId}
+            </if>
+            <if test="dishesId != null">
+                and scd.dishes_id = #{dishesId}
+            </if>
+            <if test="dishesName != null and dishesName != ''">
+                and scd.dishes_name = #{dishesName}
+            </if>
+            <if test="number != null">
+                and scd.number = #{number}
+            </if>
+            <if test="dataStatus != null">
+                and scd.data_status = #{dataStatus}
+            </if>
+            <if test="version != null">
+                and scd.version = #{version}
+            </if>
+            <if test="createName != null and createName != ''">
+                and scd.create_name = #{createName}
+            </if>
+            <if test="updateName != null and updateName != ''">
+                and scd.update_name = #{updateName}
+            </if>
+            <if test="beginTime != null">
+                and scd.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and scd.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_shop_cart_detail -->
+
+</mapper>

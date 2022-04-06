@@ -4,14 +4,12 @@ import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import lombok.Data;
-import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * VO实体类
@@ -21,7 +19,7 @@ import java.util.List;
  */
 @Data
 @ApiModel("VO实体类")
-public class ShopCartVO implements Serializable {
+public class ShopCartDetailVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -32,23 +30,36 @@ public class ShopCartVO implements Serializable {
     private Long id;
 
     /**
-     * 食堂id
+     * 购物车id
      */
-    @NotNull(groups = {Insert.class},message = "食堂id不能为空")
-    @ApiModelProperty(value = "食堂id")
-    private Long canteenId;
+    @ApiModelProperty(value = "购物车id")
+    private Long shopCartId;
 
     /**
-     * 食堂名称
+     * 菜品id
      */
-    @ApiModelProperty(value = "食堂名称")
-    private String canteenName;
+    @NotNull(groups = {Insert.class}, message = "菜品ID 不能为空")
+    @ApiModelProperty(value = "菜品id")
+    private Long dishesId;
+
+    /**
+     * 菜品名称
+     */
+    @ApiModelProperty(value = "菜品名称")
+    private String dishesName;
+
+    /**
+     * 数量
+     */
+    @NotNull(groups = {Insert.class}, message = "购买数量不能为空")
+    @ApiModelProperty(value = "数量")
+    private Integer number;
 
     /**
      * 数据状态
      */
     @ApiModelProperty(value = "数据状态")
-    private Integer dataState;
+    private Integer dataStatus;
 
     /**
      * 乐观锁
@@ -67,14 +78,6 @@ public class ShopCartVO implements Serializable {
      */
     @ApiModelProperty(value = "更新人姓名")
     private String updateName;
-
-    /**
-     * 购物车详情列表
-     */
-    @Valid
-    @NotNull(groups = {Insert.class},message = "购物车详情集合不能为空")
-    @ApiModelProperty(value = "购物车详情集合")
-    private List<ShopCartDetailVO> shopCartDetailVOList;
 
 
 }

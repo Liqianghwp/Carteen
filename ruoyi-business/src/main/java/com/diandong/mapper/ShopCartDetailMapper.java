@@ -1,7 +1,7 @@
 package com.diandong.mapper;
 
 import com.diandong.configuration.CommonMapper;
-import com.diandong.domain.po.ShopCartPO;
+import com.diandong.domain.po.ShopCartDetailPO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,6 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2022-04-06
  */
 @Mapper
-public interface ShopCartMapper extends CommonMapper<ShopCartPO> {
+public interface ShopCartDetailMapper extends CommonMapper<ShopCartDetailPO> {
 
 }

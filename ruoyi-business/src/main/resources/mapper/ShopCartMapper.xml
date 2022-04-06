@@ -6,9 +6,7 @@
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="canteen_id" jdbcType="BIGINT" property="canteenId"/>
         <result column="canteen_name" jdbcType="VARCHAR" property="canteenName"/>
-        <result column="dishes_id" jdbcType="BIGINT" property="dishesId"/>
-        <result column="number" jdbcType="INTEGER" property="number"/>
-        <result column="date_status" jdbcType="INTEGER" property="dateStatus"/>
+        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
         <result column="version" jdbcType="INTEGER" property="version"/>
         <result column="create_by" jdbcType="BIGINT" property="createBy"/>
         <result column="create_name" jdbcType="VARCHAR" property="createName"/>
@@ -24,9 +22,7 @@
             ,sc.id
             ,sc.canteen_id
             ,sc.canteen_name
-            ,sc.dishes_id
-            ,sc.number
-            ,sc.date_status
+            ,sc.data_state
             ,sc.version
             ,sc.create_by
             ,sc.create_name
@@ -50,14 +46,8 @@
             <if test="canteenName != null and canteenName != ''">
                 and sc.canteen_name = #{canteenName}
             </if>
-            <if test="dishesId != null">
-                and sc.dishes_id = #{dishesId}
-            </if>
-            <if test="number != null">
-                and sc.number = #{number}
-            </if>
-            <if test="dateStatus != null">
-                and sc.date_status = #{dateStatus}
+            <if test="dataState != null">
+                and sc.data_state = #{dataState}
             </if>
             <if test="version != null">
                 and sc.version = #{version}
