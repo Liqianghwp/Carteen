@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  * @date 2022-04-01
  */
 @Data
-@ApiModel("DTO实体类")
+@ApiModel("人脸认证DTO实体类")
 public class FaceRecognitionDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 

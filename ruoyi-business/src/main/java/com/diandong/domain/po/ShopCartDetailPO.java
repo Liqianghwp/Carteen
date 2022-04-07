@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
  */
 @TableName("wis_shop_cart_detail")
 @Data
-@ApiModel("PO实体类")
+@ApiModel("购物车详情PO实体类")
 @Accessors(chain = true)
 public class ShopCartDetailPO implements Serializable {
     private static final long serialVersionUID = 1L;

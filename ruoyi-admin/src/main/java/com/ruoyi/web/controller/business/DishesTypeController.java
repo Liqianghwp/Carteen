@@ -33,8 +33,8 @@ import java.util.Objects;
  */
 @Validated
 @RestController
-@Api(value = "/dishesType", tags = {"菜品类型模块"})
-@RequestMapping(value = "/dishesType")
+@Api(value = "/dishes_type", tags = {"菜品类型模块"})
+@RequestMapping(value = "/dishes_type")
 public class DishesTypeController extends BaseController {
 
     @Resource

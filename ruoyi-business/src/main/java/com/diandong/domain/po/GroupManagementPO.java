@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
  */
 @TableName("wis_group_management")
 @Data
-@ApiModel("PO实体类")
+@ApiModel("集团管理PO实体类")
 @Accessors(chain = true)
 public class GroupManagementPO implements Serializable {
     private static final long serialVersionUID = 1L;

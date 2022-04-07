@@ -27,7 +27,7 @@ import javax.annotation.Resource;
  */
 @Validated
 @RestController
-@Api(value = "/shop_cart_detail", tags = {"模块"})
+@Api(value = "/shop_cart_detail", tags = {"购物车详情模块"})
 @RequestMapping(value = "/shop_cart_detail")
 public class ShopCartDetailController extends BaseController {
 

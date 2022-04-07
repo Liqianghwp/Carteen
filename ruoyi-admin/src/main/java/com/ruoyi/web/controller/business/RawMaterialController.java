@@ -30,8 +30,8 @@ import javax.annotation.Resource;
  */
 @Validated
 @RestController
-@Api(value = "/rawMaterial", tags = {"原材料设置"})
-@RequestMapping(value = "/rawMaterial")
+@Api(value = "/raw_material", tags = {"原材料设置"})
+@RequestMapping(value = "/raw_material")
 public class RawMaterialController extends BaseController {
 
     @Resource

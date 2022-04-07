@@ -18,7 +18,7 @@ import java.io.Serializable;
  * @date 2022-03-29
  */
 @Data
-@ApiModel("VO实体类")
+@ApiModel("菜品类型VO实体类")
 public class
 
 

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  * @date 2022-03-29
  */
 @Data
-@ApiModel("DTO实体类")
+@ApiModel("支付配置DTO实体类")
 public class PaymentConfigDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 

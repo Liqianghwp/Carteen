@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
  */
 @TableName("wis_face_recognition")
 @Data
-@ApiModel("PO实体类")
+@ApiModel("人脸认证PO实体类")
 @Accessors(chain = true)
 public class FaceRecognitionPO implements Serializable {
     private static final long serialVersionUID = 1L;

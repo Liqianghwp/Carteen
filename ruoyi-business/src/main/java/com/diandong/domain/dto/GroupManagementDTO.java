@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  * @date 2022-03-29
  */
 @Data
-@ApiModel("DTO实体类")
+@ApiModel("集团管理DTO实体类")
 public class GroupManagementDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 

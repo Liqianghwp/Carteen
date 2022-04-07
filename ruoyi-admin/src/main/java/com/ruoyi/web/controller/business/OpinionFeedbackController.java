@@ -40,8 +40,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Validated
 @RestController
-@Api(value = "/opinionFeedback", tags = {"意见反馈模块"})
-@RequestMapping(value = "/opinionFeedback")
+@Api(value = "/opinion_feedback", tags = {"意见反馈模块"})
+@RequestMapping(value = "/opinion_feedback")
 public class OpinionFeedbackController extends BaseController {
 
     @Resource
@@ -147,7 +147,7 @@ public class OpinionFeedbackController extends BaseController {
             @ApiImplicitParam(paramType = "query", dataType = "OpinionFeedbackVO", name = "vo", value = "参数对象")
     })
     @ApiOperation(value = "集团后台pc端查看列表", notes = "后台系统pc端查看列表", httpMethod = "POST")
-    @GetMapping("/getPcOpinionList")
+    @GetMapping("/opinion/pc")
     public TableDataInfo getPcOpinionList(OpinionFeedbackVO vo) {
         startPage();
         List<OpinionFeedbackResponseVO> pcOpinionList = opinionFeedbackMpService.getPcOpinionList(vo);
@@ -164,7 +164,7 @@ public class OpinionFeedbackController extends BaseController {
             @ApiImplicitParam(paramType = "query", dataType = "OpinionFeedbackVO", name = "vo", value = "参数对象")
     })
     @ApiOperation(value = "集团后台pc端查看列表", notes = "后台系统pc端查看列表", httpMethod = "POST")
-    @GetMapping("/getGroupPcOpinionList")
+    @GetMapping("/opinion/group_pc")
     public TableDataInfo getGroupPcOpinionList(Long groupId, OpinionFeedbackVO vo) {
         startPage();
         List<OpinionFeedbackResponseVO> pcOpinionList = opinionFeedbackMpService.getGroupPcOpinionList(groupId, vo);

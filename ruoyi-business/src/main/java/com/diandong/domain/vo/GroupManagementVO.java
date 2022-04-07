@@ -19,7 +19,7 @@ import java.io.Serializable;
  * @date 2022-03-29
  */
 @Data
-@ApiModel("VO实体类")
+@ApiModel("集团管理VO实体类")
 public class GroupManagementVO implements Serializable {
     private static final long serialVersionUID = 1L;
 

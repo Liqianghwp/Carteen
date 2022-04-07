@@ -123,7 +123,7 @@ public class BusinessConfigController extends BaseController {
      * @return
      */
     @ApiOperation(value = "关于我们", notes = "关于我们", httpMethod = "GET")
-    @GetMapping("/getAboutUs")
+    @GetMapping("/about_us")
     public BaseResult getAboutUs() {
 
         return searchBusinessConfig("关于我们");
@@ -135,7 +135,7 @@ public class BusinessConfigController extends BaseController {
      * @return
      */
     @ApiOperation(value = "用户服务协议", notes = "用户服务协议", httpMethod = "GET")
-    @GetMapping("/getUserServicesAgreement")
+    @GetMapping("/user_services_agreement")
     public BaseResult getUserServicesAgreement() {
 
         return searchBusinessConfig("用户服务协议");
@@ -147,7 +147,7 @@ public class BusinessConfigController extends BaseController {
      * @return
      */
     @ApiOperation(value = "充值服务协议", notes = "充值服务协议", httpMethod = "GET")
-    @GetMapping("/getRechargeServiceAgreement")
+    @GetMapping("/recharge_service_agreement")
     public BaseResult getRechargeServiceAgreement() {
 
         return searchBusinessConfig("充值服务协议");

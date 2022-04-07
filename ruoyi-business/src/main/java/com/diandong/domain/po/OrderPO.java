@@ -18,7 +18,7 @@ import java.util.List;
  */
 @TableName("wis_order")
 @Data
-@ApiModel("PO实体类")
+@ApiModel("订单PO实体类")
 @Accessors(chain = true)
 public class OrderPO implements Serializable {
     private static final long serialVersionUID = 1L;

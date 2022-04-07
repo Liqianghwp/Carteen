@@ -36,8 +36,8 @@ import javax.annotation.Resource;
 @Slf4j
 @Validated
 @RestController
-@Api(value = "/rawMaterialNutrition", tags = {"原材料营养信息模块"})
-@RequestMapping(value = "/rawMaterialNutrition")
+@Api(value = "/raw_material_nutrition", tags = {"原材料营养信息模块"})
+@RequestMapping(value = "/raw_material_nutrition")
 public class RawMaterialNutritionController extends BaseController {
 
     @Resource
@@ -90,26 +90,26 @@ public class RawMaterialNutritionController extends BaseController {
         return BaseResult.success(dto);
     }
 
-    /**
-     * 保存
-     *
-     * @param vo 参数对象
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "RawMaterialNutritionVO", name = "vo", value = "参数对象")
-    })
-    @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
-    @PostMapping
-    public BaseResult save(@Validated(Insert.class) RawMaterialNutritionVO vo) {
-        RawMaterialNutritionPO po = RawMaterialNutritionMsMapper.INSTANCE.vo2po(vo);
-        boolean result = rawMaterialNutritionMpService.save(po);
-        if (result) {
-            return BaseResult.successMsg("添加成功！");
-        } else {
-            return BaseResult.error("添加失败！");
-        }
-    }
+//    /**
+//     * 保存
+//     *
+//     * @param vo 参数对象
+//     * @return 返回结果
+//     */
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(paramType = "query", dataType = "RawMaterialNutritionVO", name = "vo", value = "参数对象")
+//    })
+//    @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
+//    @PostMapping
+//    public BaseResult save(@Validated(Insert.class) RawMaterialNutritionVO vo) {
+//        RawMaterialNutritionPO po = RawMaterialNutritionMsMapper.INSTANCE.vo2po(vo);
+//        boolean result = rawMaterialNutritionMpService.save(po);
+//        if (result) {
+//            return BaseResult.successMsg("添加成功！");
+//        } else {
+//            return BaseResult.error("添加失败！");
+//        }
+//    }
 
     /**
      * 保存
@@ -121,7 +121,7 @@ public class RawMaterialNutritionController extends BaseController {
             @ApiImplicitParam(paramType = "query", dataType = "List<RawMaterialNutritionVO>", name = "voList", value = "参数对象")
     })
     @ApiOperation(value = "保存原材料营养集合", notes = "保存", httpMethod = "POST")
-    @PostMapping("/saveList")
+    @PostMapping
     public BaseResult saveList(@RequestBody @Validated List<RawMaterialNutritionVO> voList) {
 
 //

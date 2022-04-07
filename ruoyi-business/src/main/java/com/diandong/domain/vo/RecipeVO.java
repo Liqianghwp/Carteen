@@ -20,7 +20,7 @@ import java.util.List;
  * @date 2022-04-02
  */
 @Data
-@ApiModel("VO实体类")
+@ApiModel("食谱VO实体类")
 public class RecipeVO implements Serializable {
     private static final long serialVersionUID = 1L;
 

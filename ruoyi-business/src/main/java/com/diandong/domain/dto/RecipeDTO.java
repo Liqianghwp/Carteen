@@ -16,7 +16,7 @@ import java.util.List;
  * @date 2022-04-02
  */
 @Data
-@ApiModel("DTO实体类")
+@ApiModel("食谱信息DTO实体类")
 public class RecipeDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 

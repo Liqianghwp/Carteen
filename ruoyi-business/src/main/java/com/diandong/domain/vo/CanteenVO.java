@@ -18,7 +18,7 @@ import java.io.Serializable;
  * @date 2022-03-29
  */
 @Data
-@ApiModel("VO实体类")
+@ApiModel("食堂VO实体类")
 public class CanteenVO implements Serializable {
     private static final long serialVersionUID = 1L;
 

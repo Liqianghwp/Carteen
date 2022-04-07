@@ -31,8 +31,8 @@ import javax.annotation.Resource;
  */
 @Validated
 @RestController
-@Api(value = "/nutritionParams", tags = {"营养信息模块"})
-@RequestMapping(value = "/nutritionParams")
+@Api(value = "/nutrition_params", tags = {"营养信息模块"})
+@RequestMapping(value = "/nutrition_params")
 public class NutritionParamsController extends BaseController {
 
     @Resource

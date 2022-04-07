@@ -37,7 +37,7 @@ import javax.annotation.Resource;
 @Slf4j
 @Validated
 @RestController
-@Api(value = "/order", tags = {"模块"})
+@Api(value = "/order", tags = {"订单模块"})
 @RequestMapping(value = "/order")
 public class OrderController extends BaseController {
 
@@ -128,7 +128,7 @@ public class OrderController extends BaseController {
             @ApiImplicitParam(paramType = "query", dataType = "ShopCartVO", name = "shopCartVO", value = "参数对象")
     })
     @ApiOperation(value = "生成订单", notes = "生成订单", httpMethod = "POST")
-    @PostMapping("/createOrder")
+    @PostMapping
     public BaseResult createOrder(@RequestBody ShopCartVO shopCartVO) {
 //        判断登录状态
         LoginUser loginUser = getLoginUser();
@@ -188,7 +188,7 @@ public class OrderController extends BaseController {
             @ApiImplicitParam(paramType = "query", dataType = "Long", name = "id", value = "参数对象")
     })
     @ApiOperation(value = "支付订单", notes = "支付订单", httpMethod = "POST")
-    @PostMapping("/payOrder/{id}")
+    @PostMapping("/payment/{id}")
     public BaseResult payOrder(@PathVariable("id") Long orderId) {
 
 //        判断登录状态
@@ -197,7 +197,6 @@ public class OrderController extends BaseController {
             return BaseResult.error(Constants.ERROR_MESSAGE);
         }
 
-//        return orderMpService.payOrder(orderId, loginUser);
         return orderMpService.processOrders(orderId, loginUser, OrderStatusEnum.COMPLETED.value());
     }
 
@@ -253,7 +252,7 @@ public class OrderController extends BaseController {
             @ApiImplicitParam(paramType = "path", dataType = "long", name = "orderId", value = "编号id")
     })
     @ApiOperation(value = "取消订单", notes = "取消订单", httpMethod = "GET")
-    @GetMapping("/cancelOrder/{id}")
+    @GetMapping("/abolition/{id}")
     public BaseResult cancelOrder(@PathVariable("id") Long orderId) {
 
         LoginUser loginUser = getLoginUser();

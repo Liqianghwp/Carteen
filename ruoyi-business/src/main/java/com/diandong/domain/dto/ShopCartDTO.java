@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  * @date 2022-04-06
  */
 @Data
-@ApiModel("DTO实体类")
+@ApiModel("购物车DTO实体类")
 public class ShopCartDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 

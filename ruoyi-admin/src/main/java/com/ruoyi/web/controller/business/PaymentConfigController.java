@@ -27,8 +27,8 @@ import javax.annotation.Resource;
  */
 @Validated
 @RestController
-@Api(value = "/paymentConfig", tags = {"支付设置模块"})
-@RequestMapping(value = "/paymentConfig")
+@Api(value = "/payment_config", tags = {"支付设置模块"})
+@RequestMapping(value = "/payment_config")
 public class PaymentConfigController extends BaseController {
 
     @Resource

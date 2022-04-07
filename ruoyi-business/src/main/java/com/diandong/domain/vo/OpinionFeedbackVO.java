@@ -18,7 +18,7 @@ import java.io.Serializable;
  * @date 2022-04-01
  */
 @Data
-@ApiModel("VO实体类")
+@ApiModel("意见反馈VO实体类")
 public class OpinionFeedbackVO implements Serializable {
     private static final long serialVersionUID = 1L;
 

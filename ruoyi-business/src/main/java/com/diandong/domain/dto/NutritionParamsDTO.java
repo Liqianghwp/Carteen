@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  * @date 2022-03-29
  */
 @Data
-@ApiModel("DTO实体类")
+@ApiModel("营养参数DTO实体类")
 public class NutritionParamsDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 

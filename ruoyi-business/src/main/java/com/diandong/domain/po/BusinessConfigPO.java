@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
  */
 @TableName("wis_business_config")
 @Data
-@ApiModel("PO实体类")
+@ApiModel("富文本PO实体类")
 @Accessors(chain = true)
 public class BusinessConfigPO implements Serializable {
     private static final long serialVersionUID = 1L;

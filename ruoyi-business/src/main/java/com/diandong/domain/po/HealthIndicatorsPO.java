@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
  */
 @TableName("wis_health_indicators")
 @Data
-@ApiModel("PO实体类")
+@ApiModel("健康指标PO实体类")
 @Accessors(chain = true)
 public class HealthIndicatorsPO implements Serializable {
     private static final long serialVersionUID = 1L;

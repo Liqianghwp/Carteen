@@ -36,7 +36,7 @@ import javax.annotation.Resource;
 @Slf4j
 @Validated
 @RestController
-@Api(value = "/shop_cart", tags = {"模块"})
+@Api(value = "/shop_cart", tags = {"购物车模块"})
 @RequestMapping(value = "/shop_cart")
 public class ShopCartController extends BaseController {
 

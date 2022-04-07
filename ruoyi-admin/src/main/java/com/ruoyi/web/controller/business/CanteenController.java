@@ -30,7 +30,7 @@ import javax.annotation.Resource;
  */
 @Validated
 @RestController
-@Api(value = "/canteen", tags = {"模块"})
+@Api(value = "/canteen", tags = {"食堂设置模块"})
 @RequestMapping(value = "/canteen")
 public class CanteenController extends BaseController {
 

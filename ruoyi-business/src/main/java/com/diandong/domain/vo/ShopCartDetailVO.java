@@ -18,7 +18,7 @@ import java.io.Serializable;
  * @date 2022-04-06
  */
 @Data
-@ApiModel("VO实体类")
+@ApiModel("购物车详情VO实体类")
 public class ShopCartDetailVO implements Serializable {
     private static final long serialVersionUID = 1L;
 

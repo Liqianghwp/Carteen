@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
  */
 @TableName("wis_canteen")
 @Data
-@ApiModel("PO实体类")
+@ApiModel("食堂PO实体类")
 @Accessors(chain = true)
 public class CanteenPO implements Serializable {
     private static final long serialVersionUID = 1L;

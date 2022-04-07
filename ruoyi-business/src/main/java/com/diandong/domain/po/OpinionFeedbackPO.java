@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
  */
 @TableName("wis_opinion_feedback")
 @Data
-@ApiModel("PO实体类")
+@ApiModel("意见反馈PO实体类")
 @Accessors(chain = true)
 public class OpinionFeedbackPO implements Serializable {
     private static final long serialVersionUID = 1L;

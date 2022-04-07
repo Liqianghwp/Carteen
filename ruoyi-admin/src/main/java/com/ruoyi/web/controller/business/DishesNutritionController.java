@@ -32,8 +32,8 @@ import javax.annotation.Resource;
 @Slf4j
 @Validated
 @RestController
-@Api(value = "/dishesNutrition", tags = {"菜品营养信息模块"})
-@RequestMapping(value = "/dishesNutrition")
+@Api(value = "/dishes_nutrition", tags = {"菜品营养信息模块"})
+@RequestMapping(value = "/dishes_nutrition")
 public class DishesNutritionController extends BaseController {
 
     @Resource
@@ -86,26 +86,26 @@ public class DishesNutritionController extends BaseController {
         return BaseResult.success(dto);
     }
 
-    /**
-     * 保存
-     *
-     * @param vo 参数对象
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "DishesNutritionVO", name = "vo", value = "参数对象")
-    })
-    @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
-    @PostMapping
-    public BaseResult save(@RequestBody @Validated(Insert.class) DishesNutritionVO vo) {
-        DishesNutritionPO po = DishesNutritionMsMapper.INSTANCE.vo2po(vo);
-        boolean result = dishesNutritionMpService.save(po);
-        if (result) {
-            return BaseResult.successMsg("添加成功！");
-        } else {
-            return BaseResult.error("添加失败！");
-        }
-    }
+//    /**
+//     * 保存
+//     *
+//     * @param vo 参数对象
+//     * @return 返回结果
+//     */
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(paramType = "query", dataType = "DishesNutritionVO", name = "vo", value = "参数对象")
+//    })
+//    @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
+//    @PostMapping
+//    public BaseResult save(@RequestBody @Validated(Insert.class) DishesNutritionVO vo) {
+//        DishesNutritionPO po = DishesNutritionMsMapper.INSTANCE.vo2po(vo);
+//        boolean result = dishesNutritionMpService.save(po);
+//        if (result) {
+//            return BaseResult.successMsg("添加成功！");
+//        } else {
+//            return BaseResult.error("添加失败！");
+//        }
+//    }
 
 
     /**
@@ -118,7 +118,7 @@ public class DishesNutritionController extends BaseController {
             @ApiImplicitParam(paramType = "query", dataType = "List<DishesNutritionVO>", name = "voList", value = "参数对象")
     })
     @ApiOperation(value = "批量保存菜品营养信息", notes = "批量保存菜品营养信息", httpMethod = "POST")
-    @PostMapping("/saveList")
+    @PostMapping
     public BaseResult saveList(@RequestBody @Validated(Insert.class) List<DishesNutritionVO> voList) {
 
 //        判断登录状态

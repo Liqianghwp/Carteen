@@ -17,7 +17,7 @@ import java.io.Serializable;
  * @date 2022-03-29
  */
 @Data
-@ApiModel("VO实体类")
+@ApiModel("营养参数VO实体类")
 public class NutritionParamsVO implements Serializable {
     private static final long serialVersionUID = 1L;
 

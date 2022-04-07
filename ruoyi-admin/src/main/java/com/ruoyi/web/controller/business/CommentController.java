@@ -117,8 +117,6 @@ public class CommentController extends BaseController {
 //        不喜欢的菜品
         comment.setUndeliciousDishes(resetDishesName(comment.getUndeliciousDishes()));
 
-
-//        CommentDTO dto = CommentMsMapper.INSTANCE.po2dto(commentMpService.getById(id));
         CommentDTO dto = CommentMsMapper.INSTANCE.po2dto(comment);
 
         return BaseResult.success(dto);

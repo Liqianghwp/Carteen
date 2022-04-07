@@ -18,7 +18,7 @@ import java.io.Serializable;
  * @date 2022-03-31
  */
 @Data
-@ApiModel("VO实体类")
+@ApiModel("原料VO实体类")
 public class RawMaterialVO implements Serializable {
     private static final long serialVersionUID = 1L;
 

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  * @date 2022-03-31
  */
 @Data
-@ApiModel("DTO实体类")
+@ApiModel("菜品DTO实体类")
 public class DishesDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 

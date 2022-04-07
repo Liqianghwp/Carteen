@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
  */
 @TableName("wis_raw_material")
 @Data
-@ApiModel("PO实体类")
+@ApiModel("原料PO实体类")
 @Accessors(chain = true)
 public class RawMaterialPO implements Serializable {
     private static final long serialVersionUID = 1L;

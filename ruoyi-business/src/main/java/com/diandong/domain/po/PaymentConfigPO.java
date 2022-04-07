@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
  */
 @TableName("wis_payment_config")
 @Data
-@ApiModel("PO实体类")
+@ApiModel("支付配置PO实体类")
 @Accessors(chain = true)
 public class PaymentConfigPO implements Serializable {
     private static final long serialVersionUID = 1L;

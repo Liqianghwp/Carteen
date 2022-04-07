@@ -33,8 +33,8 @@ import javax.annotation.Resource;
 @Slf4j
 @Validated
 @RestController
-@Api(value = "/dishesRawMaterial", tags = {"菜品原材料模块"})
-@RequestMapping(value = "/dishesRawMaterial")
+@Api(value = "/dishes_raw_material", tags = {"菜品原材料模块"})
+@RequestMapping(value = "/dishes_raw_material")
 public class DishesRawMaterialController extends BaseController {
 
     @Resource
@@ -87,26 +87,26 @@ public class DishesRawMaterialController extends BaseController {
         return BaseResult.success(dto);
     }
 
-    /**
-     * 保存
-     *
-     * @param vo 参数对象
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "DishesRawMaterialVO", name = "vo", value = "参数对象")
-    })
-    @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
-    @PostMapping
-    public BaseResult save(@RequestBody @Validated(Insert.class) DishesRawMaterialVO vo) {
-        DishesRawMaterialPO po = DishesRawMaterialMsMapper.INSTANCE.vo2po(vo);
-        boolean result = dishesRawMaterialMpService.save(po);
-        if (result) {
-            return BaseResult.successMsg("添加成功！");
-        } else {
-            return BaseResult.error("添加失败！");
-        }
-    }
+//    /**
+//     * 保存
+//     *
+//     * @param vo 参数对象
+//     * @return 返回结果
+//     */
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(paramType = "query", dataType = "DishesRawMaterialVO", name = "vo", value = "参数对象")
+//    })
+//    @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
+//    @PostMapping
+//    public BaseResult save(@RequestBody @Validated(Insert.class) DishesRawMaterialVO vo) {
+//        DishesRawMaterialPO po = DishesRawMaterialMsMapper.INSTANCE.vo2po(vo);
+//        boolean result = dishesRawMaterialMpService.save(po);
+//        if (result) {
+//            return BaseResult.successMsg("添加成功！");
+//        } else {
+//            return BaseResult.error("添加失败！");
+//        }
+//    }
 
     /**
      * 菜品原材料信息批量保存
@@ -118,7 +118,7 @@ public class DishesRawMaterialController extends BaseController {
             @ApiImplicitParam(paramType = "query", dataType = "DishesRawMaterialVO", name = "vo", value = "参数对象")
     })
     @ApiOperation(value = "保存原材料信息", notes = "保存原材料信息", httpMethod = "POST")
-    @PostMapping("/saveList")
+    @PostMapping
     public BaseResult saveList(@RequestBody @Validated(Insert.class) List<DishesRawMaterialVO> voList) {
 
         Boolean result = false;

@@ -33,8 +33,8 @@ import java.util.Objects;
  */
 @Validated
 @RestController
-@Api(value = "/groupManagement", tags = {"集团管理模块"})
-@RequestMapping(value = "/groupManagement")
+@Api(value = "/group_management", tags = {"集团管理模块"})
+@RequestMapping(value = "/group_management")
 public class GroupManagementController extends BaseController {
 
     @Resource

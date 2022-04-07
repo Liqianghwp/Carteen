@@ -21,6 +21,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +35,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/dict/outbound")
 public class DictOutboundMethodController extends BaseController {
-    @Autowired
+    @Resource
     private ISysDictDataService dictDataService;
 
-    @Autowired
+    @Resource
     private ISysDictTypeService dictTypeService;
 
     /**
@@ -102,7 +103,7 @@ public class DictOutboundMethodController extends BaseController {
     public BaseResult dictType(@PathVariable String dictType) {
         List<SysDictData> data = dictTypeService.selectDictDataByType(dictType);
         if (StringUtils.isNull(data)) {
-            data = new ArrayList<SysDictData>();
+            data = new ArrayList<>();
         }
         return BaseResult.success(data);
     }
@@ -117,10 +118,6 @@ public class DictOutboundMethodController extends BaseController {
     @PreAuthorize("@ss.hasPermi('dict:outbound:add')")
     @Log(title = "字典数据", businessType = BusinessType.INSERT)
     @PostMapping
-//    public BaseResult add(@Validated @RequestBody SysDictData dict) {
-//        dict.setCreateBy(getUsername());
-//        return toAjax(dictDataService.insertDictData(dict));
-//    }
     public BaseResult add(@Validated @RequestBody DictDateVO dict) {
 
         SysDictData sysDictData = new SysDictData();
@@ -141,10 +138,6 @@ public class DictOutboundMethodController extends BaseController {
     @PreAuthorize("@ss.hasPermi('dict:outbound:edit')")
     @Log(title = "字典数据", businessType = BusinessType.UPDATE)
     @PutMapping
-//    public BaseResult edit(@Validated @RequestBody SysDictData dict) {
-//        dict.setUpdateBy(getUsername());
-//        return toAjax(dictDataService.updateDictData(dict));
-//    }
     public BaseResult edit(@Validated @RequestBody DictDateVO dict) {
 
         SysDictData sysDictData = new SysDictData();

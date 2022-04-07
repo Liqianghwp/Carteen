@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
  */
 @TableName("wis_dishes_nutrition")
 @Data
-@ApiModel("PO实体类")
+@ApiModel("菜品营养PO实体类")
 @Accessors(chain = true)
 public class DishesNutritionPO implements Serializable {
     private static final long serialVersionUID = 1L;

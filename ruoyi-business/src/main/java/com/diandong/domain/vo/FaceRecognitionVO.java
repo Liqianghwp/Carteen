@@ -17,7 +17,7 @@ import java.io.Serializable;
  * @date 2022-04-01
  */
 @Data
-@ApiModel("VO实体类")
+@ApiModel("人脸认证VO实体类")
 public class FaceRecognitionVO implements Serializable {
     private static final long serialVersionUID = 1L;
 

@@ -31,9 +31,9 @@ import javax.annotation.Resource;
  */
 @Validated
 @RestController
-@Api(value = "/faceRecognition", tags = {"模块"})
-@RequestMapping(value = "/faceRecognition")
-public class FaceRecognitionController extends BaseController {
+@Api(value = "/face_recognition", tags = {"人脸识别录入模块"})
+@RequestMapping(value = "/face_recognition")
+public class  FaceRecognitionController extends BaseController {
 
     @Resource
     private FaceRecognitionMpService faceRecognitionMpService;

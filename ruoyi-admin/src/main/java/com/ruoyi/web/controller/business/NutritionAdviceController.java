@@ -37,8 +37,8 @@ import javax.annotation.Resource;
 @Slf4j
 @Validated
 @RestController
-@Api(value = "/nutritionAdvice", tags = {"营养建议模块"})
-@RequestMapping(value = "/nutritionAdvice")
+@Api(value = "/nutrition_advice", tags = {"营养建议模块"})
+@RequestMapping(value = "/nutrition_advice")
 public class NutritionAdviceController extends BaseController {
 
     @Resource
@@ -86,8 +86,8 @@ public class NutritionAdviceController extends BaseController {
             @ApiImplicitParam(paramType = "query", dataType = "Long", name = "mealTimesId", value = "查询参数")
     })
     @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
-    @GetMapping("/getNutritionAdvice")
-    public BaseResult getNutritionAdvice(Long mealTimesId) {
+    @GetMapping("/{mealTimesId}")
+    public BaseResult getNutritionAdvice(@PathVariable("mealTimesId")Long mealTimesId) {
 
 //        判断登录信息
         LoginUser loginUser = getLoginUser();
@@ -127,7 +127,7 @@ public class NutritionAdviceController extends BaseController {
             @ApiImplicitParam(paramType = "path", dataType = "IntakeAnalysisVO", name = "vo", value = "参数对象")
     })
     @ApiOperation(value = "根据id查询", notes = "根据id查询", httpMethod = "GET")
-    @PostMapping(value = "/intakeAnalysis")
+    @PostMapping(value = "/intake_analysis")
     public BaseResult intakeAnalysis(@RequestBody @Validated IntakeAnalysisVO vo) {
 
 //        判断登录状态
@@ -140,26 +140,26 @@ public class NutritionAdviceController extends BaseController {
     }
 
 
-    /**
-     * 保存
-     *
-     * @param vo 参数对象
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "NutritionAdviceVO", name = "vo", value = "参数对象")
-    })
-    @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
-    @PostMapping
-    public BaseResult save(@Validated(Insert.class) NutritionAdviceVO vo) {
-        NutritionAdvicePO po = NutritionAdviceMsMapper.INSTANCE.vo2po(vo);
-        boolean result = nutritionAdviceMpService.save(po);
-        if (result) {
-            return BaseResult.successMsg("添加成功！");
-        } else {
-            return BaseResult.error("添加失败！");
-        }
-    }
+//    /**
+//     * 保存
+//     *
+//     * @param vo 参数对象
+//     * @return 返回结果
+//     */
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(paramType = "query", dataType = "NutritionAdviceVO", name = "vo", value = "参数对象")
+//    })
+//    @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
+//    @PostMapping
+//    public BaseResult save(@Validated(Insert.class) NutritionAdviceVO vo) {
+//        NutritionAdvicePO po = NutritionAdviceMsMapper.INSTANCE.vo2po(vo);
+//        boolean result = nutritionAdviceMpService.save(po);
+//        if (result) {
+//            return BaseResult.successMsg("添加成功！");
+//        } else {
+//            return BaseResult.error("添加失败！");
+//        }
+//    }
 
     /**
      * @return
@@ -168,7 +168,7 @@ public class NutritionAdviceController extends BaseController {
             @ApiImplicitParam(paramType = "query", dataType = "List<NutritionAdviceVO>", name = "naList", value = "参数对象")
     })
     @ApiOperation(value = "批量保存营养建议", notes = "批量保存营养建议", httpMethod = "POST")
-    @PostMapping("/inputNutritionAdvice")
+    @PostMapping
     public BaseResult inputNutritionAdvice(@RequestBody @Validated(Insert.class) List<NutritionAdviceVO> naList) {
 
 //        判断是否登录

@@ -44,7 +44,7 @@ import javax.annotation.Resource;
 @Slf4j
 @Validated
 @RestController
-@Api(value = "/recipe", tags = {"模块"})
+@Api(value = "/recipe", tags = {"食谱模块"})
 @RequestMapping(value = "/recipe")
 public class RecipeController extends BaseController {
 
@@ -183,6 +183,7 @@ public class RecipeController extends BaseController {
     /**
      * 根据id复制菜谱
      *
+     * Q：这个地方有个疑问，是先有了食谱才有原材料清单还是再未创建食谱之前就可以通过传参查询原材料清单
      * @param voList 菜谱菜品信息
      * @return 返回结果
      */
@@ -190,7 +191,7 @@ public class RecipeController extends BaseController {
             @ApiImplicitParam(paramType = "path", dataType = "List<RecipeDetailVO>", name = "voList", value = "菜谱信息"),
     })
     @ApiOperation(value = "原材料清单", notes = "原材料清单", httpMethod = "POST")
-    @PostMapping("/rawMaterialsList")
+    @PostMapping("list/raw_materials")
     public BaseResult rawMaterialsList(@RequestBody List<RecipeDetailVO> voList) {
         return recipeMpService.rawMaterialsList(voList);
     }

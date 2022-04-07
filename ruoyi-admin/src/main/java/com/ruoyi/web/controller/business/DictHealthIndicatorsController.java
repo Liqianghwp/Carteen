@@ -21,23 +21,25 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 数据字典信息
- *  字典：健康指标配置接口
+ * 字典：健康指标配置接口
+ *
  * @author ruoyi
  */
 @Api(value = "/dict/health", tags = {"健康指标配置"})
 @RestController
 @RequestMapping("/dict/health")
 public class DictHealthIndicatorsController extends BaseController {
-    @Autowired
+    @Resource
     private ISysDictDataService dictDataService;
 
-    @Autowired
+    @Resource
     private ISysDictTypeService dictTypeService;
 
     /**
@@ -117,10 +119,6 @@ public class DictHealthIndicatorsController extends BaseController {
     @PreAuthorize("@ss.hasPermi('dict:health:add')")
     @Log(title = "字典数据", businessType = BusinessType.INSERT)
     @PostMapping
-//    public BaseResult add(@Validated @RequestBody SysDictData dict) {
-//        dict.setCreateBy(getUsername());
-//        return toAjax(dictDataService.insertDictData(dict));
-//    }
     public BaseResult add(@Validated @RequestBody DictDateVO dict) {
 
         SysDictData sysDictData = new SysDictData();
@@ -141,10 +139,6 @@ public class DictHealthIndicatorsController extends BaseController {
     @PreAuthorize("@ss.hasPermi('dict:health:edit')")
     @Log(title = "字典数据", businessType = BusinessType.UPDATE)
     @PutMapping
-//    public BaseResult edit(@Validated @RequestBody SysDictData dict) {
-//        dict.setUpdateBy(getUsername());
-//        return toAjax(dictDataService.updateDictData(dict));
-//    }
     public BaseResult edit(@Validated @RequestBody DictDateVO dict) {
 
         SysDictData sysDictData = new SysDictData();

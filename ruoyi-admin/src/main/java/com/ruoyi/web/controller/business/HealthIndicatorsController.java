@@ -31,8 +31,8 @@ import javax.annotation.Resource;
  */
 @Validated
 @RestController
-@Api(value = "/healthIndicators", tags = {"我的-健康指标模块"})
-@RequestMapping(value = "/healthIndicators")
+@Api(value = "/health_indicators", tags = {"我的-健康指标模块"})
+@RequestMapping(value = "/health_indicators")
 public class HealthIndicatorsController extends BaseController {
 
     @Resource
@@ -97,7 +97,7 @@ public class HealthIndicatorsController extends BaseController {
      * @return 返回结果
      */
     @ApiOperation(value = "根据id查询", notes = "根据id查询", httpMethod = "GET")
-    @GetMapping(value = "/getHealthIndicator")
+    @GetMapping(value = "/own")
     public BaseResult getHealthIndicator() {
 
         LoginUser loginUser = getLoginUser();
