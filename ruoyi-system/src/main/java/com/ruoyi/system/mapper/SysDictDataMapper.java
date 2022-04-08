@@ -100,4 +100,46 @@ public interface SysDictDataMapper {
      * @return 结果
      */
     public int updateDictDataType(@Param("oldDictType") String oldDictType, @Param("newDictType") String newDictType);
+
+
+    //    TODO 健康指标
+    int selectHealthIndicatorsDictDataByIds(Long[] dictCodes);
+
+    //    TODO 餐次设置
+    int selectMealSettingDictDataByIds(Long[] dictCodes);
+
+    //    TODO 营养建议
+    int selectNutritionAdviceDictDataByIds(Long[] dictCodes);
+
+    //    TODO 出库方式
+    int selectOutboundMethodDictDataByIds(Long[] dictCodes);
+
+    //    TODO 充值设置
+    int selectRechargeSettingDictDataByIds(Long[] dictCodes);
+
+    //    TODO 留样存储
+    int selectSampleStorageDictDataByIds(Long[] dictCodes);
+
+    //    TODO 入库方式
+    int selectStorageMethodDictDataByIds(Long[] dictCodes);
+
+    //    TODO 检测结果
+    int selectTestResultsDictDataByIds(Long[] dictCodes);
+
+    //    TODO 单位设置
+    int selectUnitSettingDictDataByIds(Long[] dictCodes);
+
+    //    TODO 库存管理
+    int selectWarehouseManagementDictDataByIds(Long[] dictCodes);
+
+    //    TODO 菜品类别
+    int selectDishesTypeDictDataByIds(Long[] dictCodes);
+
+    //    TODO 原材料类别
+    int selectRawMaterialCategoryDictDataByIds(Long[] dictCodes);
+
+    //    TODO 意见类型
+    int selectOpinionTypeDictDataByIds(Long[] dictCodes);
+
+
 }

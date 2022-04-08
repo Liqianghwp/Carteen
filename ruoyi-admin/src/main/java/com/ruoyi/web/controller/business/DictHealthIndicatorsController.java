@@ -161,7 +161,7 @@ public class DictHealthIndicatorsController extends BaseController {
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{dictCodes}")
     public BaseResult remove(@PathVariable Long[] dictCodes) {
-        dictDataService.deleteDictDataByIds(dictCodes);
+        dictDataService.deleteBizDictDataByIds(dictCodes);
         return success();
     }
 }

@@ -8,6 +8,7 @@ import com.diandong.mapstruct.DishesNutritionMsMapper;
 import com.diandong.service.DishesNutritionMpService;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.exception.ServiceException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class DishesNutritionMpServiceImpl extends CommonServiceImpl<DishesNutrit
         implements DishesNutritionMpService {
 
     @Override
-    public Boolean saveList(List<DishesNutritionPO> dnList) throws Exception {
+    public Boolean saveList(List<DishesNutritionPO> dnList) {
         Boolean result = false;
 
         for (DishesNutritionPO dishesNutritionPO : dnList) {
@@ -33,7 +34,7 @@ public class DishesNutritionMpServiceImpl extends CommonServiceImpl<DishesNutrit
             result = save(dishesNutritionPO);
 
             if (!result) {
-                throw new Exception("保存菜品营养信息失败");
+                throw new ServiceException("保存菜品营养信息失败");
             }
         }
         return result;
@@ -41,7 +42,7 @@ public class DishesNutritionMpServiceImpl extends CommonServiceImpl<DishesNutrit
 
 
     @Override
-    public BaseResult saveDishesNutritionList(List<DishesNutritionVO> dnList, LoginUser loginUser) throws Exception {
+    public BaseResult saveDishesNutritionList(List<DishesNutritionVO> dnList, LoginUser loginUser) {
 
         Boolean result = false;
         for (DishesNutritionVO dishesNutritionVO : dnList) {
@@ -53,7 +54,7 @@ public class DishesNutritionMpServiceImpl extends CommonServiceImpl<DishesNutrit
 
             result = save(po);
             if (!result) {
-                throw new Exception("保存菜品营养信息失败");
+                throw new ServiceException("保存菜品营养信息失败");
             }
         }
         if (result) {

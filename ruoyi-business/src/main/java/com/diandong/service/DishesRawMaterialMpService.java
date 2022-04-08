@@ -22,7 +22,7 @@ public interface DishesRawMaterialMpService extends CommonService<DishesRawMater
      * @param voList 菜品原材料信息集合
      * @return Boolean
      */
-    Boolean saveList(List<DishesRawMaterialVO> voList, LoginUser loginUser) throws Exception;
+    Boolean saveList(List<DishesRawMaterialVO> voList, LoginUser loginUser);
 
 
 }

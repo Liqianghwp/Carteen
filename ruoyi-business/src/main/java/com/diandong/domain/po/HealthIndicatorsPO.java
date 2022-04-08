@@ -13,11 +13,11 @@ import java.time.LocalDateTime;
  * PO实体类
  *
  * @author YuLiu
- * @date 2022-03-31
+ * @date 2022-04-08
  */
 @TableName("wis_health_indicators")
 @Data
-@ApiModel("健康指标PO实体类")
+@ApiModel("PO实体类")
 @Accessors(chain = true)
 public class HealthIndicatorsPO implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -30,81 +30,46 @@ public class HealthIndicatorsPO implements Serializable {
     private Long id;
 
     /**
-     * 腰围
+     * 指标ID
      */
-    @TableField(value = "waistline")
-    @ApiModelProperty(value = "腰围")
-    private Double waistline;
+    @TableField(value = "indicators_id")
+    @ApiModelProperty(value = "指标ID")
+    private Long indicatorsId;
 
     /**
-     * 体重
+     * 指标名称
      */
-    @TableField(value = "body_weight")
-    @ApiModelProperty(value = "体重")
-    private Double bodyWeight;
+    @TableField(value = "indicators_name")
+    @ApiModelProperty(value = "指标名称")
+    private String indicatorsName;
 
     /**
-     * 体脂
+     * 指标数值
      */
-    @TableField(value = "body_fat")
-    @ApiModelProperty(value = "体脂")
-    private Double bodyFat;
+    @TableField(value = "indicator_value")
+    @ApiModelProperty(value = "指标数值")
+    private Double indicatorValue;
 
     /**
-     * 心率
+     * 指标单位
      */
-    @TableField(value = "heart_rate")
-    @ApiModelProperty(value = "心率")
-    private Double heartRate;
+    @TableField(value = "indicator_unit")
+    @ApiModelProperty(value = "指标单位")
+    private String indicatorUnit;
 
     /**
-     * 血压
+     * 指标所属人id
      */
-    @TableField(value = "blood_pressure")
-    @ApiModelProperty(value = "血压")
-    private Double bloodPressure;
+    @TableField(value = "user_id")
+    @ApiModelProperty(value = "指标所属人id")
+    private Long userId;
 
     /**
-     * 血糖
+     * 指标所属人名称
      */
-    @TableField(value = "blood_sugar")
-    @ApiModelProperty(value = "血糖")
-    private Double bloodSugar;
-
-    /**
-     * 甘油三酯
-     */
-    @TableField(value = "triglycerides")
-    @ApiModelProperty(value = "甘油三酯")
-    private Double triglycerides;
-
-    /**
-     * 总胆固醇
-     */
-    @TableField(value = "total_cholesterol")
-    @ApiModelProperty(value = "总胆固醇")
-    private Double totalCholesterol;
-
-    /**
-     * 坏胆固醇
-     */
-    @TableField(value = "bad_cholesterol")
-    @ApiModelProperty(value = "坏胆固醇")
-    private Double badCholesterol;
-
-    /**
-     * 血氧
-     */
-    @TableField(value = "blood_oxygen")
-    @ApiModelProperty(value = "血氧")
-    private Double bloodOxygen;
-
-    /**
-     * 血粘稠度
-     */
-    @TableField(value = "blood_viscosity")
-    @ApiModelProperty(value = "血粘稠度")
-    private Double bloodViscosity;
+    @TableField(value = "user_name")
+    @ApiModelProperty(value = "指标所属人名称")
+    private String userName;
 
     /**
      * 数据状态

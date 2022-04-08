@@ -44,6 +44,14 @@ public interface ISysDictDataService {
     public void deleteDictDataByIds(Long[] dictCodes);
 
     /**
+     * 批量删除字典数据信息
+     * 被占用的字典数据无法删除
+     *
+     * @param dictCodes
+     */
+    public void deleteBizDictDataByIds(Long[] dictCodes);
+
+    /**
      * 新增保存字典数据信息
      *
      * @param dictData 字典数据信息
@@ -66,4 +74,14 @@ public interface ISysDictDataService {
      * @return
      */
     int selectUsedDictData(Long[] dictCodes);
+
+
+    /**
+     * 检查当前选中的id是否被使用
+     *
+     * @param dictLabel 字典类型标签
+     * @param dictCodes 字典数据信息
+     * @return
+     */
+    int selectUsedBizDictData(String dictLabel, Long[] dictCodes);
 }

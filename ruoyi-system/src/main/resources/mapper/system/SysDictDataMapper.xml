@@ -83,7 +83,7 @@
 
         select
         count(1)
-        from sys_dict_data	sdd
+        from sys_dict_data sdd
         right join wis_nutrition_advice wna
         on sdd.dict_code = wna.meal_times_id
 
@@ -95,6 +95,203 @@
         </where>
 
     </select>
+
+
+    <select id="selectHealthIndicatorsDictDataByIds" resultType="java.lang.Integer">
+        select
+        count(1)
+        from sys_dict_data sdd
+        inner join wis_health_indicators whi
+        on sdd.dict_code = whi.indicators_id
+
+        <where>
+            dict_code in
+            <foreach collection="array" item="dictCode" open="(" separator="," close=")">
+                #{dictCode}
+            </foreach>
+        </where>
+    </select>
+    <select id="selectMealSettingDictDataByIds" resultType="java.lang.Integer">
+        select
+        count(1)
+        from sys_dict_data sdd
+        inner join wis_recipe_detail wrd
+        on sdd.dict_code = wrd.meal_times_id
+        inner join wis_dishes wd
+        on sdd.dict_code = wd. dishes_attr_id
+        <where>
+            dict_code in
+            <foreach collection="array" item="dictCode" open="(" separator="," close=")">
+                #{dictCode}
+            </foreach>
+        </where>
+    </select>
+    <select id="selectNutritionAdviceDictDataByIds" resultType="java.lang.Integer">
+        select
+        count(1)
+        from sys_dict_data sdd
+        right join wis_nutrition_advice wna
+        on sdd.dict_code = wna.meal_times_id
+
+        <where>
+            dict_code in
+            <foreach collection="array" item="dictCode" open="(" separator="," close=")">
+                #{dictCode}
+            </foreach>
+        </where>
+    </select>
+    <select id="selectOutboundMethodDictDataByIds" resultType="java.lang.Integer">
+        select
+        count(1)
+        from sys_dict_data sdd
+        right join wis_nutrition_advice wna
+        on sdd.dict_code = wna.meal_times_id
+
+        <where>
+            dict_code in
+            <foreach collection="array" item="dictCode" open="(" separator="," close=")">
+                #{dictCode}
+            </foreach>
+        </where>
+    </select>
+    <select id="selectRechargeSettingDictDataByIds" resultType="java.lang.Integer">
+        select
+        count(1)
+        from sys_dict_data sdd
+        right join wis_nutrition_advice wna
+        on sdd.dict_code = wna.meal_times_id
+
+        <where>
+            dict_code in
+            <foreach collection="array" item="dictCode" open="(" separator="," close=")">
+                #{dictCode}
+            </foreach>
+        </where>
+    </select>
+    <select id="selectSampleStorageDictDataByIds" resultType="java.lang.Integer">
+        select
+        count(1)
+        from sys_dict_data sdd
+        right join wis_nutrition_advice wna
+        on sdd.dict_code = wna.meal_times_id
+
+        <where>
+            dict_code in
+            <foreach collection="array" item="dictCode" open="(" separator="," close=")">
+                #{dictCode}
+            </foreach>
+        </where>
+    </select>
+    <select id="selectStorageMethodDictDataByIds" resultType="java.lang.Integer">
+        select
+        count(1)
+        from sys_dict_data sdd
+        right join wis_nutrition_advice wna
+        on sdd.dict_code = wna.meal_times_id
+
+        <where>
+            dict_code in
+            <foreach collection="array" item="dictCode" open="(" separator="," close=")">
+                #{dictCode}
+            </foreach>
+        </where>
+    </select>
+    <select id="selectTestResultsDictDataByIds" resultType="java.lang.Integer">
+        select
+        count(1)
+        from sys_dict_data sdd
+        right join wis_nutrition_advice wna
+        on sdd.dict_code = wna.meal_times_id
+
+        <where>
+            dict_code in
+            <foreach collection="array" item="dictCode" open="(" separator="," close=")">
+                #{dictCode}
+            </foreach>
+        </where>
+    </select>
+    <select id="selectUnitSettingDictDataByIds" resultType="java.lang.Integer">
+        select
+        count(1)
+        from sys_dict_data sdd
+
+        -- inner join wis_nutrition_params wnp
+        -- on sdd.dict_code = wna.meal_times_id
+
+        inner join wis_raw_material wrm
+        on sdd.dict_code = wrm.unit_id
+
+        -- inner join wis_dishes wd
+        -- on sdd.dict_code = wd.meal_times_id
+
+        -- inner join wis_nutrition_advice wna
+        -- on sdd.dict_code = wna.meal_times_id
+
+
+        <where>
+            dict_code in
+            <foreach collection="array" item="dictCode" open="(" separator="," close=")">
+                #{dictCode}
+            </foreach>
+        </where>
+    </select>
+    <select id="selectWarehouseManagementDictDataByIds" resultType="java.lang.Integer">
+        select
+        count(1)
+        from sys_dict_data sdd
+        right join wis_nutrition_advice wna
+        on sdd.dict_code = wna.meal_times_id
+
+        <where>
+            dict_code in
+            <foreach collection="array" item="dictCode" open="(" separator="," close=")">
+                #{dictCode}
+            </foreach>
+        </where>
+    </select>
+    <select id="selectDishesTypeDictDataByIds" resultType="java.lang.Integer">
+        select
+        count(1)
+        from sys_dict_data sdd
+        right join wis_nutrition_advice wna
+        on sdd.dict_code = wna.meal_times_id
+
+        <where>
+            dict_code in
+            <foreach collection="array" item="dictCode" open="(" separator="," close=")">
+                #{dictCode}
+            </foreach>
+        </where>
+    </select>
+    <select id="selectRawMaterialCategoryDictDataByIds" resultType="java.lang.Integer">
+        select
+        count(1)
+        from sys_dict_data sdd
+        right join wis_nutrition_advice wna
+        on sdd.dict_code = wna.meal_times_id
+
+        <where>
+            dict_code in
+            <foreach collection="array" item="dictCode" open="(" separator="," close=")">
+                #{dictCode}
+            </foreach>
+        </where>
+    </select>
+    <select id="selectOpinionTypeDictDataByIds" resultType="java.lang.Integer">
+        select
+        count(1)
+        from sys_dict_data sdd
+        right join wis_opinion_feedback wof
+        on sdd.dict_code = wof.opinion_id
+
+        <where>
+            dict_code in
+            <foreach collection="array" item="dictCode" open="(" separator="," close=")">
+                #{dictCode}
+            </foreach>
+        </where>
+    </select>
+
 
     <delete id="deleteDictDataById" parameterType="Long">
         delete

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
@@ -53,17 +54,12 @@ public class HealthIndicatorsController extends BaseController {
         startPage();
         List<HealthIndicatorsPO> dataList = healthIndicatorsMpService.lambdaQuery()
                 .eq(ObjectUtils.isNotEmpty(vo.getId()), HealthIndicatorsPO::getId, vo.getId())
-                .eq(ObjectUtils.isNotEmpty(vo.getWaistline()), HealthIndicatorsPO::getWaistline, vo.getWaistline())
-                .eq(ObjectUtils.isNotEmpty(vo.getBodyWeight()), HealthIndicatorsPO::getBodyWeight, vo.getBodyWeight())
-                .eq(ObjectUtils.isNotEmpty(vo.getBodyFat()), HealthIndicatorsPO::getBodyFat, vo.getBodyFat())
-                .eq(ObjectUtils.isNotEmpty(vo.getHeartRate()), HealthIndicatorsPO::getHeartRate, vo.getHeartRate())
-                .eq(ObjectUtils.isNotEmpty(vo.getBloodPressure()), HealthIndicatorsPO::getBloodPressure, vo.getBloodPressure())
-                .eq(ObjectUtils.isNotEmpty(vo.getBloodSugar()), HealthIndicatorsPO::getBloodSugar, vo.getBloodSugar())
-                .eq(ObjectUtils.isNotEmpty(vo.getTriglycerides()), HealthIndicatorsPO::getTriglycerides, vo.getTriglycerides())
-                .eq(ObjectUtils.isNotEmpty(vo.getTotalCholesterol()), HealthIndicatorsPO::getTotalCholesterol, vo.getTotalCholesterol())
-                .eq(ObjectUtils.isNotEmpty(vo.getBadCholesterol()), HealthIndicatorsPO::getBadCholesterol, vo.getBadCholesterol())
-                .eq(ObjectUtils.isNotEmpty(vo.getBloodOxygen()), HealthIndicatorsPO::getBloodOxygen, vo.getBloodOxygen())
-                .eq(ObjectUtils.isNotEmpty(vo.getBloodViscosity()), HealthIndicatorsPO::getBloodViscosity, vo.getBloodViscosity())
+                .eq(ObjectUtils.isNotEmpty(vo.getIndicatorsId()), HealthIndicatorsPO::getIndicatorsId, vo.getIndicatorsId())
+                .eq(StringUtils.isNotBlank(vo.getIndicatorsName()), HealthIndicatorsPO::getIndicatorsName, vo.getIndicatorsName())
+                .eq(ObjectUtils.isNotEmpty(vo.getIndicatorValue()), HealthIndicatorsPO::getIndicatorValue, vo.getIndicatorValue())
+                .eq(StringUtils.isNotBlank(vo.getIndicatorUnit()), HealthIndicatorsPO::getIndicatorUnit, vo.getIndicatorUnit())
+                .eq(ObjectUtils.isNotEmpty(vo.getUserId()), HealthIndicatorsPO::getUserId, vo.getUserId())
+                .eq(StringUtils.isNotBlank(vo.getUserName()), HealthIndicatorsPO::getUserName, vo.getUserName())
                 .eq(ObjectUtils.isNotEmpty(vo.getDataState()), HealthIndicatorsPO::getDataState, vo.getDataState())
                 .eq(ObjectUtils.isNotEmpty(vo.getVersion()), HealthIndicatorsPO::getVersion, vo.getVersion())
                 .eq(StringUtils.isNotBlank(vo.getCreateName()), HealthIndicatorsPO::getCreateName, vo.getCreateName())
@@ -115,37 +111,58 @@ public class HealthIndicatorsController extends BaseController {
     }
 
 
+//    /**
+//     * 保存
+//     *
+//     * @param vo 参数对象
+//     * @return 返回结果
+//     */
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(paramType = "query", dataType = "HealthIndicatorsVO", name = "vo", value = "参数对象")
+//    })
+//    @ApiOperation(value = "保存健康指标", notes = "保存健康指标", httpMethod = "POST")
+//    @PostMapping
+//    public BaseResult save(@RequestBody @Validated(Insert.class) HealthIndicatorsVO vo) {
+//
+////        判断登录状态
+//        LoginUser loginUser = getLoginUser();
+//        if (Objects.isNull(loginUser)) {
+//            return BaseResult.error(Constants.ERROR_MESSAGE);
+//        }
+//
+//        HealthIndicatorsPO po = HealthIndicatorsMsMapper.INSTANCE.vo2po(vo);
+//
+////        设置创建人信息
+//        po.setCreateBy(loginUser.getUserId());
+//        po.setCreateName(loginUser.getUsername());
+//
+//        boolean result = healthIndicatorsMpService.save(po);
+//        if (result) {
+//            return BaseResult.successMsg("添加成功！");
+//        } else {
+//            return BaseResult.error("添加失败！");
+//        }
+//    }
+
     /**
      * 保存
      *
-     * @param vo 参数对象
+     * @param voList 参数对象
      * @return 返回结果
      */
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "HealthIndicatorsVO", name = "vo", value = "参数对象")
+            @ApiImplicitParam(paramType = "query", dataType = "List<HealthIndicatorsVO>", name = "voList", value = "参数对象")
     })
     @ApiOperation(value = "保存健康指标", notes = "保存健康指标", httpMethod = "POST")
     @PostMapping
-    public BaseResult save(@RequestBody @Validated(Insert.class) HealthIndicatorsVO vo) {
+    public BaseResult saveList(@RequestBody @Validated(Insert.class) List<HealthIndicatorsVO> voList) {
 
-//        判断登录状态
         LoginUser loginUser = getLoginUser();
         if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
+            return BaseResult.error("用户未登录无法进行操作");
         }
 
-        HealthIndicatorsPO po = HealthIndicatorsMsMapper.INSTANCE.vo2po(vo);
-
-//        设置创建人信息
-        po.setCreateBy(loginUser.getUserId());
-        po.setCreateName(loginUser.getUsername());
-
-        boolean result = healthIndicatorsMpService.save(po);
-        if (result) {
-            return BaseResult.successMsg("添加成功！");
-        } else {
-            return BaseResult.error("添加失败！");
-        }
+        return healthIndicatorsMpService.saveList(loginUser, voList);
     }
 
     /**

@@ -52,6 +52,7 @@ public class Constants {
     /**
      * 未登录信息
      */
-    public static final String ERROR_MESSAGE= "用户未登录，无法进行操作。请您重新登录!";
+    public static final String ERROR_MESSAGE = "用户未登录，无法进行操作。请您重新登录!";
+
 
 }

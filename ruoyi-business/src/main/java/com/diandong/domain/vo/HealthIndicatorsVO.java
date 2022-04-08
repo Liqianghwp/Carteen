@@ -14,10 +14,10 @@ import java.io.Serializable;
  * VO实体类
  *
  * @author YuLiu
- * @date 2022-03-31
+ * @date 2022-04-08
  */
 @Data
-@ApiModel("健康指标VO实体类")
+@ApiModel("VO实体类")
 public class HealthIndicatorsVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -29,70 +29,40 @@ public class HealthIndicatorsVO implements Serializable {
     private Long id;
 
     /**
-     * 腰围
+     * 指标ID
      */
-    @ApiModelProperty(value = "腰围")
-    private Double waistline;
+    @ApiModelProperty(value = "指标ID")
+    private Long indicatorsId;
 
     /**
-     * 体重
+     * 指标名称
      */
-    @ApiModelProperty(value = "体重")
-    private Double bodyWeight;
+    @ApiModelProperty(value = "指标名称")
+    private String indicatorsName;
 
     /**
-     * 体脂
+     * 指标数值
      */
-    @ApiModelProperty(value = "体脂")
-    private Double bodyFat;
+    @ApiModelProperty(value = "指标数值")
+    private Double indicatorValue;
 
     /**
-     * 心率
+     * 指标单位
      */
-    @ApiModelProperty(value = "心率")
-    private Double heartRate;
+    @ApiModelProperty(value = "指标单位")
+    private String indicatorUnit;
 
     /**
-     * 血压
+     * 指标所属人id
      */
-    @ApiModelProperty(value = "血压")
-    private Double bloodPressure;
+    @ApiModelProperty(value = "指标所属人id")
+    private Long userId;
 
     /**
-     * 血糖
+     * 指标所属人名称
      */
-    @ApiModelProperty(value = "血糖")
-    private Double bloodSugar;
-
-    /**
-     * 甘油三酯
-     */
-    @ApiModelProperty(value = "甘油三酯")
-    private Double triglycerides;
-
-    /**
-     * 总胆固醇
-     */
-    @ApiModelProperty(value = "总胆固醇")
-    private Double totalCholesterol;
-
-    /**
-     * 坏胆固醇
-     */
-    @ApiModelProperty(value = "坏胆固醇")
-    private Double badCholesterol;
-
-    /**
-     * 血氧
-     */
-    @ApiModelProperty(value = "血氧")
-    private Double bloodOxygen;
-
-    /**
-     * 血粘稠度
-     */
-    @ApiModelProperty(value = "血粘稠度")
-    private Double bloodViscosity;
+    @ApiModelProperty(value = "指标所属人名称")
+    private String userName;
 
     /**
      * 数据状态

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
 import java.net.ContentHandler;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.Resource;
@@ -160,7 +161,11 @@ public class NutritionParamsController extends BaseController {
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
     @DeleteMapping(value = "/{id}")
     public BaseResult delete(@PathVariable("id") Long id) {
+
+        nutritionParamsMpService.selectBeUsed(Arrays.asList(id));
+
         boolean result = nutritionParamsMpService.removeById(id);
+
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {
@@ -180,6 +185,7 @@ public class NutritionParamsController extends BaseController {
     @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
     @DeleteMapping
     public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
+        nutritionParamsMpService.selectBeUsed(idList);
         boolean result = nutritionParamsMpService.removeByIds(idList);
         if (result) {
             return BaseResult.successMsg("删除成功");

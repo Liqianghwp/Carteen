@@ -23,7 +23,7 @@ public interface DishesNutritionMpService extends CommonService<DishesNutritionP
      * @return BaseResult
      * @throws Exception
      */
-    Boolean saveList(List<DishesNutritionPO> dnList) throws Exception;
+    Boolean saveList(List<DishesNutritionPO> dnList) ;
 
     /**
      * 主动批量保存菜品营养信息

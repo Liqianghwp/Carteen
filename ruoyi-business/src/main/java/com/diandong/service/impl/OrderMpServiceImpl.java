@@ -11,6 +11,7 @@ import com.diandong.mapstruct.ShopCartMsMapper;
 import com.diandong.service.*;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.exception.ServiceException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +46,7 @@ public class OrderMpServiceImpl extends CommonServiceImpl<OrderMapper, OrderPO>
     private ShopCartDetailMpService shopCartDetailMpService;
 
     @Override
-    public BaseResult createOrder(ShopCartVO shopCartVO, LoginUser loginUser) throws Exception {
+    public BaseResult createOrder(ShopCartVO shopCartVO, LoginUser loginUser) {
 
 
 //        查询购物车信息
@@ -97,13 +98,13 @@ public class OrderMpServiceImpl extends CommonServiceImpl<OrderMapper, OrderPO>
 
             result = orderDetailMpService.save(orderDetail);
             if (!result) {
-                throw new Exception("订单详情添加失败");
+                throw new ServiceException("订单详情添加失败");
             }
 
 //            更新购物车信息
             result = shopCartDetailMpService.removeById(shopCartDetailPO.getId());
             if (!result) {
-                throw new Exception("订单详情添加失败");
+                throw new ServiceException("订单详情添加失败");
             }
 
         }

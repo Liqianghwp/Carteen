@@ -4,17 +4,12 @@
 
     <resultMap id="BaseResultMap" type="com.diandong.domain.po.HealthIndicatorsPO">
         <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="waistline" jdbcType="DOUBLE" property="waistline"/>
-        <result column="body_weight" jdbcType="DOUBLE" property="bodyWeight"/>
-        <result column="body_fat" jdbcType="DOUBLE" property="bodyFat"/>
-        <result column="heart_rate" jdbcType="DOUBLE" property="heartRate"/>
-        <result column="blood_pressure" jdbcType="DOUBLE" property="bloodPressure"/>
-        <result column="blood_sugar" jdbcType="DOUBLE" property="bloodSugar"/>
-        <result column="triglycerides" jdbcType="DOUBLE" property="triglycerides"/>
-        <result column="total_cholesterol" jdbcType="DOUBLE" property="totalCholesterol"/>
-        <result column="bad_cholesterol" jdbcType="DOUBLE" property="badCholesterol"/>
-        <result column="blood_oxygen" jdbcType="DOUBLE" property="bloodOxygen"/>
-        <result column="blood_viscosity" jdbcType="DOUBLE" property="bloodViscosity"/>
+        <result column="indicators_id" jdbcType="BIGINT" property="indicatorsId"/>
+        <result column="indicators_name" jdbcType="VARCHAR" property="indicatorsName"/>
+        <result column="indicator_value" jdbcType="DOUBLE" property="indicatorValue"/>
+        <result column="indicator_unit" jdbcType="VARCHAR" property="indicatorUnit"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
         <result column="data_state" jdbcType="INTEGER" property="dataState"/>
         <result column="version" jdbcType="INTEGER" property="version"/>
         <result column="create_by" jdbcType="BIGINT" property="createBy"/>
@@ -29,17 +24,12 @@
     <sql id="BaseSelectField">
         <trim prefixOverrides=",">
             ,hi.id
-            ,hi.waistline
-            ,hi.body_weight
-            ,hi.body_fat
-            ,hi.heart_rate
-            ,hi.blood_pressure
-            ,hi.blood_sugar
-            ,hi.triglycerides
-            ,hi.total_cholesterol
-            ,hi.bad_cholesterol
-            ,hi.blood_oxygen
-            ,hi.blood_viscosity
+            ,hi.indicators_id
+            ,hi.indicators_name
+            ,hi.indicator_value
+            ,hi.indicator_unit
+            ,hi.user_id
+            ,hi.user_name
             ,hi.data_state
             ,hi.version
             ,hi.create_by
@@ -58,38 +48,23 @@
             <if test="id != null">
                 and hi.id = #{id}
             </if>
-            <if test="waistline != null">
-                and hi.waistline = #{waistline}
+            <if test="indicatorsId != null">
+                and hi.indicators_id = #{indicatorsId}
             </if>
-            <if test="bodyWeight != null">
-                and hi.body_weight = #{bodyWeight}
+            <if test="indicatorsName != null and indicatorsName != ''">
+                and hi.indicators_name = #{indicatorsName}
             </if>
-            <if test="bodyFat != null">
-                and hi.body_fat = #{bodyFat}
+            <if test="indicatorValue != null">
+                and hi.indicator_value = #{indicatorValue}
             </if>
-            <if test="heartRate != null">
-                and hi.heart_rate = #{heartRate}
+            <if test="indicatorUnit != null and indicatorUnit != ''">
+                and hi.indicator_unit = #{indicatorUnit}
             </if>
-            <if test="bloodPressure != null">
-                and hi.blood_pressure = #{bloodPressure}
+            <if test="userId != null">
+                and hi.user_id = #{userId}
             </if>
-            <if test="bloodSugar != null">
-                and hi.blood_sugar = #{bloodSugar}
-            </if>
-            <if test="triglycerides != null">
-                and hi.triglycerides = #{triglycerides}
-            </if>
-            <if test="totalCholesterol != null">
-                and hi.total_cholesterol = #{totalCholesterol}
-            </if>
-            <if test="badCholesterol != null">
-                and hi.bad_cholesterol = #{badCholesterol}
-            </if>
-            <if test="bloodOxygen != null">
-                and hi.blood_oxygen = #{bloodOxygen}
-            </if>
-            <if test="bloodViscosity != null">
-                and hi.blood_viscosity = #{bloodViscosity}
+            <if test="userName != null and userName != ''">
+                and hi.user_name = #{userName}
             </if>
             <if test="dataState != null">
                 and hi.data_state = #{dataState}

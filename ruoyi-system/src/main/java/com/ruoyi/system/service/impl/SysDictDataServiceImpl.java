@@ -3,11 +3,13 @@ package com.ruoyi.system.service.impl;
 import com.ruoyi.common.core.domain.entity.SysDictData;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.DictUtils;
+import com.ruoyi.system.constant.SysConstants;
 import com.ruoyi.system.mapper.SysDictDataMapper;
 import com.ruoyi.system.service.ISysDictDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -17,8 +19,9 @@ import java.util.List;
  */
 @Service
 public class SysDictDataServiceImpl implements ISysDictDataService {
-    @Autowired
+    @Resource
     private SysDictDataMapper dictDataMapper;
+
 
     /**
      * 根据条件分页查询字典数据
@@ -69,10 +72,31 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
             if (selectUsedDictData(dictCodes) > 0) {
                 throw new ServiceException(String.format("%1$s已分配,不能删除", data.getDictLabel()));
             }
+
             dictDataMapper.deleteDictDataById(dictCode);
             List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(data.getDictType());
             DictUtils.setDictCache(data.getDictType(), dictDatas);
         }
+    }
+
+    @Override
+    public void deleteBizDictDataByIds(Long[] dictCodes) {
+
+        for (Long dictCode : dictCodes) {
+            SysDictData data = selectDictDataById(dictCode);
+
+//            TODO 改造 被占用的无法进行删除操作
+            int result = selectUsedBizDictData(data.getDictLabel(), dictCodes);
+
+            if (result > 0) {
+                throw new ServiceException(String.format("%1$s已分配,不能删除", data.getDictLabel()));
+            }
+            dictDataMapper.deleteDictDataById(dictCode);
+            List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(data.getDictType());
+            DictUtils.setDictCache(data.getDictType(), dictDatas);
+        }
+
+
     }
 
     /**
@@ -110,6 +134,68 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
     @Override
     public int selectUsedDictData(Long[] dictCodes) {
         return dictDataMapper.deleteDictDataByIds(dictCodes);
+    }
+
+    @Override
+    public int selectUsedBizDictData(String dictLabel, Long[] dictCodes) {
+        int result = 0;
+
+        switch (dictLabel) {
+            case SysConstants.HEALTH_INDICATORS:
+//                    健康指标 (1)
+                result = dictDataMapper.selectHealthIndicatorsDictDataByIds(dictCodes);
+
+                break;
+            case SysConstants.MEAL_SETTING:
+//                    餐次设置
+                result = dictDataMapper.selectMealSettingDictDataByIds(dictCodes);
+
+                break;
+            case SysConstants.NUTRITION_ADVICE:
+//                    营养建议（应该是需要做到别的地方）
+                result = dictDataMapper.selectNutritionAdviceDictDataByIds(dictCodes);
+                break;
+            case SysConstants.OUTBOUND_METHOD:
+//                    出库方式
+                result = dictDataMapper.selectOutboundMethodDictDataByIds(dictCodes);
+                break;
+            case SysConstants.RECHARGE_SETTING:
+//                    充值设置
+                result = dictDataMapper.selectRechargeSettingDictDataByIds(dictCodes);
+                break;
+            case SysConstants.SAMPLE_STORAGE:
+//                    留样存储设置
+                result = dictDataMapper.selectSampleStorageDictDataByIds(dictCodes);
+                break;
+            case SysConstants.STORAGE_METHOD:
+//                    入库方式
+                result = dictDataMapper.selectStorageMethodDictDataByIds(dictCodes);
+                break;
+            case SysConstants.TEST_RESULTS:
+//                    检测结果
+                result = dictDataMapper.selectTestResultsDictDataByIds(dictCodes);
+                break;
+            case SysConstants.UNIT_SETTING:
+//                    单位设置
+                result = dictDataMapper.selectUnitSettingDictDataByIds(dictCodes);
+                break;
+            case SysConstants.WAREHOUSE_MANAGEMENT:
+//                    仓储管理
+                result = dictDataMapper.selectWarehouseManagementDictDataByIds(dictCodes);
+                break;
+            case SysConstants.RAW_MATERIAL_CATEGORY:
+//                    原材料类别
+                result = dictDataMapper.selectRawMaterialCategoryDictDataByIds(dictCodes);
+                break;
+            case SysConstants.OPINION_TYPE:
+//                    原材料类别
+                result = dictDataMapper.selectOpinionTypeDictDataByIds(dictCodes);
+                break;
+            default:
+                throw new ServiceException("未找到对应标签，无法删除");
+        }
+
+        return result;
     }
 
 }

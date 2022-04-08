@@ -12,6 +12,7 @@ import com.diandong.service.DishesNutritionMpService;
 import com.diandong.service.DishesRawMaterialMpService;
 import com.diandong.service.RawMaterialNutritionMpService;
 import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.exception.ServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +43,7 @@ public class DishesRawMaterialMpServiceImpl extends CommonServiceImpl<DishesRawM
 
 
     @Override
-    public Boolean saveList(List<DishesRawMaterialVO> voList, LoginUser loginUser) throws Exception {
+    public Boolean saveList(List<DishesRawMaterialVO> voList, LoginUser loginUser) {
 //        保存原材料信息
         Boolean result = false;
 //        要保存的菜品营养信息
@@ -54,7 +55,7 @@ public class DishesRawMaterialMpServiceImpl extends CommonServiceImpl<DishesRawM
 //            保存菜品原材料信息
             result = save(po);
             if (!result) {
-                throw new Exception("保存菜品原材料信息失败");
+                throw new ServiceException("保存菜品原材料信息失败");
             }
 
 //            查询原材料营养信息
