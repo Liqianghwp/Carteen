@@ -9,6 +9,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.system.constant.SysConstants;
 import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysDictTypeService;
 import io.swagger.annotations.Api;
@@ -25,6 +26,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 数据字典信息
@@ -52,9 +54,10 @@ public class DictRechargeSettingController extends BaseController {
     })
     @ApiOperation(value = "字典数据列表", notes = "字典数据列表", httpMethod = "GET")
     @PreAuthorize("@ss.hasPermi('dict:recharge:list')")
-    @GetMapping("/list")
+    @GetMapping
     public TableDataInfo list(SysDictData dictData) {
         startPage();
+        resetSysDictData(dictData);
         List<SysDictData> list = dictDataService.selectDictDataList(dictData);
         return getDataTable(list);
     }
@@ -74,6 +77,7 @@ public class DictRechargeSettingController extends BaseController {
     @PreAuthorize("@ss.hasPermi('dict:recharge:export')")
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysDictData dictData) {
+        resetSysDictData(dictData);
         List<SysDictData> list = dictDataService.selectDictDataList(dictData);
         ExcelUtil<SysDictData> util = new ExcelUtil<SysDictData>(SysDictData.class);
         util.exportExcel(response, list, "字典数据");
@@ -122,9 +126,16 @@ public class DictRechargeSettingController extends BaseController {
 
         SysDictData sysDictData = new SysDictData();
         BeanUtils.copyProperties(dict, sysDictData);
-        sysDictData.setDictType("recharge_setting");
+        resetSysDictData(sysDictData);
 
         sysDictData.setCreateBy(getUsername());
+
+
+        Integer count = dictDataService.countDictData(sysDictData);
+        if (count > 0) {
+            return BaseResult.error("充值面额重复");
+        }
+
         return toAjax(dictDataService.insertDictData(sysDictData));
     }
 
@@ -142,9 +153,13 @@ public class DictRechargeSettingController extends BaseController {
 
         SysDictData sysDictData = new SysDictData();
         BeanUtils.copyProperties(dict, sysDictData);
-        sysDictData.setDictType("recharge_setting");
+        resetSysDictData(sysDictData);
 
         sysDictData.setUpdateBy(getUsername());
+        Integer count = dictDataService.countDictData(sysDictData);
+        if (count > 0) {
+            return BaseResult.error("充值面额重复");
+        }
         return toAjax(dictDataService.updateDictData(sysDictData));
     }
 
@@ -163,4 +178,19 @@ public class DictRechargeSettingController extends BaseController {
         dictDataService.deleteDictDataByIds(dictCodes);
         return success();
     }
+
+    /**
+     * 默认设置字典类型
+     *
+     * @param sysDictData 字典数据
+     */
+    private void resetSysDictData(SysDictData sysDictData) {
+        if (Objects.isNull(sysDictData)) {
+            sysDictData = new SysDictData();
+        }
+        if (StringUtils.isBlank(sysDictData.getDictType())) {
+            sysDictData.setDictType(SysConstants.RECHARGE_SETTING);
+        }
+    }
+
 }

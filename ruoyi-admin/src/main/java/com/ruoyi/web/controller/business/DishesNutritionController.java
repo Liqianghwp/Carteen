@@ -19,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.Resource;
@@ -59,10 +60,6 @@ public class DishesNutritionController extends BaseController {
                 .eq(ObjectUtils.isNotEmpty(vo.getNutritionId()), DishesNutritionPO::getNutritionId, vo.getNutritionId())
                 .eq(StringUtils.isNotBlank(vo.getNutritionName()), DishesNutritionPO::getNutritionName, vo.getNutritionName())
                 .eq(ObjectUtils.isNotEmpty(vo.getNumber()), DishesNutritionPO::getNumber, vo.getNumber())
-                .eq(ObjectUtils.isNotEmpty(vo.getDataState()), DishesNutritionPO::getDataState, vo.getDataState())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), DishesNutritionPO::getVersion, vo.getVersion())
-                .eq(StringUtils.isNotBlank(vo.getCreateName()), DishesNutritionPO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), DishesNutritionPO::getUpdateName, vo.getUpdateName())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(DishesNutritionMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -85,27 +82,6 @@ public class DishesNutritionController extends BaseController {
                 .po2dto(dishesNutritionMpService.getById(id));
         return BaseResult.success(dto);
     }
-
-//    /**
-//     * 保存
-//     *
-//     * @param vo 参数对象
-//     * @return 返回结果
-//     */
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(paramType = "query", dataType = "DishesNutritionVO", name = "vo", value = "参数对象")
-//    })
-//    @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
-//    @PostMapping
-//    public BaseResult save(@RequestBody @Validated(Insert.class) DishesNutritionVO vo) {
-//        DishesNutritionPO po = DishesNutritionMsMapper.INSTANCE.vo2po(vo);
-//        boolean result = dishesNutritionMpService.save(po);
-//        if (result) {
-//            return BaseResult.successMsg("添加成功！");
-//        } else {
-//            return BaseResult.error("添加失败！");
-//        }
-//    }
 
 
     /**
@@ -158,7 +134,6 @@ public class DishesNutritionController extends BaseController {
         DishesNutritionPO po = DishesNutritionMsMapper.INSTANCE.vo2po(vo);
 
         po.setUpdateBy(loginUser.getUserId());
-        po.setUpdateName(loginUser.getUsername());
         boolean result = dishesNutritionMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");
@@ -170,16 +145,13 @@ public class DishesNutritionController extends BaseController {
     /**
      * 删除
      *
-     * @param id 编号id
+     * @param ids 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = dishesNutritionMpService.removeById(id);
+    @DeleteMapping(value = "/{ids}")
+    public BaseResult delete(@PathVariable Long[] ids) {
+        boolean result = dishesNutritionMpService.removeByIds(Arrays.asList(ids));
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {
@@ -187,24 +159,5 @@ public class DishesNutritionController extends BaseController {
         }
     }
 
-    /**
-     * 批量删除
-     *
-     * @param idList 编号id集合
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = dishesNutritionMpService.removeByIds(idList);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
-            return BaseResult.error("删除失败");
-        }
-    }
 
 }

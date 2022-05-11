@@ -35,7 +35,6 @@ public class HealthIndicatorsMpServiceImpl extends CommonServiceImpl<HealthIndic
         voList.forEach(healthIndicatorsVO -> {
             HealthIndicatorsPO po = HealthIndicatorsMsMapper.INSTANCE.vo2po(healthIndicatorsVO);
             po.setCreateBy(loginUser.getUserId());
-            po.setCreateName(loginUser.getUsername());
             po.setUserId(loginUser.getUserId());
             po.setUserName(loginUser.getUsername());
             poList.add(po);

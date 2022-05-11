@@ -19,6 +19,15 @@ public interface SysDictDataMapper {
      */
     public List<SysDictData> selectDictDataList(SysDictData dictData);
 
+
+    /**
+     *  计算数量
+     * @param dictData
+     * @return
+     */
+    Integer countDictData(SysDictData dictData);
+
+
     /**
      * 根据字典类型查询字典数据
      *
@@ -35,6 +44,14 @@ public interface SysDictDataMapper {
      * @return 字典标签
      */
     public String selectDictLabel(@Param("dictType") String dictType, @Param("dictValue") String dictValue);
+
+    /**
+     * 根据字典类型和字典键值查询字段数据信息
+     * @param dictType  字典类型
+     * @param dictValue 字典键值
+     * @return  字典数据
+     */
+    List<SysDictData> selectDictDateByTypeAndValue(@Param("dictType") String dictType, @Param("dictValue") String dictValue);
 
     /**
      * 根据字典数据ID查询信息

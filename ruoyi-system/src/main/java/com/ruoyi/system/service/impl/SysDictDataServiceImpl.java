@@ -1,16 +1,21 @@
 package com.ruoyi.system.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.ruoyi.common.core.domain.entity.SysDictData;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.DictUtils;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.pinyin.ChineseCharacterUtil;
 import com.ruoyi.system.constant.SysConstants;
 import com.ruoyi.system.mapper.SysDictDataMapper;
 import com.ruoyi.system.service.ISysDictDataService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 字典 业务层处理
@@ -32,6 +37,17 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
     @Override
     public List<SysDictData> selectDictDataList(SysDictData dictData) {
         return dictDataMapper.selectDictDataList(dictData);
+    }
+
+    /**
+     * 根据字典类型 字典标签获取查询数量
+     *
+     * @param dictData 字典数据信息
+     * @return
+     */
+    @Override
+    public Integer countDictData(SysDictData dictData) {
+        return dictDataMapper.countDictData(dictData);
     }
 
     /**
@@ -69,7 +85,7 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
             SysDictData data = selectDictDataById(dictCode);
 
 //            TODO 改造 被占用的无法进行删除操作
-            if (selectUsedDictData(dictCodes) > 0) {
+            if (selectUsedBizDictData(data.getDictType(), dictCodes) > 0) {
                 throw new ServiceException(String.format("%1$s已分配,不能删除", data.getDictLabel()));
             }
 
@@ -86,7 +102,7 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
             SysDictData data = selectDictDataById(dictCode);
 
 //            TODO 改造 被占用的无法进行删除操作
-            int result = selectUsedBizDictData(data.getDictLabel(), dictCodes);
+            int result = selectUsedBizDictData(data.getDictType(), dictCodes);
 
             if (result > 0) {
                 throw new ServiceException(String.format("%1$s已分配,不能删除", data.getDictLabel()));
@@ -107,6 +123,22 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
      */
     @Override
     public int insertDictData(SysDictData data) {
+
+        String dictValue = data.getDictValue();
+        if (StringUtils.isBlank(dictValue)) {
+//            将标签转换为汉字
+            String hanZiDictValue = ChineseCharacterUtil.convertHanZi2PinyinFull(data.getDictLabel());
+            List<SysDictData> dictDataList = dictDataMapper.selectDictDateByTypeAndValue(data.getDictType(), hanZiDictValue + "%");
+//            判断是否有以转换的汉字开头的字典数据
+//            重新设置value值
+            if (CollectionUtils.isNotEmpty(dictDataList)) {
+                data.setDictValue(hanZiDictValue + "_" + dictDataList.size());
+            } else {
+                data.setDictValue(hanZiDictValue);
+            }
+        }
+        data.setListClass(StringUtils.isBlank(data.getListClass()) ? "default" : data.getListClass());
+
         int row = dictDataMapper.insertDictData(data);
         if (row > 0) {
             List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(data.getDictType());
@@ -125,8 +157,8 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
     public int updateDictData(SysDictData data) {
         int row = dictDataMapper.updateDictData(data);
         if (row > 0) {
-            List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(data.getDictType());
-            DictUtils.setDictCache(data.getDictType(), dictDatas);
+            List<SysDictData> dictDataList = dictDataMapper.selectDictDataByType(data.getDictType());
+            DictUtils.setDictCache(data.getDictType(), dictDataList);
         }
         return row;
     }
@@ -137,10 +169,10 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
     }
 
     @Override
-    public int selectUsedBizDictData(String dictLabel, Long[] dictCodes) {
+    public int selectUsedBizDictData(String dictType, Long[] dictCodes) {
         int result = 0;
 
-        switch (dictLabel) {
+        switch (dictType) {
             case SysConstants.HEALTH_INDICATORS:
 //                    健康指标 (1)
                 result = dictDataMapper.selectHealthIndicatorsDictDataByIds(dictCodes);

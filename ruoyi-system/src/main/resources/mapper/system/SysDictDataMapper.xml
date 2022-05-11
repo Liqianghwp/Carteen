@@ -34,7 +34,11 @@
                status,
                create_by,
                create_time,
-               remark
+               remark,
+               update_by,
+               update_time,
+               begin_time,
+               end_time
         from sys_dict_data
     </sql>
 
@@ -51,8 +55,12 @@
             <if test="status != null and status != ''">
                 AND status = #{status}
             </if>
+
+            <if test="beginTime!=null and beginTime !='' and endTime!=null and endTime!=''">
+                AND create_time between #{beginTime} and #{endTime}
+            </if>
         </where>
-        order by dict_sort asc
+        order by dict_sort asc,create_time desc
     </select>
 
     <select id="selectDictDataByType" parameterType="com.ruoyi.common.core.domain.entity.SysDictData"
@@ -289,6 +297,29 @@
             <foreach collection="array" item="dictCode" open="(" separator="," close=")">
                 #{dictCode}
             </foreach>
+        </where>
+    </select>
+    <select id="selectDictDateByTypeAndValue" resultType="com.ruoyi.common.core.domain.entity.SysDictData">
+        select
+            *
+        from
+            sys_dict_data
+        where
+            dict_type = #{dictType}
+            and dict_value like #{dictValue}
+    </select>
+    <select id="countDictData" resultType="java.lang.Integer">
+        select
+            count(dict_code)
+        from
+            sys_dict_data
+        <where>
+            <if test="dictType != null and dictType != ''">
+                AND dict_type = #{dictType}
+            </if>
+            <if test="dictLabel != null and dictLabel != ''">
+                AND dict_label = #{dictLabel}
+            </if>
         </where>
     </select>
 

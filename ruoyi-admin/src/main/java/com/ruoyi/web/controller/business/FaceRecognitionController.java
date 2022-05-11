@@ -6,22 +6,26 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
+import com.diandong.domain.dto.FaceRecognitionDTO;
+import com.diandong.domain.po.FaceRecognitionPO;
+import com.diandong.domain.vo.FaceRecognitionVO;
+import com.diandong.mapstruct.FaceRecognitionMsMapper;
+import com.diandong.service.FaceRecognitionMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.FaceRecognitionMpService;
-import com.diandong.domain.po.FaceRecognitionPO;
-import com.diandong.domain.dto.FaceRecognitionDTO;
-import com.diandong.domain.vo.FaceRecognitionVO;
-import com.diandong.mapstruct.FaceRecognitionMsMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
+import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import javax.annotation.Resource;
 
 /**
  * Controller
@@ -33,7 +37,7 @@ import javax.annotation.Resource;
 @RestController
 @Api(value = "/face_recognition", tags = {"人脸识别录入模块"})
 @RequestMapping(value = "/face_recognition")
-public class  FaceRecognitionController extends BaseController {
+public class FaceRecognitionController extends BaseController {
 
     @Resource
     private FaceRecognitionMpService faceRecognitionMpService;
@@ -54,10 +58,6 @@ public class  FaceRecognitionController extends BaseController {
         List<FaceRecognitionPO> dataList = faceRecognitionMpService.lambdaQuery()
                 .eq(ObjectUtils.isNotEmpty(vo.getId()), FaceRecognitionPO::getId, vo.getId())
                 .eq(StringUtils.isNotBlank(vo.getFacePicture()), FaceRecognitionPO::getFacePicture, vo.getFacePicture())
-                .eq(ObjectUtils.isNotEmpty(vo.getDataStatus()), FaceRecognitionPO::getDataStatus, vo.getDataStatus())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), FaceRecognitionPO::getVersion, vo.getVersion())
-                .eq(StringUtils.isNotBlank(vo.getCreateName()), FaceRecognitionPO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), FaceRecognitionPO::getUpdateName, vo.getUpdateName())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(FaceRecognitionMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -103,7 +103,7 @@ public class  FaceRecognitionController extends BaseController {
 
         List<FaceRecognitionPO> list = faceRecognitionMpService.lambdaQuery()
                 .eq(FaceRecognitionPO::getCreateBy, loginUser.getUserId())
-                .eq(FaceRecognitionPO::getDataStatus, 0)
+                .eq(FaceRecognitionPO::getDelFlag, 0)
                 .list();
 
         if (CollectionUtils.isNotEmpty(list)) {
@@ -111,14 +111,12 @@ public class  FaceRecognitionController extends BaseController {
             FaceRecognitionPO faceRecognitionPO = list.get(0);
             faceRecognitionPO.setFacePicture(vo.getFacePicture());
             faceRecognitionPO.setUpdateBy(loginUser.getUserId());
-            faceRecognitionPO.setUpdateName(loginUser.getUsername());
 
             result = faceRecognitionMpService.updateById(faceRecognitionPO);
         } else {
 //            触发添加操作
             FaceRecognitionPO po = FaceRecognitionMsMapper.INSTANCE.vo2po(vo);
             po.setCreateBy(loginUser.getUserId());
-            po.setCreateName(loginUser.getUsername());
             result = faceRecognitionMpService.save(po);
         }
 
@@ -153,16 +151,13 @@ public class  FaceRecognitionController extends BaseController {
     /**
      * 删除
      *
-     * @param id 编号id
+     * @param ids 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = faceRecognitionMpService.removeById(id);
+    @DeleteMapping(value = "/{ids}")
+    public BaseResult delete(@PathVariable Long[] ids) {
+        boolean result = faceRecognitionMpService.removeByIds(Arrays.asList(ids));
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {
@@ -170,24 +165,5 @@ public class  FaceRecognitionController extends BaseController {
         }
     }
 
-    /**
-     * 批量删除
-     *
-     * @param idList 编号id集合
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = faceRecognitionMpService.removeByIds(idList);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
-            return BaseResult.error("删除失败");
-        }
-    }
 
 }

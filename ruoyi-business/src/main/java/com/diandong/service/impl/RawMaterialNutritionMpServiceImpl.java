@@ -36,7 +36,6 @@ public class RawMaterialNutritionMpServiceImpl extends CommonServiceImpl<RawMate
                 RawMaterialNutritionPO po = RawMaterialNutritionMsMapper.INSTANCE.vo2po(rawMaterialNutritionVO);
 //                设置创建人信息
                 po.setCreateBy(loginUser.getUserId());
-                po.setCreateName(loginUser.getUsername());
                 boolean result = save(po);
                 if (!result) {
                     throw new Exception("添加信息失败");

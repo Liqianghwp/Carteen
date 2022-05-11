@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.HealthCertificateMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.HealthCertificatePO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="health_cert_pic" jdbcType="VARCHAR" property="healthCertPic"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="validity_start_time" jdbcType="TIMESTAMP" property="validityStartTime"/>
+        <result column="validity_end_time" jdbcType="TIMESTAMP" property="validityEndTime"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="sex" jdbcType="INTEGER" property="sex"/>
+        <result column="birthday" jdbcType="TIMESTAMP" property="birthday"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,hc.id
+            ,hc.health_cert_pic
+            ,hc.name
+            ,hc.phone
+            ,hc.validity_start_time
+            ,hc.validity_end_time
+            ,hc.code
+            ,hc.sex
+            ,hc.birthday
+            ,hc.state
+            ,hc.del_flag
+            ,hc.create_by
+            ,hc.create_time
+            ,hc.update_by
+            ,hc.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and hc.id = #{id}
+            </if>
+            <if test="healthCertPic != null and healthCertPic != ''">
+                and hc.health_cert_pic = #{healthCertPic}
+            </if>
+            <if test="name != null and name != ''">
+                and hc.name = #{name}
+            </if>
+            <if test="phone != null and phone != ''">
+                and hc.phone = #{phone}
+            </if>
+            <if test="validityStartTime != null">
+                and hc.validity_start_time = #{validityStartTime}
+            </if>
+            <if test="validityEndTime != null">
+                and hc.validity_end_time = #{validityEndTime}
+            </if>
+            <if test="code != null and code != ''">
+                and hc.code = #{code}
+            </if>
+            <if test="sex != null">
+                and hc.sex = #{sex}
+            </if>
+            <if test="birthday != null">
+                and hc.birthday = #{birthday}
+            </if>
+            <if test="state != null">
+                and hc.state = #{state}
+            </if>
+            <if test="delFlag != null">
+                and hc.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and hc.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and hc.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_health_certificate -->
+
+</mapper>

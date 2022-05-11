@@ -19,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.Resource;
@@ -69,10 +70,6 @@ public class DishesController extends BaseController {
                 .eq(StringUtils.isNotBlank(vo.getDishesPicture()), DishesPO::getDishesPicture, vo.getDishesPicture())
                 .eq(StringUtils.isNotBlank(vo.getDishesIntroduction()), DishesPO::getDishesIntroduction, vo.getDishesIntroduction())
                 .eq(ObjectUtils.isNotEmpty(vo.getState()), DishesPO::getState, vo.getState())
-                .eq(ObjectUtils.isNotEmpty(vo.getDataState()), DishesPO::getDataState, vo.getDataState())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), DishesPO::getVersion, vo.getVersion())
-                .eq(StringUtils.isNotBlank(vo.getCreateName()), DishesPO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), DishesPO::getUpdateName, vo.getUpdateName())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(DishesMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -118,7 +115,6 @@ public class DishesController extends BaseController {
 
 //        设置创建人信息
         po.setCreateBy(loginUser.getUserId());
-        po.setCreateName(loginUser.getUsername());
 
         boolean result = dishesMpService.save(po);
         if (result) {
@@ -142,14 +138,13 @@ public class DishesController extends BaseController {
     public BaseResult update(@Validated(Update.class) DishesVO vo) {
 //        判断登录状态
         LoginUser loginUser = getLoginUser();
-        if(Objects.isNull(loginUser)){
+        if (Objects.isNull(loginUser)) {
             return BaseResult.error(Constants.ERROR_MESSAGE);
         }
 
         DishesPO po = DishesMsMapper.INSTANCE.vo2po(vo);
 //        设置更新人信息
         po.setUpdateBy(loginUser.getUserId());
-        po.setUpdateName(loginUser.getUsername());
 
         boolean result = dishesMpService.updateById(po);
         if (result) {
@@ -162,16 +157,13 @@ public class DishesController extends BaseController {
     /**
      * 删除
      *
-     * @param id 编号id
+     * @param ids 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
-    @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = dishesMpService.removeById(id);
+    @ApiOperation(value = "删除菜品信息", notes = "删除菜品信息", httpMethod = "DELETE")
+    @DeleteMapping(value = "/{ids}")
+    public BaseResult delete(@PathVariable Long[] ids) {
+        boolean result = dishesMpService.removeByIds(Arrays.asList(ids));
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {
@@ -179,24 +171,5 @@ public class DishesController extends BaseController {
         }
     }
 
-    /**
-     * 批量删除
-     *
-     * @param idList 编号id集合
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = dishesMpService.removeByIds(idList);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
-            return BaseResult.error("删除失败");
-        }
-    }
 
 }

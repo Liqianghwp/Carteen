@@ -1,31 +1,30 @@
 package com.ruoyi.web.controller.business;
 
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
-import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
 import com.diandong.domain.dto.RawMaterialNutritionDTO;
 import com.diandong.domain.po.RawMaterialNutritionPO;
-import com.diandong.domain.vo.RawMaterialNutritionListVO;
 import com.diandong.domain.vo.RawMaterialNutritionVO;
+import com.diandong.mapstruct.RawMaterialNutritionMsMapper;
+import com.diandong.service.RawMaterialNutritionMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.RawMaterialNutritionMpService;
-import com.diandong.mapstruct.RawMaterialNutritionMsMapper;
 import com.ruoyi.common.utils.StringUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
-import java.util.ArrayList;
+import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import javax.annotation.Resource;
 
 /**
  * Controller
@@ -63,10 +62,6 @@ public class RawMaterialNutritionController extends BaseController {
                 .eq(ObjectUtils.isNotEmpty(vo.getNutritionParamsId()), RawMaterialNutritionPO::getNutritionParamsId, vo.getNutritionParamsId())
                 .eq(StringUtils.isNotBlank(vo.getNutritionParamsName()), RawMaterialNutritionPO::getNutritionParamsName, vo.getNutritionParamsName())
                 .eq(ObjectUtils.isNotEmpty(vo.getNumber()), RawMaterialNutritionPO::getNumber, vo.getNumber())
-                .eq(ObjectUtils.isNotEmpty(vo.getDataState()), RawMaterialNutritionPO::getDataState, vo.getDataState())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), RawMaterialNutritionPO::getVersion, vo.getVersion())
-                .eq(StringUtils.isNotBlank(vo.getCreateName()), RawMaterialNutritionPO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), RawMaterialNutritionPO::getUpdateName, vo.getUpdateName())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(RawMaterialNutritionMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -161,7 +156,6 @@ public class RawMaterialNutritionController extends BaseController {
         RawMaterialNutritionPO po = RawMaterialNutritionMsMapper.INSTANCE.vo2po(vo);
 
         po.setUpdateBy(loginUser.getUserId());
-        po.setUpdateName(loginUser.getUsername());
         boolean result = rawMaterialNutritionMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");
@@ -173,36 +167,13 @@ public class RawMaterialNutritionController extends BaseController {
     /**
      * 删除
      *
-     * @param id 编号id
+     * @param ids 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = rawMaterialNutritionMpService.removeById(id);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
-            return BaseResult.error("删除失败");
-        }
-    }
-
-    /**
-     * 批量删除
-     *
-     * @param idList 编号id集合
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = rawMaterialNutritionMpService.removeByIds(idList);
+    @DeleteMapping(value = "/{ids}")
+    public BaseResult delete(@PathVariable Long[] ids) {
+        boolean result = rawMaterialNutritionMpService.removeByIds(Arrays.asList(ids));
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {

@@ -2,24 +2,24 @@ package com.diandong.domain.vo;
 
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 
 /**
- * VO实体类
+ * 食堂信息VO实体类
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-05-11
  */
 @Data
-@ApiModel("食堂VO实体类")
-public class CanteenVO implements Serializable {
+@ApiModel("食堂信息VO实体类")
+public class CanteenVO extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -32,21 +32,18 @@ public class CanteenVO implements Serializable {
     /**
      * 食堂名称
      */
-    @NotEmpty(groups = {Update.class,Insert.class},message = "食堂名称不能为空")
     @ApiModelProperty(value = "食堂名称")
     private String canteenName;
 
     /**
      * 联系人名称
      */
-    @NotEmpty(groups = {Insert.class},message = "食堂名称不能为空")
     @ApiModelProperty(value = "联系人名称")
     private String contentName;
 
     /**
      * 联系人手机号码
      */
-    @NotEmpty(groups = {Insert.class},message = "食堂名称不能为空")
     @ApiModelProperty(value = "联系人手机号码")
     private String contentPhone;
 
@@ -67,19 +64,6 @@ public class CanteenVO implements Serializable {
      */
     @ApiModelProperty(value = "二维码 二维码路径地址")
     private String qrCode;
-
-    /**
-     * 状态
-     */
-    @NotNull(groups = {Insert.class}, message ="状态不能为空")
-    @ApiModelProperty(value = "状态")
-    private Integer status;
-
-    /**
-     * 数据状态
-     */
-    @ApiModelProperty(value = "数据状态")
-    private Integer dataState;
 
     /**
      * 食堂图片 存储的是路径地址
@@ -106,28 +90,16 @@ public class CanteenVO implements Serializable {
     private String pName;
 
     /**
+     * 启用状态（0:未启用;1:已启用）
+     */
+    @ApiModelProperty(value = "启用状态（0:未启用;1:已启用）")
+    private Integer status;
+
+    /**
      * 备注
      */
     @ApiModelProperty(value = "备注")
     private String remark;
-
-    /**
-     * 乐观锁
-     */
-    @ApiModelProperty(value = "乐观锁")
-    private Integer version;
-
-    /**
-     * 创建人姓名
-     */
-    @ApiModelProperty(value = "创建人姓名")
-    private String createName;
-
-    /**
-     * 更新者姓名
-     */
-    @ApiModelProperty(value = "更新者姓名")
-    private String updateName;
 
 
 }

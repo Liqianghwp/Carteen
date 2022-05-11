@@ -1,5 +1,6 @@
 package com.diandong.domain.vo;
 
+import com.diandong.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 
 @ApiModel(value = "营养摄入分析VO类")
 @Data
-public class IntakeAnalysisVO implements Serializable {
+public class IntakeAnalysisVO extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1625779383779911464L;
 
 
@@ -26,18 +27,5 @@ public class IntakeAnalysisVO implements Serializable {
     @NotNull(message = "营养id不能为空")
     @ApiModelProperty(value = "营养id")
     private Long nutritionId;
-    /**
-     * 查询开始时间
-     */
-    @NotNull(message = "查询开始时间不能为空")
-    @ApiModelProperty(value = "查询开始时间")
-    private LocalDateTime startTime;
-
-    /**
-     * 查询结束时间
-     */
-    @NotNull(message = "查询结束时间不能为空")
-    @ApiModelProperty(value = "查询结束时间")
-    private LocalDateTime endTime;
 
 }

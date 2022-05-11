@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.ReserveSampleMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.ReserveSamplePO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="reserve_date" jdbcType="TIMESTAMP" property="reserveDate"/>
+        <result column="meal_times" jdbcType="BIGINT" property="mealTimes"/>
+        <result column="food_name" jdbcType="VARCHAR" property="foodName"/>
+        <result column="reserve_num" jdbcType="VARCHAR" property="reserveNum"/>
+        <result column="storage_location" jdbcType="BIGINT" property="storageLocation"/>
+        <result column="reserve_name" jdbcType="VARCHAR" property="reserveName"/>
+        <result column="warning_day" jdbcType="INTEGER" property="warningDay"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,rs.id
+            ,rs.reserve_date
+            ,rs.meal_times
+            ,rs.food_name
+            ,rs.reserve_num
+            ,rs.storage_location
+            ,rs.reserve_name
+            ,rs.warning_day
+            ,rs.remark
+            ,rs.state
+            ,rs.del_flag
+            ,rs.create_by
+            ,rs.create_time
+            ,rs.update_by
+            ,rs.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and rs.id = #{id}
+            </if>
+            <if test="reserveDate != null">
+                and rs.reserve_date = #{reserveDate}
+            </if>
+            <if test="mealTimes != null">
+                and rs.meal_times = #{mealTimes}
+            </if>
+            <if test="foodName != null and foodName != ''">
+                and rs.food_name = #{foodName}
+            </if>
+            <if test="reserveNum != null and reserveNum != ''">
+                and rs.reserve_num = #{reserveNum}
+            </if>
+            <if test="storageLocation != null">
+                and rs.storage_location = #{storageLocation}
+            </if>
+            <if test="reserveName != null and reserveName != ''">
+                and rs.reserve_name = #{reserveName}
+            </if>
+            <if test="warningDay != null">
+                and rs.warning_day = #{warningDay}
+            </if>
+            <if test="remark != null and remark != ''">
+                and rs.remark = #{remark}
+            </if>
+            <if test="state != null">
+                and rs.state = #{state}
+            </if>
+            <if test="delFlag != null">
+                and rs.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and rs.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and rs.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_reserve_sample -->
+
+</mapper>

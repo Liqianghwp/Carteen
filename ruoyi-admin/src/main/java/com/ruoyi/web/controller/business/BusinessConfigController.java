@@ -1,11 +1,8 @@
 package com.ruoyi.web.controller.business;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.diandong.configuration.Insert;
-import com.diandong.configuration.Update;
-import com.diandong.constant.Constants;
+import com.diandong.constant.RichTextConstants;
 import com.diandong.domain.dto.BusinessConfigDTO;
 import com.diandong.domain.po.BusinessConfigPO;
 import com.diandong.domain.vo.BusinessConfigVO;
@@ -13,8 +10,6 @@ import com.diandong.mapstruct.BusinessConfigMsMapper;
 import com.diandong.service.BusinessConfigMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
-import com.ruoyi.common.core.domain.model.LoginUser;
-import com.ruoyi.common.core.page.TableDataInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -42,32 +37,6 @@ public class BusinessConfigController extends BaseController {
     @Resource
     private BusinessConfigMpService businessConfigMpService;
 
-    /**
-     * 分页查询
-     *
-     * @param vo 参数对象
-     * @return 分页数据结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "BusinessConfigVO", name = "vo", value = "查询参数")
-    })
-    @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
-    @GetMapping
-    public TableDataInfo<BusinessConfigDTO> getList(BusinessConfigVO vo) {
-        startPage();
-        List<BusinessConfigPO> dataList = businessConfigMpService.lambdaQuery()
-                .eq(ObjectUtils.isNotEmpty(vo.getId()), BusinessConfigPO::getId, vo.getId())
-                .eq(StringUtils.isNotBlank(vo.getConfigName()), BusinessConfigPO::getConfigName, vo.getConfigName())
-                .eq(StringUtils.isNotBlank(vo.getConfigValue()), BusinessConfigPO::getConfigValue, vo.getConfigValue())
-                .eq(ObjectUtils.isNotEmpty(vo.getDataState()), BusinessConfigPO::getDataState, vo.getDataState())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), BusinessConfigPO::getVersion, vo.getVersion())
-                .eq(StringUtils.isNotBlank(vo.getCreateName()), BusinessConfigPO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), BusinessConfigPO::getUpdateName, vo.getUpdateName())
-                .list();
-        TableDataInfo pageData = getDataTable(dataList);
-        pageData.setRows(BusinessConfigMsMapper.INSTANCE.poList2dtoList(dataList));
-        return pageData;
-    }
 
     /**
      * 根据id查询
@@ -86,36 +55,6 @@ public class BusinessConfigController extends BaseController {
         return BaseResult.success(dto);
     }
 
-    /**
-     * 保存
-     *
-     * @param vo 参数对象
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "BusinessConfigVO", name = "vo", value = "参数对象")
-    })
-    @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
-    @PostMapping
-    public BaseResult save(@Validated(Insert.class) BusinessConfigVO vo) {
-
-//        判断登录状态
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
-
-        BusinessConfigPO po = BusinessConfigMsMapper.INSTANCE.vo2po(vo);
-//        设置创建人信息
-        po.setCreateBy(loginUser.getUserId());
-        po.setCreateName(loginUser.getUsername());
-        boolean result = businessConfigMpService.save(po);
-        if (result) {
-            return BaseResult.successMsg("添加成功！");
-        } else {
-            return BaseResult.error("添加失败！");
-        }
-    }
 
     /**
      * 查询关于我们的信息
@@ -126,7 +65,7 @@ public class BusinessConfigController extends BaseController {
     @GetMapping("/about_us")
     public BaseResult getAboutUs() {
 
-        return searchBusinessConfig("关于我们");
+        return searchBusinessConfig(RichTextConstants.ABOUT_US);
     }
 
     /**
@@ -138,7 +77,7 @@ public class BusinessConfigController extends BaseController {
     @GetMapping("/user_services_agreement")
     public BaseResult getUserServicesAgreement() {
 
-        return searchBusinessConfig("用户服务协议");
+        return searchBusinessConfig(RichTextConstants.USER_SERVICES_AGREEMENT);
     }
 
     /**
@@ -149,8 +88,7 @@ public class BusinessConfigController extends BaseController {
     @ApiOperation(value = "充值服务协议", notes = "充值服务协议", httpMethod = "GET")
     @GetMapping("/recharge_service_agreement")
     public BaseResult getRechargeServiceAgreement() {
-
-        return searchBusinessConfig("充值服务协议");
+        return searchBusinessConfig(RichTextConstants.RECHARGE_SERVICE_AGREEMENT);
     }
 
 
@@ -172,75 +110,63 @@ public class BusinessConfigController extends BaseController {
         return BaseResult.success(businessConfigPO);
     }
 
-
     /**
-     * 更新
+     * 保存更新关于我们富文本设置
      *
-     * @param vo 参数对象
-     * @return 返回结果
+     * @return
      */
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "BusinessConfigVO", name = "vo", value = "参数对象")
+            @ApiImplicitParam(paramType = "query", dataType = "BusinessConfigVO", name = "vo")
     })
-    @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
-    @PutMapping
-    public BaseResult update(@Validated(Update.class) BusinessConfigVO vo) {
-//        判断登录状态
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
+    @ApiOperation(value = "保存&更新(关于我们)")
+    @PostMapping("/about_us")
+    public BaseResult saveAndUpdateAboutUs(@RequestBody BusinessConfigVO vo) {
+        vo.setConfigName(RichTextConstants.ABOUT_US);
+        return saveAndUpdate(vo);
+    }
 
+    /**
+     * 保存更新关于我们富文本设置
+     *
+     * @return
+     */
+    @ApiOperation(value = "保存&更新(用户服务协议)")
+    @PostMapping("/user_services_agreement")
+    public BaseResult saveAndUpdateUserServicesAgreement(@RequestBody BusinessConfigVO vo) {
+        vo.setConfigName(RichTextConstants.USER_SERVICES_AGREEMENT);
+        return saveAndUpdate(vo);
+    }
+
+    /**
+     * 保存更新关于我们富文本设置
+     *
+     * @return
+     */
+    @ApiOperation(value = "保存&更新(充值服务协议)")
+    @PostMapping("/recharge_service_agreement")
+    public BaseResult saveAndUpdateRechargeServiceAgreement(@RequestBody BusinessConfigVO vo) {
+        vo.setConfigName(RichTextConstants.RECHARGE_SERVICE_AGREEMENT);
+        return saveAndUpdate(vo);
+    }
+
+    private BaseResult saveAndUpdate(BusinessConfigVO vo) {
         BusinessConfigPO po = BusinessConfigMsMapper.INSTANCE.vo2po(vo);
-        po.setUpdateBy(loginUser.getUserId());
-        po.setUpdateName(loginUser.getUsername());
 
-        boolean result = businessConfigMpService.updateById(po);
-        if (result) {
-            return BaseResult.successMsg("修改成功");
+        BusinessConfigPO oldConfig = businessConfigMpService.lambdaQuery().eq(BusinessConfigPO::getConfigName, po.getConfigName()).one();
+        Boolean result = false;
+        if (Objects.isNull(oldConfig)) {
+            result = businessConfigMpService.save(po);
         } else {
-            return BaseResult.error("修改失败");
+            po.setId(oldConfig.getId());
+            result = businessConfigMpService.updateById(po);
+        }
+
+        if (result) {
+            return BaseResult.success(po);
+        } else {
+            return BaseResult.error("操作失败");
         }
     }
 
-    /**
-     * 删除
-     *
-     * @param id 编号id
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
-    @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = businessConfigMpService.removeById(id);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
-            return BaseResult.error("删除失败");
-        }
-    }
-
-    /**
-     * 批量删除
-     *
-     * @param idList 编号id集合
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = businessConfigMpService.removeByIds(idList);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
-            return BaseResult.error("删除失败");
-        }
-    }
 
 }

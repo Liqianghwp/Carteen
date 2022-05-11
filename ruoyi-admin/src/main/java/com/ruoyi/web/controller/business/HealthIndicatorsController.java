@@ -6,23 +6,26 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
-import com.fasterxml.jackson.databind.ser.Serializers;
+import com.diandong.domain.dto.HealthIndicatorsDTO;
+import com.diandong.domain.po.HealthIndicatorsPO;
+import com.diandong.domain.vo.HealthIndicatorsVO;
+import com.diandong.mapstruct.HealthIndicatorsMsMapper;
+import com.diandong.service.HealthIndicatorsMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.HealthIndicatorsMpService;
-import com.diandong.domain.po.HealthIndicatorsPO;
-import com.diandong.domain.dto.HealthIndicatorsDTO;
-import com.diandong.domain.vo.HealthIndicatorsVO;
-import com.diandong.mapstruct.HealthIndicatorsMsMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
+import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import javax.annotation.Resource;
 
 /**
  * Controller
@@ -60,10 +63,6 @@ public class HealthIndicatorsController extends BaseController {
                 .eq(StringUtils.isNotBlank(vo.getIndicatorUnit()), HealthIndicatorsPO::getIndicatorUnit, vo.getIndicatorUnit())
                 .eq(ObjectUtils.isNotEmpty(vo.getUserId()), HealthIndicatorsPO::getUserId, vo.getUserId())
                 .eq(StringUtils.isNotBlank(vo.getUserName()), HealthIndicatorsPO::getUserName, vo.getUserName())
-                .eq(ObjectUtils.isNotEmpty(vo.getDataState()), HealthIndicatorsPO::getDataState, vo.getDataState())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), HealthIndicatorsPO::getVersion, vo.getVersion())
-                .eq(StringUtils.isNotBlank(vo.getCreateName()), HealthIndicatorsPO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), HealthIndicatorsPO::getUpdateName, vo.getUpdateName())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(HealthIndicatorsMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -187,7 +186,6 @@ public class HealthIndicatorsController extends BaseController {
         HealthIndicatorsPO po = HealthIndicatorsMsMapper.INSTANCE.vo2po(vo);
 //        设置更新人信息
         po.setUpdateBy(loginUser.getUserId());
-        po.setUpdateName(loginUser.getUsername());
 
         boolean result = healthIndicatorsMpService.updateById(po);
         if (result) {
@@ -200,16 +198,13 @@ public class HealthIndicatorsController extends BaseController {
     /**
      * 删除
      *
-     * @param id 编号id
+     * @param ids 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = healthIndicatorsMpService.removeById(id);
+    @DeleteMapping(value = "/{ids}")
+    public BaseResult delete(@PathVariable Long[] ids) {
+        boolean result = healthIndicatorsMpService.removeByIds(Arrays.asList(ids));
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {

@@ -50,7 +50,6 @@ public class DishesNutritionMpServiceImpl extends CommonServiceImpl<DishesNutrit
 
 //            设置创建人信息
             po.setCreateBy(loginUser.getUserId());
-            po.setCreateName(loginUser.getUsername());
 
             result = save(po);
             if (!result) {

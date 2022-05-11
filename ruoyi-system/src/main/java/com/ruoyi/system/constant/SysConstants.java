@@ -28,6 +28,8 @@ public class SysConstants {
     public static final String RAW_MATERIAL_CATEGORY = "raw_material_category";
     //    意见类型
     public static final String OPINION_TYPE = "sys_opinion_type";
+    //    健康证管理配置
+    public static final String HEALTH_CERTIFICATE = "health_certificate";
 
 
 }

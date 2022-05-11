@@ -54,13 +54,12 @@ public class ShopCartMpServiceImpl extends CommonServiceImpl<ShopCartMapper, Sho
         lambdaQueryWrapper
                 .eq(ShopCartPO::getCanteenId, shopCartVO.getCanteenId())
                 .eq(ShopCartPO::getCreateBy, loginUser.getUserId())
-                .eq(ShopCartPO::getDataState, DataStateEnum.DELETE_NO.value());
+                .eq(ShopCartPO::getDelFlag, DataStateEnum.DELETE_NO.value());
         ShopCartPO shopCartPO = getOne(lambdaQueryWrapper);
 
         if (Objects.isNull(shopCartPO)) {
             shopCartPO = ShopCartMsMapper.INSTANCE.vo2po(shopCartVO);
             shopCartPO.setCreateBy(loginUser.getUserId());
-            shopCartPO.setCreateName(loginUser.getUsername());
             result = save(shopCartPO);
         } else {
             result = true;
@@ -79,7 +78,6 @@ public class ShopCartMpServiceImpl extends CommonServiceImpl<ShopCartMapper, Sho
                 shopCartDetailVO.setShopCartId(finalShopCartPO.getId());
                 ShopCartDetailPO shopCartDetailPO = ShopCartDetailMsMapper.INSTANCE.vo2po(shopCartDetailVO);
                 shopCartDetailPO.setCreateBy(loginUser.getUserId());
-                shopCartDetailPO.setCreateName(loginUser.getUsername());
 
                 log.info(JSONObject.toJSONString(shopCartDetailPO));
                 detailPOList.add(shopCartDetailPO);

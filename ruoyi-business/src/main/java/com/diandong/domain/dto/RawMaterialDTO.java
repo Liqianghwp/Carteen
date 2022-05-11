@@ -1,5 +1,6 @@
 package com.diandong.domain.dto;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -9,13 +10,13 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * DTO实体类
+ * 原材料信息 原材料信息DTO实体类
  *
  * @author YuLiu
- * @date 2022-03-31
+ * @date 2022-05-11
  */
 @Data
-@ApiModel("原料DTO实体类")
+@ApiModel("原材料信息 原材料信息DTO实体类")
 public class RawMaterialDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -110,28 +111,10 @@ public class RawMaterialDTO implements Serializable {
     private Integer status;
 
     /**
-     * 数据状态（0:未删除；1:已删除）
-     */
-    @ApiModelProperty(value = "数据状态（0:未删除；1:已删除）")
-    private Integer dataState;
-
-    /**
-     * 乐观锁
-     */
-    @ApiModelProperty(value = "乐观锁")
-    private Integer version;
-
-    /**
      * 创建人id
      */
     @ApiModelProperty(value = "创建人id")
     private Long createBy;
-
-    /**
-     * 创建人姓名
-     */
-    @ApiModelProperty(value = "创建人姓名")
-    private String createName;
 
     /**
      * 创建时间
@@ -146,21 +129,14 @@ public class RawMaterialDTO implements Serializable {
     private Long updateBy;
 
     /**
-     * 更新者姓名
-     */
-    @ApiModelProperty(value = "更新者姓名")
-    private String updateName;
-
-    /**
      * 更新时间
      */
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 
-    /**
-     * 菜谱生成原材料清单 原材料重量
-     */
-    @ApiModelProperty(value = "重量信息")
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "数量")
     private Double number;
 
 }

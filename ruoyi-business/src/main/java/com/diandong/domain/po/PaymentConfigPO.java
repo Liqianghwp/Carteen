@@ -10,14 +10,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * PO实体类
+ * 支付设置PO实体类
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-05-11
  */
 @TableName("wis_payment_config")
 @Data
-@ApiModel("支付配置PO实体类")
+@ApiModel("支付设置PO实体类")
 @Accessors(chain = true)
 public class PaymentConfigPO implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -65,25 +65,11 @@ public class PaymentConfigPO implements Serializable {
     private String canteenName;
 
     /**
-     * 乐观锁
-     */
-    @TableField(value = "version")
-    @ApiModelProperty(value = "乐观锁")
-    private Integer version;
-
-    /**
      * 创建人id
      */
     @TableField(value = "create_by", fill = FieldFill.INSERT)
     @ApiModelProperty(value = "创建人id")
     private Long createBy;
-
-    /**
-     * 创建人姓名
-     */
-    @TableField(value = "create_name")
-    @ApiModelProperty(value = "创建人姓名")
-    private String createName;
 
     /**
      * 创建日期 默认为当前时间
@@ -93,18 +79,11 @@ public class PaymentConfigPO implements Serializable {
     private LocalDateTime createTime;
 
     /**
-     * 更新者
+     * 更新者id
      */
     @TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
-    @ApiModelProperty(value = "更新者")
+    @ApiModelProperty(value = "更新者id")
     private Long updateBy;
-
-    /**
-     * 更新人姓名
-     */
-    @TableField(value = "update_name")
-    @ApiModelProperty(value = "更新人姓名")
-    private String updateName;
 
     /**
      * 更新时间

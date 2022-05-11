@@ -8,13 +8,13 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * DTO实体类
+ * 营养信息DTO实体类
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-05-11
  */
 @Data
-@ApiModel("营养参数DTO实体类")
+@ApiModel("营养信息DTO实体类")
 public class NutritionParamsDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -55,28 +55,10 @@ public class NutritionParamsDTO implements Serializable {
     private Integer beUsed;
 
     /**
-     * 数据状态
-     */
-    @ApiModelProperty(value = "数据状态")
-    private Integer dataState;
-
-    /**
-     * 乐观锁
-     */
-    @ApiModelProperty(value = "乐观锁")
-    private Integer version;
-
-    /**
      * 创建人id
      */
     @ApiModelProperty(value = "创建人id")
     private Long createBy;
-
-    /**
-     * 创建人姓名
-     */
-    @ApiModelProperty(value = "创建人姓名")
-    private String createName;
 
     /**
      * 创建时间
@@ -85,16 +67,10 @@ public class NutritionParamsDTO implements Serializable {
     private LocalDateTime createTime;
 
     /**
-     * 更新人id
+     * 更新者id
      */
-    @ApiModelProperty(value = "更新人id")
+    @ApiModelProperty(value = "更新者id")
     private Long updateBy;
-
-    /**
-     * 更新人姓名
-     */
-    @ApiModelProperty(value = "更新人姓名")
-    private String updateName;
 
     /**
      * 更新时间

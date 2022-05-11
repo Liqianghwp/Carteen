@@ -1,5 +1,6 @@
 package com.diandong.domain.vo;
 
+import com.diandong.domain.BaseEntity;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -7,7 +8,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class RawMaterialNutritionListVO implements Serializable {
+public class RawMaterialNutritionListVO extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 8480593660028767017L;
 
     /**

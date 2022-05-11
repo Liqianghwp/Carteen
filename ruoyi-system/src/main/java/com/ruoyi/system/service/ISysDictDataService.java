@@ -18,6 +18,14 @@ public interface ISysDictDataService {
      */
     public List<SysDictData> selectDictDataList(SysDictData dictData);
 
+
+    /**
+     * 根据字典类型 字典标签获取数量
+     * @param dictData  字典数据信息
+     * @return
+     */
+    Integer countDictData(SysDictData dictData);
+
     /**
      * 根据字典类型和字典键值查询字典数据信息
      *

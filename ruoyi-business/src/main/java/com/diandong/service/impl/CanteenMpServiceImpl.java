@@ -30,7 +30,6 @@ public class CanteenMpServiceImpl extends CommonServiceImpl<CanteenMapper, Cante
 
 //        设置创建人信息
         po.setCreateBy(loginUser.getUserId());
-        po.setCreateName(loginUser.getUsername());
 
         boolean result = save(po);
         if (result) {

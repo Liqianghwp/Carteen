@@ -5,32 +5,31 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
+import com.diandong.domain.dto.OpinionFeedbackDTO;
+import com.diandong.domain.po.OpinionFeedbackPO;
 import com.diandong.domain.vo.OpinionFeedbackResponseVO;
-import com.diandong.enums.OpinionStatusEnum;
+import com.diandong.domain.vo.OpinionFeedbackVO;
+import com.diandong.mapstruct.OpinionFeedbackMsMapper;
+import com.diandong.service.OpinionFeedbackMpService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
-import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.OpinionFeedbackMpService;
-import com.diandong.domain.po.OpinionFeedbackPO;
-import com.diandong.domain.dto.OpinionFeedbackDTO;
-import com.diandong.domain.vo.OpinionFeedbackVO;
-import com.diandong.mapstruct.OpinionFeedbackMsMapper;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
-import org.springframework.security.access.prepost.PreAuthorize;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Controller
@@ -72,10 +71,6 @@ public class OpinionFeedbackController extends BaseController {
                 .eq(ObjectUtils.isNotEmpty(vo.getStatus()), OpinionFeedbackPO::getStatus, vo.getStatus())
                 .eq(ObjectUtils.isNotEmpty(vo.getAnonymous()), OpinionFeedbackPO::getAnonymous, vo.getAnonymous())
                 .eq(ObjectUtils.isNotEmpty(vo.getProcessTime()), OpinionFeedbackPO::getProcessTime, vo.getProcessTime())
-                .eq(ObjectUtils.isNotEmpty(vo.getDataState()), OpinionFeedbackPO::getDataState, vo.getDataState())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), OpinionFeedbackPO::getVersion, vo.getVersion())
-                .eq(StringUtils.isNotBlank(vo.getCreateName()), OpinionFeedbackPO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), OpinionFeedbackPO::getUpdateName, vo.getUpdateName())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(OpinionFeedbackMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -128,7 +123,6 @@ public class OpinionFeedbackController extends BaseController {
         OpinionFeedbackPO po = OpinionFeedbackMsMapper.INSTANCE.vo2po(vo);
 //        设置创建人信息
         po.setCreateBy(loginUser.getUserId());
-        po.setCreateName(loginUser.getUsername());
         boolean result = opinionFeedbackMpService.save(po);
         if (result) {
             return BaseResult.successMsg("添加成功！");
@@ -192,7 +186,6 @@ public class OpinionFeedbackController extends BaseController {
 
         OpinionFeedbackPO po = OpinionFeedbackMsMapper.INSTANCE.vo2po(vo);
         po.setUpdateBy(loginUser.getUserId());
-        po.setUpdateName(loginUser.getUsername());
         boolean result = opinionFeedbackMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");
@@ -204,36 +197,13 @@ public class OpinionFeedbackController extends BaseController {
     /**
      * 删除
      *
-     * @param id 编号id
+     * @param ids 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = opinionFeedbackMpService.removeById(id);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
-            return BaseResult.error("删除失败");
-        }
-    }
-
-    /**
-     * 批量删除
-     *
-     * @param idList 编号id集合
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = opinionFeedbackMpService.removeByIds(idList);
+    @DeleteMapping(value = "/{ids}")
+    public BaseResult delete(@PathVariable Long[] ids) {
+        boolean result = opinionFeedbackMpService.removeByIds(Arrays.asList(ids));
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {

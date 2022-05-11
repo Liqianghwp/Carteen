@@ -46,15 +46,15 @@ public class NutritionParamsMpServiceImpl extends CommonServiceImpl<NutritionPar
 
             List<NutritionAdvicePO> naList = nutritionAdviceMpService.lambdaQuery()
                     .eq(NutritionAdvicePO::getNutritionalId, aLong)
-                    .eq(NutritionAdvicePO::getDataState, 0)
+                    .eq(NutritionAdvicePO::getDelFlag, false)
                     .list();
             List<DishesNutritionPO> dnList = dishesNutritionMpService.lambdaQuery()
                     .eq(DishesNutritionPO::getNutritionId, aLong)
-                    .eq(DishesNutritionPO::getDataState, 0)
+                    .eq(DishesNutritionPO::getDelFlag, false)
                     .list();
             List<RawMaterialNutritionPO> rmnList = rawMaterialNutritionMpService.lambdaQuery()
                     .eq(RawMaterialNutritionPO::getNutritionParamsId, aLong)
-                    .eq(RawMaterialNutritionPO::getDataState, 0)
+                    .eq(RawMaterialNutritionPO::getDelFlag, false)
                     .list();
 
 

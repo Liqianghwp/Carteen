@@ -2,6 +2,7 @@ package com.diandong.domain.vo;
 
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -11,14 +12,14 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 
 /**
- * VO实体类
+ * 人脸识别图片存储VO实体类
  *
  * @author YuLiu
- * @date 2022-04-01
+ * @date 2022-05-11
  */
 @Data
-@ApiModel("人脸认证VO实体类")
-public class FaceRecognitionVO implements Serializable {
+@ApiModel("人脸识别图片存储VO实体类")
+public class FaceRecognitionVO extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -33,30 +34,6 @@ public class FaceRecognitionVO implements Serializable {
      */
     @ApiModelProperty(value = "人脸照片")
     private String facePicture;
-
-    /**
-     * 数据状态
-     */
-    @ApiModelProperty(value = "数据状态")
-    private Integer dataStatus;
-
-    /**
-     * 乐观锁
-     */
-    @ApiModelProperty(value = "乐观锁")
-    private Integer version;
-
-    /**
-     * 创建人姓名
-     */
-    @ApiModelProperty(value = "创建人姓名")
-    private String createName;
-
-    /**
-     * 更新人姓名
-     */
-    @ApiModelProperty(value = "更新人姓名")
-    private String updateName;
 
 
 }

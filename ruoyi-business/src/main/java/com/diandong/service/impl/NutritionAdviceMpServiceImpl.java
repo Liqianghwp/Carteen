@@ -12,10 +12,9 @@ import com.diandong.mapstruct.NutritionAdviceMsMapper;
 import com.diandong.service.NutritionAdviceMpService;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -47,7 +46,6 @@ public class NutritionAdviceMpServiceImpl extends CommonServiceImpl<NutritionAdv
             NutritionAdvicePO po = NutritionAdviceMsMapper.INSTANCE.vo2po(nutritionAdviceVO);
 
             po.setCreateBy(loginUser.getUserId());
-            po.setCreateName(loginUser.getUsername());
 
             result = save(po);
 
@@ -65,9 +63,6 @@ public class NutritionAdviceMpServiceImpl extends CommonServiceImpl<NutritionAdv
         LocalDateTime startTime = vo.getStartTime();
 //        结束时间
         LocalDateTime endTime = vo.getEndTime();
-//        获取查询时间的最小值和最大值
-        LocalDateTime startMinTime = LocalDateTime.of(startTime.toLocalDate(), LocalTime.MIN);
-        LocalDateTime endMaxTime = LocalDateTime.of(endTime.toLocalDate(), LocalTime.MAX);
 
         DateTimeFormatter dayDtf = DateTimeFormatter.ISO_LOCAL_DATE;
 
@@ -75,7 +70,7 @@ public class NutritionAdviceMpServiceImpl extends CommonServiceImpl<NutritionAdv
                 .eq(ObjectUtils.isNotEmpty(vo.getMealTimesId()), NutritionAdvicePO::getMealTimesId, vo.getMealTimesId())
                 .eq(NutritionAdvicePO::getNutritionalId, vo.getNutritionId())
                 .eq(NutritionAdvicePO::getCreateBy, loginUser.getUserId())
-                .between(NutritionAdvicePO::getCreateTime, startMinTime, endMaxTime)
+                .between(NutritionAdvicePO::getCreateTime, startTime, endTime)
                 .list();
 
 
@@ -84,12 +79,14 @@ public class NutritionAdviceMpServiceImpl extends CommonServiceImpl<NutritionAdv
         Map<String, Double> inputMap = new HashMap<>();
         Map<String, Double> suggestionMap = new HashMap<>();
 
-        while (startMinTime.isBefore(endMaxTime)) {
-            String formatDay = startMinTime.format(dayDtf);
+
+        while (startTime.isBefore(endTime)) {
+            String formatDay = startTime.format(dayDtf);
+
             List<NutritionAdvicePO> collect = list.stream().filter(nutritionAdvicePO -> nutritionAdvicePO.getCreateTime().format(dayDtf).equals(formatDay)).collect(Collectors.toList());
 
             if (CollectionUtils.isEmpty(collect)) {
-                inputMap.put(formatDay, 0D);
+                inputMap.put(formatDay, 0d);
             } else {
                 AtomicReference<Double> total = new AtomicReference<>(0d);
                 collect.forEach(nutritionAdvicePO -> {
@@ -99,7 +96,9 @@ public class NutritionAdviceMpServiceImpl extends CommonServiceImpl<NutritionAdv
             }
 
             suggestionMap.put(formatDay, 0d);
-            startMinTime = startMinTime.plusDays(1L);
+
+//            日期+1
+            startTime = startTime.plusDays(1L);
         }
         intakeAnalysisResponseVO.setInputMap(inputMap);
         intakeAnalysisResponseVO.setSuggestionMap(suggestionMap);
@@ -120,7 +119,7 @@ public class NutritionAdviceMpServiceImpl extends CommonServiceImpl<NutritionAdv
                 .eq(NutritionAdvicePO::getCreateBy, loginUser.getUserId())
                 .between(NutritionAdvicePO::getCreateTime, nowMinTime, nowMaxTime)
                 .list();
-        
+
         return BaseResult.success(list);
     }
 }

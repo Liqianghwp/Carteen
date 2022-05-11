@@ -2,7 +2,7 @@ package com.diandong.domain.vo;
 
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
-import com.ruoyi.common.annotation.Excel;
+import com.diandong.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -12,14 +12,14 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 
 /**
- * VO实体类
+ * 意见反馈VO实体类
  *
  * @author YuLiu
- * @date 2022-04-01
+ * @date 2022-05-11
  */
 @Data
 @ApiModel("意见反馈VO实体类")
-public class OpinionFeedbackVO implements Serializable {
+public class OpinionFeedbackVO extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -89,34 +89,6 @@ public class OpinionFeedbackVO implements Serializable {
     @ApiModelProperty(value = "处理时间")
     private LocalDateTime processTime;
 
-    /**
-     * 数据状态 0：未删除；1：已删除
-     */
-    @ApiModelProperty(value = "数据状态 0：未删除；1：已删除")
-    private Integer dataState;
-
-    /**
-     * 乐观锁
-     */
-    @ApiModelProperty(value = "乐观锁")
-    private Integer version;
-
-    /**
-     * 创建人姓名
-     */
-    @ApiModelProperty(value = "创建人姓名")
-    private String createName;
-
-    /**
-     * 更新人姓名
-     */
-    @ApiModelProperty(value = "更新人姓名")
-    private String updateName;
-
-    /**
-     * 集团id
-     */
     @ApiModelProperty(value = "集团id")
     private Long groupId;
-
 }

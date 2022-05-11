@@ -2,24 +2,24 @@ package com.diandong.domain.vo;
 
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 
 /**
- * VO实体类
+ * 评价处理VO实体类
  *
  * @author YuLiu
- * @date 2022-04-01
+ * @date 2022-05-11
  */
 @Data
-@ApiModel("评价VO实体类")
-public class CommentVO implements Serializable {
+@ApiModel("评价处理VO实体类")
+public class CommentVO extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -32,14 +32,12 @@ public class CommentVO implements Serializable {
     /**
      * 订单编号
      */
-    @NotNull(groups = {Insert.class}, message = "提交评价，订单编号不能为空")
     @ApiModelProperty(value = "订单编号")
     private Long orderId;
 
     /**
      * 评价内容
      */
-    @NotEmpty(groups = {Insert.class}, message = "评价内容不能为空")
     @ApiModelProperty(value = "评价内容")
     private String commentContent;
 
@@ -78,30 +76,6 @@ public class CommentVO implements Serializable {
      */
     @ApiModelProperty(value = "处理时间")
     private LocalDateTime processTime;
-
-    /**
-     * 数据状态 0：未删除；1：已删除
-     */
-    @ApiModelProperty(value = "数据状态 0：未删除；1：已删除")
-    private Integer dataState;
-
-    /**
-     * 乐观锁
-     */
-    @ApiModelProperty(value = "乐观锁")
-    private Integer version;
-
-    /**
-     * 创建人姓名
-     */
-    @ApiModelProperty(value = "创建人姓名")
-    private String createName;
-
-    /**
-     * 更新人姓名
-     */
-    @ApiModelProperty(value = "更新人姓名")
-    private String updateName;
 
 
 }

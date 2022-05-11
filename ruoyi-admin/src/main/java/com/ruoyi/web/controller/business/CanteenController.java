@@ -64,10 +64,6 @@ public class CanteenController extends BaseController {
                 .eq(ObjectUtils.isNotEmpty(vo.getPId()), CanteenPO::getPId, vo.getPId())
                 .eq(StringUtils.isNotBlank(vo.getPName()), CanteenPO::getPName, vo.getPName())
                 .eq(StringUtils.isNotBlank(vo.getRemark()), CanteenPO::getRemark, vo.getRemark())
-                .eq(ObjectUtils.isNotEmpty(vo.getDataState()), CanteenPO::getDataState, vo.getDataState())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), CanteenPO::getVersion, vo.getVersion())
-                .eq(StringUtils.isNotBlank(vo.getCreateName()), CanteenPO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), CanteenPO::getUpdateName, vo.getUpdateName())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(CanteenMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -133,7 +129,6 @@ public class CanteenController extends BaseController {
 
 //        设置修改人信息
         po.setUpdateBy(loginUser.getUserId());
-        po.setUpdateName(loginUser.getUsername());
 
         boolean result = canteenMpService.updateById(po);
         if (result) {

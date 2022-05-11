@@ -52,7 +52,7 @@ public class SysRoleController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "SysRole", name = "role", value = "")
     })
-    @ApiOperation(value = "", notes = "", httpMethod = "GET")
+    @ApiOperation(value = "角色分页查询", notes = "角色分页查询", httpMethod = "GET")
     @PreAuthorize("@ss.hasPermi('system:role:list')")
     @GetMapping("/list")
     public TableDataInfo list(SysRole role) {
@@ -65,7 +65,7 @@ public class SysRoleController extends BaseController {
             @ApiImplicitParam(paramType = "query", dataType = "HttpServletResponse", name = "response", value = ""),
             @ApiImplicitParam(paramType = "query", dataType = "SysRole", name = "role", value = "")
     })
-    @ApiOperation(value = "", notes = "", httpMethod = "POST")
+    @ApiOperation(value = "角色管理导出", notes = "角色管理导出", httpMethod = "POST")
     @Log(title = "角色管理", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('system:role:export')")
     @PostMapping("/export")

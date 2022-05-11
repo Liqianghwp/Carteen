@@ -10,14 +10,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * PO实体类
+ * 食谱详情PO实体类
  *
  * @author YuLiu
- * @date 2022-04-02
+ * @date 2022-05-11
  */
 @TableName("wis_recipe_detail")
 @Data
-@ApiModel("菜谱详情PO实体类")
+@ApiModel("食谱详情PO实体类")
 @Accessors(chain = true)
 public class RecipeDetailPO implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -79,18 +79,11 @@ public class RecipeDetailPO implements Serializable {
     private Integer number;
 
     /**
-     * 乐观锁
+     * 数据状态
      */
-    @TableField(value = "version")
-    @ApiModelProperty(value = "乐观锁")
-    private Long version;
-
-    /**
-     * 状态
-     */
-    @TableField(value = "status")
-    @ApiModelProperty(value = "状态")
-    private Integer status;
+    @TableField(value = "del_flag")
+    @ApiModelProperty(value = "数据状态")
+    private Integer delFlag;
 
     /**
      * 创建人id
@@ -98,13 +91,6 @@ public class RecipeDetailPO implements Serializable {
     @TableField(value = "create_by", fill = FieldFill.INSERT)
     @ApiModelProperty(value = "创建人id")
     private Long createBy;
-
-    /**
-     * 创建人姓名
-     */
-    @TableField(value = "create_name")
-    @ApiModelProperty(value = "创建人姓名")
-    private String createName;
 
     /**
      * 创建时间 当前时间
@@ -119,13 +105,6 @@ public class RecipeDetailPO implements Serializable {
     @TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(value = "更新者id")
     private Long updateBy;
-
-    /**
-     * 更新者姓名
-     */
-    @TableField(value = "update_name")
-    @ApiModelProperty(value = "更新者姓名")
-    private String updateName;
 
     /**
      * 更新时间

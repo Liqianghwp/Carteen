@@ -67,7 +67,6 @@ public class OrderMpServiceImpl extends CommonServiceImpl<OrderMapper, OrderPO>
         order.setOrderTime(LocalDateTime.now());
         order.setEvaluationStatus(EvaluateEnum.NOT_RATED.value());
         order.setCreateBy(loginUser.getUserId());
-        order.setCreateName(loginUser.getUsername());
 
 
         boolean result = save(order);
@@ -94,7 +93,6 @@ public class OrderMpServiceImpl extends CommonServiceImpl<OrderMapper, OrderPO>
 //            计算当前菜品的总价格
             orderDetail.setDishesTotalPrice(orderDetail.getDishesPrice().multiply(BigDecimal.valueOf(orderDetail.getDishesCount())));
             orderDetail.setCreateBy(loginUser.getUserId());
-            orderDetail.setCreateName(loginUser.getUsername());
 
             result = orderDetailMpService.save(orderDetail);
             if (!result) {
@@ -124,7 +122,6 @@ public class OrderMpServiceImpl extends CommonServiceImpl<OrderMapper, OrderPO>
         order.setStatus(OrderStatusEnum.CANCELLED.value());
 //        设置更新人信息
         order.setUpdateBy(loginUser.getUserId());
-        order.setUpdateName(loginUser.getUsername());
         order.setUpdateTime(LocalDateTime.now());
 //        更新订单状态
         boolean result = updateById(order);
@@ -144,7 +141,6 @@ public class OrderMpServiceImpl extends CommonServiceImpl<OrderMapper, OrderPO>
         order.setStatus(OrderStatusEnum.COMPLETED.value());
 //        设置更新人信息
         order.setUpdateBy(loginUser.getUserId());
-        order.setUpdateName(loginUser.getUsername());
         order.setUpdateTime(LocalDateTime.now());
 //        更新订单状态
         boolean result = updateById(order);
@@ -170,7 +166,6 @@ public class OrderMpServiceImpl extends CommonServiceImpl<OrderMapper, OrderPO>
         order.setStatus(status);
 //        设置更新人信息
         order.setUpdateBy(loginUser.getUserId());
-        order.setUpdateName(loginUser.getUsername());
         order.setUpdateTime(LocalDateTime.now());
 //        更新订单状态
         boolean result = updateById(order);
@@ -215,7 +210,7 @@ public class OrderMpServiceImpl extends CommonServiceImpl<OrderMapper, OrderPO>
 //        订单菜品列表信息
         List<OrderDetailPO> orderDetailList = orderDetailMpService.lambdaQuery()
                 .eq(OrderDetailPO::getOrderId, orderId)
-                .eq(OrderDetailPO::getDataStatus, 0)
+                .eq(OrderDetailPO::getDelFlag, false)
                 .list();
 
         order.setOrderDetailList(orderDetailList);

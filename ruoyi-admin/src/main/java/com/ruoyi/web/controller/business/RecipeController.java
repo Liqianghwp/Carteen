@@ -1,39 +1,40 @@
 package com.ruoyi.web.controller.business;
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
+import com.diandong.domain.dto.RecipeDTO;
 import com.diandong.domain.dto.RecipeDetailDTO;
 import com.diandong.domain.po.DishesPO;
 import com.diandong.domain.po.RecipeDetailPO;
+import com.diandong.domain.po.RecipePO;
 import com.diandong.domain.vo.RecipeDetailVO;
+import com.diandong.domain.vo.RecipeVO;
 import com.diandong.mapstruct.RecipeDetailMsMapper;
+import com.diandong.mapstruct.RecipeMsMapper;
 import com.diandong.service.DishesMpService;
 import com.diandong.service.RecipeDetailMpService;
+import com.diandong.service.RecipeMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.RecipeMpService;
-import com.diandong.domain.po.RecipePO;
-import com.diandong.domain.dto.RecipeDTO;
-import com.diandong.domain.vo.RecipeVO;
-import com.diandong.mapstruct.RecipeMsMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.internal.util.Contracts;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
+import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import javax.annotation.Resource;
 
 /**
  * Controller
@@ -75,10 +76,6 @@ public class RecipeController extends BaseController {
                 .eq(ObjectUtils.isNotEmpty(vo.getAddWayId()), RecipePO::getAddWayId, vo.getAddWayId())
                 .eq(StringUtils.isNotBlank(vo.getAddWayName()), RecipePO::getAddWayName, vo.getAddWayName())
                 .eq(ObjectUtils.isNotEmpty(vo.getStatus()), RecipePO::getStatus, vo.getStatus())
-                .eq(ObjectUtils.isNotEmpty(vo.getDataState()), RecipePO::getDataState, vo.getDataState())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), RecipePO::getVersion, vo.getVersion())
-                .eq(StringUtils.isNotBlank(vo.getCreateName()), RecipePO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), RecipePO::getUpdateName, vo.getUpdateName())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(RecipeMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -103,7 +100,7 @@ public class RecipeController extends BaseController {
 
         List<RecipeDetailPO> recipeDetailList = recipeDetailMpService.lambdaQuery()
                 .eq(RecipeDetailPO::getRecipeId, id)
-                .eq(RecipeDetailPO::getStatus, 0)
+                .eq(RecipeDetailPO::getDelFlag, false)
                 .list();
 
         List<RecipeDetailDTO> detailDTOList = new ArrayList<>();
@@ -182,8 +179,9 @@ public class RecipeController extends BaseController {
 
     /**
      * 根据id复制菜谱
-     *
+     * <p>
      * Q：这个地方有个疑问，是先有了食谱才有原材料清单还是再未创建食谱之前就可以通过传参查询原材料清单
+     *
      * @param voList 菜谱菜品信息
      * @return 返回结果
      */
@@ -220,16 +218,13 @@ public class RecipeController extends BaseController {
     /**
      * 删除
      *
-     * @param id 编号id
+     * @param ids 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = recipeMpService.removeById(id);
+    @DeleteMapping(value = "/{ids}")
+    public BaseResult delete(@PathVariable Long[] ids) {
+        boolean result = recipeMpService.removeByIds(Arrays.asList(ids));
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {
@@ -237,24 +232,5 @@ public class RecipeController extends BaseController {
         }
     }
 
-    /**
-     * 批量删除
-     *
-     * @param idList 编号id集合
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = recipeMpService.removeByIds(idList);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
-            return BaseResult.error("删除失败");
-        }
-    }
 
 }

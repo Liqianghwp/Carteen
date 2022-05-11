@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.ChefManagementMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.ChefManagementPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="chef_name" jdbcType="VARCHAR" property="chefName"/>
+        <result column="sex" jdbcType="INTEGER" property="sex"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="job_title" jdbcType="VARCHAR" property="jobTitle"/>
+        <result column="home_address" jdbcType="VARCHAR" property="homeAddress"/>
+        <result column="chef_details" jdbcType="VARCHAR" property="chefDetails"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,cm.id
+            ,cm.chef_name
+            ,cm.sex
+            ,cm.phone
+            ,cm.job_title
+            ,cm.home_address
+            ,cm.chef_details
+            ,cm.del_flag
+            ,cm.create_by
+            ,cm.create_time
+            ,cm.update_by
+            ,cm.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and cm.id = #{id}
+            </if>
+            <if test="chefName != null and chefName != ''">
+                and cm.chef_name = #{chefName}
+            </if>
+            <if test="sex != null">
+                and cm.sex = #{sex}
+            </if>
+            <if test="phone != null and phone != ''">
+                and cm.phone = #{phone}
+            </if>
+            <if test="jobTitle != null and jobTitle != ''">
+                and cm.job_title = #{jobTitle}
+            </if>
+            <if test="homeAddress != null and homeAddress != ''">
+                and cm.home_address = #{homeAddress}
+            </if>
+            <if test="chefDetails != null and chefDetails != ''">
+                and cm.chef_details = #{chefDetails}
+            </if>
+            <if test="delFlag != null">
+                and cm.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and cm.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and cm.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_chef_management -->
+
+</mapper>

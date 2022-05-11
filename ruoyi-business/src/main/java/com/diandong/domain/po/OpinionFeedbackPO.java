@@ -1,7 +1,6 @@
 package com.diandong.domain.po;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.ruoyi.common.annotation.Excel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -11,10 +10,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * PO实体类
+ * 意见反馈PO实体类
  *
  * @author YuLiu
- * @date 2022-04-01
+ * @date 2022-05-11
  */
 @TableName("wis_opinion_feedback")
 @Data
@@ -40,7 +39,6 @@ public class OpinionFeedbackPO implements Serializable {
     /**
      * 食堂名称
      */
-    @Excel(sort = 0, name = "食堂名称", prompt = "食堂名称")
     @TableField(value = "canteen_name")
     @ApiModelProperty(value = "食堂名称")
     private String canteenName;
@@ -55,7 +53,6 @@ public class OpinionFeedbackPO implements Serializable {
     /**
      * 意见类型
      */
-    @Excel(sort = 1, name = "意见类型", prompt = "意见类型")
     @TableField(value = "opinion_type")
     @ApiModelProperty(value = "意见类型")
     private String opinionType;
@@ -63,7 +60,6 @@ public class OpinionFeedbackPO implements Serializable {
     /**
      * 意见内容
      */
-    @Excel(sort = 3, name = "内容", prompt = "内容")
     @TableField(value = "opinion_content")
     @ApiModelProperty(value = "意见内容")
     private String opinionContent;
@@ -85,7 +81,6 @@ public class OpinionFeedbackPO implements Serializable {
     /**
      * 状态 0：未处理；1：已查看；2：已处理
      */
-    @Excel(sort = 6, name = "状态", readConverterExp = "0=未处理,1=已查看,2=已处理")
     @TableField(value = "status")
     @ApiModelProperty(value = "状态 0：未处理；1：已查看；2：已处理")
     private Integer status;
@@ -105,18 +100,11 @@ public class OpinionFeedbackPO implements Serializable {
     private LocalDateTime processTime;
 
     /**
-     * 数据状态 0：未删除；1：已删除
+     * 数据状态
      */
-    @TableField(value = "data_state")
-    @ApiModelProperty(value = "数据状态 0：未删除；1：已删除")
-    private Integer dataState;
-
-    /**
-     * 乐观锁
-     */
-    @TableField(value = "version")
-    @ApiModelProperty(value = "乐观锁")
-    private Integer version;
+    @TableField(value = "del_flag")
+    @ApiModelProperty(value = "数据状态")
+    private Integer delFlag;
 
     /**
      * 创建人id
@@ -126,34 +114,18 @@ public class OpinionFeedbackPO implements Serializable {
     private Long createBy;
 
     /**
-     * 创建人姓名
-     */
-    @Excel(sort = 4, name = "用户名称", prompt = "用户名称")
-    @TableField(value = "create_name")
-    @ApiModelProperty(value = "创建人姓名")
-    private String createName;
-
-    /**
      * 创建时间 默认为当前时间
      */
-    @Excel(sort = 2, name = "反馈时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     @ApiModelProperty(value = "创建时间 默认为当前时间")
     private LocalDateTime createTime;
 
     /**
-     * 更新人id
+     * 更新者id
      */
     @TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
-    @ApiModelProperty(value = "更新人id")
+    @ApiModelProperty(value = "更新者id")
     private Long updateBy;
-
-    /**
-     * 更新人姓名
-     */
-    @TableField(value = "update_name")
-    @ApiModelProperty(value = "更新人姓名")
-    private String updateName;
 
     /**
      * 更新时间

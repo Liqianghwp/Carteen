@@ -10,10 +10,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * PO实体类
+ * 集团管理PO实体类
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-05-11
  */
 @TableName("wis_group_management")
 @Data
@@ -88,16 +88,9 @@ public class GroupManagementPO implements Serializable {
     /**
      * 数据状态
      */
-    @TableField(value = "data_status")
+    @TableField(value = "del_flag")
     @ApiModelProperty(value = "数据状态")
-    private Integer dataStatus;
-
-    /**
-     * 乐观锁
-     */
-    @TableField(value = "version")
-    @ApiModelProperty(value = "乐观锁")
-    private Integer version;
+    private Integer delFlag;
 
     /**
      * 创建人id
@@ -107,13 +100,6 @@ public class GroupManagementPO implements Serializable {
     private Long createBy;
 
     /**
-     * 创建人姓名
-     */
-    @TableField(value = "create_name")
-    @ApiModelProperty(value = "创建人姓名")
-    private String createName;
-
-    /**
      * 创建时间 默认为当前时间
      */
     @TableField(value = "create_time", fill = FieldFill.INSERT)
@@ -121,18 +107,11 @@ public class GroupManagementPO implements Serializable {
     private LocalDateTime createTime;
 
     /**
-     * 更新人id
+     * 更新者id
      */
     @TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
-    @ApiModelProperty(value = "更新人id")
+    @ApiModelProperty(value = "更新者id")
     private Long updateBy;
-
-    /**
-     * 更新人姓名
-     */
-    @TableField(value = "update_name")
-    @ApiModelProperty(value = "更新人姓名")
-    private String updateName;
 
     /**
      * 更新时间

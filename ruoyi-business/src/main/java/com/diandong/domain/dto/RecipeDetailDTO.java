@@ -8,10 +8,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * DTO实体类
+ * 食谱详情DTO实体类
  *
  * @author YuLiu
- * @date 2022-04-02
+ * @date 2022-05-11
  */
 @Data
 @ApiModel("食谱详情DTO实体类")
@@ -67,28 +67,10 @@ public class RecipeDetailDTO implements Serializable {
     private Integer number;
 
     /**
-     * 乐观锁
-     */
-    @ApiModelProperty(value = "乐观锁")
-    private Long version;
-
-    /**
-     * 状态
-     */
-    @ApiModelProperty(value = "状态")
-    private Integer status;
-
-    /**
      * 创建人id
      */
     @ApiModelProperty(value = "创建人id")
     private Long createBy;
-
-    /**
-     * 创建人姓名
-     */
-    @ApiModelProperty(value = "创建人姓名")
-    private String createName;
 
     /**
      * 创建时间 当前时间
@@ -103,26 +85,15 @@ public class RecipeDetailDTO implements Serializable {
     private Long updateBy;
 
     /**
-     * 更新者姓名
-     */
-    @ApiModelProperty(value = "更新者姓名")
-    private String updateName;
-
-    /**
      * 更新时间
      */
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 
-    /**
-     * 菜品图片
-     */
+
     @ApiModelProperty(value = "菜品图片")
     private String dishesPicture;
 
-    /**
-     * 菜品类型
-     */
-    @ApiModelProperty(value = "菜品类型")
+    @ApiModelProperty(value = "菜品分类名称")
     private String dishesType;
 }

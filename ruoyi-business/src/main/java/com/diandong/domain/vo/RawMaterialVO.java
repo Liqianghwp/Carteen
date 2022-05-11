@@ -2,6 +2,7 @@ package com.diandong.domain.vo;
 
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -12,14 +13,14 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 
 /**
- * VO实体类
+ * 原材料信息 原材料信息VO实体类
  *
  * @author YuLiu
- * @date 2022-03-31
+ * @date 2022-05-11
  */
 @Data
-@ApiModel("原料VO实体类")
-public class RawMaterialVO implements Serializable {
+@ApiModel("原材料信息 原材料信息VO实体类")
+public class RawMaterialVO extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -112,30 +113,6 @@ public class RawMaterialVO implements Serializable {
      */
     @ApiModelProperty(value = "状态 （0:停用；1:启用）")
     private Integer status;
-
-    /**
-     * 数据状态（0:未删除；1:已删除）
-     */
-    @ApiModelProperty(value = "数据状态（0:未删除；1:已删除）")
-    private Integer dataState;
-
-    /**
-     * 乐观锁
-     */
-    @ApiModelProperty(value = "乐观锁")
-    private Integer version;
-
-    /**
-     * 创建人姓名
-     */
-    @ApiModelProperty(value = "创建人姓名")
-    private String createName;
-
-    /**
-     * 更新者姓名
-     */
-    @ApiModelProperty(value = "更新者姓名")
-    private String updateName;
 
 
 }

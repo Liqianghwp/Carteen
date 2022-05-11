@@ -83,7 +83,7 @@ public class OpinionFeedbackMpServiceImpl extends CommonServiceImpl<OpinionFeedb
         if (Objects.isNull(vo.getCanteenId())) {
             List<CanteenPO> list = canteenMpService.lambdaQuery()
                     .eq(CanteenPO::getPId, groupId)
-                    .eq(CanteenPO::getDataState, 0)
+                    .eq(CanteenPO::getDelFlag, 0)
                     .list();
             if (CollectionUtils.isNotEmpty(list)) {
                 List<Long> canteenIds = list.stream().map(CanteenPO::getId).collect(Collectors.toList());
@@ -160,10 +160,6 @@ public class OpinionFeedbackMpServiceImpl extends CommonServiceImpl<OpinionFeedb
                 .eq(ObjectUtils.isNotEmpty(vo.getStatus()), OpinionFeedbackPO::getStatus, vo.getStatus())
                 .eq(ObjectUtils.isNotEmpty(vo.getAnonymous()), OpinionFeedbackPO::getAnonymous, vo.getAnonymous())
                 .eq(ObjectUtils.isNotEmpty(vo.getProcessTime()), OpinionFeedbackPO::getProcessTime, vo.getProcessTime())
-                .eq(ObjectUtils.isNotEmpty(vo.getDataState()), OpinionFeedbackPO::getDataState, vo.getDataState())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), OpinionFeedbackPO::getVersion, vo.getVersion())
-                .eq(StringUtils.isNotBlank(vo.getCreateName()), OpinionFeedbackPO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), OpinionFeedbackPO::getUpdateName, vo.getUpdateName())
                 .list();
     }
 }

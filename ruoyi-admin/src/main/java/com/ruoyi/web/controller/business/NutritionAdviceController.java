@@ -1,32 +1,33 @@
 package com.ruoyi.web.controller.business;
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
+import com.diandong.domain.dto.NutritionAdviceDTO;
+import com.diandong.domain.po.NutritionAdvicePO;
 import com.diandong.domain.vo.IntakeAnalysisVO;
-import com.fasterxml.jackson.databind.ser.Serializers;
+import com.diandong.domain.vo.NutritionAdviceVO;
+import com.diandong.mapstruct.NutritionAdviceMsMapper;
+import com.diandong.service.NutritionAdviceMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.NutritionAdviceMpService;
-import com.diandong.domain.po.NutritionAdvicePO;
-import com.diandong.domain.dto.NutritionAdviceDTO;
-import com.diandong.domain.vo.NutritionAdviceVO;
-import com.diandong.mapstruct.NutritionAdviceMsMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
-import java.time.LocalDateTime;
+import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import javax.annotation.Resource;
 
 /**
  * Controller
@@ -65,10 +66,6 @@ public class NutritionAdviceController extends BaseController {
                 .eq(StringUtils.isNotBlank(vo.getNutritionalName()), NutritionAdvicePO::getNutritionalName, vo.getNutritionalName())
                 .eq(StringUtils.isNotBlank(vo.getUnit()), NutritionAdvicePO::getUnit, vo.getUnit())
                 .eq(ObjectUtils.isNotEmpty(vo.getNumber()), NutritionAdvicePO::getNumber, vo.getNumber())
-                .eq(ObjectUtils.isNotEmpty(vo.getDataState()), NutritionAdvicePO::getDataState, vo.getDataState())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), NutritionAdvicePO::getVersion, vo.getVersion())
-                .eq(StringUtils.isNotBlank(vo.getCreateName()), NutritionAdvicePO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), NutritionAdvicePO::getUpdateName, vo.getUpdateName())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(NutritionAdviceMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -87,7 +84,7 @@ public class NutritionAdviceController extends BaseController {
     })
     @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
     @GetMapping("/{mealTimesId}")
-    public BaseResult getNutritionAdvice(@PathVariable("mealTimesId")Long mealTimesId) {
+    public BaseResult getNutritionAdvice(@PathVariable("mealTimesId") Long mealTimesId) {
 
 //        判断登录信息
         LoginUser loginUser = getLoginUser();
@@ -211,7 +208,6 @@ public class NutritionAdviceController extends BaseController {
         NutritionAdvicePO po = NutritionAdviceMsMapper.INSTANCE.vo2po(vo);
 //        设置更新人信息
         po.setUpdateBy(loginUser.getUserId());
-        po.setUpdateName(loginUser.getUsername());
 
         boolean result = nutritionAdviceMpService.updateById(po);
         if (result) {
@@ -224,16 +220,13 @@ public class NutritionAdviceController extends BaseController {
     /**
      * 删除
      *
-     * @param id 编号id
+     * @param ids 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = nutritionAdviceMpService.removeById(id);
+    @DeleteMapping(value = "/{ids}")
+    public BaseResult delete(@PathVariable Long[] ids) {
+        boolean result = nutritionAdviceMpService.removeByIds(Arrays.asList(ids));
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {

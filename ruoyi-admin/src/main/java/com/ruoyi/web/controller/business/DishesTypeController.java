@@ -22,6 +22,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -64,10 +65,6 @@ public class DishesTypeController extends BaseController {
                 .eq(ObjectUtils.isNotEmpty(vo.getIsPackage()), DishesTypePO::getIsPackage, vo.getIsPackage())
                 .eq(StringUtils.isNotBlank(vo.getUuid()), DishesTypePO::getUuid, vo.getUuid())
                 .eq(StringUtils.isNotBlank(vo.getPuuid()), DishesTypePO::getPuuid, vo.getPuuid())
-                .eq(ObjectUtils.isNotEmpty(vo.getDataState()), DishesTypePO::getDataState, vo.getDataState())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), DishesTypePO::getVersion, vo.getVersion())
-                .eq(StringUtils.isNotBlank(vo.getCreateName()), DishesTypePO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), DishesTypePO::getUpdateName, vo.getUpdateName())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(DishesTypeMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -114,7 +111,6 @@ public class DishesTypeController extends BaseController {
 
 //        设置创建人信息
         po.setCreateBy(loginUser.getUserId());
-        po.setCreateName(loginUser.getUsername());
 
         boolean result = dishesTypeMpService.save(po);
         if (result) {
@@ -144,7 +140,6 @@ public class DishesTypeController extends BaseController {
 
         DishesTypePO po = DishesTypeMsMapper.INSTANCE.vo2po(vo);
         po.setUpdateBy(loginUser.getUserId());
-        po.setUpdateName(loginUser.getUsername());
         boolean result = dishesTypeMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");
@@ -156,36 +151,13 @@ public class DishesTypeController extends BaseController {
     /**
      * 删除
      *
-     * @param id 编号id
+     * @param ids 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = dishesTypeMpService.removeById(id);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
-            return BaseResult.error("删除失败");
-        }
-    }
-
-    /**
-     * 批量删除
-     *
-     * @param idList 编号id集合
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = dishesTypeMpService.removeByIds(idList);
+    @DeleteMapping(value = "/{ids}")
+    public BaseResult delete(@PathVariable Long[] ids) {
+        boolean result = dishesTypeMpService.removeByIds(Arrays.asList(ids));
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {

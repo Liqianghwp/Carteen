@@ -78,9 +78,7 @@
             targetRecipe.setRecipeDate(recipeDate);
             targetRecipe.setAddWayId(sourceRecipe.getAddWayId());
             targetRecipe.setAddWayName(sourceRecipe.getAddWayName());
-            targetRecipe.setVersion(sourceRecipe.getVersion());
             targetRecipe.setCreateBy(loginUser.getUserId());
-            targetRecipe.setCreateName(loginUser.getUsername());
 
             boolean result = save(targetRecipe);
 
@@ -88,7 +86,7 @@
 
                 List<RecipeDetailPO> recipeDetailList = recipeDetailMpService.lambdaQuery()
                         .eq(RecipeDetailPO::getRecipeId, id)
-                        .eq(RecipeDetailPO::getStatus, 0)
+                        .eq(RecipeDetailPO::getDelFlag, false)
                         .list();
 
                 recipeDetailList.forEach(recipeDetailPO -> {
@@ -97,10 +95,8 @@
                     recipeDetailPO.setRecipeId(targetRecipe.getId());
                     recipeDetailPO.setRecipeName(targetRecipe.getRecipeName());
                     recipeDetailPO.setCreateBy(loginUser.getUserId());
-                    recipeDetailPO.setCreateName(loginUser.getUsername());
 
                     recipeDetailPO.setUpdateBy(null);
-                    recipeDetailPO.setUpdateName(null);
                     recipeDetailPO.setUpdateTime(null);
                 });
 
@@ -128,7 +124,7 @@
     //            查询菜品原材料信息
                 List<DishesRawMaterialPO> dishesRawMaterialList = dishesRawMaterialMpService.lambdaQuery()
                         .eq(DishesRawMaterialPO::getDishesId, recipeDetailVO.getDishesId())
-                        .eq(DishesRawMaterialPO::getDataState, 0)
+                        .eq(DishesRawMaterialPO::getDelFlag, 0)
                         .list();
 
                 if (CollectionUtils.isNotEmpty(dishesRawMaterialList)) {
@@ -185,7 +181,6 @@
             RecipePO po = RecipeMsMapper.INSTANCE.vo2po(vo);
     //        设置创建人信息
             po.setCreateBy(loginUser.getUserId());
-            po.setCreateName(loginUser.getUsername());
             boolean result = save(po);
             if (!result) {
                 return result;
@@ -200,7 +195,6 @@
                 recipeDetailPO.setRecipeId(po.getId());
                 recipeDetailPO.setRecipeName(po.getRecipeName());
                 recipeDetailPO.setCreateBy(loginUser.getUserId());
-                recipeDetailPO.setCreateName(loginUser.getUsername());
                 detailPOList.add(recipeDetailPO);
             });
 
@@ -220,7 +214,6 @@
             RecipePO po = RecipeMsMapper.INSTANCE.vo2po(vo);
     //        设置创建人信息
             po.setUpdateBy(loginUser.getUserId());
-            po.setUpdateName(loginUser.getUsername());
             boolean result = updateById(po);
             if (!result) {
                 return result;
@@ -235,7 +228,6 @@
                     recipeDetailPO.setRecipeId(po.getId());
                     recipeDetailPO.setRecipeName(po.getRecipeName());
                     recipeDetailPO.setCreateBy(loginUser.getUserId());
-                    recipeDetailPO.setCreateName(loginUser.getUsername());
                     detailPOList.add(recipeDetailPO);
                 });
 

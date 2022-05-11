@@ -8,7 +8,7 @@ public class Constants {
     /**
      * 逻辑删除字段名
      */
-    public static final String LOGIC_DELETE_COLUMN = "is_del";
+    public static final String LOGIC_DELETE_COLUMN = "del_flag";
     /**
      * 顾问岗位code
      */

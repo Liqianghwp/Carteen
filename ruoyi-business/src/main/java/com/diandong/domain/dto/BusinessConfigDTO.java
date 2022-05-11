@@ -8,13 +8,13 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * DTO实体类
+ * 系统配置 用于富文本设置DTO实体类
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-05-11
  */
 @Data
-@ApiModel("富文本DTO实体类")
+@ApiModel("系统配置 用于富文本设置DTO实体类")
 public class BusinessConfigDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -43,22 +43,10 @@ public class BusinessConfigDTO implements Serializable {
     private Integer dataState;
 
     /**
-     * 乐观锁
-     */
-    @ApiModelProperty(value = "乐观锁")
-    private Integer version;
-
-    /**
      * 创建人id
      */
     @ApiModelProperty(value = "创建人id")
     private Long createBy;
-
-    /**
-     * 创建人姓名
-     */
-    @ApiModelProperty(value = "创建人姓名")
-    private String createName;
 
     /**
      * 创建时间
@@ -71,12 +59,6 @@ public class BusinessConfigDTO implements Serializable {
      */
     @ApiModelProperty(value = "更新人id")
     private Long updateBy;
-
-    /**
-     * 更新人姓名
-     */
-    @ApiModelProperty(value = "更新人姓名")
-    private String updateName;
 
     /**
      * 更新时间

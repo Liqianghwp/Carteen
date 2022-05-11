@@ -64,7 +64,7 @@ public class DishesRawMaterialMpServiceImpl extends CommonServiceImpl<DishesRawM
 
             List<RawMaterialNutritionPO> list = rawMaterialNutritionMpService.lambdaQuery()
                     .eq(RawMaterialNutritionPO::getRawMaterialId, dishesRawMaterialVO.getRawMaterialId())
-                    .eq(RawMaterialNutritionPO::getDataState, false)
+                    .eq(RawMaterialNutritionPO::getDelFlag, false)
                     .list();
 
             resetDishesNutritionPO(dnList, dishesRawMaterialVO, list, loginUser);
@@ -121,7 +121,6 @@ public class DishesRawMaterialMpServiceImpl extends CommonServiceImpl<DishesRawM
                     dnPo.setNumber(needNumber);
 
                     dnPo.setCreateBy(loginUser.getUserId());
-                    dnPo.setCreateName(loginUser.getUsername());
                     dnPo.setCreateTime(LocalDateTime.now());
 
                     dnList.add(dnPo);

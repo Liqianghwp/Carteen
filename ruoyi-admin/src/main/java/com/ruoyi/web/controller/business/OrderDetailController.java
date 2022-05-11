@@ -4,20 +4,24 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.domain.dto.OrderDetailDTO;
+import com.diandong.domain.po.OrderDetailPO;
+import com.diandong.domain.vo.OrderDetailVO;
+import com.diandong.mapstruct.OrderDetailMsMapper;
+import com.diandong.service.OrderDetailMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.OrderDetailMpService;
-import com.diandong.domain.po.OrderDetailPO;
-import com.diandong.domain.dto.OrderDetailDTO;
-import com.diandong.domain.vo.OrderDetailVO;
-import com.diandong.mapstruct.OrderDetailMsMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
-import java.util.List;
 import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Controller
@@ -56,10 +60,6 @@ public class OrderDetailController extends BaseController {
                 .eq(ObjectUtils.isNotEmpty(vo.getDishesCount()), OrderDetailPO::getDishesCount, vo.getDishesCount())
                 .eq(ObjectUtils.isNotEmpty(vo.getDishesTotalPrice()), OrderDetailPO::getDishesTotalPrice, vo.getDishesTotalPrice())
                 .eq(StringUtils.isNotBlank(vo.getDishesPicture()), OrderDetailPO::getDishesPicture, vo.getDishesPicture())
-                .eq(ObjectUtils.isNotEmpty(vo.getDataStatus()), OrderDetailPO::getDataStatus, vo.getDataStatus())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), OrderDetailPO::getVersion, vo.getVersion())
-                .eq(StringUtils.isNotBlank(vo.getCreateName()), OrderDetailPO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), OrderDetailPO::getUpdateName, vo.getUpdateName())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(OrderDetailMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -128,36 +128,13 @@ public class OrderDetailController extends BaseController {
     /**
      * 删除
      *
-     * @param id 编号id
+     * @param ids 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = orderDetailMpService.removeById(id);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
-            return BaseResult.error("删除失败");
-        }
-    }
-
-    /**
-     * 批量删除
-     *
-     * @param idList 编号id集合
-     * @return 返回结果
-    */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = orderDetailMpService.removeByIds(idList);
+    @DeleteMapping(value = "/{ids}")
+    public BaseResult delete(@PathVariable Long[] ids) {
+        boolean result = orderDetailMpService.removeByIds(Arrays.asList(ids));
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {

@@ -3,30 +3,33 @@ package com.ruoyi.web.controller.business;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
+import com.diandong.domain.dto.OrderDTO;
+import com.diandong.domain.po.OrderPO;
+import com.diandong.domain.vo.OrderVO;
 import com.diandong.domain.vo.ShopCartDetailVO;
 import com.diandong.domain.vo.ShopCartVO;
 import com.diandong.enums.OrderStatusEnum;
+import com.diandong.mapstruct.OrderMsMapper;
+import com.diandong.service.OrderMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.OrderMpService;
-import com.diandong.domain.po.OrderPO;
-import com.diandong.domain.dto.OrderDTO;
-import com.diandong.domain.vo.OrderVO;
-import com.diandong.mapstruct.OrderMsMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
+import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import javax.annotation.Resource;
 
 /**
  * Controller
@@ -67,10 +70,6 @@ public class OrderController extends BaseController {
                 .eq(ObjectUtils.isNotEmpty(vo.getPaymentMethodId()), OrderPO::getPaymentMethodId, vo.getPaymentMethodId())
                 .eq(StringUtils.isNotBlank(vo.getPaymentMethodName()), OrderPO::getPaymentMethodName, vo.getPaymentMethodName())
                 .eq(ObjectUtils.isNotEmpty(vo.getPaymentTime()), OrderPO::getPaymentTime, vo.getPaymentTime())
-                .eq(ObjectUtils.isNotEmpty(vo.getDataStatus()), OrderPO::getDataStatus, vo.getDataStatus())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), OrderPO::getVersion, vo.getVersion())
-                .eq(StringUtils.isNotBlank(vo.getCreateName()), OrderPO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), OrderPO::getUpdateName, vo.getUpdateName())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(OrderMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -224,16 +223,13 @@ public class OrderController extends BaseController {
     /**
      * 删除
      *
-     * @param id 编号id
+     * @param ids 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = orderMpService.removeById(id);
+    @DeleteMapping(value = "/{ids}")
+    public BaseResult delete(@PathVariable Long[] ids) {
+        boolean result = orderMpService.removeByIds(Arrays.asList(ids));
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {
@@ -264,24 +260,5 @@ public class OrderController extends BaseController {
         return orderMpService.processOrders(orderId, loginUser, OrderStatusEnum.CANCELLED.value());
     }
 
-    /**
-     * 批量删除
-     *
-     * @param idList 编号id集合
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = orderMpService.removeByIds(idList);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
-            return BaseResult.error("删除失败");
-        }
-    }
 
 }

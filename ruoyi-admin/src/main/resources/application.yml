@@ -1,7 +1,7 @@
 # 项目相关配置
 ruoyi:
   # 名称
-  name: RuoYi
+  name: WisdomCanteen
   # 版本
   version: 3.8.1
   # 版权年份
@@ -62,13 +62,14 @@ spring:
   # redis 配置
   redis:
     # 地址
-    host: 192.168.0.93
+#    host: 192.168.0.93
+    host: 127.0.0.1
     # 端口，默认为6379
     port: 6379
     # 数据库索引
     database: 11
     # 密码
-    password: Talent123!
+#    password: Talent123!
     # 连接超时时间
     timeout: 10s
     lettuce:
@@ -126,7 +127,7 @@ swagger:
   # 是否开启swagger
   enabled: true
   # 请求前缀
-  pathMapping: /dev-api
+  pathMapping:
 
 # 防止XSS攻击
 xss: 

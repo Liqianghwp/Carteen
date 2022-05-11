@@ -4,20 +4,24 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.domain.dto.ShopCartDetailDTO;
+import com.diandong.domain.po.ShopCartDetailPO;
+import com.diandong.domain.vo.ShopCartDetailVO;
+import com.diandong.mapstruct.ShopCartDetailMsMapper;
+import com.diandong.service.ShopCartDetailMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.ShopCartDetailMpService;
-import com.diandong.domain.po.ShopCartDetailPO;
-import com.diandong.domain.dto.ShopCartDetailDTO;
-import com.diandong.domain.vo.ShopCartDetailVO;
-import com.diandong.mapstruct.ShopCartDetailMsMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
-import java.util.List;
 import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Controller
@@ -53,10 +57,6 @@ public class ShopCartDetailController extends BaseController {
                 .eq(ObjectUtils.isNotEmpty(vo.getDishesId()), ShopCartDetailPO::getDishesId, vo.getDishesId())
                 .eq(StringUtils.isNotBlank(vo.getDishesName()), ShopCartDetailPO::getDishesName, vo.getDishesName())
                 .eq(ObjectUtils.isNotEmpty(vo.getNumber()), ShopCartDetailPO::getNumber, vo.getNumber())
-                .eq(ObjectUtils.isNotEmpty(vo.getDataStatus()), ShopCartDetailPO::getDataStatus, vo.getDataStatus())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), ShopCartDetailPO::getVersion, vo.getVersion())
-                .eq(StringUtils.isNotBlank(vo.getCreateName()), ShopCartDetailPO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), ShopCartDetailPO::getUpdateName, vo.getUpdateName())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(ShopCartDetailMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -125,16 +125,16 @@ public class ShopCartDetailController extends BaseController {
     /**
      * 删除
      *
-     * @param id 编号id
+     * @param ids 编号id
      * @return 返回结果
      */
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
+            @ApiImplicitParam(paramType = "path", dataType = "long[]", name = "ids", value = "编号id数组")
     })
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = shopCartDetailMpService.removeById(id);
+    @DeleteMapping(value = "/{ids}")
+    public BaseResult delete(@PathVariable Long[] ids) {
+        boolean result = shopCartDetailMpService.removeByIds(Arrays.asList(ids));
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {
@@ -142,24 +142,5 @@ public class ShopCartDetailController extends BaseController {
         }
     }
 
-    /**
-     * 批量删除
-     *
-     * @param idList 编号id集合
-     * @return 返回结果
-    */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = shopCartDetailMpService.removeByIds(idList);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
-            return BaseResult.error("删除失败");
-        }
-    }
 
 }

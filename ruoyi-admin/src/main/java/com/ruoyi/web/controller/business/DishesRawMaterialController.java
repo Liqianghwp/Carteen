@@ -20,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.Resource;
@@ -60,10 +61,6 @@ public class DishesRawMaterialController extends BaseController {
                 .eq(ObjectUtils.isNotEmpty(vo.getRawMaterialId()), DishesRawMaterialPO::getRawMaterialId, vo.getRawMaterialId())
                 .eq(StringUtils.isNotBlank(vo.getRawMaterialName()), DishesRawMaterialPO::getRawMaterialName, vo.getRawMaterialName())
                 .eq(ObjectUtils.isNotEmpty(vo.getNumber()), DishesRawMaterialPO::getNumber, vo.getNumber())
-                .eq(ObjectUtils.isNotEmpty(vo.getDataState()), DishesRawMaterialPO::getDataState, vo.getDataState())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), DishesRawMaterialPO::getVersion, vo.getVersion())
-                .eq(StringUtils.isNotBlank(vo.getCreateName()), DishesRawMaterialPO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), DishesRawMaterialPO::getUpdateName, vo.getUpdateName())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(DishesRawMaterialMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -158,7 +155,6 @@ public class DishesRawMaterialController extends BaseController {
         DishesRawMaterialPO po = DishesRawMaterialMsMapper.INSTANCE.vo2po(vo);
 //        设置更新人状态
         po.setUpdateBy(loginUser.getUserId());
-        po.setUpdateName(loginUser.getUsername());
         boolean result = dishesRawMaterialMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");
@@ -170,36 +166,13 @@ public class DishesRawMaterialController extends BaseController {
     /**
      * 删除
      *
-     * @param id 编号id
+     * @param ids 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = dishesRawMaterialMpService.removeById(id);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
-            return BaseResult.error("删除失败");
-        }
-    }
-
-    /**
-     * 批量删除
-     *
-     * @param idList 编号id集合
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = dishesRawMaterialMpService.removeByIds(idList);
+    @DeleteMapping(value = "/{ids}")
+    public BaseResult delete(@PathVariable Long[] ids) {
+        boolean result = dishesRawMaterialMpService.removeByIds(Arrays.asList(ids));
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {

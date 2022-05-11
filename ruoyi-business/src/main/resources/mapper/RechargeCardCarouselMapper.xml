@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.RechargeCardCarouselMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.RechargeCardCarouselPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="carousel_pic" jdbcType="VARCHAR" property="carouselPic"/>
+        <result column="carousel_name" jdbcType="VARCHAR" property="carouselName"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,rcc.id
+            ,rcc.carousel_pic
+            ,rcc.carousel_name
+            ,rcc.create_by
+            ,rcc.create_time
+            ,rcc.update_by
+            ,rcc.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and rcc.id = #{id}
+            </if>
+            <if test="carouselPic != null and carouselPic != ''">
+                and rcc.carousel_pic = #{carouselPic}
+            </if>
+            <if test="carouselName != null and carouselName != ''">
+                and rcc.carousel_name = #{carouselName}
+            </if>
+            <if test="beginTime != null">
+                and rcc.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and rcc.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_recharge_card_carousel -->
+
+</mapper>

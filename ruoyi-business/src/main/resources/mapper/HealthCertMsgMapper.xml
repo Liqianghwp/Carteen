@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.HealthCertMsgMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.HealthCertMsgPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="health_cert_id" jdbcType="BIGINT" property="healthCertId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="warning_time" jdbcType="TIMESTAMP" property="warningTime"/>
+        <result column="remind_day" jdbcType="VARCHAR" property="remindDay"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,hcm.id
+            ,hcm.health_cert_id
+            ,hcm.name
+            ,hcm.phone
+            ,hcm.warning_time
+            ,hcm.remind_day
+            ,hcm.state
+            ,hcm.del_flag
+            ,hcm.create_by
+            ,hcm.create_time
+            ,hcm.update_by
+            ,hcm.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and hcm.id = #{id}
+            </if>
+            <if test="healthCertId != null">
+                and hcm.health_cert_id = #{healthCertId}
+            </if>
+            <if test="name != null and name != ''">
+                and hcm.name = #{name}
+            </if>
+            <if test="phone != null and phone != ''">
+                and hcm.phone = #{phone}
+            </if>
+            <if test="warningTime != null">
+                and hcm.warning_time = #{warningTime}
+            </if>
+            <if test="remindDay != null and remindDay != ''">
+                and hcm.remind_day = #{remindDay}
+            </if>
+            <if test="state != null">
+                and hcm.state = #{state}
+            </if>
+            <if test="delFlag != null">
+                and hcm.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and hcm.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and hcm.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_health_cert_msg -->
+
+</mapper>

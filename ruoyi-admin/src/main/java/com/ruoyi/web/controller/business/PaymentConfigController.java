@@ -7,17 +7,21 @@ import com.diandong.configuration.Update;
 import com.diandong.domain.dto.PaymentConfigDTO;
 import com.diandong.domain.po.PaymentConfigPO;
 import com.diandong.domain.vo.PaymentConfigVO;
+import com.diandong.mapstruct.PaymentConfigMsMapper;
+import com.diandong.service.PaymentConfigMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.PaymentConfigMpService;
-import com.diandong.mapstruct.PaymentConfigMsMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
-import java.util.List;
 import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Controller
@@ -54,9 +58,6 @@ public class PaymentConfigController extends BaseController {
                 .eq(StringUtils.isNotBlank(vo.getRemark()), PaymentConfigPO::getRemark, vo.getRemark())
                 .eq(ObjectUtils.isNotEmpty(vo.getCanteenId()), PaymentConfigPO::getCanteenId, vo.getCanteenId())
                 .eq(StringUtils.isNotBlank(vo.getCanteenName()), PaymentConfigPO::getCanteenName, vo.getCanteenName())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), PaymentConfigPO::getVersion, vo.getVersion())
-                .eq(StringUtils.isNotBlank(vo.getCreateName()), PaymentConfigPO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), PaymentConfigPO::getUpdateName, vo.getUpdateName())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(PaymentConfigMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -91,7 +92,7 @@ public class PaymentConfigController extends BaseController {
     })
     @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
     @PostMapping
-    public BaseResult save(@Validated(Insert.class) PaymentConfigVO vo) {
+    public BaseResult save(@RequestBody @Validated(Insert.class) PaymentConfigVO vo) {
         PaymentConfigPO po = PaymentConfigMsMapper.INSTANCE.vo2po(vo);
         boolean result = paymentConfigMpService.save(po);
         if (result) {
@@ -125,36 +126,13 @@ public class PaymentConfigController extends BaseController {
     /**
      * 删除
      *
-     * @param id 编号id
+     * @param ids 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = paymentConfigMpService.removeById(id);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
-            return BaseResult.error("删除失败");
-        }
-    }
-
-    /**
-     * 批量删除
-     *
-     * @param idList 编号id集合
-     * @return 返回结果
-    */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = paymentConfigMpService.removeByIds(idList);
+    @DeleteMapping(value = "/{ids}")
+    public BaseResult delete(@PathVariable Long[] ids) {
+        boolean result = paymentConfigMpService.removeByIds(Arrays.asList(ids));
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {

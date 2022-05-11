@@ -5,24 +5,26 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
+import com.diandong.domain.dto.NutritionParamsDTO;
+import com.diandong.domain.po.NutritionParamsPO;
+import com.diandong.domain.vo.NutritionParamsVO;
+import com.diandong.mapstruct.NutritionParamsMsMapper;
+import com.diandong.service.NutritionParamsMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.NutritionParamsMpService;
-import com.diandong.domain.po.NutritionParamsPO;
-import com.diandong.domain.dto.NutritionParamsDTO;
-import com.diandong.domain.vo.NutritionParamsVO;
-import com.diandong.mapstruct.NutritionParamsMsMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
-import java.net.ContentHandler;
+import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import javax.annotation.Resource;
 
 /**
  * Controller
@@ -58,11 +60,7 @@ public class NutritionParamsController extends BaseController {
                 .eq(StringUtils.isNotBlank(vo.getCanteenName()), NutritionParamsPO::getCanteenName, vo.getCanteenName())
                 .eq(StringUtils.isNotBlank(vo.getNutritionName()), NutritionParamsPO::getNutritionName, vo.getNutritionName())
                 .eq(StringUtils.isNotBlank(vo.getUnit()), NutritionParamsPO::getUnit, vo.getUnit())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), NutritionParamsPO::getVersion, vo.getVersion())
-                .eq(ObjectUtils.isNotEmpty(vo.getDataState()), NutritionParamsPO::getDataState, vo.getDataState())
                 .eq(ObjectUtils.isNotEmpty(vo.getBeUsed()), NutritionParamsPO::getBeUsed, vo.getBeUsed())
-                .eq(ObjectUtils.isNotEmpty(vo.getCreateName()), NutritionParamsPO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), NutritionParamsPO::getUpdateName, vo.getUpdateName())
                 .list();
         TableDataInfo pageData = getDataTable(dataList);
         pageData.setRows(NutritionParamsMsMapper.INSTANCE.poList2dtoList(dataList));
@@ -109,7 +107,6 @@ public class NutritionParamsController extends BaseController {
 
 //        设置创建人信息
         po.setCreateBy(loginUser.getUserId());
-        po.setCreateName(loginUser.getUsername());
 
         boolean result = nutritionParamsMpService.save(po);
         if (result) {
@@ -140,7 +137,6 @@ public class NutritionParamsController extends BaseController {
         NutritionParamsPO po = NutritionParamsMsMapper.INSTANCE.vo2po(vo);
 //        设置更新人信息
         po.setUpdateBy(loginUser.getUserId());
-        po.setUpdateName(loginUser.getUsername());
         boolean result = nutritionParamsMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");
@@ -152,20 +148,14 @@ public class NutritionParamsController extends BaseController {
     /**
      * 删除
      *
-     * @param id 编号id
+     * @param ids 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-
-        nutritionParamsMpService.selectBeUsed(Arrays.asList(id));
-
-        boolean result = nutritionParamsMpService.removeById(id);
-
+    @DeleteMapping(value = "/{ids}")
+    public BaseResult delete(@PathVariable Long[] ids) {
+        nutritionParamsMpService.selectBeUsed(Arrays.asList(ids));
+        boolean result = nutritionParamsMpService.removeByIds(Arrays.asList(ids));
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {

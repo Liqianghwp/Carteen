@@ -72,10 +72,6 @@ public class CommentController extends BaseController {
                 .eq(StringUtils.isNotBlank(vo.getProcessDescription()), CommentPO::getProcessDescription, vo.getProcessDescription())
                 .eq(ObjectUtils.isNotEmpty(vo.getStatus()), CommentPO::getStatus, vo.getStatus())
                 .eq(ObjectUtils.isNotEmpty(vo.getProcessTime()), CommentPO::getProcessTime, vo.getProcessTime())
-                .eq(ObjectUtils.isNotEmpty(vo.getDataState()), CommentPO::getDataState, vo.getDataState())
-                .eq(ObjectUtils.isNotEmpty(vo.getVersion()), CommentPO::getVersion, vo.getVersion())
-                .eq(StringUtils.isNotBlank(vo.getCreateName()), CommentPO::getCreateName, vo.getCreateName())
-                .eq(StringUtils.isNotBlank(vo.getUpdateName()), CommentPO::getUpdateName, vo.getUpdateName())
                 .list();
 
 
@@ -144,7 +140,6 @@ public class CommentController extends BaseController {
         CommentPO po = CommentMsMapper.INSTANCE.vo2po(vo);
 //        设置创建人信息
         po.setCreateBy(loginUser.getUserId());
-        po.setCreateName(loginUser.getUsername());
 
         boolean result = commentMpService.save(po);
         if (result) {
@@ -178,7 +173,6 @@ public class CommentController extends BaseController {
         po.setStatus(CommentStatusEnum.COMPLETED.value());
         po.setProcessTime(LocalDateTime.now());
         po.setUpdateBy(loginUser.getUserId());
-        po.setUpdateName(loginUser.getUsername());
 
         boolean result = commentMpService.updateById(po);
         if (result) {
