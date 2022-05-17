@@ -21,6 +21,9 @@ public class RichTextConstants {
      * 充值服务协议
      */
     public static final String RECHARGE_SERVICE_AGREEMENT = "recharge_service_agreement";
-
+    /**
+     * 健康证管理配置
+     */
+    public static final String HEALTH_CERTIFICATE = "health_certificate";
 
 }

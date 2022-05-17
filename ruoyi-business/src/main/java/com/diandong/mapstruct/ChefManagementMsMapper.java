@@ -12,7 +12,7 @@ import java.util.List;
  * 厨师管理Mapstruct
  *
  * @author YuLiu
- * @date 2022-05-11
+ * @date 2022-05-16
  */
 @Mapper
 public interface ChefManagementMsMapper {

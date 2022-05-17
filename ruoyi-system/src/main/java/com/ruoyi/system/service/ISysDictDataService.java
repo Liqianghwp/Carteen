@@ -92,4 +92,13 @@ public interface ISysDictDataService {
      * @return
      */
     int selectUsedBizDictData(String dictLabel, Long[] dictCodes);
+
+
+    /**
+     * 根据id查询多条记录
+     * @param ids
+     * @return
+     */
+    List<SysDictData> selectBatchByIds(List<Long> ids);
+
 }

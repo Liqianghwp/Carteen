@@ -1,5 +1,6 @@
 package com.diandong.domain.dto;
 
+import com.ruoyi.common.annotation.Excel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -27,18 +28,21 @@ public class CanteenDTO implements Serializable {
     /**
      * 食堂名称
      */
+    @Excel(name = "食堂名称", sort = 1)
     @ApiModelProperty(value = "食堂名称")
     private String canteenName;
 
     /**
      * 联系人名称
      */
+    @Excel(name = "联系人", sort = 2)
     @ApiModelProperty(value = "联系人名称")
     private String contentName;
 
     /**
      * 联系人手机号码
      */
+    @Excel(name = "联系人手机号", sort = 3)
     @ApiModelProperty(value = "联系人手机号码")
     private String contentPhone;
 
@@ -87,6 +91,7 @@ public class CanteenDTO implements Serializable {
     /**
      * 启用状态（0:未启用;1:已启用）
      */
+    @Excel(name = "状态", sort = 4, readConverterExp = "0=停用,1=启用")
     @ApiModelProperty(value = "启用状态（0:未启用;1:已启用）")
     private Integer status;
 

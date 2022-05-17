@@ -2,11 +2,16 @@ package com.ruoyi.web.controller.business;
 
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.domain.dto.RecipeDetailDTO;
+import com.diandong.domain.po.DishesPO;
 import com.diandong.domain.po.RecipeDetailPO;
+import com.diandong.domain.vo.DishesVO;
 import com.diandong.domain.vo.RecipeDetailVO;
+import com.diandong.domain.vo.RecipePieSituationVO;
 import com.diandong.mapstruct.RecipeDetailMsMapper;
 import com.diandong.service.RecipeDetailMpService;
 import com.ruoyi.common.core.controller.BaseController;
@@ -22,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Controller
@@ -49,21 +55,10 @@ public class RecipeDetailController extends BaseController {
     })
     @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
     @GetMapping
-    public TableDataInfo<RecipeDetailDTO> getList(RecipeDetailVO vo) {
-        startPage();
-        List<RecipeDetailPO> dataList = recipeDetailMpService.lambdaQuery()
-                .eq(ObjectUtils.isNotEmpty(vo.getId()), RecipeDetailPO::getId, vo.getId())
-                .eq(ObjectUtils.isNotEmpty(vo.getRecipeId()), RecipeDetailPO::getRecipeId, vo.getRecipeId())
-                .eq(StringUtils.isNotBlank(vo.getRecipeName()), RecipeDetailPO::getRecipeName, vo.getRecipeName())
-                .eq(ObjectUtils.isNotEmpty(vo.getMealTimesId()), RecipeDetailPO::getMealTimesId, vo.getMealTimesId())
-                .eq(StringUtils.isNotBlank(vo.getMealTimesName()), RecipeDetailPO::getMealTimesName, vo.getMealTimesName())
-                .eq(ObjectUtils.isNotEmpty(vo.getDishesId()), RecipeDetailPO::getDishesId, vo.getDishesId())
-                .eq(StringUtils.isNotBlank(vo.getDishesName()), RecipeDetailPO::getDishesName, vo.getDishesName())
-                .eq(ObjectUtils.isNotEmpty(vo.getNumber()), RecipeDetailPO::getNumber, vo.getNumber())
-                .list();
-        TableDataInfo pageData = getDataTable(dataList);
-        pageData.setRows(RecipeDetailMsMapper.INSTANCE.poList2dtoList(dataList));
-        return pageData;
+    public BaseResult getList(RecipeDetailVO vo) {
+
+        Page<RecipeDetailPO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
+        return BaseResult.success(page);
     }
 
     /**
@@ -94,7 +89,7 @@ public class RecipeDetailController extends BaseController {
     })
     @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
     @PostMapping
-    public BaseResult save(@Validated(Insert.class) RecipeDetailVO vo) {
+    public BaseResult save(@RequestBody @Validated(Insert.class) RecipeDetailVO vo) {
         RecipeDetailPO po = RecipeDetailMsMapper.INSTANCE.vo2po(vo);
         boolean result = recipeDetailMpService.save(po);
         if (result) {
@@ -115,7 +110,7 @@ public class RecipeDetailController extends BaseController {
     })
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
-    public BaseResult update(@Validated(Update.class) RecipeDetailVO vo) {
+    public BaseResult update(@RequestBody @Validated(Update.class) RecipeDetailVO vo) {
         RecipeDetailPO po = RecipeDetailMsMapper.INSTANCE.vo2po(vo);
         boolean result = recipeDetailMpService.updateById(po);
         if (result) {
@@ -142,5 +137,43 @@ public class RecipeDetailController extends BaseController {
         }
     }
 
+
+    /**
+     * 派菜情况
+     * @param pieSituationVO
+     * @return
+     */
+    @ApiOperation(value = "派菜情况",notes = "派菜情况",httpMethod = "GET")
+    @GetMapping("/pie_situation")
+    public BaseResult pieSituation(@Validated RecipePieSituationVO pieSituationVO){
+
+
+        return  BaseResult.success();
+    }
+
+
+
+
+    private LambdaQueryChainWrapper<RecipeDetailPO> onSelectWhere(RecipeDetailVO vo) {
+
+        LambdaQueryChainWrapper<RecipeDetailPO> queryWrapper = recipeDetailMpService.lambdaQuery();
+
+        if (Objects.isNull(vo)) {
+            return queryWrapper;
+        }
+        queryWrapper
+                .eq(ObjectUtils.isNotEmpty(vo.getId()), RecipeDetailPO::getId, vo.getId())
+                .eq(ObjectUtils.isNotEmpty(vo.getRecipeId()), RecipeDetailPO::getRecipeId, vo.getRecipeId())
+                .eq(StringUtils.isNotBlank(vo.getRecipeName()), RecipeDetailPO::getRecipeName, vo.getRecipeName())
+                .eq(ObjectUtils.isNotEmpty(vo.getMealTimesId()), RecipeDetailPO::getMealTimesId, vo.getMealTimesId())
+                .eq(StringUtils.isNotBlank(vo.getMealTimesName()), RecipeDetailPO::getMealTimesName, vo.getMealTimesName())
+                .eq(ObjectUtils.isNotEmpty(vo.getDishesId()), RecipeDetailPO::getDishesId, vo.getDishesId())
+                .eq(StringUtils.isNotBlank(vo.getDishesName()), RecipeDetailPO::getDishesName, vo.getDishesName())
+                .eq(ObjectUtils.isNotEmpty(vo.getChefId()), RecipeDetailPO::getChefId, vo.getChefId())
+                .eq(StringUtils.isNotBlank(vo.getChefName()), RecipeDetailPO::getChefName, vo.getChefName())
+                .eq(ObjectUtils.isNotEmpty(vo.getNumber()), RecipeDetailPO::getNumber, vo.getNumber());
+
+        return queryWrapper;
+    }
 
 }

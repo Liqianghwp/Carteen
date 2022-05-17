@@ -86,6 +86,7 @@ public class OpinionFeedbackVO extends BaseEntity implements Serializable {
     /**
      * 处理时间
      */
+
     @ApiModelProperty(value = "处理时间")
     private LocalDateTime processTime;
 

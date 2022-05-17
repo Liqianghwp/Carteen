@@ -10,14 +10,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 菜品分类 菜品分类PO实体类
+ * 菜品分类PO实体类
  *
  * @author YuLiu
- * @date 2022-05-11
+ * @date 2022-05-16
  */
 @TableName("wis_dishes_type")
 @Data
-@ApiModel("菜品分类 菜品分类PO实体类")
+@ApiModel("菜品分类PO实体类")
 @Accessors(chain = true)
 public class DishesTypePO implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -67,9 +67,9 @@ public class DishesTypePO implements Serializable {
     /**
      * 类型标签
      */
-    @TableField(value = "type_label")
+    @TableField(value = "remark")
     @ApiModelProperty(value = "类型标签")
-    private String typeLabel;
+    private String remark;
 
     /**
      * 是否包装
@@ -77,20 +77,6 @@ public class DishesTypePO implements Serializable {
     @TableField(value = "is_package")
     @ApiModelProperty(value = "是否包装")
     private Integer isPackage;
-
-    /**
-     * 当前类型的uuid （当前未知使用方式字段）
-     */
-    @TableField(value = "uuid")
-    @ApiModelProperty(value = "当前类型的uuid （当前未知使用方式字段）")
-    private String uuid;
-
-    /**
-     * 父级uuid (当前未知使用方式字段)
-     */
-    @TableField(value = "puuid")
-    @ApiModelProperty(value = "父级uuid (当前未知使用方式字段)")
-    private String puuid;
 
     /**
      * 数据状态

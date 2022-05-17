@@ -71,4 +71,8 @@ public class RechargeCardCarouselPO implements Serializable {
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 
+    @TableField(exist = false)
+    @ApiModelProperty(value = "显示顺序")
+    private Integer sort;
+
 }

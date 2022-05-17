@@ -1,8 +1,8 @@
 package com.ruoyi.web.controller.business;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
@@ -13,6 +13,7 @@ import com.diandong.mapstruct.RechargeTimesMsMapper;
 import com.diandong.service.RechargeTimesMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -51,9 +52,8 @@ public class RechargeTimesController extends BaseController {
     @ApiOperation(value = "充值次数设置分页查询", notes = "充值次数设置分页查询方法", httpMethod = "GET")
     @GetMapping
     public BaseResult getList(RechargeTimesVO vo) {
-
-        LambdaQueryWrapper<RechargeTimesPO> queryWrapper = onSelectWhere(vo);
-        Page<RechargeTimesPO> page = rechargeTimesMpService.page(new Page<>(vo.getPageSize(), vo.getPageNum()), queryWrapper);
+        LambdaQueryChainWrapper<RechargeTimesPO> queryWrapper = onSelectWhere(vo);
+        Page<RechargeTimesPO> page = queryWrapper.page(new Page<>(vo.getPageNum(), vo.getPageSize()));
         return BaseResult.success(page);
     }
 
@@ -106,9 +106,12 @@ public class RechargeTimesController extends BaseController {
     })
     @ApiOperation(value = "充值次数设置更新", notes = "充值次数设置更新", httpMethod = "PUT")
     @PutMapping
-    public BaseResult update(@Validated(Update.class) RechargeTimesVO vo) {
+    public BaseResult update(@RequestBody @Validated(Update.class) RechargeTimesVO vo) {
+
+        logger.info(SecurityUtils.getUserId().toString());
+
         RechargeTimesPO po = RechargeTimesMsMapper.INSTANCE.vo2po(vo);
-        boolean result = rechargeTimesMpService.updateById(po);
+        boolean result = rechargeTimesMpService.saveOrUpdate(po);
         if (result) {
             return BaseResult.successMsg("修改成功");
         } else {
@@ -137,8 +140,8 @@ public class RechargeTimesController extends BaseController {
     }
 
 
-    private LambdaQueryWrapper<RechargeTimesPO> onSelectWhere(RechargeTimesVO vo) {
-        LambdaQueryWrapper<RechargeTimesPO> queryWrapper = new LambdaQueryWrapper<>();
+    private LambdaQueryChainWrapper<RechargeTimesPO> onSelectWhere(RechargeTimesVO vo) {
+        LambdaQueryChainWrapper<RechargeTimesPO> queryWrapper = rechargeTimesMpService.lambdaQuery().orderByDesc(RechargeTimesPO::getCreateTime);
 
         if (Objects.isNull(vo)) {
             return queryWrapper;

@@ -39,7 +39,7 @@ public class RawMaterialVO extends BaseEntity implements Serializable {
     /**
      * 食堂姓名
      */
-    @ApiModelProperty(value = "食堂姓名")
+    @ApiModelProperty(value = "食堂名称")
     private String canteenName;
 
     /**

@@ -2,6 +2,8 @@ package com.ruoyi.web.controller.business;
 
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
@@ -13,7 +15,6 @@ import com.diandong.service.DishesTypeMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
-import com.ruoyi.common.core.page.TableDataInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -52,23 +52,9 @@ public class DishesTypeController extends BaseController {
     })
     @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
     @GetMapping
-    public TableDataInfo<DishesTypeDTO> getList(DishesTypeVO vo) {
-        startPage();
-        List<DishesTypePO> dataList = dishesTypeMpService.lambdaQuery()
-                .eq(ObjectUtils.isNotEmpty(vo.getId()), DishesTypePO::getId, vo.getId())
-                .eq(ObjectUtils.isNotEmpty(vo.getCanteenId()), DishesTypePO::getCanteenId, vo.getCanteenId())
-                .eq(StringUtils.isNotBlank(vo.getCanteenName()), DishesTypePO::getCanteenName, vo.getCanteenName())
-                .eq(StringUtils.isNotBlank(vo.getTypeName()), DishesTypePO::getTypeName, vo.getTypeName())
-                .eq(ObjectUtils.isNotEmpty(vo.getSort()), DishesTypePO::getSort, vo.getSort())
-                .eq(ObjectUtils.isNotEmpty(vo.getIsShow()), DishesTypePO::getIsShow, vo.getIsShow())
-                .eq(StringUtils.isNotBlank(vo.getTypeLabel()), DishesTypePO::getTypeLabel, vo.getTypeLabel())
-                .eq(ObjectUtils.isNotEmpty(vo.getIsPackage()), DishesTypePO::getIsPackage, vo.getIsPackage())
-                .eq(StringUtils.isNotBlank(vo.getUuid()), DishesTypePO::getUuid, vo.getUuid())
-                .eq(StringUtils.isNotBlank(vo.getPuuid()), DishesTypePO::getPuuid, vo.getPuuid())
-                .list();
-        TableDataInfo pageData = getDataTable(dataList);
-        pageData.setRows(DishesTypeMsMapper.INSTANCE.poList2dtoList(dataList));
-        return pageData;
+    public BaseResult getList(DishesTypeVO vo) {
+        Page<DishesTypePO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
+        return BaseResult.success(page);
     }
 
     /**
@@ -131,10 +117,10 @@ public class DishesTypeController extends BaseController {
     })
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
-    public BaseResult update(@Validated(Update.class) DishesTypeVO vo) {
+    public BaseResult update(@RequestBody @Validated(Update.class) DishesTypeVO vo) {
 //        判断更新状态
         LoginUser loginUser = getLoginUser();
-        if(Objects.isNull(loginUser)){
+        if (Objects.isNull(loginUser)) {
             return BaseResult.error(Constants.ERROR_MESSAGE);
         }
 
@@ -163,6 +149,25 @@ public class DishesTypeController extends BaseController {
         } else {
             return BaseResult.error("删除失败");
         }
+    }
+
+    private LambdaQueryChainWrapper<DishesTypePO> onSelectWhere(DishesTypeVO vo) {
+
+        LambdaQueryChainWrapper<DishesTypePO> queryWrapper = dishesTypeMpService.lambdaQuery();
+
+        if (Objects.isNull(vo)) {
+            return queryWrapper;
+        }
+        queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getId()), DishesTypePO::getId, vo.getId());
+        queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getCanteenId()), DishesTypePO::getCanteenId, vo.getCanteenId());
+        queryWrapper.eq(StringUtils.isNotBlank(vo.getCanteenName()), DishesTypePO::getCanteenName, vo.getCanteenName());
+        queryWrapper.eq(StringUtils.isNotBlank(vo.getTypeName()), DishesTypePO::getTypeName, vo.getTypeName());
+        queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getSort()), DishesTypePO::getSort, vo.getSort());
+        queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getIsShow()), DishesTypePO::getIsShow, vo.getIsShow());
+        queryWrapper.eq(StringUtils.isNotBlank(vo.getRemark()), DishesTypePO::getRemark, vo.getRemark());
+        queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getIsPackage()), DishesTypePO::getIsPackage, vo.getIsPackage());
+
+        return queryWrapper;
     }
 
 }

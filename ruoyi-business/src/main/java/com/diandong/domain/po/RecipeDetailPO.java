@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * 食谱详情PO实体类
  *
  * @author YuLiu
- * @date 2022-05-11
+ * @date 2022-05-16
  */
 @TableName("wis_recipe_detail")
 @Data
@@ -70,6 +70,20 @@ public class RecipeDetailPO implements Serializable {
     @TableField(value = "dishes_name")
     @ApiModelProperty(value = "菜品名称")
     private String dishesName;
+
+    /**
+     * 厨师id
+     */
+    @TableField(value = "chef_id")
+    @ApiModelProperty(value = "厨师id")
+    private Long chefId;
+
+    /**
+     * 厨师名称
+     */
+    @TableField(value = "chef_name")
+    @ApiModelProperty(value = "厨师名称")
+    private String chefName;
 
     /**
      * 数量

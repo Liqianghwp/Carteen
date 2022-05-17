@@ -1,23 +1,35 @@
 package com.ruoyi.web.controller.business;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
-import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.BaseResult;
-import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.HealthCertificateMpService;
-import com.diandong.domain.po.HealthCertificatePO;
 import com.diandong.domain.dto.HealthCertificateDTO;
+import com.diandong.domain.po.HealthCertificatePO;
 import com.diandong.domain.vo.HealthCertificateVO;
 import com.diandong.mapstruct.HealthCertificateMsMapper;
+import com.diandong.service.HealthCertificateMpService;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
-import java.util.List;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * 健康证Controller
@@ -45,23 +57,9 @@ public class HealthCertificateController extends BaseController {
     })
     @ApiOperation(value = "健康证分页查询", notes = "健康证分页查询方法", httpMethod = "GET")
     @GetMapping
-    public TableDataInfo<HealthCertificateDTO> getList(HealthCertificateVO vo) {
-        startPage();
-        List<HealthCertificatePO> dataList = healthCertificateMpService.lambdaQuery()
-                .eq(ObjectUtils.isNotEmpty(vo.getId()), HealthCertificatePO::getId, vo.getId())
-                .eq(StringUtils.isNotBlank(vo.getHealthCertPic()), HealthCertificatePO::getHealthCertPic, vo.getHealthCertPic())
-                .eq(StringUtils.isNotBlank(vo.getName()), HealthCertificatePO::getName, vo.getName())
-                .eq(StringUtils.isNotBlank(vo.getPhone()), HealthCertificatePO::getPhone, vo.getPhone())
-                .eq(ObjectUtils.isNotEmpty(vo.getValidityStartTime()), HealthCertificatePO::getValidityStartTime, vo.getValidityStartTime())
-                .eq(ObjectUtils.isNotEmpty(vo.getValidityEndTime()), HealthCertificatePO::getValidityEndTime, vo.getValidityEndTime())
-                .eq(StringUtils.isNotBlank(vo.getCode()), HealthCertificatePO::getCode, vo.getCode())
-                .eq(ObjectUtils.isNotEmpty(vo.getSex()), HealthCertificatePO::getSex, vo.getSex())
-                .eq(ObjectUtils.isNotEmpty(vo.getBirthday()), HealthCertificatePO::getBirthday, vo.getBirthday())
-                .eq(ObjectUtils.isNotEmpty(vo.getState()), HealthCertificatePO::getState, vo.getState())
-                .list();
-        TableDataInfo pageData = getDataTable(dataList);
-        pageData.setRows(HealthCertificateMsMapper.INSTANCE.poList2dtoList(dataList));
-        return pageData;
+    public BaseResult getList(HealthCertificateVO vo) {
+        Page<HealthCertificatePO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
+        return BaseResult.success(page);
     }
 
     /**
@@ -92,7 +90,7 @@ public class HealthCertificateController extends BaseController {
     })
     @ApiOperation(value = "健康证保存", notes = "健康证保存", httpMethod = "POST")
     @PostMapping
-    public BaseResult save(@Validated(Insert.class) HealthCertificateVO vo) {
+    public BaseResult save(@RequestBody @Validated(Insert.class) HealthCertificateVO vo) {
         HealthCertificatePO po = HealthCertificateMsMapper.INSTANCE.vo2po(vo);
         boolean result = healthCertificateMpService.save(po);
         if (result) {
@@ -113,7 +111,7 @@ public class HealthCertificateController extends BaseController {
     })
     @ApiOperation(value = "健康证更新", notes = "健康证更新", httpMethod = "PUT")
     @PutMapping
-    public BaseResult update(@Validated(Update.class) HealthCertificateVO vo) {
+    public BaseResult update(@RequestBody @Validated(Update.class) HealthCertificateVO vo) {
         HealthCertificatePO po = HealthCertificateMsMapper.INSTANCE.vo2po(vo);
         boolean result = healthCertificateMpService.updateById(po);
         if (result) {
@@ -126,16 +124,16 @@ public class HealthCertificateController extends BaseController {
     /**
      * 健康证删除
      *
-     * @param id 编号id
+     * @param ids 编号id
      * @return 返回结果
      */
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
+            @ApiImplicitParam(paramType = "path", dataType = "long[]", name = "ids", value = "编号id数组")
     })
     @ApiOperation(value = "健康证删除", notes = "健康证删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = healthCertificateMpService.removeById(id);
+    @DeleteMapping(value = "/{ids}")
+    public BaseResult delete(@PathVariable("ids") Long[] ids) {
+        boolean result = healthCertificateMpService.removeByIds(Arrays.asList(ids));
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {
@@ -144,24 +142,53 @@ public class HealthCertificateController extends BaseController {
     }
 
     /**
-     * 健康证批量删除
+     * 导出
      *
-     * @param idList 编号id集合
-     * @return 返回结果
-    */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "健康证批量删除", notes = "健康证批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = healthCertificateMpService.removeByIds(idList);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
+     * @param response
+     * @param vo
+     */
+    @Log(title = "健康证导出", businessType = BusinessType.EXPORT)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, HealthCertificateVO vo) {
+        List<Long> ids = vo.getIds();
+
+        List<HealthCertificatePO> list;
+        if (CollectionUtils.isNotEmpty(ids)) {
+            list = healthCertificateMpService.lambdaQuery().in(HealthCertificatePO::getId, ids).list();
         } else {
-            return BaseResult.error("删除失败");
+            list = onSelectWhere(vo).list();
         }
+        List<HealthCertificateDTO> healthCertificateList = new ArrayList<>();
+
+        list.forEach(healthCertificatePO -> {
+            healthCertificateList.add(HealthCertificateMsMapper.INSTANCE.po2dto(healthCertificatePO));
+        });
+
+        ExcelUtil<HealthCertificateDTO> util = new ExcelUtil<HealthCertificateDTO>(HealthCertificateDTO.class);
+        util.exportExcel(response, healthCertificateList, "健康证管理");
     }
 
+
+    private LambdaQueryChainWrapper<HealthCertificatePO> onSelectWhere(HealthCertificateVO vo) {
+
+        LambdaQueryChainWrapper<HealthCertificatePO> queryWrapper = healthCertificateMpService.lambdaQuery();
+
+        if (Objects.isNull(vo)) {
+            return queryWrapper;
+        }
+        queryWrapper
+                .eq(ObjectUtils.isNotEmpty(vo.getId()), HealthCertificatePO::getId, vo.getId())
+                .eq(StringUtils.isNotBlank(vo.getHealthCertPic()), HealthCertificatePO::getHealthCertPic, vo.getHealthCertPic())
+                .eq(StringUtils.isNotBlank(vo.getName()), HealthCertificatePO::getName, vo.getName())
+                .eq(StringUtils.isNotBlank(vo.getPhone()), HealthCertificatePO::getPhone, vo.getPhone())
+                .eq(ObjectUtils.isNotEmpty(vo.getValidityStartTime()), HealthCertificatePO::getValidityStartTime, vo.getValidityStartTime())
+                .eq(ObjectUtils.isNotEmpty(vo.getValidityEndTime()), HealthCertificatePO::getValidityEndTime, vo.getValidityEndTime())
+                .eq(StringUtils.isNotBlank(vo.getCode()), HealthCertificatePO::getCode, vo.getCode())
+                .eq(ObjectUtils.isNotEmpty(vo.getSex()), HealthCertificatePO::getSex, vo.getSex())
+                .eq(ObjectUtils.isNotEmpty(vo.getBirthday()), HealthCertificatePO::getBirthday, vo.getBirthday())
+                .eq(ObjectUtils.isNotEmpty(vo.getState()), HealthCertificatePO::getState, vo.getState());
+
+        return queryWrapper;
+    }
 
 }

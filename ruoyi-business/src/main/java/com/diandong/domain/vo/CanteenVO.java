@@ -1,15 +1,16 @@
 package com.diandong.domain.vo;
 
-import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.domain.BaseEntity;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 食堂信息VO实体类
@@ -26,6 +27,7 @@ public class CanteenVO extends BaseEntity implements Serializable {
      * 编号
      */
     @NotNull(groups = {Update.class})
+    @JsonSerialize(using = ToStringSerializer.class)
     @ApiModelProperty(value = "编号")
     private Long id;
 
@@ -101,5 +103,9 @@ public class CanteenVO extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "备注")
     private String remark;
 
-
+    /**
+     * 导出勾选id集合
+     */
+    @ApiModelProperty(value = "导出勾选id集合")
+    private List<Long> ids;
 }

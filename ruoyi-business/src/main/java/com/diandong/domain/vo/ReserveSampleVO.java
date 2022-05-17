@@ -3,6 +3,9 @@ package com.diandong.domain.vo;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.domain.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -15,7 +18,7 @@ import java.io.Serializable;
  * 预留样品VO实体类
  *
  * @author YuLiu
- * @date 2022-05-11
+ * @date 2022-05-16
  */
 @Data
 @ApiModel("预留样品VO实体类")
@@ -30,8 +33,16 @@ public class ReserveSampleVO extends BaseEntity implements Serializable {
     private Long id;
 
     /**
+     * 留样食堂ID
+     */
+    @ApiModelProperty(value = "留样食堂ID")
+    private Long reserveCanteenId;
+
+    /**
      * 留样日期
      */
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "留样日期")
     private LocalDateTime reserveDate;
 

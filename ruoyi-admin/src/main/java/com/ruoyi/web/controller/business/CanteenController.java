@@ -1,26 +1,36 @@
 package com.ruoyi.web.controller.business;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
-import com.diandong.constant.Constants;
+import com.diandong.domain.dto.CanteenDTO;
+import com.diandong.domain.po.CanteenPO;
+import com.diandong.domain.vo.CanteenVO;
+import com.diandong.mapstruct.CanteenMsMapper;
+import com.diandong.service.CanteenMpService;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
-import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.CanteenMpService;
-import com.diandong.domain.po.CanteenPO;
-import com.diandong.domain.dto.CanteenDTO;
-import com.diandong.domain.vo.CanteenVO;
-import com.diandong.mapstruct.CanteenMsMapper;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import javax.annotation.Resource;
 
 /**
  * Controller
@@ -48,26 +58,9 @@ public class CanteenController extends BaseController {
     })
     @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
     @GetMapping
-    public TableDataInfo<CanteenDTO> getList(CanteenVO vo) {
-        startPage();
-        List<CanteenPO> dataList = canteenMpService.lambdaQuery()
-                .eq(ObjectUtils.isNotEmpty(vo.getId()), CanteenPO::getId, vo.getId())
-                .eq(StringUtils.isNotBlank(vo.getCanteenName()), CanteenPO::getCanteenName, vo.getCanteenName())
-                .eq(ObjectUtils.isNotEmpty(vo.getContentName()), CanteenPO::getContentName, vo.getContentName())
-                .eq(StringUtils.isNotBlank(vo.getContentPhone()), CanteenPO::getContentPhone, vo.getContentPhone())
-                .eq(StringUtils.isNotBlank(vo.getCanteenAddress()), CanteenPO::getCanteenAddress, vo.getCanteenAddress())
-                .eq(StringUtils.isNotBlank(vo.getBusinessLicense()), CanteenPO::getBusinessLicense, vo.getBusinessLicense())
-                .eq(StringUtils.isNotBlank(vo.getQrCode()), CanteenPO::getQrCode, vo.getQrCode())
-                .eq(ObjectUtils.isNotEmpty(vo.getStatus()), CanteenPO::getStatus, vo.getStatus())
-                .eq(StringUtils.isNotBlank(vo.getCanteenPicture()), CanteenPO::getCanteenPicture, vo.getCanteenPicture())
-                .eq(StringUtils.isNotBlank(vo.getCanteenIntroduce()), CanteenPO::getCanteenIntroduce, vo.getCanteenIntroduce())
-                .eq(ObjectUtils.isNotEmpty(vo.getPId()), CanteenPO::getPId, vo.getPId())
-                .eq(StringUtils.isNotBlank(vo.getPName()), CanteenPO::getPName, vo.getPName())
-                .eq(StringUtils.isNotBlank(vo.getRemark()), CanteenPO::getRemark, vo.getRemark())
-                .list();
-        TableDataInfo pageData = getDataTable(dataList);
-        pageData.setRows(CanteenMsMapper.INSTANCE.poList2dtoList(dataList));
-        return pageData;
+    public BaseResult getList(CanteenVO vo) {
+        Page<CanteenPO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
+        return BaseResult.success(page);
     }
 
     /**
@@ -100,12 +93,7 @@ public class CanteenController extends BaseController {
     @PostMapping
     public BaseResult save(@RequestBody @Validated(Insert.class) CanteenVO vo) {
 
-        LoginUser loginUser = getLoginUser();
-        if(Objects.isNull(loginUser)){
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
-
-        return canteenMpService.addCanteen(vo,loginUser);
+        return canteenMpService.addCanteen(vo);
     }
 
     /**
@@ -119,7 +107,7 @@ public class CanteenController extends BaseController {
     })
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
-    public BaseResult update(@Validated(Update.class) CanteenVO vo) {
+    public BaseResult update(@RequestBody @Validated(Update.class) CanteenVO vo) {
         LoginUser loginUser = getLoginUser();
         if (Objects.isNull(loginUser)) {
             return BaseResult.error("用户未登录，无法进行操作。请您重新登录");
@@ -142,16 +130,16 @@ public class CanteenController extends BaseController {
     /**
      * 删除
      *
-     * @param id 编号id
+     * @param ids 编号id
      * @return 返回结果
      */
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
+            @ApiImplicitParam(paramType = "path", dataType = "long[]", name = "ids", value = "编号id数组")
     })
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = canteenMpService.removeById(id);
+    @DeleteMapping(value = "/{ids}")
+    public BaseResult delete(@PathVariable("ids") Long[] ids) {
+        boolean result = canteenMpService.removeByIds(Arrays.asList(ids));
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {
@@ -159,24 +147,58 @@ public class CanteenController extends BaseController {
         }
     }
 
+
     /**
-     * 批量删除
+     * 导出
      *
-     * @param idList 编号id集合
-     * @return 返回结果
+     * @param response
+     * @param vo
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = canteenMpService.removeByIds(idList);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
+    @Log(title = "食堂管理导出", businessType = BusinessType.EXPORT)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, CanteenVO vo) {
+        List<Long> ids = vo.getIds();
+
+        List<CanteenPO> list;
+        if (CollectionUtils.isNotEmpty(ids)) {
+            list = canteenMpService.lambdaQuery().in(CanteenPO::getId, ids).list();
         } else {
-            return BaseResult.error("删除失败");
+            list = onSelectWhere(vo).list();
         }
+        List<CanteenDTO> canteenList = new ArrayList<>();
+
+        list.forEach(canteenPO -> {
+            canteenList.add(CanteenMsMapper.INSTANCE.po2dto(canteenPO));
+        });
+
+        ExcelUtil<CanteenDTO> util = new ExcelUtil<CanteenDTO>(CanteenDTO.class);
+        util.exportExcel(response, canteenList, "食堂管理");
+    }
+
+
+    private LambdaQueryChainWrapper<CanteenPO> onSelectWhere(CanteenVO vo) {
+
+        LambdaQueryChainWrapper<CanteenPO> queryWrapper = canteenMpService.lambdaQuery();
+
+        if (Objects.isNull(vo)) {
+            return queryWrapper;
+        }
+        queryWrapper
+                .eq(ObjectUtils.isNotEmpty(vo.getId()), CanteenPO::getId, vo.getId())
+                .eq(StringUtils.isNotBlank(vo.getCanteenName()), CanteenPO::getCanteenName, vo.getCanteenName())
+                .eq(ObjectUtils.isNotEmpty(vo.getContentName()), CanteenPO::getContentName, vo.getContentName())
+                .eq(StringUtils.isNotBlank(vo.getContentPhone()), CanteenPO::getContentPhone, vo.getContentPhone())
+                .eq(StringUtils.isNotBlank(vo.getCanteenAddress()), CanteenPO::getCanteenAddress, vo.getCanteenAddress())
+                .eq(StringUtils.isNotBlank(vo.getBusinessLicense()), CanteenPO::getBusinessLicense, vo.getBusinessLicense())
+                .eq(StringUtils.isNotBlank(vo.getQrCode()), CanteenPO::getQrCode, vo.getQrCode())
+                .eq(ObjectUtils.isNotEmpty(vo.getStatus()), CanteenPO::getStatus, vo.getStatus())
+                .eq(StringUtils.isNotBlank(vo.getCanteenPicture()), CanteenPO::getCanteenPicture, vo.getCanteenPicture())
+                .eq(StringUtils.isNotBlank(vo.getCanteenIntroduce()), CanteenPO::getCanteenIntroduce, vo.getCanteenIntroduce())
+                .eq(ObjectUtils.isNotEmpty(vo.getPId()), CanteenPO::getPId, vo.getPId())
+                .eq(StringUtils.isNotBlank(vo.getPName()), CanteenPO::getPName, vo.getPName())
+                .eq(StringUtils.isNotBlank(vo.getRemark()), CanteenPO::getRemark, vo.getRemark());
+
+        return queryWrapper;
     }
 
 }

@@ -230,4 +230,9 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
         return result;
     }
 
+    @Override
+    public List<SysDictData> selectBatchByIds(List<Long> ids) {
+        return dictDataMapper.selectBatchByIds(ids);
+    }
+
 }

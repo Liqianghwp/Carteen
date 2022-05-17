@@ -2,12 +2,13 @@ package com.ruoyi.web.controller.business;
 
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
 import com.diandong.domain.dto.OpinionFeedbackDTO;
 import com.diandong.domain.po.OpinionFeedbackPO;
-import com.diandong.domain.vo.OpinionFeedbackResponseVO;
 import com.diandong.domain.vo.OpinionFeedbackVO;
 import com.diandong.mapstruct.OpinionFeedbackMsMapper;
 import com.diandong.service.OpinionFeedbackMpService;
@@ -15,7 +16,6 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
-import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import io.swagger.annotations.Api;
@@ -57,24 +57,12 @@ public class OpinionFeedbackController extends BaseController {
     })
     @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
     @GetMapping
-    public TableDataInfo<OpinionFeedbackDTO> getList(OpinionFeedbackVO vo) {
-        startPage();
-        List<OpinionFeedbackPO> dataList = opinionFeedbackMpService.lambdaQuery()
-                .eq(ObjectUtils.isNotEmpty(vo.getId()), OpinionFeedbackPO::getId, vo.getId())
-                .eq(ObjectUtils.isNotEmpty(vo.getCanteenId()), OpinionFeedbackPO::getCanteenId, vo.getCanteenId())
-                .eq(StringUtils.isNotBlank(vo.getCanteenName()), OpinionFeedbackPO::getCanteenName, vo.getCanteenName())
-                .eq(ObjectUtils.isNotEmpty(vo.getOpinionId()), OpinionFeedbackPO::getOpinionId, vo.getOpinionId())
-                .eq(StringUtils.isNotBlank(vo.getOpinionType()), OpinionFeedbackPO::getOpinionType, vo.getOpinionType())
-                .eq(StringUtils.isNotBlank(vo.getOpinionContent()), OpinionFeedbackPO::getOpinionContent, vo.getOpinionContent())
-                .eq(StringUtils.isNotBlank(vo.getOpinionPicture()), OpinionFeedbackPO::getOpinionPicture, vo.getOpinionPicture())
-                .eq(StringUtils.isNotBlank(vo.getProcessInformation()), OpinionFeedbackPO::getProcessInformation, vo.getProcessInformation())
-                .eq(ObjectUtils.isNotEmpty(vo.getStatus()), OpinionFeedbackPO::getStatus, vo.getStatus())
-                .eq(ObjectUtils.isNotEmpty(vo.getAnonymous()), OpinionFeedbackPO::getAnonymous, vo.getAnonymous())
-                .eq(ObjectUtils.isNotEmpty(vo.getProcessTime()), OpinionFeedbackPO::getProcessTime, vo.getProcessTime())
-                .list();
-        TableDataInfo pageData = getDataTable(dataList);
-        pageData.setRows(OpinionFeedbackMsMapper.INSTANCE.poList2dtoList(dataList));
-        return pageData;
+    public BaseResult getList(OpinionFeedbackVO vo) {
+        Page<OpinionFeedbackPO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
+
+        List<OpinionFeedbackPO> records = page.getRecords();
+        opinionFeedbackMpService.resetOpinionFeedBack(records);
+        return BaseResult.success(page);
     }
 
     /**
@@ -137,16 +125,16 @@ public class OpinionFeedbackController extends BaseController {
      *
      * @return
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "OpinionFeedbackVO", name = "vo", value = "参数对象")
-    })
-    @ApiOperation(value = "集团后台pc端查看列表", notes = "后台系统pc端查看列表", httpMethod = "POST")
-    @GetMapping("/opinion/pc")
-    public TableDataInfo getPcOpinionList(OpinionFeedbackVO vo) {
-        startPage();
-        List<OpinionFeedbackResponseVO> pcOpinionList = opinionFeedbackMpService.getPcOpinionList(vo);
-        return getDataTable(pcOpinionList);
-    }
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(paramType = "query", dataType = "OpinionFeedbackVO", name = "vo", value = "参数对象")
+//    })
+//    @ApiOperation(value = "集团后台pc端查看列表", notes = "后台系统pc端查看列表", httpMethod = "POST")
+//    @GetMapping("/opinion/pc")
+//    public TableDataInfo getPcOpinionList(OpinionFeedbackVO vo) {
+//        startPage();
+//        List<OpinionFeedbackResponseVO> pcOpinionList = opinionFeedbackMpService.getPcOpinionList(vo);
+//        return getDataTable(pcOpinionList);
+//    }
 
 
     /**
@@ -154,16 +142,16 @@ public class OpinionFeedbackController extends BaseController {
      *
      * @return
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "OpinionFeedbackVO", name = "vo", value = "参数对象")
-    })
-    @ApiOperation(value = "集团后台pc端查看列表", notes = "后台系统pc端查看列表", httpMethod = "POST")
-    @GetMapping("/opinion/group_pc")
-    public TableDataInfo getGroupPcOpinionList(Long groupId, OpinionFeedbackVO vo) {
-        startPage();
-        List<OpinionFeedbackResponseVO> pcOpinionList = opinionFeedbackMpService.getGroupPcOpinionList(groupId, vo);
-        return getDataTable(pcOpinionList);
-    }
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(paramType = "query", dataType = "OpinionFeedbackVO", name = "vo", value = "参数对象")
+//    })
+//    @ApiOperation(value = "集团后台pc端查看列表", notes = "后台系统pc端查看列表", httpMethod = "POST")
+//    @GetMapping("/opinion/group_pc")
+//    public TableDataInfo getGroupPcOpinionList(Long groupId, OpinionFeedbackVO vo) {
+//        startPage();
+//        List<OpinionFeedbackPO> pcOpinionList = opinionFeedbackMpService.getGroupPcOpinionList(groupId, vo);
+//        return getDataTable(pcOpinionList);
+//    }
 
 
     /**
@@ -177,7 +165,7 @@ public class OpinionFeedbackController extends BaseController {
     })
     @ApiOperation(value = "处理意见反馈", notes = "处理意见反馈", httpMethod = "PUT")
     @PutMapping
-    public BaseResult update(@Validated(Update.class) OpinionFeedbackVO vo) {
+    public BaseResult update(@RequestBody @Validated(Update.class) OpinionFeedbackVO vo) {
 //        判断登录状态
         LoginUser loginUser = getLoginUser();
         if (Objects.isNull(loginUser)) {
@@ -222,10 +210,37 @@ public class OpinionFeedbackController extends BaseController {
     @PostMapping("/export")
     public void export(HttpServletResponse response, OpinionFeedbackVO vo) {
 
-        List<OpinionFeedbackResponseVO> list = opinionFeedbackMpService.getGroupPcOpinionList(vo.getGroupId(), vo);
+        List<OpinionFeedbackPO> list = onSelectWhere(vo).list();
 
-        ExcelUtil<OpinionFeedbackResponseVO> util = new ExcelUtil<OpinionFeedbackResponseVO>(OpinionFeedbackResponseVO.class);
+        opinionFeedbackMpService.resetOpinionFeedBack(list);
+
+        ExcelUtil<OpinionFeedbackPO> util = new ExcelUtil<OpinionFeedbackPO>(OpinionFeedbackPO.class);
         util.exportExcel(response, list, "意见反馈");
+    }
+
+
+    private LambdaQueryChainWrapper<OpinionFeedbackPO> onSelectWhere(OpinionFeedbackVO vo) {
+
+        LambdaQueryChainWrapper<OpinionFeedbackPO> queryWrapper = opinionFeedbackMpService.lambdaQuery();
+        if (Objects.isNull(vo)) {
+            return queryWrapper;
+        }
+        queryWrapper
+                .eq(ObjectUtils.isNotEmpty(vo.getId()), OpinionFeedbackPO::getId, vo.getId())
+                .eq(ObjectUtils.isNotEmpty(vo.getCanteenId()), OpinionFeedbackPO::getCanteenId, vo.getCanteenId())
+                .eq(StringUtils.isNotBlank(vo.getCanteenName()), OpinionFeedbackPO::getCanteenName, vo.getCanteenName())
+                .eq(ObjectUtils.isNotEmpty(vo.getOpinionId()), OpinionFeedbackPO::getOpinionId, vo.getOpinionId())
+                .eq(StringUtils.isNotBlank(vo.getOpinionType()), OpinionFeedbackPO::getOpinionType, vo.getOpinionType())
+                .like(StringUtils.isNotBlank(vo.getOpinionContent()), OpinionFeedbackPO::getOpinionContent, vo.getOpinionContent())
+                .eq(StringUtils.isNotBlank(vo.getProcessInformation()), OpinionFeedbackPO::getProcessInformation, vo.getProcessInformation())
+                .eq(ObjectUtils.isNotEmpty(vo.getStatus()), OpinionFeedbackPO::getStatus, vo.getStatus())
+                .eq(ObjectUtils.isNotEmpty(vo.getAnonymous()), OpinionFeedbackPO::getAnonymous, vo.getAnonymous())
+                .eq(ObjectUtils.isNotEmpty(vo.getProcessTime()), OpinionFeedbackPO::getProcessTime, vo.getProcessTime());
+        if (ObjectUtils.isNotEmpty(vo.getStartTime()) && ObjectUtils.isNotEmpty(vo.getEndTime())) {
+            queryWrapper.between(OpinionFeedbackPO::getCreateTime, vo.getStartTime(), vo.getEndTime());
+        }
+
+        return queryWrapper;
     }
 
 }

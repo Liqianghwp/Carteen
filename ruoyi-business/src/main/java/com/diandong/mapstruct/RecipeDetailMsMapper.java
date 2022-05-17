@@ -9,10 +9,10 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 /**
- * Mapstruct
+ * 食谱详情Mapstruct
  *
  * @author YuLiu
- * @date 2022-04-02
+ * @date 2022-05-16
  */
 @Mapper
 public interface RecipeDetailMsMapper {

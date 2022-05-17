@@ -9,17 +9,12 @@
         <result column="type_name" jdbcType="VARCHAR" property="typeName"/>
         <result column="sort" jdbcType="INTEGER" property="sort"/>
         <result column="is_show" jdbcType="INTEGER" property="isShow"/>
-        <result column="type_label" jdbcType="VARCHAR" property="typeLabel"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
         <result column="is_package" jdbcType="INTEGER" property="isPackage"/>
-        <result column="uuid" jdbcType="VARCHAR" property="uuid"/>
-        <result column="puuid" jdbcType="VARCHAR" property="puuid"/>
-        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
-        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
         <result column="create_by" jdbcType="BIGINT" property="createBy"/>
-        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
-        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
@@ -32,17 +27,12 @@
             ,dt.type_name
             ,dt.sort
             ,dt.is_show
-            ,dt.type_label
+            ,dt.remark
             ,dt.is_package
-            ,dt.uuid
-            ,dt.puuid
-            ,dt.data_state
-            ,dt.version
+            ,dt.del_flag
             ,dt.create_by
-            ,dt.create_name
             ,dt.create_time
             ,dt.update_by
-            ,dt.update_name
             ,dt.update_time
         </trim>
     </sql>
@@ -69,29 +59,14 @@
             <if test="isShow != null">
                 and dt.is_show = #{isShow}
             </if>
-            <if test="typeLabel != null and typeLabel != ''">
-                and dt.type_label = #{typeLabel}
+            <if test="remark != null and remark != ''">
+                and dt.remark = #{remark}
             </if>
             <if test="isPackage != null">
                 and dt.is_package = #{isPackage}
             </if>
-            <if test="uuid != null and uuid != ''">
-                and dt.uuid = #{uuid}
-            </if>
-            <if test="puuid != null and puuid != ''">
-                and dt.puuid = #{puuid}
-            </if>
-            <if test="dataState != null">
-                and dt.data_state = #{dataState}
-            </if>
-            <if test="version != null">
-                and dt.version = #{version}
-            </if>
-            <if test="createName != null and createName != ''">
-                and dt.create_name = #{createName}
-            </if>
-            <if test="updateName != null and updateName != ''">
-                and dt.update_name = #{updateName}
+            <if test="delFlag != null">
+                and dt.del_flag = #{delFlag}
             </if>
             <if test="beginTime != null">
                 and dt.create_time <![CDATA[ >= ]]> #{beginTime}

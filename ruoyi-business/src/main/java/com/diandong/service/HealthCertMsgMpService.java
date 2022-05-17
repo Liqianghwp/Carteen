@@ -11,4 +11,16 @@ import com.diandong.domain.po.HealthCertMsgPO;
  */
 public interface HealthCertMsgMpService extends CommonService<HealthCertMsgPO> {
 
+    /**
+     * 已读信息
+     * @param id
+     *
+     */
+    /**
+     * 已读信息
+     * @param id    已读id
+     * @return  {@link HealthCertMsgPO}
+     */
+    HealthCertMsgPO haveRead(Long id);
+
 }

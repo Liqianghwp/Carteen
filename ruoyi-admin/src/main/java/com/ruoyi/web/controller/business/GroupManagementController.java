@@ -1,19 +1,29 @@
 package com.ruoyi.web.controller.business;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
 import com.diandong.domain.dto.GroupManagementDTO;
+import com.diandong.domain.dto.HealthCertificateDTO;
 import com.diandong.domain.po.GroupManagementPO;
+import com.diandong.domain.po.HealthCertificatePO;
 import com.diandong.domain.vo.GroupManagementVO;
+import com.diandong.domain.vo.HealthCertificateVO;
 import com.diandong.mapstruct.GroupManagementMsMapper;
+import com.diandong.mapstruct.HealthCertificateMsMapper;
 import com.diandong.service.GroupManagementMpService;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -22,6 +32,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -52,22 +64,9 @@ public class GroupManagementController extends BaseController {
     })
     @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
     @GetMapping
-    public TableDataInfo<GroupManagementDTO> getList(GroupManagementVO vo) {
-        startPage();
-        List<GroupManagementPO> dataList = groupManagementMpService.lambdaQuery()
-                .eq(ObjectUtils.isNotEmpty(vo.getId()), GroupManagementPO::getId, vo.getId())
-                .eq(StringUtils.isNotBlank(vo.getGroupName()), GroupManagementPO::getGroupName, vo.getGroupName())
-                .eq(ObjectUtils.isNotEmpty(vo.getContentName()), GroupManagementPO::getContentName, vo.getContentName())
-                .eq(StringUtils.isNotBlank(vo.getContentPhone()), GroupManagementPO::getContentPhone, vo.getContentPhone())
-                .eq(ObjectUtils.isNotEmpty(vo.getCanteensAllowed()), GroupManagementPO::getCanteensAllowed, vo.getCanteensAllowed())
-                .eq(StringUtils.isNotBlank(vo.getGroupAddress()), GroupManagementPO::getGroupAddress, vo.getGroupAddress())
-                .eq(StringUtils.isNotBlank(vo.getBusinessLicense()), GroupManagementPO::getBusinessLicense, vo.getBusinessLicense())
-                .eq(ObjectUtils.isNotEmpty(vo.getStatus()), GroupManagementPO::getStatus, vo.getStatus())
-                .eq(StringUtils.isNotBlank(vo.getRemark()), GroupManagementPO::getRemark, vo.getRemark())
-                .list();
-        TableDataInfo pageData = getDataTable(dataList);
-        pageData.setRows(GroupManagementMsMapper.INSTANCE.poList2dtoList(dataList));
-        return pageData;
+    public BaseResult getList(GroupManagementVO vo) {
+        Page<GroupManagementPO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
+        return BaseResult.success(page);
     }
 
     /**
@@ -100,16 +99,7 @@ public class GroupManagementController extends BaseController {
     @PostMapping
     public BaseResult save(@RequestBody @Validated(Insert.class) GroupManagementVO vo) {
 
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error("用户未登录，无法进行操作。请您重新登录");
-        }
-
-
-        GroupManagementPO po = GroupManagementMsMapper.INSTANCE.vo2po(vo);
-//        设置创建人信息
-        po.setCreateBy(loginUser.getUserId());
-        boolean result = groupManagementMpService.save(po);
+        boolean result = groupManagementMpService.saveGroupManagement(vo);
         if (result) {
             return BaseResult.successMsg("添加成功！");
         } else {
@@ -128,7 +118,7 @@ public class GroupManagementController extends BaseController {
     })
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
-    public BaseResult update(@Validated(Update.class) GroupManagementVO vo) {
+    public BaseResult update(@RequestBody @Validated(Update.class) GroupManagementVO vo) {
 
 //        判断更新状态
         LoginUser loginUser = getLoginUser();
@@ -164,23 +154,52 @@ public class GroupManagementController extends BaseController {
     }
 
     /**
-     * 批量删除
+     * 导出
      *
-     * @param idList 编号id集合
-     * @return 返回结果
+     * @param response
+     * @param vo
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = groupManagementMpService.removeByIds(idList);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
+    @Log(title = "集团管理导出", businessType = BusinessType.EXPORT)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, GroupManagementVO vo) {
+        List<Long> ids = vo.getIds();
+
+        List<GroupManagementPO> list;
+        if (CollectionUtils.isNotEmpty(ids)) {
+            list = groupManagementMpService.lambdaQuery().in(GroupManagementPO::getId, ids).list();
         } else {
-            return BaseResult.error("删除失败");
+            list = onSelectWhere(vo).list();
         }
+        List<GroupManagementDTO> groupManagementList = new ArrayList<>();
+
+        list.forEach(groupManagementPO -> {
+            groupManagementList.add(GroupManagementMsMapper.INSTANCE.po2dto(groupManagementPO));
+        });
+
+        ExcelUtil<GroupManagementDTO> util = new ExcelUtil<GroupManagementDTO>(GroupManagementDTO.class);
+        util.exportExcel(response, groupManagementList, "集团管理");
+    }
+
+
+    private LambdaQueryChainWrapper<GroupManagementPO> onSelectWhere(GroupManagementVO vo) {
+
+        LambdaQueryChainWrapper<GroupManagementPO> queryWrapper = groupManagementMpService.lambdaQuery();
+
+        if (Objects.isNull(vo)) {
+            return queryWrapper;
+        }
+        queryWrapper
+                .eq(ObjectUtils.isNotEmpty(vo.getId()), GroupManagementPO::getId, vo.getId())
+                .eq(StringUtils.isNotBlank(vo.getGroupName()), GroupManagementPO::getGroupName, vo.getGroupName())
+                .eq(ObjectUtils.isNotEmpty(vo.getContentName()), GroupManagementPO::getContentName, vo.getContentName())
+                .eq(StringUtils.isNotBlank(vo.getContentPhone()), GroupManagementPO::getContentPhone, vo.getContentPhone())
+                .eq(ObjectUtils.isNotEmpty(vo.getCanteensAllowed()), GroupManagementPO::getCanteensAllowed, vo.getCanteensAllowed())
+                .eq(StringUtils.isNotBlank(vo.getGroupAddress()), GroupManagementPO::getGroupAddress, vo.getGroupAddress())
+                .eq(StringUtils.isNotBlank(vo.getBusinessLicense()), GroupManagementPO::getBusinessLicense, vo.getBusinessLicense())
+                .eq(ObjectUtils.isNotEmpty(vo.getStatus()), GroupManagementPO::getStatus, vo.getStatus())
+                .eq(StringUtils.isNotBlank(vo.getRemark()), GroupManagementPO::getRemark, vo.getRemark());
+
+        return queryWrapper;
     }
 
 }

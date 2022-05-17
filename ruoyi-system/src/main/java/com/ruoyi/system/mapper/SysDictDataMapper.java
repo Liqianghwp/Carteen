@@ -158,5 +158,11 @@ public interface SysDictDataMapper {
     //    TODO 意见类型
     int selectOpinionTypeDictDataByIds(Long[] dictCodes);
 
+    /**
+     * 根据id集合查询数据
+     * @param ids
+     * @return
+     */
+    List<SysDictData> selectBatchByIds(List<Long> ids);
 
 }

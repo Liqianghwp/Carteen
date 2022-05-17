@@ -4,6 +4,7 @@
 
     <resultMap id="BaseResultMap" type="com.diandong.domain.po.ReserveSamplePO">
         <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="reserve_canteen_id" jdbcType="BIGINT" property="reserveCanteenId"/>
         <result column="reserve_date" jdbcType="TIMESTAMP" property="reserveDate"/>
         <result column="meal_times" jdbcType="BIGINT" property="mealTimes"/>
         <result column="food_name" jdbcType="VARCHAR" property="foodName"/>
@@ -24,6 +25,7 @@
     <sql id="BaseSelectField">
         <trim prefixOverrides=",">
             ,rs.id
+            ,rs.reserve_canteen_id
             ,rs.reserve_date
             ,rs.meal_times
             ,rs.food_name
@@ -47,6 +49,9 @@
             <trim prefixOverrides="and">
             <if test="id != null">
                 and rs.id = #{id}
+            </if>
+            <if test="reserveCanteenId != null">
+                and rs.reserve_canteen_id = #{reserveCanteenId}
             </if>
             <if test="reserveDate != null">
                 and rs.reserve_date = #{reserveDate}

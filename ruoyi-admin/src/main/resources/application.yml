@@ -41,6 +41,10 @@ logging:
 
 # Spring配置
 spring:
+  jackson:
+    default-property-inclusion: always
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
   # 资源信息
   messages:
     # 国际化资源文件路径

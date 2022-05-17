@@ -1,6 +1,5 @@
 package com.diandong.domain.vo;
 
-import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
@@ -8,9 +7,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * 菜品信息VO实体类

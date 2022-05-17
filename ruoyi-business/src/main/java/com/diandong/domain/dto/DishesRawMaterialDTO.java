@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 菜品原材料DTO实体类
@@ -77,5 +78,11 @@ public class DishesRawMaterialDTO implements Serializable {
      */
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
+
+    /**
+     * 原材料营养信息列表
+     */
+    @ApiModelProperty(value = "原材料营养信息列表")
+    private List<RawMaterialNutritionDTO> rawMaterialNutritionList;
 
 }

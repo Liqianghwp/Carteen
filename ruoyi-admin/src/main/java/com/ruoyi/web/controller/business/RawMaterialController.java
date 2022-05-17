@@ -2,6 +2,8 @@ package com.ruoyi.web.controller.business;
 
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
@@ -13,7 +15,6 @@ import com.diandong.service.RawMaterialMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
-import com.ruoyi.common.core.page.TableDataInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -52,28 +52,10 @@ public class RawMaterialController extends BaseController {
     })
     @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
     @GetMapping
-    public TableDataInfo<RawMaterialDTO> getList(RawMaterialVO vo) {
-        startPage();
-        List<RawMaterialPO> dataList = rawMaterialMpService.lambdaQuery()
-                .eq(ObjectUtils.isNotEmpty(vo.getId()), RawMaterialPO::getId, vo.getId())
-                .eq(ObjectUtils.isNotEmpty(vo.getCanteenId()), RawMaterialPO::getCanteenId, vo.getCanteenId())
-                .eq(StringUtils.isNotBlank(vo.getCanteenName()), RawMaterialPO::getCanteenName, vo.getCanteenName())
-                .eq(StringUtils.isNotBlank(vo.getRawMaterialName()), RawMaterialPO::getRawMaterialName, vo.getRawMaterialName())
-                .eq(ObjectUtils.isNotEmpty(vo.getCategoryId()), RawMaterialPO::getCategoryId, vo.getCategoryId())
-                .eq(StringUtils.isNotBlank(vo.getCategoryName()), RawMaterialPO::getCategoryName, vo.getCategoryName())
-                .eq(ObjectUtils.isNotEmpty(vo.getUnitId()), RawMaterialPO::getUnitId, vo.getUnitId())
-                .eq(StringUtils.isNotBlank(vo.getUnitName()), RawMaterialPO::getUnitName, vo.getUnitName())
-                .eq(ObjectUtils.isNotEmpty(vo.getPurchaseTypeId()), RawMaterialPO::getPurchaseTypeId, vo.getPurchaseTypeId())
-                .eq(StringUtils.isNotBlank(vo.getPurchaseTypeName()), RawMaterialPO::getPurchaseTypeName, vo.getPurchaseTypeName())
-                .eq(ObjectUtils.isNotEmpty(vo.getPrePrice()), RawMaterialPO::getPrePrice, vo.getPrePrice())
-                .eq(ObjectUtils.isNotEmpty(vo.getStorehouseId()), RawMaterialPO::getStorehouseId, vo.getStorehouseId())
-                .eq(StringUtils.isNotBlank(vo.getStorehouseName()), RawMaterialPO::getStorehouseName, vo.getStorehouseName())
-                .eq(StringUtils.isNotBlank(vo.getRemark()), RawMaterialPO::getRemark, vo.getRemark())
-                .eq(ObjectUtils.isNotEmpty(vo.getStatus()), RawMaterialPO::getStatus, vo.getStatus())
-                .list();
-        TableDataInfo pageData = getDataTable(dataList);
-        pageData.setRows(RawMaterialMsMapper.INSTANCE.poList2dtoList(dataList));
-        return pageData;
+    public BaseResult getList(RawMaterialVO vo) {
+
+        Page<RawMaterialPO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
+        return BaseResult.success(page);
     }
 
     /**
@@ -88,8 +70,10 @@ public class RawMaterialController extends BaseController {
     @ApiOperation(value = "根据id查询", notes = "根据id查询", httpMethod = "GET")
     @GetMapping(value = "/{id}")
     public BaseResult<RawMaterialDTO> getById(@PathVariable("id") Long id) {
-        RawMaterialDTO dto = RawMaterialMsMapper.INSTANCE
-                .po2dto(rawMaterialMpService.getById(id));
+        RawMaterialDTO dto = RawMaterialMsMapper.INSTANCE.po2dto(rawMaterialMpService.getById(id));
+
+        rawMaterialMpService.resetRawMaterialDTO(dto);
+
         return BaseResult.success(dto);
     }
 
@@ -134,7 +118,7 @@ public class RawMaterialController extends BaseController {
     })
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
-    public BaseResult update(@Validated(Update.class) RawMaterialVO vo) {
+    public BaseResult update(@RequestBody @Validated(Update.class) RawMaterialVO vo) {
 //        判断登录状态
         LoginUser loginUser = getLoginUser();
         if (Objects.isNull(loginUser)) {
@@ -169,4 +153,31 @@ public class RawMaterialController extends BaseController {
         }
     }
 
+
+    private LambdaQueryChainWrapper<RawMaterialPO> onSelectWhere(RawMaterialVO vo) {
+
+        LambdaQueryChainWrapper<RawMaterialPO> queryWrapper = rawMaterialMpService.lambdaQuery();
+
+        if (Objects.isNull(vo)) {
+            return queryWrapper;
+        }
+        queryWrapper
+                .eq(ObjectUtils.isNotEmpty(vo.getId()), RawMaterialPO::getId, vo.getId())
+                .eq(ObjectUtils.isNotEmpty(vo.getCanteenId()), RawMaterialPO::getCanteenId, vo.getCanteenId())
+                .eq(StringUtils.isNotBlank(vo.getCanteenName()), RawMaterialPO::getCanteenName, vo.getCanteenName())
+                .eq(StringUtils.isNotBlank(vo.getRawMaterialName()), RawMaterialPO::getRawMaterialName, vo.getRawMaterialName())
+                .eq(ObjectUtils.isNotEmpty(vo.getCategoryId()), RawMaterialPO::getCategoryId, vo.getCategoryId())
+                .eq(StringUtils.isNotBlank(vo.getCategoryName()), RawMaterialPO::getCategoryName, vo.getCategoryName())
+                .eq(ObjectUtils.isNotEmpty(vo.getUnitId()), RawMaterialPO::getUnitId, vo.getUnitId())
+                .eq(StringUtils.isNotBlank(vo.getUnitName()), RawMaterialPO::getUnitName, vo.getUnitName())
+                .eq(ObjectUtils.isNotEmpty(vo.getPurchaseTypeId()), RawMaterialPO::getPurchaseTypeId, vo.getPurchaseTypeId())
+                .eq(StringUtils.isNotBlank(vo.getPurchaseTypeName()), RawMaterialPO::getPurchaseTypeName, vo.getPurchaseTypeName())
+                .eq(ObjectUtils.isNotEmpty(vo.getPrePrice()), RawMaterialPO::getPrePrice, vo.getPrePrice())
+                .eq(ObjectUtils.isNotEmpty(vo.getStorehouseId()), RawMaterialPO::getStorehouseId, vo.getStorehouseId())
+                .eq(StringUtils.isNotBlank(vo.getStorehouseName()), RawMaterialPO::getStorehouseName, vo.getStorehouseName())
+                .eq(StringUtils.isNotBlank(vo.getRemark()), RawMaterialPO::getRemark, vo.getRemark())
+                .eq(ObjectUtils.isNotEmpty(vo.getStatus()), RawMaterialPO::getStatus, vo.getStatus());
+
+        return queryWrapper;
+    }
 }

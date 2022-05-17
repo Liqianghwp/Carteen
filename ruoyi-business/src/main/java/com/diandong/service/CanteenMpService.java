@@ -19,6 +19,6 @@ public interface CanteenMpService extends CommonService<CanteenPO> {
      *
      * @return
      */
-    BaseResult addCanteen(CanteenVO vo, LoginUser loginUser);
+    BaseResult addCanteen(CanteenVO vo);
 
 }

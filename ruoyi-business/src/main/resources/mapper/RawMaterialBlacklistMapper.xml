@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.RawMaterialBlacklistMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.RawMaterialBlacklistPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="category_id" jdbcType="BIGINT" property="categoryId"/>
+        <result column="raw_material_name" jdbcType="VARCHAR" property="rawMaterialName"/>
+        <result column="unit_id" jdbcType="BIGINT" property="unitId"/>
+        <result column="purchase_type_id" jdbcType="BIGINT" property="purchaseTypeId"/>
+        <result column="pre_price" jdbcType="DECIMAL" property="prePrice"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,rmb.id
+            ,rmb.category_id
+            ,rmb.raw_material_name
+            ,rmb.unit_id
+            ,rmb.purchase_type_id
+            ,rmb.pre_price
+            ,rmb.remark
+            ,rmb.del_flag
+            ,rmb.create_by
+            ,rmb.create_time
+            ,rmb.update_by
+            ,rmb.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and rmb.id = #{id}
+            </if>
+            <if test="categoryId != null">
+                and rmb.category_id = #{categoryId}
+            </if>
+            <if test="rawMaterialName != null and rawMaterialName != ''">
+                and rmb.raw_material_name = #{rawMaterialName}
+            </if>
+            <if test="unitId != null">
+                and rmb.unit_id = #{unitId}
+            </if>
+            <if test="purchaseTypeId != null">
+                and rmb.purchase_type_id = #{purchaseTypeId}
+            </if>
+            <if test="prePrice != null">
+                and rmb.pre_price = #{prePrice}
+            </if>
+            <if test="remark != null and remark != ''">
+                and rmb.remark = #{remark}
+            </if>
+            <if test="delFlag != null">
+                and rmb.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and rmb.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and rmb.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_raw_material_blacklist -->
+
+</mapper>

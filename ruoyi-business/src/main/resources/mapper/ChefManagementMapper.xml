@@ -5,10 +5,11 @@
     <resultMap id="BaseResultMap" type="com.diandong.domain.po.ChefManagementPO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="chef_name" jdbcType="VARCHAR" property="chefName"/>
-        <result column="sex" jdbcType="INTEGER" property="sex"/>
+        <result column="sex" jdbcType="BIGINT" property="sex"/>
         <result column="phone" jdbcType="VARCHAR" property="phone"/>
         <result column="job_title" jdbcType="VARCHAR" property="jobTitle"/>
         <result column="home_address" jdbcType="VARCHAR" property="homeAddress"/>
+        <result column="chef_pic" jdbcType="VARCHAR" property="chefPic"/>
         <result column="chef_details" jdbcType="VARCHAR" property="chefDetails"/>
         <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
         <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
@@ -26,6 +27,7 @@
             ,cm.phone
             ,cm.job_title
             ,cm.home_address
+            ,cm.chef_pic
             ,cm.chef_details
             ,cm.del_flag
             ,cm.create_by
@@ -56,6 +58,9 @@
             </if>
             <if test="homeAddress != null and homeAddress != ''">
                 and cm.home_address = #{homeAddress}
+            </if>
+            <if test="chefPic != null and chefPic != ''">
+                and cm.chef_pic = #{chefPic}
             </if>
             <if test="chefDetails != null and chefDetails != ''">
                 and cm.chef_details = #{chefDetails}

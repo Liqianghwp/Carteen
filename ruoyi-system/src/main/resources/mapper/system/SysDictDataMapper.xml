@@ -323,6 +323,22 @@
         </where>
     </select>
 
+    <select id="selectBatchByIds" resultType="com.ruoyi.common.core.domain.entity.SysDictData">
+        select
+            dict_label,remark
+        from
+            sys_dict_data
+        <where>
+            <if test="ids !=null and ids.size() !=0">
+                dict_code in
+                <foreach collection="ids" item="id" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+            order by dict_sort asc,create_time desc
+        </where>
+    </select>
+
 
     <delete id="deleteDictDataById" parameterType="Long">
         delete

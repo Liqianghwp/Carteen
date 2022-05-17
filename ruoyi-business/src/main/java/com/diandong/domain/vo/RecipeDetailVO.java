@@ -15,7 +15,7 @@ import java.io.Serializable;
  * 食谱详情VO实体类
  *
  * @author YuLiu
- * @date 2022-05-11
+ * @date 2022-05-16
  */
 @Data
 @ApiModel("食谱详情VO实体类")
@@ -64,6 +64,18 @@ public class RecipeDetailVO extends BaseEntity implements Serializable {
      */
     @ApiModelProperty(value = "菜品名称")
     private String dishesName;
+
+    /**
+     * 厨师id
+     */
+    @ApiModelProperty(value = "厨师id")
+    private Long chefId;
+
+    /**
+     * 厨师名称
+     */
+    @ApiModelProperty(value = "厨师名称")
+    private String chefName;
 
     /**
      * 数量

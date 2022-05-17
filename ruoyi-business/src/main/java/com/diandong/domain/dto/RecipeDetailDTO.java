@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * 食谱详情DTO实体类
  *
  * @author YuLiu
- * @date 2022-05-11
+ * @date 2022-05-16
  */
 @Data
 @ApiModel("食谱详情DTO实体类")
@@ -61,6 +61,18 @@ public class RecipeDetailDTO implements Serializable {
     private String dishesName;
 
     /**
+     * 厨师id
+     */
+    @ApiModelProperty(value = "厨师id")
+    private Long chefId;
+
+    /**
+     * 厨师名称
+     */
+    @ApiModelProperty(value = "厨师名称")
+    private String chefName;
+
+    /**
      * 数量
      */
     @ApiModelProperty(value = "数量")
@@ -90,10 +102,16 @@ public class RecipeDetailDTO implements Serializable {
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 
-
+    /**
+     * 菜品图片
+     */
     @ApiModelProperty(value = "菜品图片")
     private String dishesPicture;
 
+    /**
+     * 菜品分类名称
+     */
     @ApiModelProperty(value = "菜品分类名称")
     private String dishesType;
+
 }

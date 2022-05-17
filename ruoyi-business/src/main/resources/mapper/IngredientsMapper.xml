@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.IngredientsMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.IngredientsPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="dish_type_id" jdbcType="BIGINT" property="dishTypeId"/>
+        <result column="dish_type_name" jdbcType="VARCHAR" property="dishTypeName"/>
+        <result column="dish_id" jdbcType="BIGINT" property="dishId"/>
+        <result column="dish_name" jdbcType="VARCHAR" property="dishName"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,i.id
+            ,i.dish_type_id
+            ,i.dish_type_name
+            ,i.dish_id
+            ,i.dish_name
+            ,i.remark
+            ,i.del_flag
+            ,i.create_by
+            ,i.create_time
+            ,i.update_by
+            ,i.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and i.id = #{id}
+            </if>
+            <if test="dishTypeId != null">
+                and i.dish_type_id = #{dishTypeId}
+            </if>
+            <if test="dishTypeName != null and dishTypeName != ''">
+                and i.dish_type_name = #{dishTypeName}
+            </if>
+            <if test="dishId != null">
+                and i.dish_id = #{dishId}
+            </if>
+            <if test="dishName != null and dishName != ''">
+                and i.dish_name = #{dishName}
+            </if>
+            <if test="remark != null and remark != ''">
+                and i.remark = #{remark}
+            </if>
+            <if test="delFlag != null">
+                and i.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and i.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and i.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_ingredients -->
+
+</mapper>

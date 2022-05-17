@@ -3,6 +3,8 @@ package com.ruoyi.web.controller.business;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
@@ -15,7 +17,6 @@ import com.diandong.service.NutritionAdviceMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
-import com.ruoyi.common.core.page.TableDataInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -56,20 +57,9 @@ public class NutritionAdviceController extends BaseController {
     })
     @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
     @GetMapping
-    public TableDataInfo<NutritionAdviceDTO> getList(NutritionAdviceVO vo) {
-        startPage();
-        List<NutritionAdvicePO> dataList = nutritionAdviceMpService.lambdaQuery()
-                .eq(ObjectUtils.isNotEmpty(vo.getId()), NutritionAdvicePO::getId, vo.getId())
-                .eq(ObjectUtils.isNotEmpty(vo.getMealTimesId()), NutritionAdvicePO::getMealTimesId, vo.getMealTimesId())
-                .eq(StringUtils.isNotBlank(vo.getMealTimesName()), NutritionAdvicePO::getMealTimesName, vo.getMealTimesName())
-                .eq(ObjectUtils.isNotEmpty(vo.getNutritionalId()), NutritionAdvicePO::getNutritionalId, vo.getNutritionalId())
-                .eq(StringUtils.isNotBlank(vo.getNutritionalName()), NutritionAdvicePO::getNutritionalName, vo.getNutritionalName())
-                .eq(StringUtils.isNotBlank(vo.getUnit()), NutritionAdvicePO::getUnit, vo.getUnit())
-                .eq(ObjectUtils.isNotEmpty(vo.getNumber()), NutritionAdvicePO::getNumber, vo.getNumber())
-                .list();
-        TableDataInfo pageData = getDataTable(dataList);
-        pageData.setRows(NutritionAdviceMsMapper.INSTANCE.poList2dtoList(dataList));
-        return pageData;
+    public BaseResult getList(NutritionAdviceVO vo) {
+        Page<NutritionAdvicePO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
+        return BaseResult.success(page);
     }
 
 
@@ -197,7 +187,7 @@ public class NutritionAdviceController extends BaseController {
     })
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
-    public BaseResult update(@Validated(Update.class) NutritionAdviceVO vo) {
+    public BaseResult update(@RequestBody @Validated(Update.class) NutritionAdviceVO vo) {
 
 //        判断登录状态
         LoginUser loginUser = getLoginUser();
@@ -254,4 +244,22 @@ public class NutritionAdviceController extends BaseController {
         }
     }
 
+    private LambdaQueryChainWrapper<NutritionAdvicePO> onSelectWhere(NutritionAdviceVO vo) {
+
+        LambdaQueryChainWrapper<NutritionAdvicePO> queryWrapper = nutritionAdviceMpService.lambdaQuery();
+
+        if (Objects.isNull(vo)) {
+            return queryWrapper;
+        }
+        queryWrapper
+                .eq(ObjectUtils.isNotEmpty(vo.getId()), NutritionAdvicePO::getId, vo.getId())
+                .eq(ObjectUtils.isNotEmpty(vo.getMealTimesId()), NutritionAdvicePO::getMealTimesId, vo.getMealTimesId())
+                .eq(StringUtils.isNotBlank(vo.getMealTimesName()), NutritionAdvicePO::getMealTimesName, vo.getMealTimesName())
+                .eq(ObjectUtils.isNotEmpty(vo.getNutritionalId()), NutritionAdvicePO::getNutritionalId, vo.getNutritionalId())
+                .eq(StringUtils.isNotBlank(vo.getNutritionalName()), NutritionAdvicePO::getNutritionalName, vo.getNutritionalName())
+                .eq(StringUtils.isNotBlank(vo.getUnit()), NutritionAdvicePO::getUnit, vo.getUnit())
+                .eq(ObjectUtils.isNotEmpty(vo.getNumber()), NutritionAdvicePO::getNumber, vo.getNumber());
+
+        return queryWrapper;
+    }
 }

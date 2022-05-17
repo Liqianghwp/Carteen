@@ -1,6 +1,9 @@
 package com.diandong.domain.po;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -53,6 +56,8 @@ public class HealthCertificatePO implements Serializable {
     /**
      * 有效期开始时间
      */
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(value = "validity_start_time")
     @ApiModelProperty(value = "有效期开始时间")
     private LocalDateTime validityStartTime;
@@ -60,6 +65,8 @@ public class HealthCertificatePO implements Serializable {
     /**
      * 有效期结束时间
      */
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(value = "validity_end_time")
     @ApiModelProperty(value = "有效期结束时间")
     private LocalDateTime validityEndTime;
@@ -81,6 +88,8 @@ public class HealthCertificatePO implements Serializable {
     /**
      * 出生日期
      */
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(value = "birthday")
     @ApiModelProperty(value = "出生日期")
     private LocalDateTime birthday;
@@ -109,6 +118,8 @@ public class HealthCertificatePO implements Serializable {
     /**
      * 创建时间 默认为当前时间
      */
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     @ApiModelProperty(value = "创建时间 默认为当前时间")
     private LocalDateTime createTime;
@@ -123,6 +134,8 @@ public class HealthCertificatePO implements Serializable {
     /**
      * 更新时间
      */
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;

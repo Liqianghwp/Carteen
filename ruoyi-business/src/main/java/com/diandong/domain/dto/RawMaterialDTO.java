@@ -8,6 +8,7 @@ import lombok.Data;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 原材料信息 原材料信息DTO实体类
@@ -138,5 +139,11 @@ public class RawMaterialDTO implements Serializable {
     @TableField(exist = false)
     @ApiModelProperty(value = "数量")
     private Double number;
+
+    /**
+     * 原材料营养信息集合
+     */
+    @ApiModelProperty(value = "原材料营养信息集合")
+    private List<RawMaterialNutritionDTO> rawMaterialNutritionDTOList;
 
 }

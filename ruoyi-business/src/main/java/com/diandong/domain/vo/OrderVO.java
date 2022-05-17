@@ -78,4 +78,9 @@ public class OrderVO extends BaseEntity implements Serializable {
     private LocalDateTime paymentTime;
 
 
+//    TODO 订单价格
+//    TODO 用户名称
+//    TODO 点餐方式
+
+
 }

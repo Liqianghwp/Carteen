@@ -10,6 +10,7 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 集团管理VO实体类
@@ -77,5 +78,10 @@ public class GroupManagementVO extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "备注")
     private String remark;
 
+    /**
+     * 勾选导出的id集合
+     */
+    @ApiModelProperty(value = "勾选导出的id集合")
+    private List<Long> ids;
 
 }

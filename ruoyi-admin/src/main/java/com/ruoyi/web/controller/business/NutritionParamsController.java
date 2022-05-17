@@ -2,6 +2,8 @@ package com.ruoyi.web.controller.business;
 
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
@@ -13,7 +15,6 @@ import com.diandong.service.NutritionParamsMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
-import com.ruoyi.common.core.page.TableDataInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -52,19 +53,9 @@ public class NutritionParamsController extends BaseController {
     })
     @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
     @GetMapping
-    public TableDataInfo<NutritionParamsDTO> getList(NutritionParamsVO vo) {
-        startPage();
-        List<NutritionParamsPO> dataList = nutritionParamsMpService.lambdaQuery()
-                .eq(ObjectUtils.isNotEmpty(vo.getId()), NutritionParamsPO::getId, vo.getId())
-                .eq(ObjectUtils.isNotEmpty(vo.getCanteenId()), NutritionParamsPO::getCanteenId, vo.getCanteenId())
-                .eq(StringUtils.isNotBlank(vo.getCanteenName()), NutritionParamsPO::getCanteenName, vo.getCanteenName())
-                .eq(StringUtils.isNotBlank(vo.getNutritionName()), NutritionParamsPO::getNutritionName, vo.getNutritionName())
-                .eq(StringUtils.isNotBlank(vo.getUnit()), NutritionParamsPO::getUnit, vo.getUnit())
-                .eq(ObjectUtils.isNotEmpty(vo.getBeUsed()), NutritionParamsPO::getBeUsed, vo.getBeUsed())
-                .list();
-        TableDataInfo pageData = getDataTable(dataList);
-        pageData.setRows(NutritionParamsMsMapper.INSTANCE.poList2dtoList(dataList));
-        return pageData;
+    public BaseResult getList(NutritionParamsVO vo) {
+        Page<NutritionParamsPO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
+        return BaseResult.success(page);
     }
 
     /**
@@ -127,7 +118,7 @@ public class NutritionParamsController extends BaseController {
     })
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
-    public BaseResult update(@Validated(Update.class) NutritionParamsVO vo) {
+    public BaseResult update(@RequestBody @Validated(Update.class) NutritionParamsVO vo) {
 //        判断登录状态
         LoginUser loginUser = getLoginUser();
         if (Objects.isNull(loginUser)) {
@@ -184,4 +175,22 @@ public class NutritionParamsController extends BaseController {
         }
     }
 
+
+    private LambdaQueryChainWrapper<NutritionParamsPO> onSelectWhere(NutritionParamsVO vo) {
+
+        LambdaQueryChainWrapper<NutritionParamsPO> queryWrapper = nutritionParamsMpService.lambdaQuery();
+
+        if (Objects.isNull(vo)) {
+            return queryWrapper;
+        }
+        queryWrapper
+                .eq(ObjectUtils.isNotEmpty(vo.getId()), NutritionParamsPO::getId, vo.getId())
+                .eq(ObjectUtils.isNotEmpty(vo.getCanteenId()), NutritionParamsPO::getCanteenId, vo.getCanteenId())
+                .eq(StringUtils.isNotBlank(vo.getCanteenName()), NutritionParamsPO::getCanteenName, vo.getCanteenName())
+                .eq(StringUtils.isNotBlank(vo.getNutritionName()), NutritionParamsPO::getNutritionName, vo.getNutritionName())
+                .eq(StringUtils.isNotBlank(vo.getUnit()), NutritionParamsPO::getUnit, vo.getUnit())
+                .eq(ObjectUtils.isNotEmpty(vo.getBeUsed()), NutritionParamsPO::getBeUsed, vo.getBeUsed());
+
+        return queryWrapper;
+    }
 }

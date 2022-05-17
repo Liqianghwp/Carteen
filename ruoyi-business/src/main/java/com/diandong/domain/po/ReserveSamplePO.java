@@ -1,6 +1,9 @@
 package com.diandong.domain.po;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -13,7 +16,7 @@ import java.time.LocalDateTime;
  * 预留样品PO实体类
  *
  * @author YuLiu
- * @date 2022-05-11
+ * @date 2022-05-16
  */
 @TableName("wis_reserve_sample")
 @Data
@@ -30,8 +33,17 @@ public class ReserveSamplePO implements Serializable {
     private Long id;
 
     /**
+     * 留样食堂ID
+     */
+    @TableField(value = "reserve_canteen_id")
+    @ApiModelProperty(value = "留样食堂ID")
+    private Long reserveCanteenId;
+
+    /**
      * 留样日期
      */
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(value = "reserve_date")
     @ApiModelProperty(value = "留样日期")
     private LocalDateTime reserveDate;

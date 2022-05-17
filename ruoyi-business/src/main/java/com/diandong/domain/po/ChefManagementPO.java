@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * 厨师管理PO实体类
  *
  * @author YuLiu
- * @date 2022-05-11
+ * @date 2022-05-16
  */
 @TableName("wis_chef_management")
 @Data
@@ -41,7 +41,7 @@ public class ChefManagementPO implements Serializable {
      */
     @TableField(value = "sex")
     @ApiModelProperty(value = "性别")
-    private Integer sex;
+    private Long sex;
 
     /**
      * 联系电话
@@ -65,6 +65,13 @@ public class ChefManagementPO implements Serializable {
     private String homeAddress;
 
     /**
+     * 厨师图片
+     */
+    @TableField(value = "chef_pic")
+    @ApiModelProperty(value = "厨师图片")
+    private String chefPic;
+
+    /**
      * 厨师详情
      */
     @TableField(value = "chef_details")
@@ -83,7 +90,7 @@ public class ChefManagementPO implements Serializable {
      */
     @TableField(value = "create_by", fill = FieldFill.INSERT)
     @ApiModelProperty(value = "创建者")
-    private String createBy;
+    private Long createBy;
 
     /**
      * 创建时间 默认为当前时间
@@ -97,7 +104,7 @@ public class ChefManagementPO implements Serializable {
      */
     @TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(value = "更新者")
-    private String updateBy;
+    private Long updateBy;
 
     /**
      * 更新时间

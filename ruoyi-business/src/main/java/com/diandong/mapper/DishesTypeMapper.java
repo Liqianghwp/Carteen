@@ -5,10 +5,10 @@ import com.diandong.domain.po.DishesTypePO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * Mapper
+ * 菜品分类Mapper
  *
  * @author YuLiu
- * @date 2022-03-29
+ * @date 2022-05-16
  */
 @Mapper
 public interface DishesTypeMapper extends CommonMapper<DishesTypePO> {

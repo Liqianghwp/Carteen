@@ -3,6 +3,8 @@ package com.ruoyi.web.controller.business;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
@@ -17,7 +19,6 @@ import com.diandong.service.DishesMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
-import com.ruoyi.common.core.page.TableDataInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -60,31 +61,20 @@ public class CommentController extends BaseController {
     })
     @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
     @GetMapping
-    public TableDataInfo<CommentDTO> getList(CommentVO vo) {
-        startPage();
-        List<CommentPO> dataList = commentMpService.lambdaQuery()
-                .eq(ObjectUtils.isNotEmpty(vo.getId()), CommentPO::getId, vo.getId())
-                .eq(ObjectUtils.isNotEmpty(vo.getOrderId()), CommentPO::getOrderId, vo.getOrderId())
-                .eq(StringUtils.isNotBlank(vo.getCommentContent()), CommentPO::getCommentContent, vo.getCommentContent())
-                .eq(StringUtils.isNotBlank(vo.getCommentPicture()), CommentPO::getCommentPicture, vo.getCommentPicture())
-                .eq(StringUtils.isNotBlank(vo.getDeliciousDishes()), CommentPO::getDeliciousDishes, vo.getDeliciousDishes())
-                .eq(StringUtils.isNotBlank(vo.getUndeliciousDishes()), CommentPO::getUndeliciousDishes, vo.getUndeliciousDishes())
-                .eq(StringUtils.isNotBlank(vo.getProcessDescription()), CommentPO::getProcessDescription, vo.getProcessDescription())
-                .eq(ObjectUtils.isNotEmpty(vo.getStatus()), CommentPO::getStatus, vo.getStatus())
-                .eq(ObjectUtils.isNotEmpty(vo.getProcessTime()), CommentPO::getProcessTime, vo.getProcessTime())
-                .list();
+    public BaseResult getList(CommentVO vo) {
 
+        Page<CommentPO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
+        if (CollectionUtils.isNotEmpty(page.getRecords())) {
 
-        for (CommentPO commentPO : dataList) {
+            for (CommentPO commentPO : page.getRecords()) {
 //        喜好菜品
-            commentPO.setDeliciousDishes(resetDishesName(commentPO.getDeliciousDishes()));
+                commentPO.setDeliciousDishes(resetDishesName(commentPO.getDeliciousDishes()));
 //        不喜欢的菜品
-            commentPO.setUndeliciousDishes(resetDishesName(commentPO.getUndeliciousDishes()));
+                commentPO.setUndeliciousDishes(resetDishesName(commentPO.getUndeliciousDishes()));
+            }
         }
 
-        TableDataInfo pageData = getDataTable(dataList);
-        pageData.setRows(CommentMsMapper.INSTANCE.poList2dtoList(dataList));
-        return pageData;
+        return BaseResult.success(page);
     }
 
     /**
@@ -160,7 +150,7 @@ public class CommentController extends BaseController {
     })
     @ApiOperation(value = "处理评价信息", notes = "处理评价信息", httpMethod = "PUT")
     @PutMapping
-    public BaseResult update(@Validated(Update.class) CommentVO vo) {
+    public BaseResult update(@RequestBody @Validated(Update.class) CommentVO vo) {
 
 //        判断登录状态
         LoginUser loginUser = getLoginUser();
@@ -185,16 +175,16 @@ public class CommentController extends BaseController {
     /**
      * 删除
      *
-     * @param id 编号id
+     * @param ids 编号id数组
      * @return 返回结果
      */
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
+            @ApiImplicitParam(paramType = "path", dataType = "long[]", name = "ids", value = "编号ids数组")
     })
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = commentMpService.removeById(id);
+    @DeleteMapping(value = "/{ids}")
+    public BaseResult delete(@PathVariable("ids") Long[] ids) {
+        boolean result = commentMpService.removeByIds(Arrays.asList(ids));
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {
@@ -202,25 +192,6 @@ public class CommentController extends BaseController {
         }
     }
 
-    /**
-     * 批量删除
-     *
-     * @param idList 编号id集合
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = commentMpService.removeByIds(idList);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
-            return BaseResult.error("删除失败");
-        }
-    }
 
     /**
      * 根据ID重新设置展示菜品名称
@@ -241,4 +212,25 @@ public class CommentController extends BaseController {
         return null;
     }
 
+
+    private LambdaQueryChainWrapper<CommentPO> onSelectWhere(CommentVO vo) {
+
+        LambdaQueryChainWrapper<CommentPO> queryWrapper = commentMpService.lambdaQuery();
+
+        if (Objects.isNull(vo)) {
+            return queryWrapper;
+        }
+        queryWrapper
+                .eq(ObjectUtils.isNotEmpty(vo.getId()), CommentPO::getId, vo.getId())
+                .eq(ObjectUtils.isNotEmpty(vo.getOrderId()), CommentPO::getOrderId, vo.getOrderId())
+                .eq(StringUtils.isNotBlank(vo.getCommentContent()), CommentPO::getCommentContent, vo.getCommentContent())
+                .eq(StringUtils.isNotBlank(vo.getCommentPicture()), CommentPO::getCommentPicture, vo.getCommentPicture())
+                .eq(StringUtils.isNotBlank(vo.getDeliciousDishes()), CommentPO::getDeliciousDishes, vo.getDeliciousDishes())
+                .eq(StringUtils.isNotBlank(vo.getUndeliciousDishes()), CommentPO::getUndeliciousDishes, vo.getUndeliciousDishes())
+                .eq(StringUtils.isNotBlank(vo.getProcessDescription()), CommentPO::getProcessDescription, vo.getProcessDescription())
+                .eq(ObjectUtils.isNotEmpty(vo.getStatus()), CommentPO::getStatus, vo.getStatus())
+                .eq(ObjectUtils.isNotEmpty(vo.getProcessTime()), CommentPO::getProcessTime, vo.getProcessTime());
+
+        return queryWrapper;
+    }
 }

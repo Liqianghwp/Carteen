@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.IngredientsDetailMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.IngredientsDetailPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="ingredients_id" jdbcType="BIGINT" property="ingredientsId"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="raw_material_id" jdbcType="BIGINT" property="rawMaterialId"/>
+        <result column="raw_material_name" jdbcType="VARCHAR" property="rawMaterialName"/>
+        <result column="number" jdbcType="DOUBLE" property="number"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,id.id
+            ,id.ingredients_id
+            ,id.type
+            ,id.raw_material_id
+            ,id.raw_material_name
+            ,id.number
+            ,id.del_flag
+            ,id.create_by
+            ,id.create_time
+            ,id.update_by
+            ,id.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and id.id = #{id}
+            </if>
+            <if test="ingredientsId != null">
+                and id.ingredients_id = #{ingredientsId}
+            </if>
+            <if test="type != null and type != ''">
+                and id.type = #{type}
+            </if>
+            <if test="rawMaterialId != null">
+                and id.raw_material_id = #{rawMaterialId}
+            </if>
+            <if test="rawMaterialName != null and rawMaterialName != ''">
+                and id.raw_material_name = #{rawMaterialName}
+            </if>
+            <if test="number != null">
+                and id.number = #{number}
+            </if>
+            <if test="delFlag != null">
+                and id.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and id.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and id.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_ingredients_detail -->
+
+</mapper>

@@ -2,27 +2,31 @@ package com.ruoyi.web.controller.business;
 
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
+import com.diandong.domain.dto.DishesNutritionDTO;
+import com.diandong.domain.po.DishesNutritionPO;
+import com.diandong.domain.vo.DishesNutritionVO;
+import com.diandong.mapstruct.DishesNutritionMsMapper;
+import com.diandong.service.DishesNutritionMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
-import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.DishesNutritionMpService;
-import com.diandong.domain.po.DishesNutritionPO;
-import com.diandong.domain.dto.DishesNutritionDTO;
-import com.diandong.domain.vo.DishesNutritionVO;
-import com.diandong.mapstruct.DishesNutritionMsMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
+import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import javax.annotation.Resource;
 
 /**
  * Controller
@@ -51,19 +55,9 @@ public class DishesNutritionController extends BaseController {
     })
     @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
     @GetMapping
-    public TableDataInfo<DishesNutritionDTO> getList(DishesNutritionVO vo) {
-        startPage();
-        List<DishesNutritionPO> dataList = dishesNutritionMpService.lambdaQuery()
-                .eq(ObjectUtils.isNotEmpty(vo.getId()), DishesNutritionPO::getId, vo.getId())
-                .eq(ObjectUtils.isNotEmpty(vo.getDishesId()), DishesNutritionPO::getDishesId, vo.getDishesId())
-                .eq(StringUtils.isNotBlank(vo.getDishesName()), DishesNutritionPO::getDishesName, vo.getDishesName())
-                .eq(ObjectUtils.isNotEmpty(vo.getNutritionId()), DishesNutritionPO::getNutritionId, vo.getNutritionId())
-                .eq(StringUtils.isNotBlank(vo.getNutritionName()), DishesNutritionPO::getNutritionName, vo.getNutritionName())
-                .eq(ObjectUtils.isNotEmpty(vo.getNumber()), DishesNutritionPO::getNumber, vo.getNumber())
-                .list();
-        TableDataInfo pageData = getDataTable(dataList);
-        pageData.setRows(DishesNutritionMsMapper.INSTANCE.poList2dtoList(dataList));
-        return pageData;
+    public BaseResult getList(DishesNutritionVO vo) {
+        Page<DishesNutritionPO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
+        return BaseResult.success(page);
     }
 
     /**
@@ -123,7 +117,7 @@ public class DishesNutritionController extends BaseController {
     })
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
-    public BaseResult update(@Validated(Update.class) DishesNutritionVO vo) {
+    public BaseResult update(@RequestBody @Validated(Update.class) DishesNutritionVO vo) {
 
 //        判断登录状态
         LoginUser loginUser = getLoginUser();
@@ -159,5 +153,23 @@ public class DishesNutritionController extends BaseController {
         }
     }
 
+
+    private LambdaQueryChainWrapper<DishesNutritionPO> onSelectWhere(DishesNutritionVO vo) {
+
+        LambdaQueryChainWrapper<DishesNutritionPO> queryWrapper = dishesNutritionMpService.lambdaQuery();
+
+        if (Objects.isNull(vo)) {
+            return queryWrapper;
+        }
+        queryWrapper
+                .eq(ObjectUtils.isNotEmpty(vo.getId()), DishesNutritionPO::getId, vo.getId())
+                .eq(ObjectUtils.isNotEmpty(vo.getDishesId()), DishesNutritionPO::getDishesId, vo.getDishesId())
+                .eq(StringUtils.isNotBlank(vo.getDishesName()), DishesNutritionPO::getDishesName, vo.getDishesName())
+                .eq(ObjectUtils.isNotEmpty(vo.getNutritionId()), DishesNutritionPO::getNutritionId, vo.getNutritionId())
+                .eq(StringUtils.isNotBlank(vo.getNutritionName()), DishesNutritionPO::getNutritionName, vo.getNutritionName())
+                .eq(ObjectUtils.isNotEmpty(vo.getNumber()), DishesNutritionPO::getNumber, vo.getNumber());
+
+        return queryWrapper;
+    }
 
 }

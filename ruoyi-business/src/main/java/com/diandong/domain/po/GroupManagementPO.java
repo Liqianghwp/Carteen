@@ -93,6 +93,13 @@ public class GroupManagementPO implements Serializable {
     private Integer delFlag;
 
     /**
+     * 部门id（关联若依部门id）
+     */
+    @TableField(value = "dept_id")
+    @ApiModelProperty(value = "若依部门id")
+    private Long deptId;
+
+    /**
      * 创建人id
      */
     @TableField(value = "create_by", fill = FieldFill.INSERT)

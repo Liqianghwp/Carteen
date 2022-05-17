@@ -10,14 +10,13 @@
         <result column="meal_times_name" jdbcType="VARCHAR" property="mealTimesName"/>
         <result column="dishes_id" jdbcType="BIGINT" property="dishesId"/>
         <result column="dishes_name" jdbcType="VARCHAR" property="dishesName"/>
+        <result column="chef_id" jdbcType="BIGINT" property="chefId"/>
+        <result column="chef_name" jdbcType="VARCHAR" property="chefName"/>
         <result column="number" jdbcType="INTEGER" property="number"/>
-        <result column="version" jdbcType="BIGINT" property="version"/>
-        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
         <result column="create_by" jdbcType="BIGINT" property="createBy"/>
-        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
-        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
@@ -31,14 +30,13 @@
             ,rd.meal_times_name
             ,rd.dishes_id
             ,rd.dishes_name
+            ,rd.chef_id
+            ,rd.chef_name
             ,rd.number
-            ,rd.version
-            ,rd.status
+            ,rd.del_flag
             ,rd.create_by
-            ,rd.create_name
             ,rd.create_time
             ,rd.update_by
-            ,rd.update_name
             ,rd.update_time
         </trim>
     </sql>
@@ -68,20 +66,17 @@
             <if test="dishesName != null and dishesName != ''">
                 and rd.dishes_name = #{dishesName}
             </if>
+            <if test="chefId != null">
+                and rd.chef_id = #{chefId}
+            </if>
+            <if test="chefName != null and chefName != ''">
+                and rd.chef_name = #{chefName}
+            </if>
             <if test="number != null">
                 and rd.number = #{number}
             </if>
-            <if test="version != null">
-                and rd.version = #{version}
-            </if>
-            <if test="status != null">
-                and rd.status = #{status}
-            </if>
-            <if test="createName != null and createName != ''">
-                and rd.create_name = #{createName}
-            </if>
-            <if test="updateName != null and updateName != ''">
-                and rd.update_name = #{updateName}
+            <if test="delFlag != null">
+                and rd.del_flag = #{delFlag}
             </if>
             <if test="beginTime != null">
                 and rd.create_time <![CDATA[ >= ]]> #{beginTime}

@@ -1,29 +1,32 @@
 package com.ruoyi.web.controller.business;
 
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
+import com.diandong.domain.dto.DishesRawMaterialDTO;
+import com.diandong.domain.po.DishesRawMaterialPO;
+import com.diandong.domain.vo.DishesRawMaterialVO;
+import com.diandong.mapstruct.DishesRawMaterialMsMapper;
+import com.diandong.service.DishesRawMaterialMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
-import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.DishesRawMaterialMpService;
-import com.diandong.domain.po.DishesRawMaterialPO;
-import com.diandong.domain.dto.DishesRawMaterialDTO;
-import com.diandong.domain.vo.DishesRawMaterialVO;
-import com.diandong.mapstruct.DishesRawMaterialMsMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
+import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import javax.annotation.Resource;
 
 /**
  * Controller
@@ -52,19 +55,9 @@ public class DishesRawMaterialController extends BaseController {
     })
     @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
     @GetMapping
-    public TableDataInfo<DishesRawMaterialDTO> getList(DishesRawMaterialVO vo) {
-        startPage();
-        List<DishesRawMaterialPO> dataList = dishesRawMaterialMpService.lambdaQuery()
-                .eq(ObjectUtils.isNotEmpty(vo.getId()), DishesRawMaterialPO::getId, vo.getId())
-                .eq(ObjectUtils.isNotEmpty(vo.getDishesId()), DishesRawMaterialPO::getDishesId, vo.getDishesId())
-                .eq(StringUtils.isNotBlank(vo.getDishesName()), DishesRawMaterialPO::getDishesName, vo.getDishesName())
-                .eq(ObjectUtils.isNotEmpty(vo.getRawMaterialId()), DishesRawMaterialPO::getRawMaterialId, vo.getRawMaterialId())
-                .eq(StringUtils.isNotBlank(vo.getRawMaterialName()), DishesRawMaterialPO::getRawMaterialName, vo.getRawMaterialName())
-                .eq(ObjectUtils.isNotEmpty(vo.getNumber()), DishesRawMaterialPO::getNumber, vo.getNumber())
-                .list();
-        TableDataInfo pageData = getDataTable(dataList);
-        pageData.setRows(DishesRawMaterialMsMapper.INSTANCE.poList2dtoList(dataList));
-        return pageData;
+    public BaseResult getList(DishesRawMaterialVO vo) {
+        Page<DishesRawMaterialPO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
+        return BaseResult.success(page);
     }
 
     /**
@@ -79,8 +72,8 @@ public class DishesRawMaterialController extends BaseController {
     @ApiOperation(value = "根据id查询", notes = "根据id查询", httpMethod = "GET")
     @GetMapping(value = "/{id}")
     public BaseResult<DishesRawMaterialDTO> getById(@PathVariable("id") Long id) {
-        DishesRawMaterialDTO dto = DishesRawMaterialMsMapper.INSTANCE
-                .po2dto(dishesRawMaterialMpService.getById(id));
+        DishesRawMaterialDTO dto = DishesRawMaterialMsMapper.INSTANCE.po2dto(dishesRawMaterialMpService.getById(id));
+
         return BaseResult.success(dto);
     }
 
@@ -144,7 +137,7 @@ public class DishesRawMaterialController extends BaseController {
     })
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
-    public BaseResult update(@Validated(Update.class) DishesRawMaterialVO vo) {
+    public BaseResult update(@RequestBody @Validated(Update.class) DishesRawMaterialVO vo) {
 
 //        判断登录状态
         LoginUser loginUser = getLoginUser();
@@ -178,6 +171,24 @@ public class DishesRawMaterialController extends BaseController {
         } else {
             return BaseResult.error("删除失败");
         }
+    }
+
+    private LambdaQueryChainWrapper<DishesRawMaterialPO> onSelectWhere(DishesRawMaterialVO vo) {
+
+        LambdaQueryChainWrapper<DishesRawMaterialPO> queryWrapper = dishesRawMaterialMpService.lambdaQuery();
+
+        if (Objects.isNull(vo)) {
+            return queryWrapper;
+        }
+        queryWrapper
+                .eq(ObjectUtils.isNotEmpty(vo.getId()), DishesRawMaterialPO::getId, vo.getId())
+                .eq(ObjectUtils.isNotEmpty(vo.getDishesId()), DishesRawMaterialPO::getDishesId, vo.getDishesId())
+                .eq(StringUtils.isNotBlank(vo.getDishesName()), DishesRawMaterialPO::getDishesName, vo.getDishesName())
+                .eq(ObjectUtils.isNotEmpty(vo.getRawMaterialId()), DishesRawMaterialPO::getRawMaterialId, vo.getRawMaterialId())
+                .eq(StringUtils.isNotBlank(vo.getRawMaterialName()), DishesRawMaterialPO::getRawMaterialName, vo.getRawMaterialName())
+                .eq(ObjectUtils.isNotEmpty(vo.getNumber()), DishesRawMaterialPO::getNumber, vo.getNumber());
+
+        return queryWrapper;
     }
 
 }

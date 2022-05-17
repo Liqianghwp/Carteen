@@ -2,9 +2,6 @@ package com.diandong.service;
 
 import com.diandong.configuration.CommonService;
 import com.diandong.domain.po.OpinionFeedbackPO;
-import com.diandong.domain.vo.OpinionFeedbackResponseVO;
-import com.diandong.domain.vo.OpinionFeedbackVO;
-import com.ruoyi.common.core.domain.BaseResult;
 
 import java.util.List;
 
@@ -16,21 +13,10 @@ import java.util.List;
  */
 public interface OpinionFeedbackMpService extends CommonService<OpinionFeedbackPO> {
 
-
     /**
-     * 根据食堂id查询意见列表
-     *
-     * @param canteenId 食堂id
-     * @return BaseResult
+     * 重新设置意见列表
+     * @param list  意见列表
      */
-//    List<OpinionFeedbackResponseVO> getPcOpinionList(Long canteenId);
-    List<OpinionFeedbackResponseVO> getPcOpinionList(OpinionFeedbackVO vo);
+    void resetOpinionFeedBack(List<OpinionFeedbackPO> list);
 
-    /**
-     * 根据集团id查看意见列表
-     * @param groupId
-     * @return
-     */
-//    List<OpinionFeedbackResponseVO> getGroupPcOpinionList(Long groupId);
-    List<OpinionFeedbackResponseVO> getGroupPcOpinionList(Long groupId,OpinionFeedbackVO vo);
 }

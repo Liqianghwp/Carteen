@@ -12,13 +12,13 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 
 /**
- * 菜品分类 菜品分类VO实体类
+ * 菜品分类VO实体类
  *
  * @author YuLiu
- * @date 2022-05-11
+ * @date 2022-05-16
  */
 @Data
-@ApiModel("菜品分类 菜品分类VO实体类")
+@ApiModel("菜品分类VO实体类")
 public class DishesTypeVO extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -63,25 +63,13 @@ public class DishesTypeVO extends BaseEntity implements Serializable {
      * 类型标签
      */
     @ApiModelProperty(value = "类型标签")
-    private String typeLabel;
+    private String remark;
 
     /**
      * 是否包装
      */
     @ApiModelProperty(value = "是否包装")
     private Integer isPackage;
-
-    /**
-     * 当前类型的uuid （当前未知使用方式字段）
-     */
-    @ApiModelProperty(value = "当前类型的uuid （当前未知使用方式字段）")
-    private String uuid;
-
-    /**
-     * 父级uuid (当前未知使用方式字段)
-     */
-    @ApiModelProperty(value = "父级uuid (当前未知使用方式字段)")
-    private String puuid;
 
 
 }

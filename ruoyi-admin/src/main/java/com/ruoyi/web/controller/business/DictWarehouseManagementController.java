@@ -78,6 +78,7 @@ public class DictWarehouseManagementController extends BaseController {
     @PreAuthorize("@ss.hasPermi('dict:warehouse:export')")
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysDictData dictData) {
+        resetSysDictData(dictData);
         List<SysDictData> list = dictDataService.selectDictDataList(dictData);
         ExcelUtil<SysDictData> util = new ExcelUtil<SysDictData>(SysDictData.class);
         util.exportExcel(response, list, "字典数据");

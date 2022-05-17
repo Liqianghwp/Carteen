@@ -17,6 +17,7 @@ import com.ruoyi.system.service.ISysDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -29,10 +30,10 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SysDeptServiceImpl implements ISysDeptService {
-    @Autowired
+    @Resource
     private SysDeptMapper deptMapper;
 
-    @Autowired
+    @Resource
     private SysRoleMapper roleMapper;
 
     /**
@@ -256,6 +257,11 @@ public class SysDeptServiceImpl implements ISysDeptService {
     @Override
     public int deleteDeptById(Long deptId) {
         return deptMapper.deleteDeptById(deptId);
+    }
+
+    @Override
+    public SysDept getOneByDeptName(SysDept dept) {
+        return deptMapper.checkDeptNameUnique(dept.getDeptName(),dept.getParentId());
     }
 
     /**

@@ -60,8 +60,15 @@ public class RecipeVO extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "状态")
     private Integer status;
 
-
+    /**
+     * 要删除的食谱详情id集合
+     */
+    @ApiModelProperty(value = "要删除的食谱详情id集合")
     List<Long> delRecipeDetailIdList;
 
+    /**
+     * 食谱详情信息
+     */
+    @ApiModelProperty(value = "食谱详情信息")
     List<RecipeDetailVO> recipeDetailList;
 }

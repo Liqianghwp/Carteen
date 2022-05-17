@@ -1,6 +1,7 @@
 package com.diandong.service;
 
 import com.diandong.configuration.CommonService;
+import com.diandong.domain.dto.DishesRawMaterialDTO;
 import com.diandong.domain.po.DishesRawMaterialPO;
 import com.diandong.domain.vo.DishesRawMaterialVO;
 import com.ruoyi.common.core.domain.model.LoginUser;
@@ -23,6 +24,7 @@ public interface DishesRawMaterialMpService extends CommonService<DishesRawMater
      * @return Boolean
      */
     Boolean saveList(List<DishesRawMaterialVO> voList, LoginUser loginUser);
+
 
 
 }

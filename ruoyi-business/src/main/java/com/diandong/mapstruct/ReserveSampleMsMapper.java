@@ -12,7 +12,7 @@ import java.util.List;
  * 预留样品Mapstruct
  *
  * @author YuLiu
- * @date 2022-05-11
+ * @date 2022-05-16
  */
 @Mapper
 public interface ReserveSampleMsMapper {
