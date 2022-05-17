@@ -1,11 +1,13 @@
 package com.diandong.domain.dto;
 
+import com.diandong.domain.po.IngredientsDetailPO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 配料管理DTO实体类
@@ -78,4 +80,9 @@ public class IngredientsDTO implements Serializable {
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 
+    @ApiModelProperty(value = "主料")
+    private List<IngredientsDetailPO> list;
+
+    @ApiModelProperty(value = "辅料")
+    private List<IngredientsDetailPO> list1;
 }

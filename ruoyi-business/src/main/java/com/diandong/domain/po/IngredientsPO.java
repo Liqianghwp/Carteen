@@ -98,5 +98,17 @@ public class IngredientsPO implements Serializable {
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
+    /**
+     * 主料
+     * */
+   @TableField(exist = false)
+   @ApiModelProperty(value ="主料")
+   private String list1;
+   /**
+    * 辅料
+    * */
+    @TableField(exist = false)
+    @ApiModelProperty(value ="辅料")
+    private String list2;
 
 }

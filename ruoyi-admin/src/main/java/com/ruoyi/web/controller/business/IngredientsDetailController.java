@@ -52,6 +52,7 @@ public class IngredientsDetailController extends BaseController {
 
         Page<IngredientsDetailPO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
         return BaseResult.success(page);
+
     }
 
     /**
