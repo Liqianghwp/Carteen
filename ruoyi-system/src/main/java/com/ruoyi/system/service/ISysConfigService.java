@@ -87,4 +87,11 @@ public interface ISysConfigService {
      * @return 结果
      */
     public String checkConfigKeyUnique(SysConfig config);
+
+    /**
+     * 根据key的集合获取配置列表
+     * @param keys  key集合
+     * @return
+     */
+    List<SysConfig> getListByKeys(List<String> keys);
 }

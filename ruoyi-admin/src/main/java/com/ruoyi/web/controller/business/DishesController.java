@@ -69,8 +69,9 @@ public class DishesController extends BaseController {
     @ApiOperation(value = "根据id查询", notes = "根据id查询", httpMethod = "GET")
     @GetMapping(value = "/{id}")
     public BaseResult<DishesDTO> getById(@PathVariable("id") Long id) {
-        DishesDTO dto = DishesMsMapper.INSTANCE
-                .po2dto(dishesMpService.getById(id));
+        DishesDTO dto = DishesMsMapper.INSTANCE.po2dto(dishesMpService.getById(id));
+        dishesMpService.getAllDishMsg(dto);
+
         return BaseResult.success(dto);
     }
 

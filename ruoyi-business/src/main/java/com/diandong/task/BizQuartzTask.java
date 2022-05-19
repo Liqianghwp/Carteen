@@ -1,10 +1,12 @@
 package com.diandong.task;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.constant.RichTextConstants;
 import com.diandong.domain.po.BusinessConfigPO;
 import com.diandong.domain.po.HealthCertMsgPO;
 import com.diandong.domain.po.HealthCertificatePO;
+import com.diandong.enums.BizConfigEnum;
 import com.diandong.service.BusinessConfigMpService;
 import com.diandong.service.HealthCertMsgMpService;
 import com.diandong.service.HealthCertificateMpService;
@@ -30,8 +32,10 @@ import java.util.stream.Collectors;
 @Component("bizTask")
 public class BizQuartzTask {
 
+    //    @Resource
+//    private BusinessConfigMpService businessConfigMpService;
     @Resource
-    private BusinessConfigMpService businessConfigMpService;
+    private ISysConfigService configService;
 
     @Resource
     private HealthCertificateMpService healthCertificateMpService;
@@ -41,12 +45,13 @@ public class BizQuartzTask {
     public void healthCertOverTimeTask() {
 
         log.info("健康证预警定时任务START......");
+        String value = configService.selectConfigByKey(BizConfigEnum.HEALTH_CERT_INVALID.key());
 
-        BusinessConfigPO businessConfigPO = businessConfigMpService.searchBusinessConfig(RichTextConstants.HEALTH_CERTIFICATE);
-        if (Objects.nonNull(businessConfigPO)) {
+//        BusinessConfigPO businessConfigPO = businessConfigMpService.searchBusinessConfig(RichTextConstants.HEALTH_CERTIFICATE);
+        if (StringUtils.isNotBlank(value)) {
             try {
 //                获取预警时间
-                Long overTime = Long.valueOf(businessConfigPO.getConfigValue());
+                Long overTime = Long.valueOf(value);
 //                查询健康证信息
                 List<HealthCertificatePO> list = healthCertificateMpService.list();
                 LocalDateTime now = LocalDateTime.now();

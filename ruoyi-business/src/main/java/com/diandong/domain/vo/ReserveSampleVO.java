@@ -13,6 +13,7 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 预留样品VO实体类
@@ -94,5 +95,10 @@ public class ReserveSampleVO extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "状态 0：未处理-有效；1：未处理-报警；2：已处理")
     private Integer state;
 
+    /**
+     * 导出勾选的id集合
+     */
+    @ApiModelProperty("导出勾选的id集合")
+    private List<Long> ids;
 
 }

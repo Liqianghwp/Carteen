@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.SupplierMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.SupplierPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="supplier_name" jdbcType="VARCHAR" property="supplierName"/>
+        <result column="account" jdbcType="VARCHAR" property="account"/>
+        <result column="contact_name" jdbcType="VARCHAR" property="contactName"/>
+        <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone"/>
+        <result column="is_black" jdbcType="VARCHAR" property="isBlack"/>
+        <result column="move_time" jdbcType="TIMESTAMP" property="moveTime"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,s.id
+            ,s.supplier_name
+            ,s.account
+            ,s.contact_name
+            ,s.contact_phone
+            ,s.is_black
+            ,s.move_time
+            ,s.remark
+            ,s.del_flag
+            ,s.create_by
+            ,s.create_time
+            ,s.update_by
+            ,s.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and s.id = #{id}
+            </if>
+            <if test="supplierName != null and supplierName != ''">
+                and s.supplier_name = #{supplierName}
+            </if>
+            <if test="account != null and account != ''">
+                and s.account = #{account}
+            </if>
+            <if test="contactName != null and contactName != ''">
+                and s.contact_name = #{contactName}
+            </if>
+            <if test="contactPhone != null and contactPhone != ''">
+                and s.contact_phone = #{contactPhone}
+            </if>
+            <if test="isBlack != null and isBlack != ''">
+                and s.is_black = #{isBlack}
+            </if>
+            <if test="moveTime != null">
+                and s.move_time = #{moveTime}
+            </if>
+            <if test="remark != null and remark != ''">
+                and s.remark = #{remark}
+            </if>
+            <if test="delFlag != null">
+                and s.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and s.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and s.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_supplier -->
+
+</mapper>

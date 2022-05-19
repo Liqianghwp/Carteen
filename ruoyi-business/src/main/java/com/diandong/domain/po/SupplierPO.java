@@ -10,16 +10,16 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 厨师管理PO实体类
+ * 供应商管理PO实体类
  *
  * @author YuLiu
- * @date 2022-05-16
+ * @date 2022-05-19
  */
-@TableName("wis_chef_management")
+@TableName("wis_supplier")
 @Data
-@ApiModel("厨师管理PO实体类")
+@ApiModel("供应商管理PO实体类")
 @Accessors(chain = true)
-public class ChefManagementPO implements Serializable {
+public class SupplierPO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -30,59 +30,59 @@ public class ChefManagementPO implements Serializable {
     private Long id;
 
     /**
-     * 厨师姓名
+     * 供应商名称
      */
-    @TableField(value = "chef_name")
-    @ApiModelProperty(value = "厨师姓名")
-    private String chefName;
+    @TableField(value = "supplier_name")
+    @ApiModelProperty(value = "供应商名称")
+    private String supplierName;
 
     /**
-     * 性别
+     * 账号信息
      */
-    @TableField(value = "sex")
-    @ApiModelProperty(value = "性别")
-    private Long sex;
+    @TableField(value = "account")
+    @ApiModelProperty(value = "账号信息")
+    private String account;
 
     /**
-     * 联系电话
+     * 联系人姓名
      */
-    @TableField(value = "phone")
-    @ApiModelProperty(value = "联系电话")
-    private String phone;
+    @TableField(value = "contact_name")
+    @ApiModelProperty(value = "联系人姓名")
+    private String contactName;
 
     /**
-     * 职务
+     * 联系人电话
      */
-    @TableField(value = "job_title")
-    @ApiModelProperty(value = "职务")
-    private String jobTitle;
+    @TableField(value = "contact_phone")
+    @ApiModelProperty(value = "联系人电话")
+    private String contactPhone;
 
     /**
-     * 家庭住址
+     * 是否是黑名单 0：否，1：是
      */
-    @TableField(value = "home_address")
-    @ApiModelProperty(value = "家庭住址")
-    private String homeAddress;
+    @TableField(value = "is_black")
+    @ApiModelProperty(value = "是否是黑名单 0：否，1：是")
+    private String isBlack;
 
     /**
-     * 厨师图片
+     * 移入黑名单时间
      */
-    @TableField(value = "chef_pic")
-    @ApiModelProperty(value = "厨师图片")
-    private String chefPic;
+    @TableField(value = "move_time")
+    @ApiModelProperty(value = "移入黑名单时间")
+    private LocalDateTime moveTime;
 
     /**
-     * 厨师详情
+     * 备注
      */
-    @TableField(value = "chef_details")
-    @ApiModelProperty(value = "厨师详情")
-    private String chefDetails;
+    @TableField(value = "remark")
+    @ApiModelProperty(value = "备注")
+    private String remark;
 
     /**
-     * 数据状态
+     * 是否删除 0：否，1：是
      */
     @TableField(value = "del_flag")
-    @ApiModelProperty(value = "数据状态")
+    @ApiModelProperty(value = "是否删除 0：否，1：是")
     private Integer delFlag;
 
     /**
@@ -113,7 +113,4 @@ public class ChefManagementPO implements Serializable {
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 
-    @TableField(exist = false)
-    @ApiModelProperty(value = "创建者姓名")
-    private String createName;
 }

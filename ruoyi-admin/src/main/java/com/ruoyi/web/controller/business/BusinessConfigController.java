@@ -87,15 +87,15 @@ public class BusinessConfigController extends BaseController {
 
 
     /**
-     * 查询关于我们的信息
-     *
-     * @return
-     */
-    @ApiOperation(value = "关于我们", notes = "关于我们", httpMethod = "GET")
-    @GetMapping("/health_certificate")
-    public BaseResult getHealthCertificate() {
-        return BaseResult.success(businessConfigMpService.searchBusinessConfig(RichTextConstants.HEALTH_CERTIFICATE));
-    }
+//     * 查询关于我们的信息
+//     *
+//     * @return
+//     */
+//    @ApiOperation(value = "关于我们", notes = "关于我们", httpMethod = "GET")
+//    @GetMapping("/health_certificate")
+//    public BaseResult getHealthCertificate() {
+//        return BaseResult.success(businessConfigMpService.searchBusinessConfig(RichTextConstants.HEALTH_CERTIFICATE));
+//    }
 
 
     /**
@@ -137,17 +137,17 @@ public class BusinessConfigController extends BaseController {
         return businessConfigMpService.saveAndUpdate(vo);
     }
 
-    /**
-     * 保存更新关于我们富文本设置
-     *
-     * @return
-     */
-    @ApiOperation(value = "保存&更新(健康证过期时间)")
-    @PostMapping("/health_certificate")
-    public BaseResult saveAndUpdateHealthCertificate(@RequestBody BusinessConfigVO vo) {
-        vo.setConfigName(RichTextConstants.HEALTH_CERTIFICATE);
-        return businessConfigMpService.saveAndUpdate(vo);
-    }
+//    /**
+//     * 保存更新关于我们富文本设置
+//     *
+//     * @return
+//     */
+//    @ApiOperation(value = "保存&更新(健康证过期时间)")
+//    @PostMapping("/health_certificate")
+//    public BaseResult saveAndUpdateHealthCertificate(@RequestBody BusinessConfigVO vo) {
+//        vo.setConfigName(RichTextConstants.HEALTH_CERTIFICATE);
+//        return businessConfigMpService.saveAndUpdate(vo);
+//    }
 
 
 }

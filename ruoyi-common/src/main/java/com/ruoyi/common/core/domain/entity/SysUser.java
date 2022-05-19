@@ -124,6 +124,11 @@ public class SysUser extends BaseEntity {
      */
     private String userBirthday;
 
+    /**
+     * 集团id
+     */
+    private Long parentId;
+
 
     /**
      * 部门对象
@@ -363,6 +368,14 @@ public class SysUser extends BaseEntity {
 
     public void setUserBirthday(String userBirthday) {
         this.userBirthday = userBirthday;
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 
     @Override

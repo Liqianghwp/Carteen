@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -198,6 +199,16 @@ public class SysConfigServiceImpl implements ISysConfigService {
             return UserConstants.NOT_UNIQUE;
         }
         return UserConstants.UNIQUE;
+    }
+
+    @Override
+    public List<SysConfig> getListByKeys(List<String> keys) {
+
+        List<SysConfig> list = new ArrayList<>();
+        for (String key : keys) {
+            list.add(configMapper.checkConfigKeyUnique(key));
+        }
+        return list;
     }
 
     /**

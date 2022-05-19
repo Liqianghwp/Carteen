@@ -10,8 +10,11 @@ import com.diandong.mapstruct.CanteenMsMapper;
 import com.diandong.service.CanteenMpService;
 import com.diandong.service.GroupManagementMpService;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.system.constant.DeptConstants;
+import com.ruoyi.system.service.ISysDeptService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +34,8 @@ public class CanteenMpServiceImpl extends CommonServiceImpl<CanteenMapper, Cante
 
     @Resource
     private GroupManagementMpService groupManagementMpService;
+    @Resource
+    private ISysDeptService deptService;
 
     @Override
     public BaseResult addCanteen(CanteenVO vo) {
@@ -54,6 +59,17 @@ public class CanteenMpServiceImpl extends CommonServiceImpl<CanteenMapper, Cante
 
         po.setPId(groupManagement.getId());
         po.setPName(groupManagement.getGroupName());
+
+
+//        新增食堂时给这集团添加部门信息
+        //        如果保存成功则在若依下面添加一个部门
+
+        SysDept sysDept = new SysDept();
+        sysDept.setDeptName(vo.getCanteenName());
+        sysDept.setParentId(loginUser.getDeptId());
+        deptService.insertDept(sysDept);
+
+//        deptService.getOneByDeptName(sysDept);
 
         boolean result = save(po);
         if (result) {

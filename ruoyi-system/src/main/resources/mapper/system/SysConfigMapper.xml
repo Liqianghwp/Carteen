@@ -63,7 +63,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectConfigVo"/>
         where config_key = #{configKey} limit 1
     </select>
-    
+    <select id="getListByKeys" resultType="com.ruoyi.system.domain.SysConfig">
+        in
+
+
+    </select>
+
     <insert id="insertConfig" parameterType="SysConfig">
         insert into sys_config (
 			<if test="configName != null and configName != '' ">config_name,</if>

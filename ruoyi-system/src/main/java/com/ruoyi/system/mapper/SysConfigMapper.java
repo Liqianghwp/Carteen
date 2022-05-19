@@ -1,6 +1,7 @@
 package com.ruoyi.system.mapper;
 
 import com.ruoyi.system.domain.SysConfig;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -65,4 +66,8 @@ public interface SysConfigMapper {
      * @return 结果
      */
     public int deleteConfigByIds(Long[] configIds);
+
+
+//    List<SysConfig> getListByKeys( List<String> keys);
+
 }

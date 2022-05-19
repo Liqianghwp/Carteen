@@ -1,5 +1,7 @@
 package com.ruoyi.web.controller.system;
 
+import com.diandong.domain.vo.SysConfigVO;
+import com.diandong.enums.BizConfigEnum;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.controller.BaseController;
@@ -19,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -149,4 +152,42 @@ public class SysConfigController extends BaseController {
         configService.resetConfigCache();
         return BaseResult.success();
     }
+
+    @ApiOperation(value = "配置保存", notes = "配置保存", httpMethod = "POST")
+//    @PreAuthorize("@ss.hasPermi('system:config:remove')")
+//    @Log(title = "参数管理", businessType = BusinessType.CLEAN)
+    @PostMapping("/save_config")
+    public BaseResult healthCertInvalid(@RequestBody SysConfigVO config) {
+
+        String registerUser = BizConfigEnum.REGISTER_USER.key();
+        String healthCertInvalid = BizConfigEnum.HEALTH_CERT_INVALID.key();
+        String mealTimesInterval = BizConfigEnum.MEAL_TIMES_INTERVAL.key();
+
+        List<String> keys = new ArrayList<>();
+        keys.add(registerUser);
+        keys.add(healthCertInvalid);
+        keys.add(mealTimesInterval);
+
+        List<SysConfig> listByKeys = configService.getListByKeys(keys);
+
+        for (SysConfig sysConfig : listByKeys) {
+            switch (BizConfigEnum.getConfigEnum(sysConfig.getConfigKey())) {
+                case REGISTER_USER:
+                    sysConfig.setConfigValue(config.getRegisterUser());
+                    break;
+                case HEALTH_CERT_INVALID:
+                    sysConfig.setConfigValue(config.getHealthCertInvalid());
+                    break;
+                case MEAL_TIMES_INTERVAL:
+                    sysConfig.setConfigValue(config.getMealTimesInterval());
+                    break;
+                default:
+                    break;
+            }
+            configService.updateConfig(sysConfig);
+        }
+        return BaseResult.success();
+    }
+
+
 }

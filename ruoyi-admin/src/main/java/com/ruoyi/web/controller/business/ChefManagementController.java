@@ -32,10 +32,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
@@ -71,6 +69,15 @@ public class ChefManagementController extends BaseController {
     @GetMapping
     public BaseResult getList(ChefManagementVO vo) {
         Page<ChefManagementPO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
+
+        List<ChefManagementPO> records = page.getRecords();
+        if (CollectionUtils.isNotEmpty(records)) {
+
+            records.forEach(chefManagementPO -> {
+                SysUser user = userService.selectUserById(chefManagementPO.getCreateBy());
+                chefManagementPO.setCreateName(Objects.isNull(user) ? null : user.getUserName());
+            });
+        }
         return BaseResult.success(page);
     }
 

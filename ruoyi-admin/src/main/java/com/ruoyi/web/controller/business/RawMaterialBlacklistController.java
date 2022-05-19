@@ -84,7 +84,7 @@ public class RawMaterialBlacklistController extends BaseController {
     })
     @ApiOperation(value = "原材料黑名单保存", notes = "原材料黑名单保存", httpMethod = "POST")
     @PostMapping
-    public BaseResult save(@Validated(Insert.class) RawMaterialBlacklistVO vo) {
+    public BaseResult save(@RequestBody @Validated(Insert.class) RawMaterialBlacklistVO vo) {
         RawMaterialBlacklistPO po = RawMaterialBlacklistMsMapper.INSTANCE.vo2po(vo);
         boolean result = rawMaterialBlacklistMpService.save(po);
         if (result) {
@@ -105,7 +105,7 @@ public class RawMaterialBlacklistController extends BaseController {
     })
     @ApiOperation(value = "原材料黑名单更新", notes = "原材料黑名单更新", httpMethod = "PUT")
     @PutMapping
-    public BaseResult update(@Validated(Update.class) RawMaterialBlacklistVO vo) {
+    public BaseResult update(@RequestBody @Validated(Update.class) RawMaterialBlacklistVO vo) {
         RawMaterialBlacklistPO po = RawMaterialBlacklistMsMapper.INSTANCE.vo2po(vo);
         boolean result = rawMaterialBlacklistMpService.updateById(po);
         if (result) {

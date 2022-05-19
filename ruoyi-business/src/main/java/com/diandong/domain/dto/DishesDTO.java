@@ -7,6 +7,7 @@ import lombok.Data;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 菜品信息DTO实体类
@@ -144,5 +145,12 @@ public class DishesDTO implements Serializable {
      */
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
+
+    @ApiModelProperty(value = "原材料信息")
+    private List<DishesRawMaterialDTO> dishesRawMaterialList;
+
+    @ApiModelProperty(value = "营养信息")
+    private List<DishesNutritionDTO> dishesNutritionList;
+
 
 }

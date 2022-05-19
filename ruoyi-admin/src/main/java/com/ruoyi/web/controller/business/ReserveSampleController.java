@@ -1,20 +1,30 @@
 package com.ruoyi.web.controller.business;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.domain.dto.ChefManagementDTO;
 import com.diandong.domain.dto.ReserveSampleDTO;
+import com.diandong.domain.po.ChefManagementPO;
 import com.diandong.domain.po.ReserveSamplePO;
+import com.diandong.domain.vo.ChefManagementVO;
 import com.diandong.domain.vo.ReserveSampleVO;
+import com.diandong.mapstruct.ChefManagementMsMapper;
 import com.diandong.mapstruct.ReserveSampleMsMapper;
 import com.diandong.service.ReserveSampleMpService;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.core.domain.entity.SysDictData;
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -24,6 +34,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -161,9 +173,63 @@ public class ReserveSampleController extends BaseController {
         }
     }
 
+//    /**
+//     * 导出
+//     *
+//     * @param response
+//     * @param vo
+//     */
+//    @Log(title = "预留样品导出", businessType = BusinessType.EXPORT)
+//    @PostMapping("/export/canteen")
+//    public void export(HttpServletResponse response, ReserveSampleVO vo) {
+//
+//        List<Long> ids = vo.getIds();
+//
+//        List<ReserveSamplePO> list;
+//        if (CollectionUtils.isNotEmpty(ids)) {
+//            list = reserveSampleMpService.lambdaQuery().in(ReserveSamplePO::getId, ids).list();
+//        } else {
+//            list = onSelectWhere(vo).list();
+//        }
+//
+//
+//
+//
+//        ExcelUtil<ReserveSampleDTO> util = new ExcelUtil<ReserveSampleDTO>(ReserveSampleDTO.class);
+//        util.exportExcel(response, chefManagementList, "厨师管理");
+//
+//    }
+//    /**
+//     * 导出
+//     *
+//     * @param response
+//     * @param vo
+//     */
+//    @Log(title = "预留样品导出", businessType = BusinessType.EXPORT)
+//    @PostMapping("/export/canteen")
+//    public void export(HttpServletResponse response, ReserveSampleVO vo) {
+//
+//        List<Long> ids = vo.getIds();
+//
+//        List<ReserveSamplePO> list;
+//        if (CollectionUtils.isNotEmpty(ids)) {
+//            list = reserveSampleMpService.lambdaQuery().in(ReserveSamplePO::getId, ids).list();
+//        } else {
+//            list = onSelectWhere(vo).list();
+//        }
+//
+//
+//
+//
+//        ExcelUtil<ReserveSampleDTO> util = new ExcelUtil<ReserveSampleDTO>(ReserveSampleDTO.class);
+//        util.exportExcel(response, chefManagementList, "厨师管理");
+//
+//    }
+
+
     private LambdaQueryChainWrapper<ReserveSamplePO> onSelectWhere(ReserveSampleVO vo) {
 
-        LambdaQueryChainWrapper<ReserveSamplePO> queryWrapper = reserveSampleMpService.lambdaQuery();
+        LambdaQueryChainWrapper<ReserveSamplePO> queryWrapper = reserveSampleMpService.lambdaQuery().orderByDesc(ReserveSamplePO::getId);
 
         if (Objects.isNull(vo)) {
             return queryWrapper;
@@ -179,6 +245,9 @@ public class ReserveSampleController extends BaseController {
                 .eq(ObjectUtils.isNotEmpty(vo.getWarningDay()), ReserveSamplePO::getWarningDay, vo.getWarningDay())
                 .eq(StringUtils.isNotBlank(vo.getRemark()), ReserveSamplePO::getRemark, vo.getRemark())
                 .eq(ObjectUtils.isNotEmpty(vo.getState()), ReserveSamplePO::getState, vo.getState());
+        if (Objects.nonNull(vo.getStartTime()) && Objects.nonNull(vo.getEndTime())) {
+            queryWrapper.between(ReserveSamplePO::getReserveDate, vo.getStartTime(), vo.getEndTime());
+        }
 
         return queryWrapper;
     }

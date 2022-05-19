@@ -28,7 +28,7 @@ public class LoginUser implements UserDetails {
     /**
      * 部门ID
      */
-    @ApiModelProperty("部门ID")
+    @ApiModelProperty("部门ID/食堂id/集团id")
     private Long deptId;
 
     /**
@@ -78,6 +78,9 @@ public class LoginUser implements UserDetails {
      */
     @ApiModelProperty("权限列表")
     private Set<String> permissions;
+
+    @ApiModelProperty("集团id")
+    private Long groupId;
 
     /**
      * 用户信息
@@ -239,6 +242,14 @@ public class LoginUser implements UserDetails {
 
     public void setUser(SysUser user) {
         this.user = user;
+    }
+
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 
     @Override
