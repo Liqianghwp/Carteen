@@ -1,5 +1,6 @@
 package com.diandong.domain.dto;
 
+import com.ruoyi.common.annotation.Excel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -27,30 +28,35 @@ public class SupplierDTO implements Serializable {
     /**
      * 供应商名称
      */
-    @ApiModelProperty(value = "供应商名称")
+    @Excel(name = "供应商名称", sort = 1)
+    @ApiModelProperty(value = "供应商名称" )
     private String supplierName;
 
     /**
      * 账号信息
      */
+    @Excel(name = "账号信息", sort = 2)
     @ApiModelProperty(value = "账号信息")
     private String account;
 
     /**
      * 联系人姓名
      */
+    @Excel(name = "联系人姓名", sort = 3)
     @ApiModelProperty(value = "联系人姓名")
     private String contactName;
 
     /**
      * 联系人电话
      */
+    @Excel(name = "联系人电话", sort = 4)
     @ApiModelProperty(value = "联系人电话")
     private String contactPhone;
 
     /**
      * 是否是黑名单 0：否，1：是
      */
+    @Excel(name = "是否拉黑", sort = 4,readConverterExp = "0=没有,1=是")
     @ApiModelProperty(value = "是否是黑名单 0：否，1：是")
     private String isBlack;
 

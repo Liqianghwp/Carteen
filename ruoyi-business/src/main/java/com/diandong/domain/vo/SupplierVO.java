@@ -10,6 +10,7 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 供应商管理VO实体类
@@ -70,6 +71,10 @@ public class SupplierVO extends BaseEntity implements Serializable {
      */
     @ApiModelProperty(value = "备注")
     private String remark;
-
+    /**
+     * 导出
+     * */
+    @ApiModelProperty(value = "导出勾选id集合")
+    private List<Long> ids;
 
 }

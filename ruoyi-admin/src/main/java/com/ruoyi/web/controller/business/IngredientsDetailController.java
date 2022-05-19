@@ -83,8 +83,9 @@ public class IngredientsDetailController extends BaseController {
     })
     @ApiOperation(value = "配料管理详情保存", notes = "配料管理详情保存", httpMethod = "POST")
     @PostMapping
-    public BaseResult save(@Validated(Insert.class) IngredientsDetailVO vo) {
+    public BaseResult save(@RequestBody @Validated(Insert.class) IngredientsDetailVO vo) {
         IngredientsDetailPO po = IngredientsDetailMsMapper.INSTANCE.vo2po(vo);
+
         boolean result = ingredientsDetailMpService.save(po);
         if (result) {
             return BaseResult.successMsg("添加成功！");
@@ -104,7 +105,7 @@ public class IngredientsDetailController extends BaseController {
     })
     @ApiOperation(value = "配料管理详情更新", notes = "配料管理详情更新", httpMethod = "PUT")
     @PutMapping
-    public BaseResult update(@Validated(Update.class) IngredientsDetailVO vo) {
+    public BaseResult update(@RequestBody @Validated(Update.class) IngredientsDetailVO vo) {
         IngredientsDetailPO po = IngredientsDetailMsMapper.INSTANCE.vo2po(vo);
         boolean result = ingredientsDetailMpService.updateById(po);
         if (result) {

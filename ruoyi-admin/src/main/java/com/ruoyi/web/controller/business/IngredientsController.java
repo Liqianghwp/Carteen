@@ -108,8 +108,8 @@ public class IngredientsController extends BaseController {
             }
 
 
-            record.setList1(stringBuilder.toString());
-            record.setList2(stringBuilder1.toString());
+            record.setZic1(stringBuilder.toString());
+            record.setZio2(stringBuilder1.toString());
 
         }
 
@@ -248,43 +248,7 @@ public class IngredientsController extends BaseController {
         }
     }
 
-    public static void main(String[] args) {
 
-
-        IngredientsVO vo = new IngredientsVO();
-
-        vo.setDishId(2L);
-        vo.setDishName("sfwe");
-        vo.setDishTypeId(1L);
-        vo.setDishTypeName("wefw");
-
-        vo.setRemark("wefwef");
-
-
-
-        List<IngredientsDetailVO> detailVO1 = new ArrayList<>();
-
-        IngredientsDetailVO detail1 = new IngredientsDetailVO();
-        detail1.getRawMaterialId();
-        detail1.getRawMaterialName();
-        detail1.setNumber(2d);
-        detailVO1.add(detail1);
-
-
-
-        List<IngredientsDetailVO> detailVO2 = new ArrayList<>();
-        IngredientsDetailVO detail2 = new IngredientsDetailVO();
-        detail2.getRawMaterialId();
-        detail2.getRawMaterialName();
-        detail2.setNumber(2d);
-        detailVO2.add(detail2);
-
-
-
-        vo.setZic(detailVO1);
-        vo.setZio(detailVO2);
-        System.out.println(JSONObject.toJSONString(vo));
-    }
 
 
 

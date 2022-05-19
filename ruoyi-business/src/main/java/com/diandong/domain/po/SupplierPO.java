@@ -69,7 +69,7 @@ public class SupplierPO implements Serializable {
      */
     @TableField(value = "move_time")
     @ApiModelProperty(value = "移入黑名单时间")
-    private LocalDateTime moveTime;
+            private LocalDateTime moveTime;
 
     /**
      * 备注
