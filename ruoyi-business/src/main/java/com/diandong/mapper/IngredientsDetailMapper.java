@@ -12,5 +12,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface IngredientsDetailMapper extends CommonMapper<IngredientsDetailPO> {
-
+  Long delDetailById(Long id);
 }

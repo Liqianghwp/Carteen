@@ -11,4 +11,5 @@ import com.diandong.domain.po.IngredientsPO;
  */
 public interface IngredientsMpService extends CommonService<IngredientsPO> {
 
+
 }

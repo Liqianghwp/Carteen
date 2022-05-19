@@ -16,6 +16,7 @@
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
+
     <!-- Select_Field -->
     <sql id="BaseSelectField">
         <trim prefixOverrides=",">

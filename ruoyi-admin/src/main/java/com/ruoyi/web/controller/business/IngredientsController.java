@@ -1,12 +1,16 @@
 package com.ruoyi.web.controller.business;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.api.IErrorCode;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.domain.po.IngredientsDetailPO;
+import com.diandong.domain.vo.IngredientsDetailVO;
+import com.diandong.mapstruct.IngredientsDetailMsMapper;
 import com.diandong.service.IngredientsDetailMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
@@ -155,9 +159,42 @@ public class IngredientsController extends BaseController {
     })
     @ApiOperation(value = "配料管理保存", notes = "配料管理保存", httpMethod = "POST")
     @PostMapping
-    public BaseResult save(@Validated(Insert.class) IngredientsVO vo) {
+    public BaseResult save(@RequestBody @Validated(Insert.class) IngredientsVO vo) {
         IngredientsPO po = IngredientsMsMapper.INSTANCE.vo2po(vo);
+
+        /**
+         * 主料
+         * */
+        List<IngredientsDetailVO> zic = vo.getZic();
+        List<IngredientsDetailPO> list = new ArrayList<>();
         boolean result = ingredientsMpService.save(po);
+        for (IngredientsDetailVO ingredientsDetailVO : zic) {
+
+            ingredientsDetailVO.setType("0");
+            ingredientsDetailVO.setIngredientsId(po.getId());
+
+            IngredientsDetailPO po1= IngredientsDetailMsMapper.INSTANCE.vo2po(ingredientsDetailVO);
+            list.add(po1);
+
+
+        }
+        /**
+         * 辅料
+         * */
+        List<IngredientsDetailVO> zio = vo.getZio();
+        List<IngredientsDetailPO> objects = new ArrayList<>();
+        for (IngredientsDetailVO ingredientsDetailVO : zio) {
+            ingredientsDetailVO.setIngredientsId(po.getId());
+
+            ingredientsDetailVO.setType("1");
+            IngredientsDetailPO ingredientsDetailPO = IngredientsDetailMsMapper.INSTANCE.vo2po(ingredientsDetailVO);
+            objects.add(ingredientsDetailPO);
+        }
+
+
+        ingredientsDetailMpService.saveBatch(list);
+        ingredientsDetailMpService.saveBatch(objects);
+
         if (result) {
             return BaseResult.successMsg("添加成功！");
         } else {
@@ -176,8 +213,33 @@ public class IngredientsController extends BaseController {
     })
     @ApiOperation(value = "配料管理更新", notes = "配料管理更新", httpMethod = "PUT")
     @PutMapping
-    public BaseResult update(@Validated(Update.class) IngredientsVO vo) {
+    public BaseResult update( @RequestBody @Validated(Update.class) IngredientsVO vo) {
         IngredientsPO po = IngredientsMsMapper.INSTANCE.vo2po(vo);
+
+        /**
+         * 主料
+         * */
+        List<IngredientsDetailVO> zic = vo.getZic();
+        List<IngredientsDetailPO> list = new ArrayList<>();
+        for (IngredientsDetailVO ingredientsDetailVO : zic) {
+
+            ingredientsDetailVO.setType("0");
+            IngredientsDetailPO po1= IngredientsDetailMsMapper.INSTANCE.vo2po(ingredientsDetailVO);
+            list.add(po1);
+        }
+        /**
+         * 辅料
+         * */
+        List<IngredientsDetailVO> zio = vo.getZio();
+        List<IngredientsDetailPO> objects = new ArrayList<>();
+        for (IngredientsDetailVO ingredientsDetailVO : zio) {
+            ingredientsDetailVO.setType("1");
+            IngredientsDetailPO ingredientsDetailPO = IngredientsDetailMsMapper.INSTANCE.vo2po(ingredientsDetailVO);
+            objects.add(ingredientsDetailPO);
+        }
+
+        ingredientsDetailMpService.saveOrUpdateBatch(list);
+        ingredientsDetailMpService.saveOrUpdateBatch(objects);
         boolean result = ingredientsMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");
@@ -185,6 +247,46 @@ public class IngredientsController extends BaseController {
             return BaseResult.error("修改失败");
         }
     }
+
+    public static void main(String[] args) {
+
+
+        IngredientsVO vo = new IngredientsVO();
+
+        vo.setDishId(2L);
+        vo.setDishName("sfwe");
+        vo.setDishTypeId(1L);
+        vo.setDishTypeName("wefw");
+
+        vo.setRemark("wefwef");
+
+
+
+        List<IngredientsDetailVO> detailVO1 = new ArrayList<>();
+
+        IngredientsDetailVO detail1 = new IngredientsDetailVO();
+        detail1.getRawMaterialId();
+        detail1.getRawMaterialName();
+        detail1.setNumber(2d);
+        detailVO1.add(detail1);
+
+
+
+        List<IngredientsDetailVO> detailVO2 = new ArrayList<>();
+        IngredientsDetailVO detail2 = new IngredientsDetailVO();
+        detail2.getRawMaterialId();
+        detail2.getRawMaterialName();
+        detail2.setNumber(2d);
+        detailVO2.add(detail2);
+
+
+
+        vo.setZic(detailVO1);
+        vo.setZio(detailVO2);
+        System.out.println(JSONObject.toJSONString(vo));
+    }
+
+
 
     /**
      * 配料管理删除
@@ -198,34 +300,19 @@ public class IngredientsController extends BaseController {
     @ApiOperation(value = "配料管理删除", notes = "配料管理删除", httpMethod = "DELETE")
     @DeleteMapping(value = "/{id}")
     public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = ingredientsMpService.removeById(id);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
+        Long aLong = ingredientsDetailMpService.echoMessage(id);
+        if (aLong<=0){
             return BaseResult.error("删除失败");
+        }else {
+            boolean result = ingredientsMpService.removeById(id);
+            if (result) {
+                return BaseResult.successMsg("删除成功");
+            } else {
+                return BaseResult.error("删除失败");
+            }
         }
-    }
 
-    /**
-     * 配料管理批量删除
-     *
-     * @param idList 编号id集合
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "配料管理批量删除", notes = "配料管理批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = ingredientsMpService.removeByIds(idList);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
-            return BaseResult.error("删除失败");
-        }
     }
-
     private LambdaQueryChainWrapper<IngredientsPO> onSelectWhere(IngredientsVO vo) {
         LambdaQueryChainWrapper<IngredientsPO> queryWrapper = ingredientsMpService.lambdaQuery();
 

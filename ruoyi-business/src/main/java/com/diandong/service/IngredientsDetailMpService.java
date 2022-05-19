@@ -11,4 +11,5 @@ import com.diandong.domain.po.IngredientsDetailPO;
  */
 public interface IngredientsDetailMpService extends CommonService<IngredientsDetailPO> {
 
+    public Long echoMessage(long id);
 }

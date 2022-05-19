@@ -10,6 +10,7 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 配料管理VO实体类
@@ -58,6 +59,15 @@ public class IngredientsVO extends BaseEntity implements Serializable {
      */
     @ApiModelProperty(value = "备注")
     private String remark;
+
+
+
+    @ApiModelProperty(value = "辅料")
+    private List<IngredientsDetailVO> zio;
+
+    @ApiModelProperty(value = "主料")
+    private List<IngredientsDetailVO> zic;
+
 
 
 }

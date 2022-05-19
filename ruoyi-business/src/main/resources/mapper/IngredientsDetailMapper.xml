@@ -34,7 +34,7 @@
     </sql>
 
     <!-- Base_Where_Clause -->
-    <sql id="BaseWhereClause">
+    <sql id="BaseWhereClause" >
         <where>
             <trim prefixOverrides="and">
             <if test="id != null">
@@ -67,6 +67,12 @@
             </trim>
         </where>
     </sql>
+
+    <delete id="delDetailById" >
+
+        DELETE FROM wis_ingredients_detail  WHERE ingredients_id = #{id}
+
+    </delete>
     <!-- tableName  wis_ingredients_detail -->
 
 </mapper>
