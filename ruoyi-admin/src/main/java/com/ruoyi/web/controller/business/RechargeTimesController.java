@@ -55,6 +55,7 @@ public class RechargeTimesController extends BaseController {
         LambdaQueryChainWrapper<RechargeTimesPO> queryWrapper = onSelectWhere(vo);
         Page<RechargeTimesPO> page = queryWrapper.page(new Page<>(vo.getPageNum(), vo.getPageSize()));
         return BaseResult.success(page);
+
     }
 
     /**

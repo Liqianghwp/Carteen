@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.AccountRuMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.AccountRuPO">
+        <result column="account_book_id" jdbcType="BIGINT" property="accountBookId"/>
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime"/>
+        <result column="supplier" jdbcType="VARCHAR" property="supplier"/>
+        <result column="inventory_quantity" jdbcType="BIGINT" property="inventoryQuantity"/>
+        <result column="aggregate" jdbcType="BIGINT" property="aggregate"/>
+        <result column="tally" jdbcType="VARCHAR" property="tally"/>
+        <result column="warehouse_people" jdbcType="VARCHAR" property="warehousePeople"/>
+        <result column="aggregate_amount" jdbcType="BIGINT" property="aggregateAmount"/>
+        <result column="purchase_order_number" jdbcType="VARCHAR" property="purchaseOrderNumber"/>
+        <result column="picture_ru" jdbcType="VARCHAR" property="pictureRu"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,ar.account_book_id
+            ,ar.id
+            ,ar.storage_time
+            ,ar.supplier
+            ,ar.inventory_quantity
+            ,ar.aggregate
+            ,ar.tally
+            ,ar.warehouse_people
+            ,ar.aggregate_amount
+            ,ar.purchase_order_number
+            ,ar.picture_ru
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="accountBookId != null">
+                and ar.account_book_id = #{accountBookId}
+            </if>
+            <if test="id != null">
+                and ar.id = #{id}
+            </if>
+            <if test="storageTime != null">
+                and ar.storage_time = #{storageTime}
+            </if>
+            <if test="supplier != null and supplier != ''">
+                and ar.supplier = #{supplier}
+            </if>
+            <if test="inventoryQuantity != null">
+                and ar.inventory_quantity = #{inventoryQuantity}
+            </if>
+            <if test="aggregate != null">
+                and ar.aggregate = #{aggregate}
+            </if>
+            <if test="tally != null and tally != ''">
+                and ar.tally = #{tally}
+            </if>
+            <if test="warehousePeople != null and warehousePeople != ''">
+                and ar.warehouse_people = #{warehousePeople}
+            </if>
+            <if test="aggregateAmount != null">
+                and ar.aggregate_amount = #{aggregateAmount}
+            </if>
+            <if test="purchaseOrderNumber != null and purchaseOrderNumber != ''">
+                and ar.purchase_order_number = #{purchaseOrderNumber}
+            </if>
+            <if test="pictureRu != null and pictureRu != ''">
+                and ar.picture_ru = #{pictureRu}
+            </if>
+            <if test="beginTime != null">
+                and ar.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and ar.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_account_ru -->
+
+</mapper>

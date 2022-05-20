@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.AccountMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.AccountPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="category" jdbcType="VARCHAR" property="category"/>
+        <result column="storage_way" jdbcType="VARCHAR" property="storageWay"/>
+        <result column="inventory" jdbcType="BIGINT" property="inventory"/>
+        <result column="unit" jdbcType="VARCHAR" property="unit"/>
+        <result column="unit_price" jdbcType="DECIMAL" property="unitPrice"/>
+        <result column="warehouse" jdbcType="VARCHAR" property="warehouse"/>
+        <result column="minimum_inventory_warning" jdbcType="BIGINT" property="minimumInventoryWarning"/>
+        <result column="minimum_inventory" jdbcType="BIGINT" property="minimumInventory"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,a.id
+            ,a.category
+            ,a.storage_way
+            ,a.inventory
+            ,a.unit
+            ,a.unit_price
+            ,a.warehouse
+            ,a.minimum_inventory_warning
+            ,a.minimum_inventory
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and a.id = #{id}
+            </if>
+            <if test="category != null and category != ''">
+                and a.category = #{category}
+            </if>
+            <if test="storageWay != null and storageWay != ''">
+                and a.storage_way = #{storageWay}
+            </if>
+            <if test="inventory != null">
+                and a.inventory = #{inventory}
+            </if>
+            <if test="unit != null and unit != ''">
+                and a.unit = #{unit}
+            </if>
+            <if test="unitPrice != null">
+                and a.unit_price = #{unitPrice}
+            </if>
+            <if test="warehouse != null and warehouse != ''">
+                and a.warehouse = #{warehouse}
+            </if>
+            <if test="minimumInventoryWarning != null">
+                and a.minimum_inventory_warning = #{minimumInventoryWarning}
+            </if>
+            <if test="minimumInventory != null">
+                and a.minimum_inventory = #{minimumInventory}
+            </if>
+            <if test="beginTime != null">
+                and a.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and a.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_account -->
+
+</mapper>
