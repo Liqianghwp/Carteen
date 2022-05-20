@@ -165,6 +165,7 @@ public class SupplierController extends BaseController {
         } else {
             byId.setIsBlack("0");
 
+
         }
         boolean result = supplierMpService.updateById(byId);
         if (result) {
