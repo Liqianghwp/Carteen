@@ -1,6 +1,8 @@
 package com.ruoyi.system.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.system.domain.SysConfig;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.List;
  *
  * @author ruoyi
  */
-public interface SysUserMapper {
+public interface SysUserMapper extends BaseMapper<SysUser> {
     /**
      * 根据条件分页查询用户列表
      *

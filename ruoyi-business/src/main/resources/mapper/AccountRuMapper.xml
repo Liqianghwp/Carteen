@@ -2,19 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.diandong.mapper.AccountRuMapper">
 
-    <resultMap id="BaseResultMap" type="com.diandong.domain.po.AccountRuPO">
-        <result column="account_book_id" jdbcType="BIGINT" property="accountBookId"/>
-        <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime"/>
-        <result column="supplier" jdbcType="VARCHAR" property="supplier"/>
-        <result column="inventory_quantity" jdbcType="BIGINT" property="inventoryQuantity"/>
-        <result column="aggregate" jdbcType="BIGINT" property="aggregate"/>
-        <result column="tally" jdbcType="VARCHAR" property="tally"/>
-        <result column="warehouse_people" jdbcType="VARCHAR" property="warehousePeople"/>
-        <result column="aggregate_amount" jdbcType="BIGINT" property="aggregateAmount"/>
-        <result column="purchase_order_number" jdbcType="VARCHAR" property="purchaseOrderNumber"/>
-        <result column="picture_ru" jdbcType="VARCHAR" property="pictureRu"/>
-    </resultMap>
+<!--    <resultMap id="BaseResultMap" type="com.diandong.domain.po.AccountRuPO">-->
+<!--        <result column="account_book_id" jdbcType="BIGINT" property="accountBookId"/>-->
+<!--        <id column="id" jdbcType="BIGINT" property="id"/>-->
+<!--        <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime"/>-->
+<!--        <result column="supplier" jdbcType="VARCHAR" property="supplier"/>-->
+<!--        <result column="inventory_quantity" jdbcType="BIGINT" property="inventoryQuantity"/>-->
+<!--        <result column="aggregate" jdbcType="BIGINT" property="aggregate"/>-->
+<!--        <result column="tally" jdbcType="VARCHAR" property="tally"/>-->
+<!--        <result column="warehouse_people" jdbcType="VARCHAR" property="warehousePeople"/>-->
+<!--        <result column="aggregate_amount" jdbcType="BIGINT" property="aggregateAmount"/>-->
+<!--        <result column="purchase_order_number" jdbcType="VARCHAR" property="purchaseOrderNumber"/>-->
+<!--        <result column="picture_ru" jdbcType="VARCHAR" property="pictureRu"/>-->
+<!--    </resultMap>-->
 
     <!-- Select_Field -->
     <sql id="BaseSelectField">

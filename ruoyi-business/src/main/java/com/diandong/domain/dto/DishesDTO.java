@@ -27,6 +27,12 @@ public class DishesDTO implements Serializable {
     private Long id;
 
     /**
+     * 菜品代码
+     */
+    @ApiModelProperty(value = "菜品代码")
+    private String code;
+
+    /**
      * 食堂id
      */
     @ApiModelProperty(value = "食堂id")
@@ -75,9 +81,9 @@ public class DishesDTO implements Serializable {
     private String specification;
 
     /**
-     * 预估价
+     * 内部价格
      */
-    @ApiModelProperty(value = "预估价")
+    @ApiModelProperty(value = "内部价格")
     private BigDecimal prePrice;
 
     /**
@@ -90,7 +96,7 @@ public class DishesDTO implements Serializable {
      * 菜品属性id
      */
     @ApiModelProperty(value = "菜品属性id")
-    private Long dishesAttrId;
+    private String dishesAttrId;
 
     /**
      * 菜品属性名称
@@ -117,10 +123,16 @@ public class DishesDTO implements Serializable {
     private String dishesIntroduction;
 
     /**
-     * 状态
+     * 状态（0：下架；1：上架）
      */
-    @ApiModelProperty(value = "状态")
+    @ApiModelProperty(value = "状态（0：下架；1：上架）")
     private Integer state;
+
+    /**
+     * 检测报告
+     */
+    @ApiModelProperty(value = "检测报告")
+    private String testReport;
 
     /**
      * 创建人id
@@ -151,6 +163,12 @@ public class DishesDTO implements Serializable {
 
     @ApiModelProperty(value = "营养信息")
     private List<DishesNutritionDTO> dishesNutritionList;
+
+    @ApiModelProperty(value = "供应商信息")
+    private List<DishesSupplierDTO> dishesSupplierList;
+
+    @ApiModelProperty(value = "添加剂信息")
+    private List<DishesAdditiveDTO> dishesAdditiveList;
 
 
 }

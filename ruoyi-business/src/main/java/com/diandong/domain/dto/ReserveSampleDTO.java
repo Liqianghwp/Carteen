@@ -35,9 +35,15 @@ public class ReserveSampleDTO implements Serializable {
     private Long reserveCanteenId;
 
     /**
+     * 留样食堂名称
+     */
+    @ApiModelProperty(value = "留样食堂名称")
+    private String reserveCanteenName;
+
+    /**
      * 留样日期
      */
-    @Excel(name = "留样日期",dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "留样日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "留样日期")
@@ -48,16 +54,20 @@ public class ReserveSampleDTO implements Serializable {
      */
     @ApiModelProperty(value = "餐次")
     private Long mealTimes;
-
+    @Excel(name = "餐次")
+    @ApiModelProperty(value = "餐次名称")
+    private String mealTimesName;
     /**
      * 食品名称
      */
+    @Excel(name = "食品名称")
     @ApiModelProperty(value = "食品名称")
     private String foodName;
 
     /**
      * 留样数量
      */
+    @Excel(name = "留样数量")
     @ApiModelProperty(value = "留样数量")
     private String reserveNum;
 
@@ -66,10 +76,13 @@ public class ReserveSampleDTO implements Serializable {
      */
     @ApiModelProperty(value = "储存地点")
     private Long storageLocation;
-
+    @Excel(name = "储存地点")
+    @ApiModelProperty(value = "存储地点名称")
+    private String storageLocationName;
     /**
      * 留样人
      */
+    @Excel(name = "留样人")
     @ApiModelProperty(value = "留样人")
     private String reserveName;
 
@@ -88,6 +101,7 @@ public class ReserveSampleDTO implements Serializable {
     /**
      * 状态 0：未处理-有效；1：未处理-报警；2：已处理
      */
+    @Excel(name = "状态", readConverterExp = "0=未处理-有效,1=未处理-报警,2=已处理")
     @ApiModelProperty(value = "状态 0：未处理-有效；1：未处理-报警；2：已处理")
     private Integer state;
 

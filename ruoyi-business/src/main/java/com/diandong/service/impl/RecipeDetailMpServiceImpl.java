@@ -3,6 +3,7 @@ package com.diandong.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.diandong.configuration.CommonServiceImpl;
 import com.diandong.constant.Constants;
+import com.diandong.domain.dto.RecipePieDayDTO;
 import com.diandong.domain.dto.RecipePieSituationDayDTO;
 import com.diandong.domain.po.RecipeDetailPO;
 import com.diandong.domain.po.RecipePO;
@@ -40,22 +41,15 @@ public class RecipeDetailMpServiceImpl extends CommonServiceImpl<RecipeDetailMap
     private RecipeMpService recipeMpService;
 
     @Override
-    public void pieSituation(RecipePieSituationVO pieSituationVO) {
+    public RecipePieDayDTO pieSituation(RecipePieSituationVO pieSituationVO) {
 
         Long dishId = pieSituationVO.getDishId();
 
         LocalDate date = pieSituationVO.getDate();
 //        记录当月的次数
-//        LocalDate monthFirstDay = date.with(TemporalAdjusters.firstDayOfMonth());
-//        LocalDate monthLastDay = date.with(TemporalAdjusters.lastDayOfMonth());
-//        List<RecipePO> monthList = recipeMpService.lambdaQuery()
-//                .between(RecipePO::getRecipeDate, monthFirstDay, monthLastDay)
-//                .eq(RecipePO::getDelFlag, Constants.DEL_NO)
-//                .list();
 
         LocalDateTime monthFirstDay = date.with(TemporalAdjusters.firstDayOfMonth()).atStartOfDay();
-        LocalDateTime monthLastDay = date.with(TemporalAdjusters.firstDayOfMonth()).atTime(23, 59, 59);
-
+        LocalDateTime monthLastDay = date.with(TemporalAdjusters.lastDayOfMonth()).atTime(23, 59, 59);
         RecipePieSituationDayDTO monthDayDto = getRecipeDetailList(dishId, monthFirstDay, monthLastDay);
 
 
@@ -65,13 +59,9 @@ public class RecipeDetailMpServiceImpl extends CommonServiceImpl<RecipeDetailMap
         LocalDateTime quarterFirstDay = LocalDateTime.of(LocalDate.of(date.getYear(), month, 1), LocalTime.MIN);
         month = month.plus(2L);
         LocalDateTime quarterLastDay = LocalDateTime.of(LocalDate.of(date.getYear(), month, month.length(date.isLeapYear())), LocalTime.MAX);
+        RecipePieSituationDayDTO quarterDayDto = getRecipeDetailList(dishId, quarterFirstDay, quarterLastDay);
 
-//        List<RecipePO> quarterLastList = recipeMpService.lambdaQuery()
-//                .between(RecipePO::getRecipeDate, monthFirstDay, monthLastDay)
-//                .eq(RecipePO::getDelFlag, Constants.DEL_NO)
-//                .list();
-
-        RecipePieSituationDayDTO quarterDayDto = getRecipeDetailList(dishId, monthFirstDay, monthLastDay);
+        return new RecipePieDayDTO(monthDayDto.getList(), monthDayDto.getCount(), quarterDayDto.getList(), quarterDayDto.getCount());
 
     }
 
@@ -113,9 +103,7 @@ public class RecipeDetailMpServiceImpl extends CommonServiceImpl<RecipeDetailMap
                 collect2.forEach(localDate -> dayList.add(localDate.format(DateTimeFormatter.ISO_DATE)));
             }
 
-
             recipePieSituationDayDTO.setCount(dishList.size());
-
         }
 
         recipePieSituationDayDTO.setList(Arrays.asList(dayList.toArray(new String[0])));

@@ -18,7 +18,7 @@ ruoyi:
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为8080
-  port: 8080
+  port: 9080
   servlet:
     # 应用的访问路径
     context-path: /
@@ -94,7 +94,7 @@ token:
     # 令牌密钥
     secret: abcdefghijklmnopqrstuvwxyz
     # 令牌有效期（默认30分钟）
-    expireTime: 30
+    expireTime: 600
   
 # MyBatis配置
 #mybatis:
@@ -123,7 +123,7 @@ mybatis-plus:
 # PageHelper分页插件
 pagehelper: 
   helperDialect: mysql
-  supportMethodsArguments: true
+  supportMethodsArguments: false
   params: count=countSql 
 
 # Swagger配置

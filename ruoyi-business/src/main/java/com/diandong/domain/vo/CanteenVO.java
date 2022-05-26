@@ -1,5 +1,6 @@
 package com.diandong.domain.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.diandong.configuration.Update;
 import com.diandong.domain.BaseEntity;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -91,6 +92,11 @@ public class CanteenVO extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "集团或部门名称")
     private String pName;
 
+    /**
+     * 部门的id
+     */
+    @ApiModelProperty(value = "部门的id")
+    private Long deptId;
     /**
      * 启用状态（0:未启用;1:已启用）
      */

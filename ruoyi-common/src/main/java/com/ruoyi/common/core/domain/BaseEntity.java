@@ -18,6 +18,16 @@ import java.util.Map;
 @ApiModel(description = "Entity基类")
 public class BaseEntity implements Serializable {
 
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "页码")
+    private Integer pageNum = 1;
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "每页个数")
+    private Integer pageSize = 10;
+
+
     /**
      * 搜索值
      */
@@ -123,6 +133,21 @@ public class BaseEntity implements Serializable {
         this.params = params;
     }
 
-    @ApiModelProperty("")
+    public Integer getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(Integer pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
     private static final long serialVersionUID = 1L;
 }

@@ -89,6 +89,12 @@ public class CanteenDTO implements Serializable {
     private String pName;
 
     /**
+     * 部门的id
+     */
+    @ApiModelProperty(value = "部门的id")
+    private Long deptId;
+
+    /**
      * 启用状态（0:未启用;1:已启用）
      */
     @Excel(name = "状态", sort = 4, readConverterExp = "0=停用,1=启用")

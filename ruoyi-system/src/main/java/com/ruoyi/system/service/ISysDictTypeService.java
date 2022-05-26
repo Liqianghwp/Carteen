@@ -1,5 +1,7 @@
 package com.ruoyi.system.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.common.core.domain.entity.SysDictData;
 import com.ruoyi.common.core.domain.entity.SysDictType;
 
@@ -10,7 +12,7 @@ import java.util.List;
  *
  * @author ruoyi
  */
-public interface ISysDictTypeService {
+public interface ISysDictTypeService extends IService<SysDictType> {
     /**
      * 根据条件分页查询字典类型
      *

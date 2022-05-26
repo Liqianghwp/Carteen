@@ -4,6 +4,7 @@
 
     <resultMap id="BaseResultMap" type="com.diandong.domain.po.DishesPO">
         <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
         <result column="canteen_id" jdbcType="BIGINT" property="canteenId"/>
         <result column="canteen_name" jdbcType="VARCHAR" property="canteenName"/>
         <result column="dishes_type_id" jdbcType="BIGINT" property="dishesTypeId"/>
@@ -14,19 +15,17 @@
         <result column="specification" jdbcType="VARCHAR" property="specification"/>
         <result column="pre_price" jdbcType="DECIMAL" property="prePrice"/>
         <result column="origin" jdbcType="VARCHAR" property="origin"/>
-        <result column="dishes_attr_id" jdbcType="BIGINT" property="dishesAttrId"/>
+        <result column="dishes_attr_id" jdbcType="VARCHAR" property="dishesAttrId"/>
         <result column="dishes_attr_name" jdbcType="VARCHAR" property="dishesAttrName"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
         <result column="dishes_picture" jdbcType="VARCHAR" property="dishesPicture"/>
         <result column="dishes_introduction" jdbcType="VARCHAR" property="dishesIntroduction"/>
         <result column="state" jdbcType="INTEGER" property="state"/>
-        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
-        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="test_report" jdbcType="VARCHAR" property="testReport"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
         <result column="create_by" jdbcType="BIGINT" property="createBy"/>
-        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
-        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
@@ -34,6 +33,7 @@
     <sql id="BaseSelectField">
         <trim prefixOverrides=",">
             ,d.id
+            ,d.code
             ,d.canteen_id
             ,d.canteen_name
             ,d.dishes_type_id
@@ -50,13 +50,11 @@
             ,d.dishes_picture
             ,d.dishes_introduction
             ,d.state
-            ,d.data_state
-            ,d.version
+            ,d.test_report
+            ,d.del_flag
             ,d.create_by
-            ,d.create_name
             ,d.create_time
             ,d.update_by
-            ,d.update_name
             ,d.update_time
         </trim>
     </sql>
@@ -67,6 +65,9 @@
             <trim prefixOverrides="and">
             <if test="id != null">
                 and d.id = #{id}
+            </if>
+            <if test="code != null and code != ''">
+                and d.code = #{code}
             </if>
             <if test="canteenId != null">
                 and d.canteen_id = #{canteenId}
@@ -98,7 +99,7 @@
             <if test="origin != null and origin != ''">
                 and d.origin = #{origin}
             </if>
-            <if test="dishesAttrId != null">
+            <if test="dishesAttrId != null and dishesAttrId != ''">
                 and d.dishes_attr_id = #{dishesAttrId}
             </if>
             <if test="dishesAttrName != null and dishesAttrName != ''">
@@ -116,17 +117,11 @@
             <if test="state != null">
                 and d.state = #{state}
             </if>
-            <if test="dataState != null">
-                and d.data_state = #{dataState}
+            <if test="testReport != null and testReport != ''">
+                and d.test_report = #{testReport}
             </if>
-            <if test="version != null">
-                and d.version = #{version}
-            </if>
-            <if test="createName != null and createName != ''">
-                and d.create_name = #{createName}
-            </if>
-            <if test="updateName != null and updateName != ''">
-                and d.update_name = #{updateName}
+            <if test="delFlag != null">
+                and d.del_flag = #{delFlag}
             </if>
             <if test="beginTime != null">
                 and d.create_time <![CDATA[ >= ]]> #{beginTime}

@@ -99,6 +99,13 @@ public class CanteenPO implements Serializable {
     @ApiModelProperty(value = "集团或部门名称")
     private String pName;
 
+
+    /**
+     * 集团或部门的id
+     */
+    @TableField(value = "dept_id")
+    @ApiModelProperty(value = "部门的id")
+    private Long deptId;
     /**
      * 启用状态（0:未启用;1:已启用）
      */

@@ -100,4 +100,15 @@ public class RecipePO implements Serializable {
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 
+    @TableField(exist = false)
+    @ApiModelProperty("早餐信息")
+    private String breakfastMsg;
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "午餐信息")
+    private String lunchMsg;
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "晚餐信息")
+    private String dinnerMsg;
 }

@@ -50,7 +50,8 @@ public class CanteenMpServiceImpl extends CommonServiceImpl<CanteenMapper, Cante
                 .eq(GroupManagementPO::getDelFlag, Constants.DEL_NO)
                 .one();
 
-        List<CanteenPO> list = lambdaQuery().eq(CanteenPO::getPId, groupManagement.getId())
+        List<CanteenPO> list = lambdaQuery()
+                .eq(CanteenPO::getPId, groupManagement.getId())
                 .eq(CanteenPO::getDelFlag, Constants.DEL_NO)
                 .list();
         if (list.size() >= groupManagement.getCanteensAllowed()) {
@@ -70,7 +71,7 @@ public class CanteenMpServiceImpl extends CommonServiceImpl<CanteenMapper, Cante
         deptService.insertDept(sysDept);
 
 //        deptService.getOneByDeptName(sysDept);
-
+        po.setDeptId(sysDept.getDeptId());
         boolean result = save(po);
         if (result) {
             return BaseResult.successMsg("添加成功！");

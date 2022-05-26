@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.business;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.diandong.domain.vo.DictDateVO;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
@@ -9,6 +10,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.system.constant.MealSettingConstants;
 import com.ruoyi.system.constant.SysConstants;
 import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysDictTypeService;
@@ -25,8 +27,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 数据字典信息
@@ -42,6 +46,7 @@ public class DictMealSettingController extends BaseController {
 
     @Resource
     private ISysDictTypeService dictTypeService;
+
 
     /**
      * 字典数据列表
@@ -144,6 +149,11 @@ public class DictMealSettingController extends BaseController {
     @PutMapping
     public BaseResult edit(@Validated @RequestBody DictDateVO dict) {
 
+        SysDictData oldDictData = dictDataService.selectDictDataById(dict.getDictCode());
+        if (MealSettingConstants.defaultMeals.contains(oldDictData.getDictValue()) && oldDictData.getDictLabel().equals(dict.getDictLabel())) {
+            return BaseResult.error("默认餐次的名称不能修改");
+        }
+
         SysDictData sysDictData = new SysDictData();
         BeanUtils.copyProperties(dict, sysDictData);
         resetSysDictData(sysDictData);
@@ -164,6 +174,14 @@ public class DictMealSettingController extends BaseController {
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{dictCodes}")
     public BaseResult remove(@PathVariable Long[] dictCodes) {
+
+        List<SysDictData> dictDataList = dictDataService.selectBatchByIds(Arrays.asList(dictCodes));
+
+        List<SysDictData> collect = dictDataList.stream().filter(dictData -> MealSettingConstants.defaultMeals.contains(dictData.getDictValue())).collect(Collectors.toList());
+        if (CollectionUtils.isNotEmpty(collect)) {
+            return BaseResult.error("默认餐次不能被删除");
+        }
+
         dictDataService.deleteDictDataByIds(dictCodes);
         return success();
     }

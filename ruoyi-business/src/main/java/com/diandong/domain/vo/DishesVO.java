@@ -9,6 +9,7 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 菜品信息VO实体类
@@ -27,6 +28,12 @@ public class DishesVO extends BaseEntity implements Serializable {
     @NotNull(groups = {Update.class})
     @ApiModelProperty(value = "编号")
     private Long id;
+
+    /**
+     * 菜品代码
+     */
+    @ApiModelProperty(value = "菜品代码")
+    private String code;
 
     /**
      * 食堂id
@@ -77,9 +84,9 @@ public class DishesVO extends BaseEntity implements Serializable {
     private String specification;
 
     /**
-     * 预估价
+     * 内部价格
      */
-    @ApiModelProperty(value = "预估价")
+    @ApiModelProperty(value = "内部价格")
     private BigDecimal prePrice;
 
     /**
@@ -92,7 +99,7 @@ public class DishesVO extends BaseEntity implements Serializable {
      * 菜品属性id
      */
     @ApiModelProperty(value = "菜品属性id")
-    private Long dishesAttrId;
+    private String dishesAttrId;
 
     /**
      * 菜品属性名称
@@ -119,10 +126,28 @@ public class DishesVO extends BaseEntity implements Serializable {
     private String dishesIntroduction;
 
     /**
-     * 状态
+     * 状态（0：下架；1：上架）
      */
-    @ApiModelProperty(value = "状态")
+    @ApiModelProperty(value = "状态（0：下架；1：上架）")
     private Integer state;
 
+    /**
+     * 检测报告
+     */
+    @ApiModelProperty(value = "检测报告")
+    private String testReport;
+
+
+    @ApiModelProperty(value = "原材料信息")
+    private List<DishesRawMaterialVO> dishesRawMaterialList;
+
+    @ApiModelProperty(value = "营养信息")
+    private List<DishesNutritionVO> dishesNutritionList;
+
+    @ApiModelProperty(value = "原材料供应商信息")
+    private List<DishesSupplierVO> dishesSupplierList;
+
+    @ApiModelProperty(value = "添加剂信息")
+    private List<DishesAdditiveVO> dishesAdditiveList;
 
 }

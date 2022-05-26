@@ -3,18 +3,22 @@ package com.ruoyi.web.controller.business;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.domain.dto.ChefManagementDTO;
 import com.diandong.domain.dto.ReserveSampleDTO;
+import com.diandong.domain.dto.ReserveSampleGroupExportDTO;
+import com.diandong.domain.po.CanteenPO;
 import com.diandong.domain.po.ChefManagementPO;
 import com.diandong.domain.po.ReserveSamplePO;
 import com.diandong.domain.vo.ChefManagementVO;
 import com.diandong.domain.vo.ReserveSampleVO;
 import com.diandong.mapstruct.ChefManagementMsMapper;
 import com.diandong.mapstruct.ReserveSampleMsMapper;
+import com.diandong.service.CanteenMpService;
 import com.diandong.service.ReserveSampleMpService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
@@ -30,12 +34,14 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.catalina.security.SecurityUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -53,6 +59,8 @@ public class ReserveSampleController extends BaseController {
 
     @Resource
     private ReserveSampleMpService reserveSampleMpService;
+    @Resource
+    private CanteenMpService canteenMpService;
 
     /**
      * 预留样品分页查询
@@ -67,7 +75,12 @@ public class ReserveSampleController extends BaseController {
     @GetMapping
     public BaseResult getList(ReserveSampleVO vo) {
 
+        CanteenPO canteen = canteenMpService.lambdaQuery().eq(CanteenPO::getDeptId, SecurityUtils.getDeptId()).one();
+
+        vo.setReserveCanteenId(canteen.getId());
         Page<ReserveSamplePO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
+
+
         return BaseResult.success(page);
     }
 
@@ -101,9 +114,14 @@ public class ReserveSampleController extends BaseController {
     @PostMapping
     public BaseResult save(@RequestBody @Validated(Insert.class) ReserveSampleVO vo) {
 
-        LoginUser loginUser = SecurityUtils.getLoginUser();
+
+        CanteenPO canteen = canteenMpService.lambdaQuery().eq(CanteenPO::getDeptId, SecurityUtils.getDeptId()).one();
+        if (Objects.isNull(canteen)) {
+            return BaseResult.error("您不是食堂管理人员，请勿操作");
+        }
+
         ReserveSamplePO po = ReserveSampleMsMapper.INSTANCE.vo2po(vo);
-        po.setReserveCanteenId(loginUser.getDeptId());
+        po.setReserveCanteenId(canteen.getId());
         boolean result = reserveSampleMpService.save(po);
         if (result) {
             return BaseResult.successMsg("添加成功！");
@@ -136,95 +154,100 @@ public class ReserveSampleController extends BaseController {
     /**
      * 预留样品删除
      *
-     * @param id 编号id
+     * @param ids 编号id
      * @return 返回结果
      */
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
     })
     @ApiOperation(value = "预留样品删除", notes = "预留样品删除", httpMethod = "DELETE")
-    @DeleteMapping(value = "/{id}")
-    public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = reserveSampleMpService.removeById(id);
+    @DeleteMapping(value = "/{ids}")
+    public BaseResult delete(@PathVariable("ids") Long[] ids) {
+        boolean result = reserveSampleMpService.removeByIds(Arrays.asList(ids));
         if (result) {
             return BaseResult.successMsg("删除成功");
         } else {
             return BaseResult.error("删除失败");
         }
+    }
+
+
+    /**
+     * 预留样品分页查询
+     *
+     * @param vo 参数对象
+     * @return 分页数据结果
+     */
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "ReserveSampleVO", name = "vo", value = "查询参数")
+    })
+    @ApiOperation(value = "预留样品分页查询", notes = "预留样品分页查询方法", httpMethod = "GET")
+    @GetMapping("/group")
+    public BaseResult getGroupList(ReserveSampleVO vo) {
+        Page<ReserveSamplePO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
+        Page<ReserveSampleDTO> result = reserveSampleMpService.resetPage(page);
+        return BaseResult.success(result);
     }
 
     /**
-     * 预留样品批量删除
+     * 导出
      *
-     * @param idList 编号id集合
-     * @return 返回结果
+     * @param response
+     * @param vo
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "预留样品批量删除", notes = "预留样品批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = reserveSampleMpService.removeByIds(idList);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
+    @ApiOperation(value = "食堂留样登记导出")
+    @GetMapping("/export/canteen")
+    public void exportCanteen(HttpServletResponse response, ReserveSampleVO vo) {
+
+        List<Long> ids = vo.getIds();
+        List<ReserveSamplePO> list;
+        if (CollectionUtils.isNotEmpty(ids)) {
+            list = reserveSampleMpService.lambdaQuery().in(ReserveSamplePO::getId, ids).list();
         } else {
-            return BaseResult.error("删除失败");
+            CanteenPO canteen = canteenMpService.lambdaQuery().eq(CanteenPO::getDeptId, SecurityUtils.getDeptId()).one();
+            vo.setReserveCanteenId(canteen.getId());
+            list = onSelectWhere(vo).list();
         }
+
+        List<ReserveSampleDTO> exportList = reserveSampleMpService.changeDTO(list);
+
+        ExcelUtil<ReserveSampleDTO> util = new ExcelUtil<ReserveSampleDTO>(ReserveSampleDTO.class);
+        util.exportExcel(response, exportList, "留样登记");
+
     }
 
-//    /**
-//     * 导出
-//     *
-//     * @param response
-//     * @param vo
-//     */
-//    @Log(title = "预留样品导出", businessType = BusinessType.EXPORT)
-//    @PostMapping("/export/canteen")
-//    public void export(HttpServletResponse response, ReserveSampleVO vo) {
-//
-//        List<Long> ids = vo.getIds();
-//
-//        List<ReserveSamplePO> list;
-//        if (CollectionUtils.isNotEmpty(ids)) {
-//            list = reserveSampleMpService.lambdaQuery().in(ReserveSamplePO::getId, ids).list();
-//        } else {
-//            list = onSelectWhere(vo).list();
-//        }
-//
-//
-//
-//
-//        ExcelUtil<ReserveSampleDTO> util = new ExcelUtil<ReserveSampleDTO>(ReserveSampleDTO.class);
-//        util.exportExcel(response, chefManagementList, "厨师管理");
-//
-//    }
-//    /**
-//     * 导出
-//     *
-//     * @param response
-//     * @param vo
-//     */
-//    @Log(title = "预留样品导出", businessType = BusinessType.EXPORT)
-//    @PostMapping("/export/canteen")
-//    public void export(HttpServletResponse response, ReserveSampleVO vo) {
-//
-//        List<Long> ids = vo.getIds();
-//
-//        List<ReserveSamplePO> list;
-//        if (CollectionUtils.isNotEmpty(ids)) {
-//            list = reserveSampleMpService.lambdaQuery().in(ReserveSamplePO::getId, ids).list();
-//        } else {
-//            list = onSelectWhere(vo).list();
-//        }
-//
-//
-//
-//
-//        ExcelUtil<ReserveSampleDTO> util = new ExcelUtil<ReserveSampleDTO>(ReserveSampleDTO.class);
-//        util.exportExcel(response, chefManagementList, "厨师管理");
-//
-//    }
+    /**
+     * 导出
+     *
+     * @param response
+     * @param vo
+     */
+    @ApiOperation(value = "集团留样登记导出")
+    @GetMapping("/export/group")
+    public void exportGroup(HttpServletResponse response, ReserveSampleVO vo) {
+
+        List<Long> ids = vo.getIds();
+
+        List<ReserveSamplePO> list;
+        if (CollectionUtils.isNotEmpty(ids)) {
+            list = reserveSampleMpService.lambdaQuery().in(ReserveSamplePO::getId, ids).list();
+        } else {
+            list = onSelectWhere(vo).list();
+        }
+
+        List<ReserveSampleDTO> exportList = reserveSampleMpService.changeDTO(list);
+        List<ReserveSampleGroupExportDTO> resultList = new ArrayList<>();
+
+        exportList.forEach(reserveSampleDTO -> {
+            ReserveSampleGroupExportDTO exportDTO = new ReserveSampleGroupExportDTO();
+            BeanUtils.copyProperties(reserveSampleDTO, exportDTO);
+            resultList.add(exportDTO);
+        });
+
+        ExcelUtil<ReserveSampleGroupExportDTO> util = new ExcelUtil<ReserveSampleGroupExportDTO>(ReserveSampleGroupExportDTO.class);
+        util.exportExcel(response, resultList, "留样登记");
+
+    }
 
 
     private LambdaQueryChainWrapper<ReserveSamplePO> onSelectWhere(ReserveSampleVO vo) {
@@ -236,6 +259,7 @@ public class ReserveSampleController extends BaseController {
         }
         queryWrapper
                 .eq(ObjectUtils.isNotEmpty(vo.getId()), ReserveSamplePO::getId, vo.getId())
+                .eq(ObjectUtils.isNotEmpty(vo.getReserveCanteenId()), ReserveSamplePO::getReserveCanteenId, vo.getReserveCanteenId())
                 .eq(ObjectUtils.isNotEmpty(vo.getReserveDate()), ReserveSamplePO::getReserveDate, vo.getReserveDate())
                 .eq(ObjectUtils.isNotEmpty(vo.getMealTimes()), ReserveSamplePO::getMealTimes, vo.getMealTimes())
                 .eq(StringUtils.isNotBlank(vo.getFoodName()), ReserveSamplePO::getFoodName, vo.getFoodName())

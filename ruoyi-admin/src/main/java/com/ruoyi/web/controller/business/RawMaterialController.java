@@ -12,18 +12,17 @@ import com.diandong.domain.po.RawMaterialPO;
 import com.diandong.domain.vo.RawMaterialVO;
 import com.diandong.mapstruct.RawMaterialMsMapper;
 import com.diandong.service.RawMaterialMpService;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -151,6 +150,23 @@ public class RawMaterialController extends BaseController {
         } else {
             return BaseResult.error("删除失败");
         }
+    }
+
+    @ApiOperation(value = "跟你就Type查询原材料信息")
+    @GetMapping("/type")
+    public BaseResult getListByType(
+            @RequestParam(name = "categoryId", required = false) String categoryId,
+            @RequestParam(name = "pageNum", required = true) Integer pageNum,
+            @RequestParam(name = "pageSize", required = true) Integer pageSize
+
+    ) {
+
+        Page<RawMaterialPO> page = rawMaterialMpService.lambdaQuery()
+                .eq(RawMaterialPO::getDelFlag, Constants.DEL_NO)
+                .eq(StringUtils.isNotBlank(categoryId), RawMaterialPO::getCategoryId, categoryId)
+                .page(new Page<>(pageNum, pageSize));
+
+        return BaseResult.success(page);
     }
 
 

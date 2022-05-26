@@ -103,12 +103,12 @@ public class IngredientsPO implements Serializable {
      * */
    @TableField(exist = false)
    @ApiModelProperty(value ="主料")
-   private String zic1;
+   private String mainIngredient;
    /**
     * 辅料
     * */
     @TableField(exist = false)
     @ApiModelProperty(value ="辅料")
-    private String zio2;
+    private String excipients;
 
 }

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.DishesAdditiveMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.DishesAdditivePO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="dishes_id" jdbcType="BIGINT" property="dishesId"/>
+        <result column="additive_name" jdbcType="VARCHAR" property="additiveName"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,da.id
+            ,da.dishes_id
+            ,da.additive_name
+            ,da.content
+            ,da.del_flag
+            ,da.create_by
+            ,da.create_time
+            ,da.update_by
+            ,da.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and da.id = #{id}
+            </if>
+            <if test="additiveName != null and additiveName != ''">
+                and da.additive_name = #{additiveName}
+            </if>
+            <if test="content != null and content != ''">
+                and da.content = #{content}
+            </if>
+            <if test="delFlag != null">
+                and da.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and da.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and da.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_dishes_additive -->
+
+</mapper>

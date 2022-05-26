@@ -171,7 +171,7 @@ public class HealthCertificateController extends BaseController {
 
     private LambdaQueryChainWrapper<HealthCertificatePO> onSelectWhere(HealthCertificateVO vo) {
 
-        LambdaQueryChainWrapper<HealthCertificatePO> queryWrapper = healthCertificateMpService.lambdaQuery();
+        LambdaQueryChainWrapper<HealthCertificatePO> queryWrapper = healthCertificateMpService.lambdaQuery().orderByDesc(HealthCertificatePO::getId);
 
         if (Objects.isNull(vo)) {
             return queryWrapper;
@@ -179,14 +179,16 @@ public class HealthCertificateController extends BaseController {
         queryWrapper
                 .eq(ObjectUtils.isNotEmpty(vo.getId()), HealthCertificatePO::getId, vo.getId())
                 .eq(StringUtils.isNotBlank(vo.getHealthCertPic()), HealthCertificatePO::getHealthCertPic, vo.getHealthCertPic())
-                .eq(StringUtils.isNotBlank(vo.getName()), HealthCertificatePO::getName, vo.getName())
-                .eq(StringUtils.isNotBlank(vo.getPhone()), HealthCertificatePO::getPhone, vo.getPhone())
-                .eq(ObjectUtils.isNotEmpty(vo.getValidityStartTime()), HealthCertificatePO::getValidityStartTime, vo.getValidityStartTime())
-                .eq(ObjectUtils.isNotEmpty(vo.getValidityEndTime()), HealthCertificatePO::getValidityEndTime, vo.getValidityEndTime())
-                .eq(StringUtils.isNotBlank(vo.getCode()), HealthCertificatePO::getCode, vo.getCode())
+                .like(StringUtils.isNotBlank(vo.getName()), HealthCertificatePO::getName, vo.getName())
+                .like(StringUtils.isNotBlank(vo.getPhone()), HealthCertificatePO::getPhone, vo.getPhone())
+                .like(StringUtils.isNotBlank(vo.getCode()), HealthCertificatePO::getCode, vo.getCode())
                 .eq(ObjectUtils.isNotEmpty(vo.getSex()), HealthCertificatePO::getSex, vo.getSex())
                 .eq(ObjectUtils.isNotEmpty(vo.getBirthday()), HealthCertificatePO::getBirthday, vo.getBirthday())
                 .eq(ObjectUtils.isNotEmpty(vo.getState()), HealthCertificatePO::getState, vo.getState());
+
+        if (Objects.nonNull(vo.getStartTime()) && Objects.nonNull(vo.getEndTime())) {
+            queryWrapper.between(HealthCertificatePO::getValidityEndTime, vo.getStartTime(), vo.getEndTime());
+        }
 
         return queryWrapper;
     }

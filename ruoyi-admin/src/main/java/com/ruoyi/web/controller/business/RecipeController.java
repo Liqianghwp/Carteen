@@ -1,8 +1,10 @@
 package com.ruoyi.web.controller.business;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
@@ -59,7 +61,7 @@ public class RecipeController extends BaseController {
     private DishesMpService dishesMpService;
 
     /**
-     * 分页查询
+     * 食谱分页查询
      *
      * @param vo 参数对象
      * @return 分页数据结果
@@ -67,21 +69,16 @@ public class RecipeController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "RecipeVO", name = "vo", value = "查询参数")
     })
-    @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
+    @ApiOperation(value = "食谱分页查询", notes = "食谱分页查询方法", httpMethod = "GET")
     @GetMapping
-    public TableDataInfo<RecipeDTO> getList(RecipeVO vo) {
-        startPage();
-        List<RecipePO> dataList = recipeMpService.lambdaQuery()
-                .eq(ObjectUtils.isNotEmpty(vo.getId()), RecipePO::getId, vo.getId())
-                .eq(StringUtils.isNotBlank(vo.getRecipeName()), RecipePO::getRecipeName, vo.getRecipeName())
-                .eq(ObjectUtils.isNotEmpty(vo.getRecipeDate()), RecipePO::getRecipeDate, vo.getRecipeDate())
-                .eq(ObjectUtils.isNotEmpty(vo.getAddWayId()), RecipePO::getAddWayId, vo.getAddWayId())
-                .eq(StringUtils.isNotBlank(vo.getAddWayName()), RecipePO::getAddWayName, vo.getAddWayName())
-                .eq(ObjectUtils.isNotEmpty(vo.getStatus()), RecipePO::getStatus, vo.getStatus())
-                .list();
-        TableDataInfo pageData = getDataTable(dataList);
-        pageData.setRows(RecipeMsMapper.INSTANCE.poList2dtoList(dataList));
-        return pageData;
+    public BaseResult getList(RecipeVO vo) {
+
+        Page<RecipePO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
+
+        if (CollectionUtils.isNotEmpty(page.getRecords())) {
+            recipeMpService.resetRecipeList(page.getRecords());
+        }
+        return BaseResult.success(page);
     }
 
     /**
@@ -234,32 +231,18 @@ public class RecipeController extends BaseController {
         }
     }
 
-    private LambdaQueryChainWrapper<DishesPO> onSelectWhere(DishesVO vo) {
-
-        LambdaQueryChainWrapper<DishesPO> queryWrapper = dishesMpService.lambdaQuery();
+    private LambdaQueryChainWrapper<RecipePO> onSelectWhere(RecipeVO vo) {
+        LambdaQueryChainWrapper<RecipePO> queryWrapper = recipeMpService.lambdaQuery();
 
         if (Objects.isNull(vo)) {
             return queryWrapper;
         }
-        queryWrapper
-                .eq(ObjectUtils.isNotEmpty(vo.getId()), DishesPO::getId, vo.getId())
-                .eq(ObjectUtils.isNotEmpty(vo.getCanteenId()), DishesPO::getCanteenId, vo.getCanteenId())
-                .eq(StringUtils.isNotBlank(vo.getCanteenName()), DishesPO::getCanteenName, vo.getCanteenName())
-                .eq(ObjectUtils.isNotEmpty(vo.getDishesTypeId()), DishesPO::getDishesTypeId, vo.getDishesTypeId())
-                .eq(StringUtils.isNotBlank(vo.getDishesTypeName()), DishesPO::getDishesTypeName, vo.getDishesTypeName())
-                .eq(StringUtils.isNotBlank(vo.getDishesName()), DishesPO::getDishesName, vo.getDishesName())
-                .eq(ObjectUtils.isNotEmpty(vo.getDishesPrice()), DishesPO::getDishesPrice, vo.getDishesPrice())
-                .eq(StringUtils.isNotBlank(vo.getDishesUnit()), DishesPO::getDishesUnit, vo.getDishesUnit())
-                .eq(StringUtils.isNotBlank(vo.getSpecification()), DishesPO::getSpecification, vo.getSpecification())
-                .eq(ObjectUtils.isNotEmpty(vo.getPrePrice()), DishesPO::getPrePrice, vo.getPrePrice())
-                .eq(StringUtils.isNotBlank(vo.getOrigin()), DishesPO::getOrigin, vo.getOrigin())
-                .eq(ObjectUtils.isNotEmpty(vo.getDishesAttrId()), DishesPO::getDishesAttrId, vo.getDishesAttrId())
-                .eq(StringUtils.isNotBlank(vo.getDishesAttrName()), DishesPO::getDishesAttrName, vo.getDishesAttrName())
-                .eq(StringUtils.isNotBlank(vo.getRemark()), DishesPO::getRemark, vo.getRemark())
-                .eq(StringUtils.isNotBlank(vo.getDishesPicture()), DishesPO::getDishesPicture, vo.getDishesPicture())
-                .eq(StringUtils.isNotBlank(vo.getDishesIntroduction()), DishesPO::getDishesIntroduction, vo.getDishesIntroduction())
-                .eq(ObjectUtils.isNotEmpty(vo.getState()), DishesPO::getState, vo.getState());
-
+        queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getId()), RecipePO::getId, vo.getId());
+        queryWrapper.eq(StringUtils.isNotBlank(vo.getRecipeName()), RecipePO::getRecipeName, vo.getRecipeName());
+        queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getRecipeDate()), RecipePO::getRecipeDate, vo.getRecipeDate());
+        queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getAddWayId()), RecipePO::getAddWayId, vo.getAddWayId());
+        queryWrapper.eq(StringUtils.isNotBlank(vo.getAddWayName()), RecipePO::getAddWayName, vo.getAddWayName());
+        queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getStatus()), RecipePO::getStatus, vo.getStatus());
         return queryWrapper;
     }
 

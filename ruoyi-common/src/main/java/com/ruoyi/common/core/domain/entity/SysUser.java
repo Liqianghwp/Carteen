@@ -1,5 +1,6 @@
 package com.ruoyi.common.core.domain.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ruoyi.common.annotation.Excel;
@@ -8,6 +9,8 @@ import com.ruoyi.common.annotation.Excel.Type;
 import com.ruoyi.common.annotation.Excels;
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.xss.Xss;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -22,86 +25,108 @@ import java.util.List;
  *
  * @author ruoyi
  */
+@ApiModel(value = "用户信息实体")
 public class SysUser extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
      * 用户ID
      */
+    @ApiModelProperty(value = "")
     @Excel(name = "用户序号", cellType = ColumnType.NUMERIC, prompt = "用户编号")
     private Long userId;
 
     /**
      * 部门ID
      */
+    @ApiModelProperty(value = "")
     @Excel(name = "部门编号", type = Type.IMPORT)
     private Long deptId;
 
     /**
      * 用户账号
      */
+    @ApiModelProperty(value = "")
     @Excel(name = "登录名称")
     private String userName;
 
     /**
      * 用户昵称
      */
+    @ApiModelProperty(value = "")
     @Excel(name = "用户名称")
     private String nickName;
 
     /**
+     * 用户类型
+     */
+    @ApiModelProperty(value = "")
+    private String userType;
+
+    /**
      * 用户邮箱
      */
+    @ApiModelProperty(value = "")
     @Excel(name = "用户邮箱")
     private String email;
 
     /**
      * 手机号码
      */
+    @ApiModelProperty(value = "")
     @Excel(name = "手机号码")
     private String phonenumber;
 
     /**
      * 用户性别
      */
+    @ApiModelProperty(value = "")
     @Excel(name = "用户性别", readConverterExp = "0=男,1=女,2=未知")
     private String sex;
 
     /**
      * 用户头像
      */
+    @ApiModelProperty(value = "")
     private String avatar;
 
     /**
      * 密码
      */
+    @ApiModelProperty(value = "")
     private String password;
 
     /**
      * 盐加密
      */
+    @ApiModelProperty(value = "")
+    @TableField(exist = false)
     private String salt;
 
     /**
      * 帐号状态（0正常 1停用）
      */
+    @ApiModelProperty(value = "")
     @Excel(name = "帐号状态", readConverterExp = "0=正常,1=停用")
     private String status;
 
     /**
-     * 删除标志（0代表存在 2代表删除）
+     * 删除标志（0代表存在 1代表删除）
      */
+    @ApiModelProperty(value = "")
     private String delFlag;
 
     /**
      * 最后登录IP
      */
+    @ApiModelProperty(value = "")
     @Excel(name = "最后登录IP", type = Type.EXPORT)
     private String loginIp;
 
     /**
      * 最后登录时间
      */
+    @ApiModelProperty(value = "")
     @Excel(name = "最后登录时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Type.EXPORT)
     private Date loginDate;
 
@@ -110,54 +135,91 @@ public class SysUser extends BaseEntity {
     /**
      * 用户所在区域
      */
+    @ApiModelProperty(value = "地区")
     private String userArea;
     /**
      * 用户身高
      */
+    @ApiModelProperty(value = "用户身高")
     private String userHeight;
     /**
      * 用户体重
      */
+    @ApiModelProperty(value = "用户体重")
     private String userWeight;
     /**
      * 用户生日
      */
+    @ApiModelProperty(value = "用户生日")
     private String userBirthday;
+
+    /**
+     * 审核状态
+     * 0：审核中，1：审核通过，2：驳回
+     */
+    @ApiModelProperty(value = "审核状态")
+    private String checkState;
+
+    /**
+     * 驳回原因
+     */
+    @ApiModelProperty(value = "驳回原因")
+    private String rejectionReason;
 
     /**
      * 集团id
      */
+    @ApiModelProperty(value = "集团id")
+    @TableField(exist = false)
     private Long parentId;
 
 
     /**
      * 部门对象
      */
+    @ApiModelProperty(value = "部门对象")
     @Excels({
             @Excel(name = "部门名称", targetAttr = "deptName", type = Type.EXPORT),
             @Excel(name = "部门负责人", targetAttr = "leader", type = Type.EXPORT)
     })
+    @TableField(exist = false)
     private SysDept dept;
 
     /**
      * 角色对象
      */
+    @ApiModelProperty(value = "角色对象")
+    @TableField(exist = false)
     private List<SysRole> roles;
 
     /**
      * 角色组
      */
+    @ApiModelProperty(value = "角色组")
+    @TableField(exist = false)
     private Long[] roleIds;
 
     /**
      * 岗位组
      */
+    @ApiModelProperty(value = "岗位组")
+    @TableField(exist = false)
     private Long[] postIds;
 
     /**
      * 角色ID
      */
+    @ApiModelProperty(value = "角色ID")
+    @TableField(exist = false)
     private Long roleId;
+
+    @ApiModelProperty(value = "人脸认证图片")
+    @TableField(exist = false)
+    private String facePicture;
+
+    @ApiModelProperty(value = "勾选导出的ID集合")
+    @TableField(exist = false)
+    private List<Long> ids;
 
     public SysUser() {
 
@@ -210,6 +272,14 @@ public class SysUser extends BaseEntity {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
     @Email(message = "邮箱格式不正确")
@@ -376,6 +446,39 @@ public class SysUser extends BaseEntity {
 
     public void setParentId(Long parentId) {
         this.parentId = parentId;
+    }
+
+
+    public List<Long> getIds() {
+        return ids;
+    }
+
+    public void setIds(List<Long> ids) {
+        this.ids = ids;
+    }
+
+    public String getCheckState() {
+        return checkState;
+    }
+
+    public void setCheckState(String checkState) {
+        this.checkState = checkState;
+    }
+
+    public String getRejectionReason() {
+        return rejectionReason;
+    }
+
+    public void setRejectionReason(String rejectionReason) {
+        this.rejectionReason = rejectionReason;
+    }
+
+    public String getFacePicture() {
+        return facePicture;
+    }
+
+    public void setFacePicture(String facePicture) {
+        this.facePicture = facePicture;
     }
 
     @Override

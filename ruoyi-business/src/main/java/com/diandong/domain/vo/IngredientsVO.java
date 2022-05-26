@@ -60,14 +60,11 @@ public class IngredientsVO extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "备注")
     private String remark;
 
-
-
-    @ApiModelProperty(value = "辅料")
-    private List<IngredientsDetailVO> zio;
-
     @ApiModelProperty(value = "主料")
     private List<IngredientsDetailVO> zic;
 
+    @ApiModelProperty(value = "辅料")
+    private List<IngredientsDetailVO> zio;
 
 
 }

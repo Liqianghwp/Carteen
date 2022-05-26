@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.business;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
@@ -12,9 +13,15 @@ import com.diandong.domain.po.DishesTypePO;
 import com.diandong.domain.vo.DishesTypeVO;
 import com.diandong.mapstruct.DishesTypeMsMapper;
 import com.diandong.service.DishesTypeMpService;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.system.constant.DeptConstants;
+import com.ruoyi.system.service.ISysDeptService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -23,7 +30,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -40,6 +50,8 @@ public class DishesTypeController extends BaseController {
 
     @Resource
     private DishesTypeMpService dishesTypeMpService;
+    @Resource
+    private ISysDeptService deptService;
 
     /**
      * 分页查询
@@ -96,7 +108,14 @@ public class DishesTypeController extends BaseController {
         DishesTypePO po = DishesTypeMsMapper.INSTANCE.vo2po(vo);
 
 //        设置创建人信息
-        po.setCreateBy(loginUser.getUserId());
+//        po.setCreateBy(loginUser.getUserId());
+
+        SysDept groupDept = getGroupDept(loginUser.getDeptId());
+        if (Objects.isNull(groupDept)) {
+            throw new RuntimeException("当前账号无法创建菜品分类");
+        }
+        po.setGroupId(groupDept.getDeptId());
+        po.setGroupName(groupDept.getDeptName());
 
         boolean result = dishesTypeMpService.save(po);
         if (result) {
@@ -105,6 +124,27 @@ public class DishesTypeController extends BaseController {
             return BaseResult.error("添加失败！");
         }
     }
+
+    /**
+     * 查询集团id
+     *
+     * @param deptId
+     * @return
+     */
+    private SysDept getGroupDept(Long deptId) {
+
+        SysDept dept = null;
+        if (deptId == DeptConstants.GROUP) {
+            return dept;
+        } else {
+            dept = deptService.selectDeptById(deptId);
+            if (!(dept.getParentId() == DeptConstants.GROUP)) {
+                dept = getGroupDept(dept.getParentId());
+            }
+        }
+        return dept;
+    }
+
 
     /**
      * 更新
@@ -151,17 +191,47 @@ public class DishesTypeController extends BaseController {
         }
     }
 
+
+    /**
+     * 导出
+     *
+     * @param response
+     * @param vo
+     */
+    @Log(title = "菜品类别导出", businessType = BusinessType.EXPORT)
+    @ApiOperation(value = "菜品类别导出")
+    @GetMapping("/export")
+    public void export(HttpServletResponse response, DishesTypeVO vo) {
+        List<Long> ids = vo.getIds();
+
+        List<DishesTypePO> list;
+        if (CollectionUtils.isNotEmpty(ids)) {
+            list = dishesTypeMpService.lambdaQuery().in(DishesTypePO::getId, ids).list();
+        } else {
+            list = onSelectWhere(vo).list();
+        }
+        List<DishesTypeDTO> dishesTypeList = new ArrayList<>();
+
+        list.forEach(dishesTypePO -> {
+            dishesTypeList.add(DishesTypeMsMapper.INSTANCE.po2dto(dishesTypePO));
+        });
+
+        ExcelUtil<DishesTypeDTO> util = new ExcelUtil<DishesTypeDTO>(DishesTypeDTO.class);
+        util.exportExcel(response, dishesTypeList, "菜品类别");
+    }
+
+
     private LambdaQueryChainWrapper<DishesTypePO> onSelectWhere(DishesTypeVO vo) {
 
-        LambdaQueryChainWrapper<DishesTypePO> queryWrapper = dishesTypeMpService.lambdaQuery();
+        LambdaQueryChainWrapper<DishesTypePO> queryWrapper = dishesTypeMpService.lambdaQuery().orderByDesc(DishesTypePO::getId);
 
         if (Objects.isNull(vo)) {
             return queryWrapper;
         }
         queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getId()), DishesTypePO::getId, vo.getId());
-        queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getCanteenId()), DishesTypePO::getCanteenId, vo.getCanteenId());
-        queryWrapper.eq(StringUtils.isNotBlank(vo.getCanteenName()), DishesTypePO::getCanteenName, vo.getCanteenName());
-        queryWrapper.eq(StringUtils.isNotBlank(vo.getTypeName()), DishesTypePO::getTypeName, vo.getTypeName());
+        queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getGroupId()), DishesTypePO::getGroupId, vo.getGroupId());
+        queryWrapper.eq(StringUtils.isNotBlank(vo.getGroupName()), DishesTypePO::getGroupName, vo.getGroupName());
+        queryWrapper.like(StringUtils.isNotBlank(vo.getTypeName()), DishesTypePO::getTypeName, vo.getTypeName());
         queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getSort()), DishesTypePO::getSort, vo.getSort());
         queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getIsShow()), DishesTypePO::getIsShow, vo.getIsShow());
         queryWrapper.eq(StringUtils.isNotBlank(vo.getRemark()), DishesTypePO::getRemark, vo.getRemark());

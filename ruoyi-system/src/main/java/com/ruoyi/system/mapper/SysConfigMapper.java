@@ -1,5 +1,7 @@
 package com.ruoyi.system.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.system.domain.SysConfig;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -10,7 +12,7 @@ import java.util.List;
  *
  * @author ruoyi
  */
-public interface SysConfigMapper {
+public interface SysConfigMapper extends BaseMapper<SysConfig> {
     /**
      * 查询参数配置信息
      *

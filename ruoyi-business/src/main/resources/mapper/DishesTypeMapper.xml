@@ -4,8 +4,8 @@
 
     <resultMap id="BaseResultMap" type="com.diandong.domain.po.DishesTypePO">
         <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="canteen_id" jdbcType="BIGINT" property="canteenId"/>
-        <result column="canteen_name" jdbcType="VARCHAR" property="canteenName"/>
+        <result column="group_id" jdbcType="BIGINT" property="groupId"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
         <result column="type_name" jdbcType="VARCHAR" property="typeName"/>
         <result column="sort" jdbcType="INTEGER" property="sort"/>
         <result column="is_show" jdbcType="INTEGER" property="isShow"/>
@@ -22,8 +22,8 @@
     <sql id="BaseSelectField">
         <trim prefixOverrides=",">
             ,dt.id
-            ,dt.canteen_id
-            ,dt.canteen_name
+            ,dt.group_id
+            ,dt.group_name
             ,dt.type_name
             ,dt.sort
             ,dt.is_show
@@ -44,11 +44,11 @@
             <if test="id != null">
                 and dt.id = #{id}
             </if>
-            <if test="canteenId != null">
-                and dt.canteen_id = #{canteenId}
+            <if test="groupId != null">
+                and dt.group_id = #{groupId}
             </if>
-            <if test="canteenName != null and canteenName != ''">
-                and dt.canteen_name = #{canteenName}
+            <if test="groupName != null and groupName != ''">
+                and dt.group_name = #{groupName}
             </if>
             <if test="typeName != null and typeName != ''">
                 and dt.type_name = #{typeName}

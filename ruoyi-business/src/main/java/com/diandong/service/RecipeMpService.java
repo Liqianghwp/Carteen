@@ -48,4 +48,9 @@ public interface RecipeMpService extends CommonService<RecipePO> {
      */
     BaseResult rawMaterialsList(List<RecipeDetailVO> voList);
 
+    /**
+     * 不容食谱列表信息
+     */
+    void resetRecipeList(List<RecipePO> records);
+
 }

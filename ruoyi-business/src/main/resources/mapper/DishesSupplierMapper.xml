@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.DishesSupplierMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.DishesSupplierPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="dishes_id" jdbcType="BIGINT" property="dishesId"/>
+        <result column="supplier_id" jdbcType="BIGINT" property="supplierId"/>
+        <result column="supplier_name" jdbcType="VARCHAR" property="supplierName"/>
+        <result column="raw_material_id" jdbcType="BIGINT" property="rawMaterialId"/>
+        <result column="raw_material_name" jdbcType="VARCHAR" property="rawMaterialName"/>
+        <result column="raw_material_origin" jdbcType="VARCHAR" property="rawMaterialOrigin"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,ds.id
+            ,da.dishes_id
+            ,ds.supplier_id
+            ,ds.supplier_name
+            ,ds.raw_material_id
+            ,ds.raw_material_name
+            ,ds.raw_material_origin
+            ,ds.del_flag
+            ,ds.create_by
+            ,ds.create_time
+            ,ds.update_by
+            ,ds.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and ds.id = #{id}
+            </if>
+            <if test="supplierId != null">
+                and ds.supplier_id = #{supplierId}
+            </if>
+            <if test="supplierName != null and supplierName != ''">
+                and ds.supplier_name = #{supplierName}
+            </if>
+            <if test="rawMaterialId != null">
+                and ds.raw_material_id = #{rawMaterialId}
+            </if>
+            <if test="rawMaterialName != null and rawMaterialName != ''">
+                and ds.raw_material_name = #{rawMaterialName}
+            </if>
+            <if test="rawMaterialOrigin != null and rawMaterialOrigin != ''">
+                and ds.raw_material_origin = #{rawMaterialOrigin}
+            </if>
+            <if test="delFlag != null">
+                and ds.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and ds.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and ds.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_dishes_supplier -->
+
+</mapper>

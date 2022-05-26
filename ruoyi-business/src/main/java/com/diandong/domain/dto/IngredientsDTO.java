@@ -81,8 +81,8 @@ public class IngredientsDTO implements Serializable {
     private LocalDateTime updateTime;
 
     @ApiModelProperty(value = "主料")
-    private List<IngredientsDetailPO> list;
+    private List<IngredientsDetailPO> zio;
 
     @ApiModelProperty(value = "辅料")
-    private List<IngredientsDetailPO> list1;
+    private List<IngredientsDetailPO> zic;
 }

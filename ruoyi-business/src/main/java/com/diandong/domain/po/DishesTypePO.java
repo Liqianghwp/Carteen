@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * 菜品分类PO实体类
  *
  * @author YuLiu
- * @date 2022-05-16
+ * @date 2022-05-24
  */
 @TableName("wis_dishes_type")
 @Data
@@ -30,18 +30,18 @@ public class DishesTypePO implements Serializable {
     private Long id;
 
     /**
-     * 食堂id
+     * 集团id
      */
-    @TableField(value = "canteen_id")
-    @ApiModelProperty(value = "食堂id")
-    private Long canteenId;
+    @TableField(value = "group_id")
+    @ApiModelProperty(value = "集团id")
+    private Long groupId;
 
     /**
-     * 食堂名称
+     * 集团名称
      */
-    @TableField(value = "canteen_name")
-    @ApiModelProperty(value = "食堂名称")
-    private String canteenName;
+    @TableField(value = "group_name")
+    @ApiModelProperty(value = "集团名称")
+    private String groupName;
 
     /**
      * 分类名称

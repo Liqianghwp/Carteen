@@ -40,6 +40,12 @@ public class ReserveSamplePO implements Serializable {
     private Long reserveCanteenId;
 
     /**
+     * 留样食堂名称
+     */
+    @TableField(exist = false)
+    @ApiModelProperty(value = "留样食堂名称")
+    private String reserveCanteenName;
+    /**
      * 留样日期
      */
     @JsonSerialize(using = LocalDateTimeSerializer.class)

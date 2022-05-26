@@ -1,6 +1,9 @@
 package com.ruoyi.system.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.common.core.domain.entity.SysDictData;
 import com.ruoyi.common.core.domain.entity.SysDictType;
+import com.ruoyi.system.domain.SysConfig;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -11,7 +14,7 @@ import java.util.List;
  * @author ruoyi
  */
 @Mapper
-public interface SysDictTypeMapper {
+public interface SysDictTypeMapper extends BaseMapper<SysDictType> {
     /**
      * 根据条件分页查询字典类型
      *

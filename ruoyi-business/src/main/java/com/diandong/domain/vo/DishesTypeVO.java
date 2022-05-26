@@ -10,12 +10,13 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 菜品分类VO实体类
  *
  * @author YuLiu
- * @date 2022-05-16
+ * @date 2022-05-24
  */
 @Data
 @ApiModel("菜品分类VO实体类")
@@ -30,16 +31,16 @@ public class DishesTypeVO extends BaseEntity implements Serializable {
     private Long id;
 
     /**
-     * 食堂id
+     * 集团id
      */
-    @ApiModelProperty(value = "食堂id")
-    private Long canteenId;
+    @ApiModelProperty(value = "集团id")
+    private Long groupId;
 
     /**
-     * 食堂名称
+     * 集团名称
      */
-    @ApiModelProperty(value = "食堂名称")
-    private String canteenName;
+    @ApiModelProperty(value = "集团名称")
+    private String groupName;
 
     /**
      * 分类名称
@@ -71,5 +72,7 @@ public class DishesTypeVO extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "是否包装")
     private Integer isPackage;
 
+    @ApiModelProperty(value = "勾选导出的id集合")
+    private List<Long> ids;
 
 }

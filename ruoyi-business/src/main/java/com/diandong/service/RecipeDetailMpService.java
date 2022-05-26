@@ -1,6 +1,7 @@
 package com.diandong.service;
 
 import com.diandong.configuration.CommonService;
+import com.diandong.domain.dto.RecipePieDayDTO;
 import com.diandong.domain.po.RecipeDetailPO;
 import com.diandong.domain.vo.RecipePieSituationVO;
 
@@ -18,6 +19,6 @@ public interface RecipeDetailMpService extends CommonService<RecipeDetailPO> {
      *
      * @param pieSituationVO
      */
-    void pieSituation(RecipePieSituationVO pieSituationVO);
+    RecipePieDayDTO pieSituation(RecipePieSituationVO pieSituationVO);
 
 }

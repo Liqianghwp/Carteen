@@ -1,36 +1,36 @@
 package com.ruoyi.web.controller.business;
 
-import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.extension.api.IErrorCode;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.domain.dto.IngredientsDTO;
 import com.diandong.domain.po.IngredientsDetailPO;
+import com.diandong.domain.po.IngredientsPO;
 import com.diandong.domain.vo.IngredientsDetailVO;
+import com.diandong.domain.vo.IngredientsVO;
 import com.diandong.mapstruct.IngredientsDetailMsMapper;
+import com.diandong.mapstruct.IngredientsMsMapper;
 import com.diandong.service.IngredientsDetailMpService;
+import com.diandong.service.IngredientsMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
-import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.IngredientsMpService;
-import com.diandong.domain.po.IngredientsPO;
-import com.diandong.domain.dto.IngredientsDTO;
-import com.diandong.domain.vo.IngredientsVO;
-import com.diandong.mapstruct.IngredientsMsMapper;
-import io.swagger.models.auth.In;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import javax.annotation.Resource;
 
 /**
  * 配料管理Controller
@@ -62,55 +62,41 @@ public class IngredientsController extends BaseController {
     @GetMapping
     public BaseResult getList(IngredientsVO vo) {
         Page<IngredientsPO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
-        for (IngredientsPO record : page.getRecords()) {
+        List<IngredientsPO> records = page.getRecords();
+        if (CollectionUtils.isNotEmpty(records)) {
 
-            List<IngredientsDetailPO> list = ingredientsDetailMpService.lambdaQuery().eq(IngredientsDetailPO::getIngredientsId, record.getId()).list();
-
-//            主料
-            List<IngredientsDetailPO> list1 = new ArrayList<>();
-//            辅料
-            List<IngredientsDetailPO> list2 = new ArrayList<>();
-
-            for (IngredientsDetailPO ingredientsDetailPO : list) {
-                if ("0".equalsIgnoreCase(ingredientsDetailPO.getType())) {
-                    list1.add(ingredientsDetailPO);
-                }else {
-                    list2.add(ingredientsDetailPO);
-                }
-
-            }
-
-//            String collect = list1.stream().map(ingredientsDetailPO -> ingredientsDetailPO.getRawMaterialName() + " " + ingredientsDetailPO.getNumber() + "g")
-//                    .collect(Collectors.joining(","));
-//
-//            Stream<String> stringStream = list1.stream().map(ingredientsDetailPO -> ingredientsDetailPO.getRawMaterialName() + " " + ingredientsDetailPO.getNumber() + "g");
-//
-//
-//            stringStream.collect(Collectors.joining(","))
+            List<Long> ingredientsIds = records.stream().map(IngredientsPO::getId).collect(Collectors.toList());
+            List<IngredientsDetailPO> detailList = ingredientsDetailMpService.lambdaQuery()
+                    .in(IngredientsDetailPO::getIngredientsId, ingredientsIds)
+                    .eq(IngredientsDetailPO::getDelFlag, false)
+                    .list();
 
 
-            StringBuilder stringBuilder=new StringBuilder();
-            for (IngredientsDetailPO ingredientsDetailPO : list1) {
-                if(stringBuilder.length() == 0){
-                    stringBuilder.append(ingredientsDetailPO.getRawMaterialName()+" " + ingredientsDetailPO.getNumber()+"g");
-                }else {
-                    stringBuilder.append(",") .append(ingredientsDetailPO.getRawMaterialName()+" " + ingredientsDetailPO.getNumber()+"g");
-                }
-            }
-            StringBuilder stringBuilder1= new StringBuilder();
-            for (IngredientsDetailPO ingredientsDetailPO : list2) {
-                if (stringBuilder1.length()==1){
-                    stringBuilder.append(ingredientsDetailPO.getRawMaterialName()+""+ingredientsDetailPO.getNumber()+"g");
-                }else {
-                    stringBuilder.append(",").append(ingredientsDetailPO.getRawMaterialName()+""+ingredientsDetailPO.getNumber()+"g");
+            for (IngredientsPO record : records) {
 
+                List<IngredientsDetailPO> collect = detailList.stream().filter(ingredientsDetailPO -> ingredientsDetailPO.getIngredientsId().equals(record.getId())).collect(Collectors.toList());
+                if (CollectionUtils.isNotEmpty(collect)) {
+
+                    Map<String, List<IngredientsDetailPO>> collect1 = collect.stream().collect(Collectors.groupingBy(IngredientsDetailPO::getType));
+
+                    for (Map.Entry<String, List<IngredientsDetailPO>> entry : collect1.entrySet()) {
+                        List<IngredientsDetailPO> value = entry.getValue();
+                        String val = null;
+                        if (CollectionUtils.isNotEmpty(value)) {
+                            val = value.stream().map(ingredientsDetailPO -> ingredientsDetailPO.getRawMaterialName() + " " + ingredientsDetailPO.getNumber() + "g").collect(Collectors.joining(","));
+                        }
+
+                        switch (entry.getKey()) {
+                            case "0":
+                                record.setMainIngredient(val);
+                                break;
+                            case "1":
+                                record.setExcipients(val);
+                                break;
+                        }
+                    }
                 }
             }
-
-
-            record.setZic1(stringBuilder.toString());
-            record.setZio2(stringBuilder1.toString());
-
         }
 
         return BaseResult.success(page);
@@ -128,23 +114,17 @@ public class IngredientsController extends BaseController {
     @ApiOperation(value = "配料管理根据id查询", notes = "配料管理根据id查询", httpMethod = "GET")
     @GetMapping(value = "/{id}")
     public BaseResult<IngredientsDTO> getById(@PathVariable("id") Long id) {
-        IngredientsDTO dto = IngredientsMsMapper.INSTANCE
-                .po2dto(ingredientsMpService.getById(id));
-        List<IngredientsDetailPO> list = ingredientsDetailMpService.lambdaQuery().eq(IngredientsDetailPO::getId, dto.getId()).list();
-        //    主料
-        List<IngredientsDetailPO> list1 = new ArrayList<>();
-//            辅料
-        List<IngredientsDetailPO> list2 = new ArrayList<>();
+        IngredientsDTO dto = IngredientsMsMapper.INSTANCE.po2dto(ingredientsMpService.getById(id));
+        List<IngredientsDetailPO> list = ingredientsDetailMpService.lambdaQuery()
+                .eq(IngredientsDetailPO::getId, dto.getId())
+                .eq(IngredientsDetailPO::getDelFlag, false)
+                .list();
 
-        for (IngredientsDetailPO ingredientsDetailPO : list) {
-            if ("0".equalsIgnoreCase(ingredientsDetailPO.getType())) {
-                list1.add(ingredientsDetailPO);
-            }else {
-                list2.add(ingredientsDetailPO);
-            }
+        if (CollectionUtils.isNotEmpty(list)) {
+            Map<String, List<IngredientsDetailPO>> collect = list.stream().collect(Collectors.groupingBy(IngredientsDetailPO::getType));
+            dto.setZio(CollectionUtils.isNotEmpty(collect.get("0")) ? collect.get("0") : null);
+            dto.setZic(CollectionUtils.isNotEmpty(collect.get("1")) ? collect.get("0") : null);
         }
-       dto.setList(list1);
-       dto.setList1(list2);
         return BaseResult.success(dto);
     }
 
@@ -162,38 +142,8 @@ public class IngredientsController extends BaseController {
     public BaseResult save(@RequestBody @Validated(Insert.class) IngredientsVO vo) {
         IngredientsPO po = IngredientsMsMapper.INSTANCE.vo2po(vo);
 
-        /**
-         * 主料
-         * */
-        List<IngredientsDetailVO> zic = vo.getZic();
-        List<IngredientsDetailPO> list = new ArrayList<>();
-        boolean result = ingredientsMpService.save(po);
-        for (IngredientsDetailVO ingredientsDetailVO : zic) {
-
-            ingredientsDetailVO.setType("0");
-            ingredientsDetailVO.setIngredientsId(po.getId());
-
-            IngredientsDetailPO po1= IngredientsDetailMsMapper.INSTANCE.vo2po(ingredientsDetailVO);
-            list.add(po1);
-
-
-        }
-        /**
-         * 辅料
-         * */
-        List<IngredientsDetailVO> zio = vo.getZio();
-        List<IngredientsDetailPO> objects = new ArrayList<>();
-        for (IngredientsDetailVO ingredientsDetailVO : zio) {
-            ingredientsDetailVO.setIngredientsId(po.getId());
-
-            ingredientsDetailVO.setType("1");
-            IngredientsDetailPO ingredientsDetailPO = IngredientsDetailMsMapper.INSTANCE.vo2po(ingredientsDetailVO);
-            objects.add(ingredientsDetailPO);
-        }
-
-
-        ingredientsDetailMpService.saveBatch(list);
-        ingredientsDetailMpService.saveBatch(objects);
+        List<IngredientsDetailPO> list = resetIngredientDetail(vo, po);
+        boolean result = ingredientsDetailMpService.saveBatch(list);
 
         if (result) {
             return BaseResult.successMsg("添加成功！");
@@ -213,33 +163,12 @@ public class IngredientsController extends BaseController {
     })
     @ApiOperation(value = "配料管理更新", notes = "配料管理更新", httpMethod = "PUT")
     @PutMapping
-    public BaseResult update( @RequestBody @Validated(Update.class) IngredientsVO vo) {
+    public BaseResult update(@RequestBody @Validated(Update.class) IngredientsVO vo) {
         IngredientsPO po = IngredientsMsMapper.INSTANCE.vo2po(vo);
 
-        /**
-         * 主料
-         * */
-        List<IngredientsDetailVO> zic = vo.getZic();
-        List<IngredientsDetailPO> list = new ArrayList<>();
-        for (IngredientsDetailVO ingredientsDetailVO : zic) {
-
-            ingredientsDetailVO.setType("0");
-            IngredientsDetailPO po1= IngredientsDetailMsMapper.INSTANCE.vo2po(ingredientsDetailVO);
-            list.add(po1);
-        }
-        /**
-         * 辅料
-         * */
-        List<IngredientsDetailVO> zio = vo.getZio();
-        List<IngredientsDetailPO> objects = new ArrayList<>();
-        for (IngredientsDetailVO ingredientsDetailVO : zio) {
-            ingredientsDetailVO.setType("1");
-            IngredientsDetailPO ingredientsDetailPO = IngredientsDetailMsMapper.INSTANCE.vo2po(ingredientsDetailVO);
-            objects.add(ingredientsDetailPO);
-        }
+        List<IngredientsDetailPO> list = resetIngredientDetail(vo, po);
 
         ingredientsDetailMpService.saveOrUpdateBatch(list);
-        ingredientsDetailMpService.saveOrUpdateBatch(objects);
         boolean result = ingredientsMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");
@@ -249,8 +178,31 @@ public class IngredientsController extends BaseController {
     }
 
 
+    private List<IngredientsDetailPO> resetIngredientDetail(IngredientsVO vo, IngredientsPO po) {
 
+        //        主料
+        List<IngredientsDetailVO> zic = vo.getZic();
+//        辅料
+        List<IngredientsDetailVO> zio = vo.getZio();
 
+        List<IngredientsDetailPO> list = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(zic)) {
+            zic.forEach(ingredientsDetailVO -> {
+                ingredientsDetailVO.setType("0");
+                ingredientsDetailVO.setIngredientsId(po.getId());
+                list.add(IngredientsDetailMsMapper.INSTANCE.vo2po(ingredientsDetailVO));
+            });
+        }
+        if (CollectionUtils.isNotEmpty(zio)) {
+            zio.forEach(ingredientsDetailVO -> {
+                ingredientsDetailVO.setType("1");
+                ingredientsDetailVO.setIngredientsId(po.getId());
+
+                list.add(IngredientsDetailMsMapper.INSTANCE.vo2po(ingredientsDetailVO));
+            });
+        }
+        return list;
+    }
 
     /**
      * 配料管理删除
@@ -264,19 +216,19 @@ public class IngredientsController extends BaseController {
     @ApiOperation(value = "配料管理删除", notes = "配料管理删除", httpMethod = "DELETE")
     @DeleteMapping(value = "/{id}")
     public BaseResult delete(@PathVariable("id") Long id) {
-        Long aLong = ingredientsDetailMpService.echoMessage(id);
-        if (aLong<=0){
+        boolean result = ingredientsDetailMpService.lambdaUpdate().set(IngredientsDetailPO::getDelFlag, false).eq(IngredientsDetailPO::getIngredientsId, id).update();
+
+        if (result) {
+            result = ingredientsMpService.removeById(id);
+        }
+        if (result) {
+            return BaseResult.successMsg("删除成功");
+        } else {
             return BaseResult.error("删除失败");
-        }else {
-            boolean result = ingredientsMpService.removeById(id);
-            if (result) {
-                return BaseResult.successMsg("删除成功");
-            } else {
-                return BaseResult.error("删除失败");
-            }
         }
 
     }
+
     private LambdaQueryChainWrapper<IngredientsPO> onSelectWhere(IngredientsVO vo) {
         LambdaQueryChainWrapper<IngredientsPO> queryWrapper = ingredientsMpService.lambdaQuery();
 

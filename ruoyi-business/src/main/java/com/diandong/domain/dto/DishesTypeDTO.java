@@ -1,5 +1,6 @@
 package com.diandong.domain.dto;
 
+import com.ruoyi.common.annotation.Excel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
  * 菜品分类DTO实体类
  *
  * @author YuLiu
- * @date 2022-05-16
+ * @date 2022-05-24
  */
 @Data
 @ApiModel("菜品分类DTO实体类")
@@ -25,20 +26,21 @@ public class DishesTypeDTO implements Serializable {
     private Long id;
 
     /**
-     * 食堂id
+     * 集团id
      */
-    @ApiModelProperty(value = "食堂id")
-    private Long canteenId;
+    @ApiModelProperty(value = "集团id")
+    private Long groupId;
 
     /**
-     * 食堂名称
+     * 集团名称
      */
-    @ApiModelProperty(value = "食堂名称")
-    private String canteenName;
+    @ApiModelProperty(value = "集团名称")
+    private String groupName;
 
     /**
      * 分类名称
      */
+    @Excel(name = "菜类")
     @ApiModelProperty(value = "分类名称")
     private String typeName;
 
@@ -55,9 +57,10 @@ public class DishesTypeDTO implements Serializable {
     private Integer isShow;
 
     /**
-     * 类型标签
+     * 备注
      */
-    @ApiModelProperty(value = "类型标签")
+    @Excel(name = "备注")
+    @ApiModelProperty(value = "备注")
     private String remark;
 
     /**

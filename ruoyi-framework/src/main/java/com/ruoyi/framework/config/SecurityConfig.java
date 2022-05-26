@@ -3,7 +3,9 @@ package com.ruoyi.framework.config;
 import com.ruoyi.framework.security.filter.JwtAuthenticationTokenFilter;
 import com.ruoyi.framework.security.handle.AuthenticationEntryPointImpl;
 import com.ruoyi.framework.security.handle.LogoutSuccessHandlerImpl;
+import com.ruoyi.framework.security.sms.SmsCodeAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,11 +27,16 @@ import org.springframework.web.filter.CorsFilter;
  */
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     /**
      * 自定义用户认证逻辑
      */
     @Autowired
+    @Qualifier("userDetailsServiceImpl")
     private UserDetailsService userDetailsService;
+    @Autowired
+    @Qualifier("userDetailsByTelephoneServiceImpl")
+    private UserDetailsService userDetailsServiceByTelephone;
 
     /**
      * 认证失败处理类
@@ -84,6 +91,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+
+        SmsCodeAuthenticationProvider smsCodeAuthenticationProvider = new SmsCodeAuthenticationProvider();
+        smsCodeAuthenticationProvider.setUserDetailsService(userDetailsServiceByTelephone);
+
         httpSecurity
                 // CSRF禁用，因为不使用session
                 .csrf().disable()
@@ -120,7 +131,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
         // 添加CORS filter
         httpSecurity.addFilterBefore(corsFilter, JwtAuthenticationTokenFilter.class);
-        httpSecurity.addFilterBefore(corsFilter, LogoutFilter.class);
+        httpSecurity.addFilterBefore(corsFilter, LogoutFilter.class)
+                .authenticationProvider(smsCodeAuthenticationProvider);
     }
 
     /**

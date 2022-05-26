@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  * 菜品信息PO实体类
  *
  * @author YuLiu
- * @date 2022-05-11
+ * @date 2022-05-24
  */
 @TableName("wis_dishes")
 @Data
@@ -29,6 +29,13 @@ public class DishesPO implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     @ApiModelProperty(value = "编号")
     private Long id;
+
+    /**
+     * 菜品代码
+     */
+    @TableField(value = "code")
+    @ApiModelProperty(value = "菜品代码")
+    private String code;
 
     /**
      * 食堂id
@@ -87,10 +94,10 @@ public class DishesPO implements Serializable {
     private String specification;
 
     /**
-     * 预估价
+     * 内部价格
      */
     @TableField(value = "pre_price")
-    @ApiModelProperty(value = "预估价")
+    @ApiModelProperty(value = "内部价格")
     private BigDecimal prePrice;
 
     /**
@@ -105,7 +112,7 @@ public class DishesPO implements Serializable {
      */
     @TableField(value = "dishes_attr_id")
     @ApiModelProperty(value = "菜品属性id")
-    private Long dishesAttrId;
+    private String dishesAttrId;
 
     /**
      * 菜品属性名称
@@ -136,11 +143,18 @@ public class DishesPO implements Serializable {
     private String dishesIntroduction;
 
     /**
-     * 状态
+     * 状态（0：下架；1：上架）
      */
     @TableField(value = "state")
-    @ApiModelProperty(value = "状态")
+    @ApiModelProperty(value = "状态（0：下架；1：上架）")
     private Integer state;
+
+    /**
+     * 检测报告
+     */
+    @TableField(value = "test_report")
+    @ApiModelProperty(value = "检测报告")
+    private String testReport;
 
     /**
      * 数据状态（0：未删除；1：删除）

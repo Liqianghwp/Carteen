@@ -140,18 +140,15 @@ public class RecipeDetailController extends BaseController {
 
     /**
      * 派菜情况
+     *
      * @param pieSituationVO
      * @return
      */
-    @ApiOperation(value = "派菜情况",notes = "派菜情况",httpMethod = "GET")
+    @ApiOperation(value = "派菜情况", notes = "派菜情况", httpMethod = "GET")
     @GetMapping("/pie_situation")
-    public BaseResult pieSituation(@Validated RecipePieSituationVO pieSituationVO){
-
-
-        return  BaseResult.success();
+    public BaseResult pieSituation(@Validated RecipePieSituationVO pieSituationVO) {
+        return BaseResult.success(recipeDetailMpService.pieSituation(pieSituationVO));
     }
-
-
 
 
     private LambdaQueryChainWrapper<RecipeDetailPO> onSelectWhere(RecipeDetailVO vo) {

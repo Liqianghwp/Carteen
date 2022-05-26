@@ -88,22 +88,8 @@ public class DishesController extends BaseController {
     @PostMapping
     public BaseResult save(@RequestBody @Validated(Insert.class) DishesVO vo) {
 
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
-
-        DishesPO po = DishesMsMapper.INSTANCE.vo2po(vo);
-
-//        设置创建人信息
-        po.setCreateBy(loginUser.getUserId());
-
-        boolean result = dishesMpService.save(po);
-        if (result) {
-            return BaseResult.successMsg("添加成功！");
-        } else {
-            return BaseResult.error("添加失败！");
-        }
+        dishesMpService.saveDishes(vo);
+        return BaseResult.success("添加成功");
     }
 
     /**
@@ -118,23 +104,53 @@ public class DishesController extends BaseController {
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
     public BaseResult update(@RequestBody @Validated(Update.class) DishesVO vo) {
-//        判断登录状态
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
+
+        dishesMpService.updateDishes(vo);
+        return BaseResult.success();
+    }
+
+
+    @ApiOperation(value = "上下架")
+    @GetMapping("/onOff/{id}")
+    public BaseResult onOrOff(@PathVariable String id) {
+
+        DishesPO dishes = dishesMpService.getById(id);
+        if (Constants.SHELF_OFF == dishes.getState()) {
         }
+        dishes.setState(Constants.SHELF_OFF == dishes.getState() ? Constants.SHELF_ON : Constants.SHELF_OFF);
 
-        DishesPO po = DishesMsMapper.INSTANCE.vo2po(vo);
-//        设置更新人信息
-        po.setUpdateBy(loginUser.getUserId());
-
-        boolean result = dishesMpService.updateById(po);
+        boolean result = dishesMpService.updateById(dishes);
         if (result) {
-            return BaseResult.successMsg("修改成功");
+            return BaseResult.success();
         } else {
-            return BaseResult.error("修改失败");
+            return BaseResult.error();
         }
     }
+
+    /**
+     * 获取菜品更新
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "获取菜品更新", notes = "主要是更新检测报告，菜品原材料供应商，添加剂等信息")
+    @GetMapping("/msg/{id}")
+    public BaseResult getMsg(@PathVariable String id) {
+        return dishesMpService.getMsg(id);
+    }
+
+    /**
+     * 保存菜品更新
+     *
+     * @param vo
+     * @return
+     */
+    @ApiOperation(value = "保存菜品更新", notes = "主要是更新检测报告，菜品原材料供应商，添加剂等信息")
+    @PostMapping("/msg")
+    public BaseResult saveOrUpdateMsg(@RequestBody @Validated(Update.class) DishesVO vo) {
+        return dishesMpService.saveOrUpdateMsg(vo);
+    }
+
 
     /**
      * 删除
@@ -168,11 +184,11 @@ public class DishesController extends BaseController {
                 .eq(StringUtils.isNotBlank(vo.getDishesTypeName()), DishesPO::getDishesTypeName, vo.getDishesTypeName())
                 .eq(StringUtils.isNotBlank(vo.getDishesName()), DishesPO::getDishesName, vo.getDishesName())
                 .eq(ObjectUtils.isNotEmpty(vo.getDishesPrice()), DishesPO::getDishesPrice, vo.getDishesPrice())
-                .eq(StringUtils.isNotBlank(vo.getDishesUnit()), DishesPO::getDishesUnit, vo.getDishesUnit())
+                .eq(ObjectUtils.isNotEmpty(vo.getDishesUnit()), DishesPO::getDishesUnit, vo.getDishesUnit())
                 .eq(StringUtils.isNotBlank(vo.getSpecification()), DishesPO::getSpecification, vo.getSpecification())
                 .eq(ObjectUtils.isNotEmpty(vo.getPrePrice()), DishesPO::getPrePrice, vo.getPrePrice())
                 .eq(StringUtils.isNotBlank(vo.getOrigin()), DishesPO::getOrigin, vo.getOrigin())
-                .eq(ObjectUtils.isNotEmpty(vo.getDishesAttrId()), DishesPO::getDishesAttrId, vo.getDishesAttrId())
+                .eq(StringUtils.isNotBlank(vo.getDishesAttrId()), DishesPO::getDishesAttrId, vo.getDishesAttrId())
                 .eq(StringUtils.isNotBlank(vo.getDishesAttrName()), DishesPO::getDishesAttrName, vo.getDishesAttrName())
                 .eq(StringUtils.isNotBlank(vo.getRemark()), DishesPO::getRemark, vo.getRemark())
                 .eq(StringUtils.isNotBlank(vo.getDishesPicture()), DishesPO::getDishesPicture, vo.getDishesPicture())

@@ -1,5 +1,6 @@
 package com.ruoyi.system.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.constant.UserConstants;
@@ -27,7 +28,8 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class SysConfigServiceImpl implements ISysConfigService {
+public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper,SysConfig> implements ISysConfigService {
+
     @Resource
     private SysConfigMapper configMapper;
 
