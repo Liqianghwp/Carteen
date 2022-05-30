@@ -48,6 +48,6 @@ public class UserDetailsByTelephoneServiceImpl implements UserDetailsService {
     }
 
     public UserDetails createLoginUser(SysUser user) {
-        return new LoginUser(user, permissionService.getMenuPermission(user));
+        return new LoginUser(user.getUserId(), user.getDeptId(), user, permissionService.getMenuPermission(user));
     }
 }

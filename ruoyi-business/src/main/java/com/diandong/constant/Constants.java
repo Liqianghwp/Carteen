@@ -7,6 +7,15 @@ package com.diandong.constant;
 public class Constants {
 
     /**
+     * 通用是
+     */
+    public static final Integer DEFAULT_YES = 1;
+    /**
+     * 通用否
+     */
+    public static final Integer DEFAULT_NO = 0;
+
+    /**
      * 已删除
      */
     public static final Integer DEL_YES = 1;
@@ -63,5 +72,16 @@ public class Constants {
      */
     public static final String BLACKLIST = "1";
 //    ============================= 黑白名单常量  =============================
+
+//    ============================= 配料类型常量  =============================
+    /**
+     * 主料
+     */
+    public static final String INGREDIENTS_MAIN = "0";
+    /**
+     * 辅料
+     */
+    public static final String INGREDIENTS_SECONDARY = "1";
+//    ============================= 配料类型常量  =============================
 
 }

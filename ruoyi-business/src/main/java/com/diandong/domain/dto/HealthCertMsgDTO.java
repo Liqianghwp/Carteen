@@ -84,4 +84,5 @@ public class HealthCertMsgDTO implements Serializable {
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 
+
 }

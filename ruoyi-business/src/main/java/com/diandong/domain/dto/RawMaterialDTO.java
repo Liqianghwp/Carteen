@@ -1,10 +1,12 @@
 package com.diandong.domain.dto;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.ruoyi.common.annotation.Excel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.print.attribute.standard.MediaSize;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -42,6 +44,7 @@ public class RawMaterialDTO implements Serializable {
     /**
      * 原材料名称
      */
+    @Excel(name = "原材料名称", sort = 2)
     @ApiModelProperty(value = "原材料名称")
     private String rawMaterialName;
 
@@ -54,6 +57,7 @@ public class RawMaterialDTO implements Serializable {
     /**
      * 原材料类别名称
      */
+    @Excel(name = "原材料类别", sort = 1)
     @ApiModelProperty(value = "原材料类别名称")
     private String categoryName;
 
@@ -66,24 +70,21 @@ public class RawMaterialDTO implements Serializable {
     /**
      * 单位名称
      */
+    @Excel(name = "单位", sort = 3)
     @ApiModelProperty(value = "单位名称")
     private String unitName;
 
     /**
      * 采购类型id
      */
-    @ApiModelProperty(value = "采购类型id")
-    private Long purchaseTypeId;
-
-    /**
-     * 采购类型名称
-     */
-    @ApiModelProperty(value = "采购类型名称")
-    private String purchaseTypeName;
+    @Excel(name = "采购类型", sort = 4, readConverterExp = "1=常采购,2=不常采购")
+    @ApiModelProperty(value = "采购类型")
+    private Integer purchaseType;
 
     /**
      * 预估进价
      */
+    @Excel(name = "预估进价", sort = 5)
     @ApiModelProperty(value = "预估进价")
     private BigDecimal prePrice;
 
@@ -146,4 +147,7 @@ public class RawMaterialDTO implements Serializable {
     @ApiModelProperty(value = "原材料营养信息集合")
     private List<RawMaterialNutritionDTO> rawMaterialNutritionDTOList;
 
+    @Excel(name = "库存", sort = 6)
+    @ApiModelProperty(value = "库存")
+    private Integer stock;
 }

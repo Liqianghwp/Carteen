@@ -200,7 +200,7 @@ public class DishesTypeController extends BaseController {
      */
     @Log(title = "菜品类别导出", businessType = BusinessType.EXPORT)
     @ApiOperation(value = "菜品类别导出")
-    @GetMapping("/export")
+    @PostMapping("/export")
     public void export(HttpServletResponse response, DishesTypeVO vo) {
         List<Long> ids = vo.getIds();
 

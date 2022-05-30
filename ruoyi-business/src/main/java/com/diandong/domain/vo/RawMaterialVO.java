@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 原材料信息 原材料信息VO实体类
@@ -75,14 +76,9 @@ public class RawMaterialVO extends BaseEntity implements Serializable {
     /**
      * 采购类型id
      */
-    @ApiModelProperty(value = "采购类型id")
-    private Long purchaseTypeId;
+    @ApiModelProperty(value = "采购类型")
+    private Integer purchaseType;
 
-    /**
-     * 采购类型名称
-     */
-    @ApiModelProperty(value = "采购类型名称")
-    private String purchaseTypeName;
 
     /**
      * 预估进价
@@ -114,5 +110,9 @@ public class RawMaterialVO extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "状态 （0:停用；1:启用）")
     private Integer status;
 
+    @ApiModelProperty(value = "勾选导出id集合")
+    private List<Long> ids;
 
+    @ApiModelProperty(value = "原材料营养信息")
+    private List<RawMaterialNutritionVO> rawMaterialNutritionVOList;
 }

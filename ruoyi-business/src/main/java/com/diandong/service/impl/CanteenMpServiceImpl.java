@@ -13,13 +13,13 @@ import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.utils.SecurityUtils;
-import com.ruoyi.system.constant.DeptConstants;
 import com.ruoyi.system.service.ISysDeptService;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * service实现类
@@ -40,15 +40,17 @@ public class CanteenMpServiceImpl extends CommonServiceImpl<CanteenMapper, Cante
     @Override
     public BaseResult addCanteen(CanteenVO vo) {
 
-
         CanteenPO po = CanteenMsMapper.INSTANCE.vo2po(vo);
 
-        LoginUser loginUser = SecurityUtils.getLoginUser();
+        Long deptId = SecurityUtils.getDeptId();
 //        这个可能是集团id
         GroupManagementPO groupManagement = groupManagementMpService.lambdaQuery()
-                .eq(GroupManagementPO::getDeptId, loginUser.getDeptId())
+                .eq(GroupManagementPO::getDeptId, deptId)
                 .eq(GroupManagementPO::getDelFlag, Constants.DEL_NO)
                 .one();
+        if (Objects.isNull(groupManagement)) {
+            return BaseResult.error("非集团操作者无法创建食堂");
+        }
 
         List<CanteenPO> list = lambdaQuery()
                 .eq(CanteenPO::getPId, groupManagement.getId())
@@ -61,17 +63,17 @@ public class CanteenMpServiceImpl extends CommonServiceImpl<CanteenMapper, Cante
         po.setPId(groupManagement.getId());
         po.setPName(groupManagement.getGroupName());
 
-
 //        新增食堂时给这集团添加部门信息
         //        如果保存成功则在若依下面添加一个部门
 
         SysDept sysDept = new SysDept();
         sysDept.setDeptName(vo.getCanteenName());
-        sysDept.setParentId(loginUser.getDeptId());
+        sysDept.setParentId(deptId);
         deptService.insertDept(sysDept);
 
-//        deptService.getOneByDeptName(sysDept);
-        po.setDeptId(sysDept.getDeptId());
+        sysDept.setParentId(groupManagement.getDeptId());
+        SysDept oneByDeptName = deptService.getOneByDeptName(sysDept);
+        po.setDeptId(oneByDeptName.getDeptId());
         boolean result = save(po);
         if (result) {
             return BaseResult.successMsg("添加成功！");

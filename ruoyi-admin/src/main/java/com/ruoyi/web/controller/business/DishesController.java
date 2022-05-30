@@ -171,7 +171,7 @@ public class DishesController extends BaseController {
 
     private LambdaQueryChainWrapper<DishesPO> onSelectWhere(DishesVO vo) {
 
-        LambdaQueryChainWrapper<DishesPO> queryWrapper = dishesMpService.lambdaQuery();
+        LambdaQueryChainWrapper<DishesPO> queryWrapper = dishesMpService.lambdaQuery().orderByDesc(DishesPO::getId);
 
         if (Objects.isNull(vo)) {
             return queryWrapper;

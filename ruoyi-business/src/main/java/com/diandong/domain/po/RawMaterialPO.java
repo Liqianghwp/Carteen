@@ -82,16 +82,9 @@ public class RawMaterialPO implements Serializable {
     /**
      * 采购类型id
      */
-    @TableField(value = "purchase_type_id")
-    @ApiModelProperty(value = "采购类型id")
-    private Long purchaseTypeId;
-
-    /**
-     * 采购类型名称
-     */
-    @TableField(value = "purchase_type_name")
-    @ApiModelProperty(value = "采购类型名称")
-    private String purchaseTypeName;
+    @TableField(value = "purchase_type")
+    @ApiModelProperty(value = "采购类型")
+    private Integer purchaseType;
 
     /**
      * 预估进价

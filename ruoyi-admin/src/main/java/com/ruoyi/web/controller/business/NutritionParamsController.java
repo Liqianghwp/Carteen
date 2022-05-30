@@ -187,7 +187,7 @@ public class NutritionParamsController extends BaseController {
                 .eq(ObjectUtils.isNotEmpty(vo.getId()), NutritionParamsPO::getId, vo.getId())
                 .eq(ObjectUtils.isNotEmpty(vo.getCanteenId()), NutritionParamsPO::getCanteenId, vo.getCanteenId())
                 .eq(StringUtils.isNotBlank(vo.getCanteenName()), NutritionParamsPO::getCanteenName, vo.getCanteenName())
-                .eq(StringUtils.isNotBlank(vo.getNutritionName()), NutritionParamsPO::getNutritionName, vo.getNutritionName())
+                .like(StringUtils.isNotBlank(vo.getNutritionName()), NutritionParamsPO::getNutritionName, vo.getNutritionName())
                 .eq(StringUtils.isNotBlank(vo.getUnit()), NutritionParamsPO::getUnit, vo.getUnit())
                 .eq(ObjectUtils.isNotEmpty(vo.getBeUsed()), NutritionParamsPO::getBeUsed, vo.getBeUsed());
 

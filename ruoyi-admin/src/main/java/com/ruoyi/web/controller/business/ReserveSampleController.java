@@ -77,6 +77,9 @@ public class ReserveSampleController extends BaseController {
 
         CanteenPO canteen = canteenMpService.lambdaQuery().eq(CanteenPO::getDeptId, SecurityUtils.getDeptId()).one();
 
+        if(Objects.isNull(canteen)){
+            return BaseResult.error("非食堂人员无法预留样品");
+        }
         vo.setReserveCanteenId(canteen.getId());
         Page<ReserveSamplePO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
 

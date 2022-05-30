@@ -6,11 +6,14 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
-import com.diandong.domain.dto.HealthCertMsgDTO;
+import com.diandong.constant.Constants;
+import com.diandong.domain.dto.HealthCertificateDTO;
 import com.diandong.domain.po.HealthCertMsgPO;
 import com.diandong.domain.vo.HealthCertMsgVO;
 import com.diandong.mapstruct.HealthCertMsgMsMapper;
+import com.diandong.mapstruct.HealthCertificateMsMapper;
 import com.diandong.service.HealthCertMsgMpService;
+import com.diandong.service.HealthCertificateMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import io.swagger.annotations.Api;
@@ -38,6 +41,8 @@ public class HealthCertMsgController extends BaseController {
 
     @Resource
     private HealthCertMsgMpService healthCertMsgMpService;
+    @Resource
+    private HealthCertificateMpService healthCertificateMpService;
 
     /**
      * 健康证到期消息分页查询
@@ -66,9 +71,13 @@ public class HealthCertMsgController extends BaseController {
     })
     @ApiOperation(value = "健康证到期消息根据id查询", notes = "健康证到期消息根据id查询", httpMethod = "GET")
     @GetMapping(value = "/{id}")
-    public BaseResult<HealthCertMsgDTO> getById(@PathVariable("id") Long id) {
-        HealthCertMsgDTO dto = HealthCertMsgMsMapper.INSTANCE.po2dto(healthCertMsgMpService.haveRead(id));
-        return BaseResult.success(dto);
+    public BaseResult getById(@PathVariable("id") Long id) {
+
+        HealthCertMsgPO healthCertMsg = healthCertMsgMpService.getById(id);
+        HealthCertificateDTO healthCertificateDTO = HealthCertificateMsMapper.INSTANCE.po2dto(healthCertificateMpService.getById(healthCertMsg.getHealthCertId()));
+        healthCertMsg.setState(Constants.DEFAULT_YES);
+        healthCertMsgMpService.updateById(healthCertMsg);
+        return BaseResult.success(healthCertificateDTO);
     }
 
     /**
@@ -135,7 +144,7 @@ public class HealthCertMsgController extends BaseController {
 
     private LambdaQueryChainWrapper<HealthCertMsgPO> onSelectWhere(HealthCertMsgVO vo) {
 
-        LambdaQueryChainWrapper<HealthCertMsgPO> queryWrapper = healthCertMsgMpService.lambdaQuery();
+        LambdaQueryChainWrapper<HealthCertMsgPO> queryWrapper = healthCertMsgMpService.lambdaQuery().orderByDesc(HealthCertMsgPO::getId);
 
         if (Objects.isNull(vo)) {
             return queryWrapper;

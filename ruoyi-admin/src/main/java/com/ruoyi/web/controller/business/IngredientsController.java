@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.constant.Constants;
 import com.diandong.domain.dto.IngredientsDTO;
 import com.diandong.domain.po.IngredientsDetailPO;
 import com.diandong.domain.po.IngredientsPO;
@@ -87,10 +88,10 @@ public class IngredientsController extends BaseController {
                         }
 
                         switch (entry.getKey()) {
-                            case "0":
+                            case Constants.INGREDIENTS_MAIN:
                                 record.setMainIngredient(val);
                                 break;
-                            case "1":
+                            case Constants.INGREDIENTS_SECONDARY:
                                 record.setExcipients(val);
                                 break;
                         }
@@ -116,14 +117,14 @@ public class IngredientsController extends BaseController {
     public BaseResult<IngredientsDTO> getById(@PathVariable("id") Long id) {
         IngredientsDTO dto = IngredientsMsMapper.INSTANCE.po2dto(ingredientsMpService.getById(id));
         List<IngredientsDetailPO> list = ingredientsDetailMpService.lambdaQuery()
-                .eq(IngredientsDetailPO::getId, dto.getId())
+                .eq(IngredientsDetailPO::getIngredientsId, dto.getId())
                 .eq(IngredientsDetailPO::getDelFlag, false)
                 .list();
 
         if (CollectionUtils.isNotEmpty(list)) {
             Map<String, List<IngredientsDetailPO>> collect = list.stream().collect(Collectors.groupingBy(IngredientsDetailPO::getType));
-            dto.setZio(CollectionUtils.isNotEmpty(collect.get("0")) ? collect.get("0") : null);
-            dto.setZic(CollectionUtils.isNotEmpty(collect.get("1")) ? collect.get("0") : null);
+            dto.setZio(CollectionUtils.isNotEmpty(collect.get(Constants.INGREDIENTS_MAIN)) ? collect.get(Constants.INGREDIENTS_MAIN) : null);
+            dto.setZic(CollectionUtils.isNotEmpty(collect.get(Constants.INGREDIENTS_SECONDARY)) ? collect.get(Constants.INGREDIENTS_SECONDARY) : null);
         }
         return BaseResult.success(dto);
     }
@@ -141,6 +142,8 @@ public class IngredientsController extends BaseController {
     @PostMapping
     public BaseResult save(@RequestBody @Validated(Insert.class) IngredientsVO vo) {
         IngredientsPO po = IngredientsMsMapper.INSTANCE.vo2po(vo);
+
+        ingredientsMpService.save(po);
 
         List<IngredientsDetailPO> list = resetIngredientDetail(vo, po);
         boolean result = ingredientsDetailMpService.saveBatch(list);
@@ -167,7 +170,6 @@ public class IngredientsController extends BaseController {
         IngredientsPO po = IngredientsMsMapper.INSTANCE.vo2po(vo);
 
         List<IngredientsDetailPO> list = resetIngredientDetail(vo, po);
-
         ingredientsDetailMpService.saveOrUpdateBatch(list);
         boolean result = ingredientsMpService.updateById(po);
         if (result) {
@@ -188,14 +190,14 @@ public class IngredientsController extends BaseController {
         List<IngredientsDetailPO> list = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(zic)) {
             zic.forEach(ingredientsDetailVO -> {
-                ingredientsDetailVO.setType("0");
+                ingredientsDetailVO.setType(Constants.INGREDIENTS_MAIN);
                 ingredientsDetailVO.setIngredientsId(po.getId());
                 list.add(IngredientsDetailMsMapper.INSTANCE.vo2po(ingredientsDetailVO));
             });
         }
         if (CollectionUtils.isNotEmpty(zio)) {
             zio.forEach(ingredientsDetailVO -> {
-                ingredientsDetailVO.setType("1");
+                ingredientsDetailVO.setType(Constants.INGREDIENTS_SECONDARY);
                 ingredientsDetailVO.setIngredientsId(po.getId());
 
                 list.add(IngredientsDetailMsMapper.INSTANCE.vo2po(ingredientsDetailVO));

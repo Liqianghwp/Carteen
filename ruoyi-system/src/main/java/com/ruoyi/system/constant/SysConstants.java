@@ -30,6 +30,8 @@ public class SysConstants {
     public static final String OPINION_TYPE = "sys_opinion_type";
     //    采购类型
     public static final String PURCHASE_TYPE = "purchase_type";
+    //      用户类型
+    public static final String USER_TYPE = "user_type";
 
 
 }

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
+import com.diandong.constant.Constants;
 import com.diandong.domain.dto.CanteenDTO;
 import com.diandong.domain.po.CanteenPO;
 import com.diandong.domain.vo.CanteenVO;
@@ -43,7 +44,6 @@ import java.util.Objects;
 @Api(value = "/canteen", tags = {"食堂设置模块"})
 @RequestMapping(value = "/canteen")
 public class CanteenController extends BaseController {
-
     @Resource
     private CanteenMpService canteenMpService;
 
@@ -92,7 +92,6 @@ public class CanteenController extends BaseController {
     @ApiOperation(value = "新增食堂", notes = "新增食堂", httpMethod = "POST")
     @PostMapping
     public BaseResult save(@RequestBody @Validated(Insert.class) CanteenVO vo) {
-
         return canteenMpService.addCanteen(vo);
     }
 
@@ -108,16 +107,7 @@ public class CanteenController extends BaseController {
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
     public BaseResult update(@RequestBody @Validated(Update.class) CanteenVO vo) {
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error("用户未登录，无法进行操作。请您重新登录");
-        }
-
         CanteenPO po = CanteenMsMapper.INSTANCE.vo2po(vo);
-
-//        设置修改人信息
-        po.setUpdateBy(loginUser.getUserId());
-
         boolean result = canteenMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");
@@ -175,6 +165,24 @@ public class CanteenController extends BaseController {
         util.exportExcel(response, canteenList, "食堂管理");
     }
 
+    /**
+     * 根据集团id查询集团下的所有食堂信息
+     *
+     * @param groupId 集团id
+     * @return
+     */
+    @ApiOperation(value = "根据集团id查询集团下的所有食堂信息")
+    @GetMapping("/group/{groupId}")
+    public BaseResult getCanteenByGroupId(@PathVariable("groupId") Long groupId) {
+
+        List<CanteenPO> list = canteenMpService.lambdaQuery()
+                .eq(CanteenPO::getPId, groupId)
+                .eq(CanteenPO::getDelFlag, Constants.DEL_NO)
+                .list();
+
+        return BaseResult.success(list);
+    }
+
 
     private LambdaQueryChainWrapper<CanteenPO> onSelectWhere(CanteenVO vo) {
 
@@ -185,9 +193,9 @@ public class CanteenController extends BaseController {
         }
         queryWrapper
                 .eq(ObjectUtils.isNotEmpty(vo.getId()), CanteenPO::getId, vo.getId())
-                .eq(StringUtils.isNotBlank(vo.getCanteenName()), CanteenPO::getCanteenName, vo.getCanteenName())
-                .eq(ObjectUtils.isNotEmpty(vo.getContentName()), CanteenPO::getContentName, vo.getContentName())
-                .eq(StringUtils.isNotBlank(vo.getContentPhone()), CanteenPO::getContentPhone, vo.getContentPhone())
+                .like(StringUtils.isNotBlank(vo.getCanteenName()), CanteenPO::getCanteenName, vo.getCanteenName())
+                .like(ObjectUtils.isNotEmpty(vo.getContentName()), CanteenPO::getContentName, vo.getContentName())
+                .like(StringUtils.isNotBlank(vo.getContentPhone()), CanteenPO::getContentPhone, vo.getContentPhone())
                 .eq(StringUtils.isNotBlank(vo.getCanteenAddress()), CanteenPO::getCanteenAddress, vo.getCanteenAddress())
                 .eq(StringUtils.isNotBlank(vo.getBusinessLicense()), CanteenPO::getBusinessLicense, vo.getBusinessLicense())
                 .eq(StringUtils.isNotBlank(vo.getQrCode()), CanteenPO::getQrCode, vo.getQrCode())
