@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.InventoryInboundMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.InventoryInboundPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="ledger_id" jdbcType="BIGINT" property="ledgerId"/>
+        <result column="inbounder" jdbcType="VARCHAR" property="inbounder"/>
+        <result column="raw_material_pic" jdbcType="VARCHAR" property="rawMaterialPic"/>
+        <result column="number" jdbcType="INTEGER" property="number"/>
+        <result column="price" jdbcType="BIGINT" property="price"/>
+        <result column="inbound_type" jdbcType="BIGINT" property="inboundType"/>
+        <result column="inbound_name" jdbcType="VARCHAR" property="inboundName"/>
+        <result column="association" jdbcType="VARCHAR" property="association"/>
+        <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
+        <result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName"/>
+        <result column="state" jdbcType="VARCHAR" property="state"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,ii.id
+            ,ii.ledger_id
+            ,ii.inbounder
+            ,ii.raw_material_pic
+            ,ii.number
+            ,ii.price
+            ,ii.inbound_type
+            ,ii.inbound_name
+            ,ii.association
+            ,ii.warehouse_id
+            ,ii.warehouse_name
+            ,ii.state
+            ,ii.del_flag
+            ,ii.create_by
+            ,ii.create_time
+            ,ii.update_by
+            ,ii.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and ii.id = #{id}
+            </if>
+            <if test="ledgerId != null">
+                and ii.ledger_id = #{ledgerId}
+            </if>
+            <if test="inbounder != null and inbounder != ''">
+                and ii.inbounder = #{inbounder}
+            </if>
+            <if test="rawMaterialPic != null and rawMaterialPic != ''">
+                and ii.raw_material_pic = #{rawMaterialPic}
+            </if>
+            <if test="number != null">
+                and ii.number = #{number}
+            </if>
+            <if test="price != null">
+                and ii.price = #{price}
+            </if>
+            <if test="inboundType != null">
+                and ii.inbound_type = #{inboundType}
+            </if>
+            <if test="inboundName != null and inboundName != ''">
+                and ii.inbound_name = #{inboundName}
+            </if>
+            <if test="association != null and association != ''">
+                and ii.association = #{association}
+            </if>
+            <if test="warehouseId != null">
+                and ii.warehouse_id = #{warehouseId}
+            </if>
+            <if test="warehouseName != null and warehouseName != ''">
+                and ii.warehouse_name = #{warehouseName}
+            </if>
+            <if test="state != null and state != ''">
+                and ii.state = #{state}
+            </if>
+            <if test="delFlag != null">
+                and ii.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and ii.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and ii.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_inventory_inbound -->
+
+</mapper>

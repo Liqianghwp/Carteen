@@ -10,16 +10,16 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 配料管理详情PO实体类
+ * 库存台账PO实体类
  *
  * @author YuLiu
- * @date 2022-05-17
+ * @date 2022-05-31
  */
-@TableName("wis_ingredients_detail")
+@TableName("wis_inventory_ledger")
 @Data
-@ApiModel("配料管理详情PO实体类")
+@ApiModel("库存台账PO实体类")
 @Accessors(chain = true)
-public class IngredientsDetailPO implements Serializable {
+public class InventoryLedgerPO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -30,18 +30,32 @@ public class IngredientsDetailPO implements Serializable {
     private Long id;
 
     /**
-     * 父级id
+     * 食堂id
      */
-    @TableField(value = "ingredients_id")
-    @ApiModelProperty(value = "父级id")
-    private Long ingredientsId;
+    @TableField(value = "canteen_id")
+    @ApiModelProperty(value = "食堂id")
+    private Long canteenId;
 
     /**
-     * 配料类型 0：主料；1：辅料
+     * 食堂名称
      */
-    @TableField(value = "type")
-    @ApiModelProperty(value = "配料类型 0：主料；1：辅料")
-    private String type;
+    @TableField(value = "canteen_name")
+    @ApiModelProperty(value = "食堂名称")
+    private String canteenName;
+
+    /**
+     * 原材料类别id
+     */
+    @TableField(value = "category_id")
+    @ApiModelProperty(value = "原材料类别id")
+    private Long categoryId;
+
+    /**
+     * 原材料类别名称
+     */
+    @TableField(value = "category_name")
+    @ApiModelProperty(value = "原材料类别名称")
+    private String categoryName;
 
     /**
      * 原材料id
@@ -58,24 +72,38 @@ public class IngredientsDetailPO implements Serializable {
     private String rawMaterialName;
 
     /**
-     * 重量
+     * 单位id
      */
-    @TableField(value = "number")
-    @ApiModelProperty(value = "重量")
-    private Double number;
-
     @TableField(value = "unit_id")
     @ApiModelProperty(value = "单位id")
     private Long unitId;
+
+    /**
+     * 单位名称
+     */
     @TableField(value = "unit_name")
     @ApiModelProperty(value = "单位名称")
     private String unitName;
 
     /**
-     * 是否删除 0:否;1:是
+     * 最小库存数量
+     */
+    @TableField(value = "min_stock_warning")
+    @ApiModelProperty(value = "最小库存数量")
+    private Integer minStockWarning;
+
+    /**
+     * 最大库存数量
+     */
+    @TableField(value = "max_stock_warning")
+    @ApiModelProperty(value = "最大库存数量")
+    private Integer maxStockWarning;
+
+    /**
+     * 数据状态
      */
     @TableField(value = "del_flag")
-    @ApiModelProperty(value = "是否删除 0:否;1:是")
+    @ApiModelProperty(value = "数据状态")
     private Integer delFlag;
 
     /**

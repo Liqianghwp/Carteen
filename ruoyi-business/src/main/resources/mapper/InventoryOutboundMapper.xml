@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.InventoryOutboundMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.InventoryOutboundPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="ledger_id" jdbcType="BIGINT" property="ledgerId"/>
+        <result column="recipients" jdbcType="VARCHAR" property="recipients"/>
+        <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
+        <result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName"/>
+        <result column="number" jdbcType="BIGINT" property="number"/>
+        <result column="outbound_type" jdbcType="BIGINT" property="outboundType"/>
+        <result column="outbound_name" jdbcType="VARCHAR" property="outboundName"/>
+        <result column="association" jdbcType="VARCHAR" property="association"/>
+        <result column="price" jdbcType="BIGINT" property="price"/>
+        <result column="raw_material_pic" jdbcType="VARCHAR" property="rawMaterialPic"/>
+        <result column="state" jdbcType="VARCHAR" property="state"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,io.id
+            ,io.ledger_id
+            ,io.recipients
+            ,io.warehouse_id
+            ,io.warehouse_name
+            ,io.number
+            ,io.outbound_type
+            ,io.outbound_name
+            ,io.association
+            ,io.price
+            ,io.raw_material_pic
+            ,io.state
+            ,io.del_flag
+            ,io.create_by
+            ,io.create_time
+            ,io.update_by
+            ,io.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and io.id = #{id}
+            </if>
+            <if test="ledgerId != null">
+                and io.ledger_id = #{ledgerId}
+            </if>
+            <if test="recipients != null and recipients != ''">
+                and io.recipients = #{recipients}
+            </if>
+            <if test="warehouseId != null">
+                and io.warehouse_id = #{warehouseId}
+            </if>
+            <if test="warehouseName != null and warehouseName != ''">
+                and io.warehouse_name = #{warehouseName}
+            </if>
+            <if test="number != null">
+                and io.number = #{number}
+            </if>
+            <if test="outboundType != null">
+                and io.outbound_type = #{outboundType}
+            </if>
+            <if test="outboundName != null and outboundName != ''">
+                and io.outbound_name = #{outboundName}
+            </if>
+            <if test="association != null and association != ''">
+                and io.association = #{association}
+            </if>
+            <if test="price != null">
+                and io.price = #{price}
+            </if>
+            <if test="rawMaterialPic != null and rawMaterialPic != ''">
+                and io.raw_material_pic = #{rawMaterialPic}
+            </if>
+            <if test="state != null and state != ''">
+                and io.state = #{state}
+            </if>
+            <if test="delFlag != null">
+                and io.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and io.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and io.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_inventory_outbound -->
+
+</mapper>

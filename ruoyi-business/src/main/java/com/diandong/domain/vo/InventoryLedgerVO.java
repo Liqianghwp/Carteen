@@ -12,14 +12,14 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 
 /**
- * 配料管理详情VO实体类
+ * 库存台账VO实体类
  *
  * @author YuLiu
- * @date 2022-05-17
+ * @date 2022-05-31
  */
 @Data
-@ApiModel("配料管理详情VO实体类")
-public class IngredientsDetailVO extends BaseEntity implements Serializable {
+@ApiModel("库存台账VO实体类")
+public class InventoryLedgerVO extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -30,16 +30,28 @@ public class IngredientsDetailVO extends BaseEntity implements Serializable {
     private Long id;
 
     /**
-     * 父级id
+     * 食堂id
      */
-    @ApiModelProperty(value = "父级id")
-    private Long ingredientsId;
+    @ApiModelProperty(value = "食堂id")
+    private Long canteenId;
 
     /**
-     * 配料类型 0：主料；1：辅料
+     * 食堂名称
      */
-    @ApiModelProperty(value = "配料类型 0：主料；1：辅料")
-    private String type;
+    @ApiModelProperty(value = "食堂名称")
+    private String canteenName;
+
+    /**
+     * 原材料类别id
+     */
+    @ApiModelProperty(value = "原材料类别id")
+    private Long categoryId;
+
+    /**
+     * 原材料类别名称
+     */
+    @ApiModelProperty(value = "原材料类别名称")
+    private String categoryName;
 
     /**
      * 原材料id
@@ -54,14 +66,28 @@ public class IngredientsDetailVO extends BaseEntity implements Serializable {
     private String rawMaterialName;
 
     /**
-     * 重量
+     * 单位id
      */
-    @ApiModelProperty(value = "重量")
-    private Double number;
-
     @ApiModelProperty(value = "单位id")
     private Long unitId;
+
+    /**
+     * 单位名称
+     */
     @ApiModelProperty(value = "单位名称")
     private String unitName;
+
+    /**
+     * 最小库存数量
+     */
+    @ApiModelProperty(value = "最小库存数量")
+    private Integer minStockWarning;
+
+    /**
+     * 最大库存数量
+     */
+    @ApiModelProperty(value = "最大库存数量")
+    private Integer maxStockWarning;
+
 
 }

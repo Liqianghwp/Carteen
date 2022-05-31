@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.InventoryLedgerMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.InventoryLedgerPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="canteen_id" jdbcType="BIGINT" property="canteenId"/>
+        <result column="canteen_name" jdbcType="VARCHAR" property="canteenName"/>
+        <result column="category_id" jdbcType="BIGINT" property="categoryId"/>
+        <result column="category_name" jdbcType="VARCHAR" property="categoryName"/>
+        <result column="raw_material_id" jdbcType="BIGINT" property="rawMaterialId"/>
+        <result column="raw_material_name" jdbcType="VARCHAR" property="rawMaterialName"/>
+        <result column="unit_id" jdbcType="BIGINT" property="unitId"/>
+        <result column="unit_name" jdbcType="VARCHAR" property="unitName"/>
+        <result column="min_stock_warning" jdbcType="INTEGER" property="minStockWarning"/>
+        <result column="max_stock_warning" jdbcType="INTEGER" property="maxStockWarning"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,il.id
+            ,il.canteen_id
+            ,il.canteen_name
+            ,il.category_id
+            ,il.category_name
+            ,il.raw_material_id
+            ,il.raw_material_name
+            ,il.unit_id
+            ,il.unit_name
+            ,il.min_stock_warning
+            ,il.max_stock_warning
+            ,il.del_flag
+            ,il.create_by
+            ,il.create_time
+            ,il.update_by
+            ,il.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and il.id = #{id}
+            </if>
+            <if test="canteenId != null">
+                and il.canteen_id = #{canteenId}
+            </if>
+            <if test="canteenName != null and canteenName != ''">
+                and il.canteen_name = #{canteenName}
+            </if>
+            <if test="categoryId != null">
+                and il.category_id = #{categoryId}
+            </if>
+            <if test="categoryName != null and categoryName != ''">
+                and il.category_name = #{categoryName}
+            </if>
+            <if test="rawMaterialId != null">
+                and il.raw_material_id = #{rawMaterialId}
+            </if>
+            <if test="rawMaterialName != null and rawMaterialName != ''">
+                and il.raw_material_name = #{rawMaterialName}
+            </if>
+            <if test="unitId != null">
+                and il.unit_id = #{unitId}
+            </if>
+            <if test="unitName != null and unitName != ''">
+                and il.unit_name = #{unitName}
+            </if>
+            <if test="minStockWarning != null">
+                and il.min_stock_warning = #{minStockWarning}
+            </if>
+            <if test="maxStockWarning != null">
+                and il.max_stock_warning = #{maxStockWarning}
+            </if>
+            <if test="delFlag != null">
+                and il.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and il.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and il.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_inventory_ledger -->
+
+</mapper>

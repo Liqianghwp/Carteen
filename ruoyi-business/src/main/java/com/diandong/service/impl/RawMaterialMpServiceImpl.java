@@ -73,7 +73,7 @@ public class RawMaterialMpServiceImpl extends CommonServiceImpl<RawMaterialMappe
         }
 
 
-        return null;
+        return result;
     }
 
     @Override
@@ -101,6 +101,8 @@ public class RawMaterialMpServiceImpl extends CommonServiceImpl<RawMaterialMappe
             RawMaterialNutritionPO rawMaterialNutritionPO = RawMaterialNutritionMsMapper.INSTANCE.vo2po(rawMaterialNutritionVO);
 
             rawMaterialNutritionPO.setRawMaterialId(rawMaterialPO.getId());
+            rawMaterialNutritionPO.setRawMaterialName(rawMaterialPO.getRawMaterialName());
+
             rawMaterialNutritionPOList.add(rawMaterialNutritionPO);
 
         });
