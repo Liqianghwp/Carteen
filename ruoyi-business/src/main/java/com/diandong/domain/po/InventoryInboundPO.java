@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -62,7 +63,7 @@ public class InventoryInboundPO implements Serializable {
      */
     @TableField(value = "price")
     @ApiModelProperty(value = "单价")
-    private Long price;
+    private BigDecimal price;
 
     /**
      * 入库方式id
@@ -140,5 +141,16 @@ public class InventoryInboundPO implements Serializable {
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
+
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "原材料名称")
+    private String rawName;
+
+    @ApiModelProperty(value = "总金额")
+    @TableField(exist = false)
+    private BigDecimal amount;
+
+
 
 }

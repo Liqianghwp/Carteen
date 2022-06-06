@@ -1,11 +1,14 @@
 package com.diandong.domain.dto;
 
+import com.diandong.domain.po.InventoryInboundPO;
+import com.diandong.domain.po.InventoryOutboundPO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 库存台账DTO实体类
@@ -107,5 +110,10 @@ public class InventoryLedgerDTO implements Serializable {
      */
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
+
+    @ApiModelProperty(value = "入库查询")
+    private List<InventoryInboundPO> list1;
+    @ApiModelProperty(value = "出库查询")
+    private List<InventoryOutboundPO>list2;
 
 }

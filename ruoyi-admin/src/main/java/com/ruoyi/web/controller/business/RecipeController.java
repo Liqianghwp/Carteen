@@ -19,6 +19,7 @@ import com.diandong.domain.vo.RecipeVO;
 import com.diandong.mapstruct.RecipeDetailMsMapper;
 import com.diandong.mapstruct.RecipeMsMapper;
 import com.diandong.service.DishesMpService;
+import com.diandong.service.RawMaterialMpService;
 import com.diandong.service.RecipeDetailMpService;
 import com.diandong.service.RecipeMpService;
 import com.ruoyi.common.core.controller.BaseController;
@@ -59,6 +60,8 @@ public class RecipeController extends BaseController {
     private RecipeDetailMpService recipeDetailMpService;
     @Resource
     private DishesMpService dishesMpService;
+    @Resource
+    private RawMaterialMpService rawMaterialMpService;
 
     /**
      * 食谱分页查询

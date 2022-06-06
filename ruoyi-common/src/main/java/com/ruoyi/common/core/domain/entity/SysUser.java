@@ -130,7 +130,23 @@ public class SysUser extends BaseEntity {
     @Excel(name = "最后登录时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Type.EXPORT)
     private Date loginDate;
 
+    /**
+     * 验证码
+     * */
+    @TableField(exist = false)
+    private String authCode;
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getAuthCode() {
+        return authCode;
+    }
+
+    public void setAuthCode(String authCode) {
+        this.authCode = authCode;
+    }
 //    新增用户属性
     /**
      * 用户所在区域

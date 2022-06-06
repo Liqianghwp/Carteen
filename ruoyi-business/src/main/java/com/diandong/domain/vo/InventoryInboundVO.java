@@ -1,5 +1,6 @@
 package com.diandong.domain.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.domain.BaseEntity;
@@ -8,8 +9,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 入库VO实体类
@@ -57,7 +60,7 @@ public class InventoryInboundVO extends BaseEntity implements Serializable {
      * 单价
      */
     @ApiModelProperty(value = "单价")
-    private Long price;
+    private BigDecimal price;
 
     /**
      * 入库方式id
@@ -95,5 +98,15 @@ public class InventoryInboundVO extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "是否记账 0：不记账；1：记账")
     private String state;
 
+    @ApiModelProperty(value = "总金额")
+    @TableField(exist = false)
+    private BigDecimal amount;
+
+
+    /**
+     * 导出
+     * */
+    @ApiModelProperty(value = "导出勾选id集合")
+    private List<Long> ids;
 
 }

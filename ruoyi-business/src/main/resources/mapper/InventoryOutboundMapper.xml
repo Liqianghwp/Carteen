@@ -12,7 +12,7 @@
         <result column="outbound_type" jdbcType="BIGINT" property="outboundType"/>
         <result column="outbound_name" jdbcType="VARCHAR" property="outboundName"/>
         <result column="association" jdbcType="VARCHAR" property="association"/>
-        <result column="price" jdbcType="BIGINT" property="price"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
         <result column="raw_material_pic" jdbcType="VARCHAR" property="rawMaterialPic"/>
         <result column="state" jdbcType="VARCHAR" property="state"/>
         <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>

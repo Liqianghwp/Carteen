@@ -1,15 +1,20 @@
 package com.diandong.domain.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.domain.BaseEntity;
+import com.diandong.domain.po.InventoryLedgerPO;
+import com.diandong.domain.po.RawMaterialPO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 库存台账VO实体类
@@ -88,6 +93,38 @@ public class InventoryLedgerVO extends BaseEntity implements Serializable {
      */
     @ApiModelProperty(value = "最大库存数量")
     private Integer maxStockWarning;
+
+
+    /**
+     * 库存
+     * */
+    @ApiModelProperty(value = "库存")
+    @TableField(exist = false)
+    private Long repertory;
+
+
+    @ApiModelProperty(value = "单价")
+    @TableField(exist = false)
+    private BigDecimal unitPrice;
+
+    @ApiModelProperty(value = "总金额")
+    @TableField(exist = false)
+    private BigDecimal amount;
+
+    /**
+     * 入库
+     */
+    @ApiModelProperty(value = "入库信息")
+    @TableField(exist = false)
+    private List<InventoryInboundVO> storage;
+
+
+    /**
+     * 入库
+     */
+    @ApiModelProperty(value = "出库信息")
+    @TableField(exist = false)
+    private List<InventoryOutboundVO> stockRemoval;
 
 
 }

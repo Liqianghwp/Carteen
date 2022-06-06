@@ -8,7 +8,7 @@
         <result column="inbounder" jdbcType="VARCHAR" property="inbounder"/>
         <result column="raw_material_pic" jdbcType="VARCHAR" property="rawMaterialPic"/>
         <result column="number" jdbcType="INTEGER" property="number"/>
-        <result column="price" jdbcType="BIGINT" property="price"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
         <result column="inbound_type" jdbcType="BIGINT" property="inboundType"/>
         <result column="inbound_name" jdbcType="VARCHAR" property="inboundName"/>
         <result column="association" jdbcType="VARCHAR" property="association"/>

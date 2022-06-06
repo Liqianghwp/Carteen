@@ -14,6 +14,8 @@ import com.ruoyi.framework.security.sms.SmsCodeAuthenticationToken;
 import com.ruoyi.framework.web.service.TokenService;
 import com.ruoyi.system.service.ISysUserService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -40,7 +44,10 @@ import java.util.concurrent.TimeUnit;
 @Api(value = "/app", tags = {"APP相关接口"})
 @RequestMapping(value = "/app")
 public class AppController extends BaseController {
-
+    @Autowired
+    private ISysUserService userService;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private StringRedisTemplate redisTemplate;
     @Resource
@@ -159,5 +166,93 @@ public class AppController extends BaseController {
         userAndTokenDto.setUser(user);
         return userAndTokenDto;
     }
+    // 发送验证码
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "body", dataType = "SysUser", name = "user", value = "")
+    })
+    @ApiOperation(value = "发送验证码", notes = "发送验证码", httpMethod = "PUT")
+    @PutMapping("/reset")
+    public BaseResult resetPwd(@RequestBody SysUser user) {
+        //拿到前端返回的手机号
+        String phonemes = user.getPhonenumber();
+        String regex="/^1[0-9]{10}$/";
+        String result="";
 
+        if (StringUtils.isNotBlank(phonemes)||phonemes.matches(regex)) {
+            Random random = new Random();
+            for (int i=0;i<6;i++)
+            {
+                result+=random.nextInt(10);
+            }
+            stringRedisTemplate.opsForValue().set(phonemes,result,60,TimeUnit.SECONDS);
+
+        }else {
+            return BaseResult.success("手机号不能为空");
+        }
+        return BaseResult.success(result);
+    }
+
+    //接收验证码进行效验,保存密码
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "body", dataType = "SysUser", name = "user", value = "")
+    })
+    @ApiOperation(value = "找回密码", notes = "找回密码", httpMethod = "PUT")
+    @PutMapping("/resetPwd")
+    public BaseResult reset(@RequestBody SysUser user) {
+        //接收他的手机号
+        String phonenumber = user.getPhonenumber();
+        //接受他的验证码
+        String authCode = user.getAuthCode();
+        //通过拿到的手机号查询到他的id
+        SysUser one = userService.lambdaQuery().eq(SysUser::getPhonenumber,phonenumber).one();
+        String phonenumber1 = one.getPhonenumber();
+        //判断手机号是否为空
+        if (phonenumber1== null) {
+            return BaseResult.error("没有这个手机号");
+        }
+        //校验验证码
+        String s = stringRedisTemplate.opsForValue().get(phonenumber);
+
+        if (authCode.equals(s) ) {
+            //接收他的密码
+            //密码加密
+            //将密码保存到库
+            userService.lambdaUpdate().set(SysUser::getPassword,SecurityUtils.encryptPassword(user.getPassword()))
+                    .eq(SysUser::getUserId,one.getUserId()).update();
+        }else {
+            return BaseResult.success("验证码错误");
+        }
+        return BaseResult.success(user);
+    }
+    //接收验证码进行效验,保存密码
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "body", dataType = "SysUser", name = "user", value = "")
+    })
+    @ApiOperation(value = "找回密码", notes = "找回密码", httpMethod = "PUT")
+    @PostMapping("/reception")
+    public BaseResult reception(@RequestBody SysUser user) {
+        //接收他的手机号
+        String phonenumber = user.getPhonenumber();
+        List<SysUser> list = userService.lambdaQuery().eq(SysUser::getPhonenumber, phonenumber).list();
+        for (SysUser sysUser : list) {
+            String phonenumber1 = sysUser.getPhonenumber();
+            if (phonenumber1.equals(phonenumber)) {
+                return BaseResult.success("手机号重复");
+            }
+        }
+        //接受他的验证码
+        String authCode = user.getAuthCode();
+        //校验验证码
+        String s = stringRedisTemplate.opsForValue().get(phonenumber);
+        if (authCode.equals(s)) {
+            //前端春来数据直接保存到库
+            userService.saveOrUpdate(user);
+
+        } else {
+            return BaseResult.success("验证码错误");
+        }
+        return BaseResult.success(user);
+    }
 }
+
+

@@ -1,10 +1,13 @@
 package com.diandong.domain.dto;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.ruoyi.common.annotation.Excel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -33,6 +36,7 @@ public class InventoryInboundDTO implements Serializable {
     /**
      * 入库人
      */
+    @Excel(name = "入库人",sort = 6)
     @ApiModelProperty(value = "入库人")
     private String inbounder;
 
@@ -45,6 +49,7 @@ public class InventoryInboundDTO implements Serializable {
     /**
      * 入库数量
      */
+    @Excel(name = "入库数量",sort = 3)
     @ApiModelProperty(value = "入库数量")
     private Integer number;
 
@@ -52,7 +57,7 @@ public class InventoryInboundDTO implements Serializable {
      * 单价
      */
     @ApiModelProperty(value = "单价")
-    private Long price;
+    private BigDecimal price;
 
     /**
      * 入库方式id
@@ -63,6 +68,7 @@ public class InventoryInboundDTO implements Serializable {
     /**
      * 入库方式名称
      */
+    @Excel(name = "入库方式名称",sort = 5)
     @ApiModelProperty(value = "入库方式名称")
     private String inboundName;
 
@@ -99,6 +105,7 @@ public class InventoryInboundDTO implements Serializable {
     /**
      * 创建时间 默认为当前时间
      */
+    @Excel(name = "入库时间",sort = 2)
     @ApiModelProperty(value = "创建时间 默认为当前时间")
     private LocalDateTime createTime;
 
@@ -113,5 +120,17 @@ public class InventoryInboundDTO implements Serializable {
      */
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
+
+
+    @TableField(exist = false)
+    @Excel(name = "原材料名称",sort = 1)
+    @ApiModelProperty(value = "原材料名称")
+    private String rawName;
+
+
+    @Excel(name = "总金额",sort = 4)
+    @ApiModelProperty(value = "总金额")
+    @TableField(exist = false)
+    private BigDecimal amount;
 
 }

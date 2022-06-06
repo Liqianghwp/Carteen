@@ -83,5 +83,14 @@ public class Constants {
      */
     public static final String INGREDIENTS_SECONDARY = "1";
 //    ============================= 配料类型常量  =============================
-
+    /**
+     * 记账常量
+     * 1:是记账
+     * */
+    public static final String TALLY_YES = "1";
+    /**
+     * 记账常量
+     * 0:否记账
+     * */
+    public static final String  TALLY_NO = "0";
 }

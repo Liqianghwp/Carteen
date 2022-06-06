@@ -1,10 +1,13 @@
 package com.diandong.domain.dto;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.ruoyi.common.annotation.Excel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -33,6 +36,7 @@ public class InventoryOutboundDTO implements Serializable {
     /**
      * 领取人
      */
+    @Excel(name = "领取人",sort = 5)
     @ApiModelProperty(value = "领取人")
     private String recipients;
 
@@ -51,6 +55,7 @@ public class InventoryOutboundDTO implements Serializable {
     /**
      * 出库数量
      */
+    @Excel(name = "出库数量",sort = 3)
     @ApiModelProperty(value = "出库数量")
     private Long number;
 
@@ -63,6 +68,7 @@ public class InventoryOutboundDTO implements Serializable {
     /**
      * 出库方式名称
      */
+    @Excel(name = "出库方式",sort = 5)
     @ApiModelProperty(value = "出库方式名称")
     private String outboundName;
 
@@ -76,7 +82,7 @@ public class InventoryOutboundDTO implements Serializable {
      * 单价
      */
     @ApiModelProperty(value = "单价")
-    private Long price;
+    private BigDecimal price;
 
     /**
      * 原材料图片
@@ -87,6 +93,7 @@ public class InventoryOutboundDTO implements Serializable {
     /**
      * 是否记账 0：不记账（默认）；1：记账
      */
+    @Excel(name = "是否记账",sort = 6)
     @ApiModelProperty(value = "是否记账 0：不记账（默认）；1：记账")
     private String state;
 
@@ -99,6 +106,7 @@ public class InventoryOutboundDTO implements Serializable {
     /**
      * 创建时间 默认为当前时间
      */
+    @Excel(name = "出库时间",sort = 2)
     @ApiModelProperty(value = "创建时间 默认为当前时间")
     private LocalDateTime createTime;
 
@@ -113,5 +121,17 @@ public class InventoryOutboundDTO implements Serializable {
      */
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
+
+
+    @TableField(exist = false)
+    @Excel(name = "原材料名称",sort = 1)
+    @ApiModelProperty(value = "原材料名称")
+    private String rawName;
+
+
+    @Excel(name = "总金额",sort = 4)
+    @ApiModelProperty(value = "总金额")
+    @TableField(exist = false)
+    private BigDecimal amount;
 
 }
