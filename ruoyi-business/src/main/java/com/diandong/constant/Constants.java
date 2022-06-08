@@ -93,4 +93,37 @@ public class Constants {
      * 0:否记账
      * */
     public static final String  TALLY_NO = "0";
+
+// ============================= 调拨管理常量 =============================
+
+    /**
+     * 调拨常量
+     * 1:待审核
+     *
+     * */
+    public static final String  TO_AUDIT = "1";
+    /**
+     * 调拨常量
+     * 2:审核驳回
+     *
+     * */
+    public static final String  REVIEW_THE_REJECTED = "2";
+    /**
+     * 调拨常量
+     * 3:待出库
+     *
+     * */
+    public static final String  FOR_OUTBOUND = "3";
+    /**
+     * 调拨常量
+     * 4:已入库
+     *
+     * */
+    public static final String  HAS_BEEN_PUT_IN_STORAGE = "4";
+    /**
+     * 调拨常量
+     * 5:已出库
+     *
+     * */
+    public static final String  HAVE_OUTBOUND = "5";
 }

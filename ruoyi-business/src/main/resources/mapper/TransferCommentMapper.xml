@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.TransferCommentMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.TransferCommentPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="transfer_id" jdbcType="BIGINT" property="transferId"/>
+        <result column="rid" jdbcType="BIGINT" property="rid"/>
+        <result column="number" jdbcType="BIGINT" property="number"/>
+        <result column="fel_flag" jdbcType="INTEGER" property="felFlag"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,tc.id
+            ,tc.transfer_id
+            ,tc.rid
+            ,tc.number
+            ,tc.fel_flag
+            ,tc.create_by
+            ,tc.create_time
+            ,tc.update_by
+            ,tc.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and tc.id = #{id}
+            </if>
+            <if test="transferId != null">
+                and tc.transfer_id = #{transferId}
+            </if>
+            <if test="rid != null">
+                and tc.rid = #{rid}
+            </if>
+            <if test="number != null">
+                and tc.number = #{number}
+            </if>
+            <if test="felFlag != null">
+                and tc.fel_flag = #{felFlag}
+            </if>
+            <if test="beginTime != null">
+                and tc.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and tc.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_transfer_comment -->
+
+</mapper>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.TransferMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.TransferPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="outbound_canteen" jdbcType="VARCHAR" property="outboundCanteen"/>
+        <result column="inbound_canteen" jdbcType="VARCHAR" property="inboundCanteen"/>
+        <result column="state" jdbcType="VARCHAR" property="state"/>
+        <result column="reviewer" jdbcType="VARCHAR" property="reviewer"/>
+        <result column="review_time" jdbcType="TIMESTAMP" property="reviewTime"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,t.id
+            ,t.code
+            ,t.outbound_canteen
+            ,t.inbound_canteen
+            ,t.state
+            ,t.reviewer
+            ,t.review_time
+            ,t.remark
+            ,t.del_flag
+            ,t.create_by
+            ,t.create_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and t.id = #{id}
+            </if>
+            <if test="code != null and code != ''">
+                and t.code = #{code}
+            </if>
+            <if test="outboundCanteen != null and outboundCanteen != ''">
+                and t.outbound_canteen = #{outboundCanteen}
+            </if>
+            <if test="inboundCanteen != null and inboundCanteen != ''">
+                and t.inbound_canteen = #{inboundCanteen}
+            </if>
+            <if test="state != null and state != ''">
+                and t.state = #{state}
+            </if>
+            <if test="reviewer != null and reviewer != ''">
+                and t.reviewer = #{reviewer}
+            </if>
+            <if test="reviewTime != null">
+                and t.review_time = #{reviewTime}
+            </if>
+            <if test="remark != null and remark != ''">
+                and t.remark = #{remark}
+            </if>
+            <if test="delFlag != null">
+                and t.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and t.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and t.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_transfer -->
+
+</mapper>

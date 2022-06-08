@@ -134,4 +134,12 @@ public class InventoryLedgerPO implements Serializable {
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 
+    /**
+     * 库存
+     * */
+    @TableField(exist = false)
+    @ApiModelProperty(value = "库存")
+    private Long repertory;
+
+
 }

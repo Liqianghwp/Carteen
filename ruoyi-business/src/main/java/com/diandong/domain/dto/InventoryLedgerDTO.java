@@ -113,6 +113,7 @@ public class InventoryLedgerDTO implements Serializable {
 
     @ApiModelProperty(value = "入库查询")
     private List<InventoryInboundPO> list1;
+
     @ApiModelProperty(value = "出库查询")
     private List<InventoryOutboundPO>list2;
 
