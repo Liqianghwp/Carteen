@@ -63,9 +63,10 @@ public class TransferController extends BaseController {
 
     /**
      * 根据id查询
-     *
+     * @author Yangchao
      * @param id 编号id
      * @return 返回结果
+     *
      */
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
