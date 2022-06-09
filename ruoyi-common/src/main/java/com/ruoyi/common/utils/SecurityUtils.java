@@ -35,6 +35,14 @@ public class SecurityUtils {
         }
     }
 
+    public static Long getCanteenId(){
+        try {
+            return getLoginUser().getCanteenId();
+        } catch (Exception e) {
+            throw new ServiceException("获取部门ID异常", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
     /**
      * 获取用户账户
      **/

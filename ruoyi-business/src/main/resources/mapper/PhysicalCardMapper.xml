@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.PhysicalCardMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.PhysicalCardPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="card_no" jdbcType="VARCHAR" property="cardNo"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="report_loss" jdbcType="INTEGER" property="reportLoss"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,pc.id
+            ,pc.user_id
+            ,pc.card_no
+            ,pc.state
+            ,pc.report_loss
+            ,pc.del_flag
+            ,pc.create_by
+            ,pc.create_time
+            ,pc.update_by
+            ,pc.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and pc.id = #{id}
+            </if>
+            <if test="userId != null">
+                and pc.user_id = #{userId}
+            </if>
+            <if test="cardNo != null and cardNo != ''">
+                and pc.card_no = #{cardNo}
+            </if>
+            <if test="state != null">
+                and pc.state = #{state}
+            </if>
+            <if test="reportLoss != null">
+                and pc.report_loss = #{reportLoss}
+            </if>
+            <if test="delFlag != null">
+                and pc.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and pc.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and pc.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_physical_card -->
+
+</mapper>

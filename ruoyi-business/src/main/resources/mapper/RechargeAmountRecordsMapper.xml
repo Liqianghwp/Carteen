@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.RechargeAmountRecordsMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.RechargeAmountRecordsPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="serial_number" jdbcType="VARCHAR" property="serialNumber"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="recharge_type" jdbcType="VARCHAR" property="rechargeType"/>
+        <result column="card_no" jdbcType="VARCHAR" property="cardNo"/>
+        <result column="amount" jdbcType="DECIMAL" property="amount"/>
+        <result column="recharge_method" jdbcType="VARCHAR" property="rechargeMethod"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,rar.id
+            ,rar.serial_number
+            ,rar.user_id
+            ,rar.recharge_type
+            ,rar.card_no
+            ,rar.amount
+            ,rar.recharge_method
+            ,rar.state
+            ,rar.del_flag
+            ,rar.create_by
+            ,rar.create_time
+            ,rar.update_by
+            ,rar.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and rar.id = #{id}
+            </if>
+            <if test="serialNumber != null and serialNumber != ''">
+                and rar.serial_number = #{serialNumber}
+            </if>
+            <if test="userId != null">
+                and rar.user_id = #{userId}
+            </if>
+            <if test="rechargeType != null and rechargeType != ''">
+                and rar.recharge_type = #{rechargeType}
+            </if>
+            <if test="cardNo != null and cardNo != ''">
+                and rar.card_no = #{cardNo}
+            </if>
+            <if test="amount != null">
+                and rar.amount = #{amount}
+            </if>
+            <if test="rechargeMethod != null and rechargeMethod != ''">
+                and rar.recharge_method = #{rechargeMethod}
+            </if>
+            <if test="state != null">
+                and rar.state = #{state}
+            </if>
+            <if test="delFlag != null">
+                and rar.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and rar.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and rar.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_recharge_amount_records -->
+
+</mapper>

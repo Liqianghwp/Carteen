@@ -22,5 +22,5 @@ public class BizUserTypeConstants {
     /**
      * 系统默认的餐次设置
      */
-    public static final List<String> defaultMeals = Arrays.asList(BizUserTypeConstants.STUDENT, BizUserTypeConstants.PARENTS);
+    public static final List<String> defaultType = Arrays.asList(BizUserTypeConstants.STUDENT, BizUserTypeConstants.PARENTS);
 }

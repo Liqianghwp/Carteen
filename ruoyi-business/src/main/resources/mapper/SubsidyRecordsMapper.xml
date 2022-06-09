@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.SubsidyRecordsMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.SubsidyRecordsPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_type" jdbcType="BIGINT" property="userType"/>
+        <result column="user_ids" jdbcType="VARCHAR" property="userIds"/>
+        <result column="amount" jdbcType="DECIMAL" property="amount"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,sr.id
+            ,sr.user_type
+            ,sr.user_ids
+            ,sr.amount
+            ,sr.type
+            ,sr.del_flag
+            ,sr.create_by
+            ,sr.create_time
+            ,sr.update_by
+            ,sr.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and sr.id = #{id}
+            </if>
+            <if test="userType != null">
+                and sr.user_type = #{userType}
+            </if>
+            <if test="userIds != null and userIds != ''">
+                and sr.user_ids = #{userIds}
+            </if>
+            <if test="amount != null">
+                and sr.amount = #{amount}
+            </if>
+            <if test="type != null">
+                and sr.type = #{type}
+            </if>
+            <if test="delFlag != null">
+                and sr.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and sr.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and sr.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_subsidy_records -->
+
+</mapper>

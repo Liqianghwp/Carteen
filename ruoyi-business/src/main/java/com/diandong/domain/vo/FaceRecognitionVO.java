@@ -28,7 +28,11 @@ public class FaceRecognitionVO extends BaseEntity implements Serializable {
     @NotNull(groups = {Update.class})
     @ApiModelProperty(value = "编号")
     private Long id;
-
+    /**
+     * 用户id
+     */
+    @ApiModelProperty(value = "用户id")
+    private Long userId;
     /**
      * 人脸照片
      */

@@ -30,6 +30,12 @@ public class NutritionAdviceVO extends BaseEntity implements Serializable {
     private Long id;
 
     /**
+     * 用户id
+     */
+    @ApiModelProperty(value = "用户id")
+    private Long userId;
+
+    /**
      * 餐次id
      */
     @ApiModelProperty(value = "餐次id")

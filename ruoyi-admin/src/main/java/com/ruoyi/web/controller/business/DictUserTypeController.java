@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  *
  * @author ruoyi
  */
-@Api(value = "/dict/meal", tags = {"餐次设置"})
+@Api(value = "/dict/user_type", tags = {"用户类型设置"})
 @RestController
 @RequestMapping("/dict/user_type")
 public class DictUserTypeController extends BaseController {
@@ -58,7 +58,7 @@ public class DictUserTypeController extends BaseController {
             @ApiImplicitParam(paramType = "query", dataType = "SysDictData", name = "dictData", value = "")
     })
     @ApiOperation(value = "字典数据列表", notes = "字典数据列表", httpMethod = "GET")
-    @PreAuthorize("@ss.hasPermi('dict:meal:list')")
+//    @PreAuthorize("@ss.hasPermi('dict:meal:list')")
     @GetMapping
     public TableDataInfo list(SysDictData dictData) {
         startPage();
@@ -79,7 +79,7 @@ public class DictUserTypeController extends BaseController {
     })
     @ApiOperation(value = "字典数据导出", notes = "字典数据导出", httpMethod = "POST")
     @Log(title = "字典数据", businessType = BusinessType.EXPORT)
-    @PreAuthorize("@ss.hasPermi('dict:meal:export')")
+//    @PreAuthorize("@ss.hasPermi('dict:meal:export')")
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysDictData dictData) {
         resetSysDictData(dictData);
@@ -95,7 +95,7 @@ public class DictUserTypeController extends BaseController {
             @ApiImplicitParam(paramType = "path", dataType = "long", name = "dictCode", value = "")
     })
     @ApiOperation(value = "查询字典数据详细", notes = "查询字典数据详细", httpMethod = "GET")
-    @PreAuthorize("@ss.hasPermi('dict:meal:query')")
+//    @PreAuthorize("@ss.hasPermi('dict:meal:query')")
     @GetMapping(value = "/{dictCode}")
     public BaseResult getInfo(@PathVariable Long dictCode) {
         return BaseResult.success(dictDataService.selectDictDataById(dictCode));
@@ -124,7 +124,7 @@ public class DictUserTypeController extends BaseController {
             @ApiImplicitParam(paramType = "body", dataType = "SysDictData", name = "dict", value = "")
     })
     @ApiOperation(value = "新增字典类型", notes = "新增字典类型", httpMethod = "POST")
-    @PreAuthorize("@ss.hasPermi('dict:meal:add')")
+//    @PreAuthorize("@ss.hasPermi('dict:meal:add')")
     @Log(title = "字典数据", businessType = BusinessType.INSERT)
     @PostMapping
     public BaseResult add(@Validated @RequestBody DictDateVO dict) {
@@ -144,7 +144,7 @@ public class DictUserTypeController extends BaseController {
             @ApiImplicitParam(paramType = "body", dataType = "SysDictData", name = "dict", value = "")
     })
     @ApiOperation(value = "修改保存字典类型", notes = "修改保存字典类型", httpMethod = "PUT")
-    @PreAuthorize("@ss.hasPermi('dict:meal:edit')")
+//    @PreAuthorize("@ss.hasPermi('dict:meal:edit')")
     @Log(title = "字典数据", businessType = BusinessType.UPDATE)
     @PutMapping
     public BaseResult edit(@Validated @RequestBody DictDateVO dict) {
@@ -170,16 +170,16 @@ public class DictUserTypeController extends BaseController {
             @ApiImplicitParam(paramType = "path", dataType = "Long[]", name = "dictCodes", value = "")
     })
     @ApiOperation(value = "删除字典类型", notes = "删除字典类型", httpMethod = "DELETE")
-    @PreAuthorize("@ss.hasPermi('dict:meal:remove')")
+//    @PreAuthorize("@ss.hasPermi('dict:meal:remove')")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{dictCodes}")
     public BaseResult remove(@PathVariable Long[] dictCodes) {
 
         List<SysDictData> dictDataList = dictDataService.selectBatchByIds(Arrays.asList(dictCodes));
 
-        List<SysDictData> collect = dictDataList.stream().filter(dictData -> BizUserTypeConstants.defaultMeals.contains(dictData.getDictValue())).collect(Collectors.toList());
+        List<SysDictData> collect = dictDataList.stream().filter(dictData -> BizUserTypeConstants.defaultType.contains(dictData.getDictValue())).collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(collect)) {
-            return BaseResult.error("默认餐次不能被删除");
+            return BaseResult.error("默认用户类型不能被删除");
         }
 
         dictDataService.deleteDictDataByIds(dictCodes);

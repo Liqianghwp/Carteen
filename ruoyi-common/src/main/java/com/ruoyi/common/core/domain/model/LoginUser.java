@@ -82,6 +82,9 @@ public class LoginUser implements UserDetails {
     @ApiModelProperty("集团id")
     private Long groupId;
 
+    @ApiModelProperty("食堂id")
+    private Long canteenId;
+
     /**
      * 用户信息
      */
@@ -125,6 +128,14 @@ public class LoginUser implements UserDetails {
         this.deptId = deptId;
         this.user = user;
         this.permissions = permissions;
+    }
+
+    public LoginUser(Long userId, Long deptId, Long canteenId, SysUser user, Set<String> permissions) {
+        this.userId = userId;
+        this.deptId = deptId;
+        this.permissions = permissions;
+        this.canteenId = canteenId;
+        this.user = user;
     }
 
     @JSONField(serialize = false)
@@ -250,6 +261,14 @@ public class LoginUser implements UserDetails {
 
     public void setGroupId(Long groupId) {
         this.groupId = groupId;
+    }
+
+    public Long getCanteenId() {
+        return canteenId;
+    }
+
+    public void setCanteenId(Long canteenId) {
+        this.canteenId = canteenId;
     }
 
     @Override

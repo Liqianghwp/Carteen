@@ -199,7 +199,7 @@ public class ReserveSampleController extends BaseController {
      * @param vo
      */
     @ApiOperation(value = "食堂留样登记导出")
-    @GetMapping("/export/canteen")
+    @PostMapping("/export/canteen")
     public void exportCanteen(HttpServletResponse response, ReserveSampleVO vo) {
 
         List<Long> ids = vo.getIds();
@@ -226,7 +226,7 @@ public class ReserveSampleController extends BaseController {
      * @param vo
      */
     @ApiOperation(value = "集团留样登记导出")
-    @GetMapping("/export/group")
+    @PostMapping("/export/group")
     public void exportGroup(HttpServletResponse response, ReserveSampleVO vo) {
 
         List<Long> ids = vo.getIds();

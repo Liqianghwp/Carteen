@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.RechargeTimesConfigMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.RechargeTimesConfigPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="sex" jdbcType="BIGINT" property="sex"/>
+        <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime"/>
+        <result column="time" jdbcType="INTEGER" property="time"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="times" jdbcType="INTEGER" property="times"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="qr_code" jdbcType="VARCHAR" property="qrCode"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,rtc.id
+            ,rtc.sex
+            ,rtc.begin_time
+            ,rtc.time
+            ,rtc.price
+            ,rtc.times
+            ,rtc.remark
+            ,rtc.qr_code
+            ,rtc.state
+            ,rtc.del_flag
+            ,rtc.create_by
+            ,rtc.create_time
+            ,rtc.update_by
+            ,rtc.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and rtc.id = #{id}
+            </if>
+            <if test="sex != null">
+                and rtc.sex = #{sex}
+            </if>
+            <if test="beginTime != null">
+                and rtc.begin_time = #{beginTime}
+            </if>
+            <if test="time != null">
+                and rtc.time = #{time}
+            </if>
+            <if test="price != null">
+                and rtc.price = #{price}
+            </if>
+            <if test="times != null">
+                and rtc.times = #{times}
+            </if>
+            <if test="remark != null and remark != ''">
+                and rtc.remark = #{remark}
+            </if>
+            <if test="qrCode != null and qrCode != ''">
+                and rtc.qr_code = #{qrCode}
+            </if>
+            <if test="state != null">
+                and rtc.state = #{state}
+            </if>
+            <if test="delFlag != null">
+                and rtc.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and rtc.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and rtc.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_recharge_times_config -->
+
+</mapper>

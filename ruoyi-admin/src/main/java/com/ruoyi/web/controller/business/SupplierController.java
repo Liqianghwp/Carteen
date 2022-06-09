@@ -154,7 +154,7 @@ public class SupplierController extends BaseController {
     }
 
     @Log(title = "供应商导出", businessType = BusinessType.EXPORT)
-    @PutMapping("/export")
+    @PostMapping("/export")
     public void export(HttpServletResponse response, SupplierVO vo) {
         vo.setIsBlack(Constants.WHITELIST);
         List<SupplierDTO> exportList = supplierMpService.getExportList(vo);

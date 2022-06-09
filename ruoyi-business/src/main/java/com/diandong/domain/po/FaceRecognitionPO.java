@@ -30,6 +30,12 @@ public class FaceRecognitionPO implements Serializable {
     private Long id;
 
     /**
+     * 用户id
+     */
+    @TableField(value = "user_id")
+    @ApiModelProperty(value = "用户id")
+    private Long userId;
+    /**
      * 人脸照片
      */
     @TableField(value = "face_picture")

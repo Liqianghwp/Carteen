@@ -141,18 +141,8 @@ public class IngredientsController extends BaseController {
     @ApiOperation(value = "配料管理保存", notes = "配料管理保存", httpMethod = "POST")
     @PostMapping
     public BaseResult save(@RequestBody @Validated(Insert.class) IngredientsVO vo) {
-        IngredientsPO po = IngredientsMsMapper.INSTANCE.vo2po(vo);
 
-        ingredientsMpService.save(po);
-
-        List<IngredientsDetailPO> list = resetIngredientDetail(vo, po);
-        boolean result = ingredientsDetailMpService.saveBatch(list);
-
-        if (result) {
-            return BaseResult.successMsg("添加成功！");
-        } else {
-            return BaseResult.error("添加失败！");
-        }
+        return ingredientsMpService.saveIngredients(vo);
     }
 
     /**
@@ -167,44 +157,9 @@ public class IngredientsController extends BaseController {
     @ApiOperation(value = "配料管理更新", notes = "配料管理更新", httpMethod = "PUT")
     @PutMapping
     public BaseResult update(@RequestBody @Validated(Update.class) IngredientsVO vo) {
-        IngredientsPO po = IngredientsMsMapper.INSTANCE.vo2po(vo);
-
-        List<IngredientsDetailPO> list = resetIngredientDetail(vo, po);
-        ingredientsDetailMpService.saveOrUpdateBatch(list);
-        boolean result = ingredientsMpService.updateById(po);
-        if (result) {
-            return BaseResult.successMsg("修改成功");
-        } else {
-            return BaseResult.error("修改失败");
-        }
+        return ingredientsMpService.updateIngredients(vo);
     }
 
-
-    private List<IngredientsDetailPO> resetIngredientDetail(IngredientsVO vo, IngredientsPO po) {
-
-        //        主料
-        List<IngredientsDetailVO> zic = vo.getZic();
-//        辅料
-        List<IngredientsDetailVO> zio = vo.getZio();
-
-        List<IngredientsDetailPO> list = new ArrayList<>();
-        if (CollectionUtils.isNotEmpty(zic)) {
-            zic.forEach(ingredientsDetailVO -> {
-                ingredientsDetailVO.setType(Constants.INGREDIENTS_MAIN);
-                ingredientsDetailVO.setIngredientsId(po.getId());
-                list.add(IngredientsDetailMsMapper.INSTANCE.vo2po(ingredientsDetailVO));
-            });
-        }
-        if (CollectionUtils.isNotEmpty(zio)) {
-            zio.forEach(ingredientsDetailVO -> {
-                ingredientsDetailVO.setType(Constants.INGREDIENTS_SECONDARY);
-                ingredientsDetailVO.setIngredientsId(po.getId());
-
-                list.add(IngredientsDetailMsMapper.INSTANCE.vo2po(ingredientsDetailVO));
-            });
-        }
-        return list;
-    }
 
     /**
      * 配料管理删除

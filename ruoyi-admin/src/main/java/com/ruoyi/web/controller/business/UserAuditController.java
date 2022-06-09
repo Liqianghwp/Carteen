@@ -110,7 +110,7 @@ public class UserAuditController extends BaseController {
     }
 
     @ApiOperation(value = "用户审核导出")
-    @GetMapping("/export")
+    @PostMapping("/export")
     public void export(HttpServletResponse response, SysUser vo) {
         List<Long> ids = vo.getIds();
         List<SysUser> userList;

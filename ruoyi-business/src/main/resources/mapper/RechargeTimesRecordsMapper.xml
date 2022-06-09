@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.RechargeTimesRecordsMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.RechargeTimesRecordsPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="serial_number" jdbcType="VARCHAR" property="serialNumber"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="recharge_type" jdbcType="VARCHAR" property="rechargeType"/>
+        <result column="time" jdbcType="TIMESTAMP" property="time"/>
+        <result column="amount" jdbcType="DECIMAL" property="amount"/>
+        <result column="count" jdbcType="INTEGER" property="count"/>
+        <result column="remain_times" jdbcType="INTEGER" property="remainTimes"/>
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,rtr.id
+            ,rtr.serial_number
+            ,rtr.user_id
+            ,rtr.recharge_type
+            ,rtr.time
+            ,rtr.amount
+            ,rtr.count
+            ,rtr.remain_times
+            ,rtr.start_time
+            ,rtr.end_time
+            ,rtr.state
+            ,rtr.del_flag
+            ,rtr.create_by
+            ,rtr.create_time
+            ,rtr.update_by
+            ,rtr.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and rtr.id = #{id}
+            </if>
+            <if test="serialNumber != null and serialNumber != ''">
+                and rtr.serial_number = #{serialNumber}
+            </if>
+            <if test="userId != null">
+                and rtr.user_id = #{userId}
+            </if>
+            <if test="rechargeType != null and rechargeType != ''">
+                and rtr.recharge_type = #{rechargeType}
+            </if>
+            <if test="time != null">
+                and rtr.time = #{time}
+            </if>
+            <if test="amount != null">
+                and rtr.amount = #{amount}
+            </if>
+            <if test="count != null">
+                and rtr.count = #{count}
+            </if>
+            <if test="remainTimes != null">
+                and rtr.remain_times = #{remainTimes}
+            </if>
+            <if test="startTime != null">
+                and rtr.start_time = #{startTime}
+            </if>
+            <if test="endTime != null">
+                and rtr.end_time = #{endTime}
+            </if>
+            <if test="state != null">
+                and rtr.state = #{state}
+            </if>
+            <if test="delFlag != null">
+                and rtr.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and rtr.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and rtr.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_recharge_times_records -->
+
+</mapper>

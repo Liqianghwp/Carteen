@@ -132,7 +132,7 @@ public class SysUser extends BaseEntity {
 
     /**
      * 验证码
-     * */
+     */
     @TableField(exist = false)
     private String authCode;
 
@@ -189,6 +189,12 @@ public class SysUser extends BaseEntity {
     @TableField(exist = false)
     private Long parentId;
 
+    /**
+     * 食堂id
+     */
+    @ApiModelProperty(value = "食堂id")
+    private Long canteenId;
+
 
     /**
      * 部门对象
@@ -233,9 +239,15 @@ public class SysUser extends BaseEntity {
     @TableField(exist = false)
     private String facePicture;
 
+
     @ApiModelProperty(value = "勾选导出的ID集合")
     @TableField(exist = false)
     private List<Long> ids;
+
+    @ApiModelProperty(value = "是否有实体卡(true:有;false:没有)")
+    @TableField(exist = false)
+    private Boolean hasCard;
+
 
     public SysUser() {
 
@@ -495,6 +507,22 @@ public class SysUser extends BaseEntity {
 
     public void setFacePicture(String facePicture) {
         this.facePicture = facePicture;
+    }
+
+    public Boolean getHasCard() {
+        return hasCard;
+    }
+
+    public void setHasCard(Boolean hasCard) {
+        this.hasCard = hasCard;
+    }
+
+    public Long getCanteenId() {
+        return canteenId;
+    }
+
+    public void setCanteenId(Long canteenId) {
+        this.canteenId = canteenId;
     }
 
     @Override

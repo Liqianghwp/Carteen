@@ -30,6 +30,13 @@ public class NutritionAdvicePO implements Serializable {
     private Long id;
 
     /**
+     * 用户id
+     */
+    @TableField(value = "user_id")
+    @ApiModelProperty(value = "用户id")
+    private Long userId;
+
+    /**
      * 餐次id
      */
     @TableField(value = "meal_times_id")

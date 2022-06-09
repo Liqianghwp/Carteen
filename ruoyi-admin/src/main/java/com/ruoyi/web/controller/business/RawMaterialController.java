@@ -163,7 +163,7 @@ public class RawMaterialController extends BaseController {
      * @param vo
      */
     @ApiOperation(value = "原材料导出")
-    @GetMapping("/export")
+    @PostMapping("/export")
     public void exportCanteen(HttpServletResponse response, RawMaterialVO vo) {
 
         List<Long> ids = vo.getIds();

@@ -26,7 +26,6 @@ public class UserDetailsByTelephoneServiceImpl implements UserDetailsService {
 
     @Autowired
     private ISysUserService userService;
-
     @Autowired
     private SysPermissionService permissionService;
 
@@ -48,6 +47,7 @@ public class UserDetailsByTelephoneServiceImpl implements UserDetailsService {
     }
 
     public UserDetails createLoginUser(SysUser user) {
-        return new LoginUser(user.getUserId(), user.getDeptId(), user, permissionService.getMenuPermission(user));
+//        return new LoginUser(user.getUserId(), user.getDeptId(), user, permissionService.getMenuPermission(user));
+        return new LoginUser(user.getUserId(), user.getDeptId(), user.getCanteenId(), user, permissionService.getMenuPermission(user));
     }
 }

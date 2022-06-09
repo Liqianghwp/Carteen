@@ -117,8 +117,9 @@ public class SupplierBlackController extends BaseController {
     }
 
     @Log(title = "供应商导出", businessType = BusinessType.EXPORT)
-    @PutMapping("/export")
+    @PostMapping("/export")
     public void export(HttpServletResponse response, SupplierVO vo) {
+        vo.setIsBlack(Constants.BLACKLIST);
         List<SupplierDTO> exportList = supplierMpService.getExportList(vo);
         ExcelUtil<SupplierDTO> util = new ExcelUtil(SupplierDTO.class);
         util.exportExcel(response, exportList, "供应商管理");
