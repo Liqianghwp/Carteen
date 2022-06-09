@@ -6,12 +6,11 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
-import com.diandong.domain.po.TransferCommentPO;
+import com.diandong.domain.po.*;
 import com.diandong.service.*;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.domain.po.TransferPO;
 import com.diandong.domain.dto.TransferDTO;
 import com.diandong.domain.vo.TransferVO;
 import com.diandong.mapstruct.TransferMsMapper;
@@ -19,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.Resource;
@@ -73,8 +73,34 @@ public class TransferController extends BaseController {
     @ApiOperation(value = "根据id查询", notes = "根据id查询", httpMethod = "GET")
     @GetMapping(value = "/{id}")
     public BaseResult<TransferDTO> getById(@PathVariable("id") Long id) {
+        Long repertory=0L;
         TransferDTO dto = TransferMsMapper.INSTANCE
                 .po2dto(transferMpService.getById(id));
+        TransferCommentPO transferCommentPO = transferCommentMpService.lambdaQuery().eq(TransferCommentPO::getTransferId, dto.getId()).one();
+        InventoryLedgerPO inventoryLedgerPo = inventoryLedgerMpService.getById(transferCommentPO.getRid());
+        //查询入库
+        List<InventoryInboundPO> list = inventoryInboundMpService.lambdaQuery()
+                .eq(InventoryInboundPO::getLedgerId, inventoryLedgerPo.getId())
+                .eq(InventoryInboundPO::getState, 1).list();
+        //查询出库
+        List<InventoryOutboundPO> list1 = inventoryOutboundMpService.lambdaQuery()
+                .eq(InventoryOutboundPO::getId, inventoryLedgerPo.getId())
+                .eq(InventoryOutboundPO::getState, 1).list();
+        for (InventoryInboundPO inventoryInboundPO : list) {
+            //如果有入库则增加数量
+            repertory += inventoryInboundPO.getNumber();
+            //计算他的总金额
+        }
+        //遍历出库
+        for (InventoryOutboundPO inventoryOutboundPO : list1) {
+            //出库 数量相减
+            repertory -= inventoryOutboundPO.getNumber();
+        }
+        dto.setCategoryName(inventoryLedgerPo.getCategoryName());
+        dto.setRawMaterialName(inventoryLedgerPo.getRawMaterialName());
+        dto.setUnitName(inventoryLedgerPo.getUnitName());
+        dto.setNumber(transferCommentPO.getNumber());
+        dto.setRepertory(repertory); //库存量 经过计算
         return BaseResult.success(dto);
     }
 

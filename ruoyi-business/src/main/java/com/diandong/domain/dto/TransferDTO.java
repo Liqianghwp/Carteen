@@ -1,5 +1,6 @@
 package com.diandong.domain.dto;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -77,5 +78,36 @@ public class TransferDTO implements Serializable {
      */
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
+
+    /**
+     * 原材料类别名称
+     */
+    @ApiModelProperty(value = "原材料类别名称")
+    private String categoryName;
+
+    /**
+     * 原材料名称
+     */
+    @ApiModelProperty(value = "原材料名称")
+    private String rawMaterialName;
+
+    /**
+     * 单位名称
+     */
+    @ApiModelProperty(value = "单位名称")
+    private String unitName;
+
+    /**
+     * 调拨数量
+     */
+    @ApiModelProperty(value = "调拨数量")
+    private Long number;
+
+    /**
+     * 库存
+     * */
+    @TableField(exist = false)
+    @ApiModelProperty(value = "库存")
+    private Long repertory;
 
 }
