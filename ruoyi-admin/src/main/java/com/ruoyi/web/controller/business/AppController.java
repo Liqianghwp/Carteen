@@ -5,12 +5,14 @@ import com.diandong.constant.Constants;
 import com.diandong.domain.dto.UserAndTokenDto;
 import com.diandong.domain.vo.PhoneLoginVO;
 import com.diandong.enums.UserTypeEnum;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.framework.security.sms.SmsCodeAuthenticationToken;
+import com.ruoyi.framework.web.service.SysLoginService;
 import com.ruoyi.framework.web.service.TokenService;
 import com.ruoyi.system.service.ISysUserService;
 import io.swagger.annotations.Api;
@@ -56,6 +58,9 @@ public class AppController extends BaseController {
     private TokenService tokenService;
     @Resource
     private AuthenticationManager authenticationManager;
+    @Resource
+    private SysLoginService loginService;
+
 //    1、获取验证码
 
     @ApiOperation(value = "发送短信验证码")
@@ -100,7 +105,15 @@ public class AppController extends BaseController {
         return BaseResult.success(userAndTokenDto.getToken());
     }
 
-//    4、更换手机号
+    @ApiOperation(value = "APP账密登录")
+    @PostMapping("/appLogin")
+    public BaseResult appLogin(@RequestBody PhoneLoginVO phoneLoginVO) {
+        String token = loginService.verifyLogin(phoneLoginVO.getPhone(), phoneLoginVO.getPassword());
+        return BaseResult.success(token);
+    }
+
+
+    //    4、更换手机号
     @ApiOperation("用户修改手机号-原手机号-获取验证码")
     @GetMapping("/change/old_phone_message")
     public BaseResult getChangePhoneMessage(String phone) {
@@ -166,6 +179,7 @@ public class AppController extends BaseController {
         userAndTokenDto.setUser(user);
         return userAndTokenDto;
     }
+
     // 发送验证码
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "body", dataType = "SysUser", name = "user", value = "")
@@ -175,18 +189,17 @@ public class AppController extends BaseController {
     public BaseResult resetPwd(@RequestBody SysUser user) {
         //拿到前端返回的手机号
         String phonemes = user.getPhonenumber();
-        String regex="/^1[0-9]{10}$/";
-        String result="";
+        String regex = "/^1[0-9]{10}$/";
+        String result = "";
 
-        if (StringUtils.isNotBlank(phonemes)||phonemes.matches(regex)) {
+        if (StringUtils.isNotBlank(phonemes) || phonemes.matches(regex)) {
             Random random = new Random();
-            for (int i=0;i<6;i++)
-            {
-                result+=random.nextInt(10);
+            for (int i = 0; i < 6; i++) {
+                result += random.nextInt(10);
             }
-            stringRedisTemplate.opsForValue().set(phonemes,result,60,TimeUnit.SECONDS);
+            stringRedisTemplate.opsForValue().set(phonemes, result, 60, TimeUnit.SECONDS);
 
-        }else {
+        } else {
             return BaseResult.success("手机号不能为空");
         }
         return BaseResult.success(result);
@@ -204,26 +217,27 @@ public class AppController extends BaseController {
         //接受他的验证码
         String authCode = user.getAuthCode();
         //通过拿到的手机号查询到他的id
-        SysUser one = userService.lambdaQuery().eq(SysUser::getPhonenumber,phonenumber).one();
+        SysUser one = userService.lambdaQuery().eq(SysUser::getPhonenumber, phonenumber).one();
         String phonenumber1 = one.getPhonenumber();
         //判断手机号是否为空
-        if (phonenumber1== null) {
+        if (phonenumber1 == null) {
             return BaseResult.error("没有这个手机号");
         }
         //校验验证码
         String s = stringRedisTemplate.opsForValue().get(phonenumber);
 
-        if (authCode.equals(s) ) {
+        if (authCode.equals(s)) {
             //接收他的密码
             //密码加密
             //将密码保存到库
-            userService.lambdaUpdate().set(SysUser::getPassword,SecurityUtils.encryptPassword(user.getPassword()))
-                    .eq(SysUser::getUserId,one.getUserId()).update();
-        }else {
+            userService.lambdaUpdate().set(SysUser::getPassword, SecurityUtils.encryptPassword(user.getPassword()))
+                    .eq(SysUser::getUserId, one.getUserId()).update();
+        } else {
             return BaseResult.success("验证码错误");
         }
         return BaseResult.success(user);
     }
+
     //接收验证码进行效验,保存密码
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "body", dataType = "SysUser", name = "user", value = "")

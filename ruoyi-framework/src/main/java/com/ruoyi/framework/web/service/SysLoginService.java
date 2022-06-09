@@ -5,6 +5,7 @@ import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.exception.base.BaseException;
 import com.ruoyi.common.exception.user.CaptchaException;
 import com.ruoyi.common.exception.user.CaptchaExpireException;
 import com.ruoyi.common.exception.user.UserPasswordNotMatchException;
@@ -62,6 +63,17 @@ public class SysLoginService {
         if (captchaOnOff) {
             validateCaptcha(username, code, uuid);
         }
+        return verifyLogin(username,password);
+    }
+    /**
+     * 登录验证
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @return 结果
+     */
+    public String verifyLogin(String username, String password) {
+
         // 用户验证
         Authentication authentication = null;
         try {
@@ -80,9 +92,11 @@ public class SysLoginService {
         AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         recordLoginInfo(loginUser.getUserId());
+
         // 生成token
         return tokenService.createToken(loginUser);
     }
+
 
     /**
      * 校验验证码

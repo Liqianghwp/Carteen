@@ -1,6 +1,9 @@
 package com.diandong.domain.vo;
 
 import com.diandong.domain.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -92,6 +95,8 @@ public class SysUserVO extends BaseEntity {
     /**
      * 用户生日
      */
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @ApiModelProperty(value = "用户生日")
     private LocalDate userBirthday;
 
