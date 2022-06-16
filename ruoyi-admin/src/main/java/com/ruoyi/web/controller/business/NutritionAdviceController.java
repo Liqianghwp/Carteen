@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
-import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
 import com.diandong.domain.dto.NutritionAdviceDTO;
 import com.diandong.domain.po.NutritionAdvicePO;
@@ -127,27 +126,6 @@ public class NutritionAdviceController extends BaseController {
     }
 
 
-//    /**
-//     * 保存
-//     *
-//     * @param vo 参数对象
-//     * @return 返回结果
-//     */
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(paramType = "query", dataType = "NutritionAdviceVO", name = "vo", value = "参数对象")
-//    })
-//    @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
-//    @PostMapping
-//    public BaseResult save(@Validated(Insert.class) NutritionAdviceVO vo) {
-//        NutritionAdvicePO po = NutritionAdviceMsMapper.INSTANCE.vo2po(vo);
-//        boolean result = nutritionAdviceMpService.save(po);
-//        if (result) {
-//            return BaseResult.successMsg("添加成功！");
-//        } else {
-//            return BaseResult.error("添加失败！");
-//        }
-//    }
-
     /**
      * @return
      */
@@ -158,54 +136,12 @@ public class NutritionAdviceController extends BaseController {
     @PostMapping
     public BaseResult inputNutritionAdvice(@RequestBody @Validated(Insert.class) List<NutritionAdviceVO> naList) {
 
-//        判断是否登录
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
         if (CollectionUtils.isEmpty(naList)) {
             return BaseResult.error("没有要录入的营养参数");
         }
-
-        try {
-            return nutritionAdviceMpService.inputNutritionAdvice(naList, loginUser);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return BaseResult.error("添加失败");
-        }
+        return nutritionAdviceMpService.inputNutritionAdvice(naList);
     }
 
-
-    /**
-     * 更新
-     *
-     * @param vo 参数对象
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "NutritionAdviceVO", name = "vo", value = "参数对象")
-    })
-    @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
-    @PutMapping
-    public BaseResult update(@RequestBody @Validated(Update.class) NutritionAdviceVO vo) {
-
-//        判断登录状态
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
-
-        NutritionAdvicePO po = NutritionAdviceMsMapper.INSTANCE.vo2po(vo);
-//        设置更新人信息
-        po.setUpdateBy(loginUser.getUserId());
-
-        boolean result = nutritionAdviceMpService.updateById(po);
-        if (result) {
-            return BaseResult.successMsg("修改成功");
-        } else {
-            return BaseResult.error("修改失败");
-        }
-    }
 
     /**
      * 删除
@@ -224,25 +160,6 @@ public class NutritionAdviceController extends BaseController {
         }
     }
 
-    /**
-     * 批量删除
-     *
-     * @param idList 编号id集合
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = nutritionAdviceMpService.removeByIds(idList);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
-            return BaseResult.error("删除失败");
-        }
-    }
 
     private LambdaQueryChainWrapper<NutritionAdvicePO> onSelectWhere(NutritionAdviceVO vo) {
 
@@ -258,7 +175,8 @@ public class NutritionAdviceController extends BaseController {
                 .eq(ObjectUtils.isNotEmpty(vo.getNutritionalId()), NutritionAdvicePO::getNutritionalId, vo.getNutritionalId())
                 .eq(StringUtils.isNotBlank(vo.getNutritionalName()), NutritionAdvicePO::getNutritionalName, vo.getNutritionalName())
                 .eq(StringUtils.isNotBlank(vo.getUnit()), NutritionAdvicePO::getUnit, vo.getUnit())
-                .eq(ObjectUtils.isNotEmpty(vo.getNumber()), NutritionAdvicePO::getNumber, vo.getNumber());
+                .eq(ObjectUtils.isNotEmpty(vo.getNumber()), NutritionAdvicePO::getNumber, vo.getNumber())
+                .eq(ObjectUtils.isNotEmpty(vo.getUserId()), NutritionAdvicePO::getUserId, vo.getUserId());
 
         return queryWrapper;
     }

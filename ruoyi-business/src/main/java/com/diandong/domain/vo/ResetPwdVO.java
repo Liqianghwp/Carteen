@@ -9,25 +9,24 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
- * @Classname PhoneLoginVO
- * @Description 手机验证码登录&注册
- * @Date 2022/5/26 10:07
+ * @Classname ResetPwdVO
+ * @Description 重设密码实体类
+ * @Date 2022/6/13 13:52
  * @Created by YuLiu
  */
-@ApiModel(value = "手机号码验证码登录/注册实体类")
 @Data
-public class PhoneLoginVO implements Serializable {
-    private static final long serialVersionUID = -3093314205549450910L;
+@ApiModel("找回密码实体类")
+public class ResetPwdVO implements Serializable {
 
+    @ApiModelProperty(value = "手机号")
     @NotBlank(message = "手机号不能为空")
     @PhoneConstraint
-    @ApiModelProperty(value = "手机号")
     private String phone;
-
-    @NotBlank(message = "验证码不能为空")
-    @ApiModelProperty(value = "验证码")
-    private String code;
 
     @ApiModelProperty(value = "密码")
     private String password;
+
+    @ApiModelProperty(value = "验证码")
+    private String verifyCode;
+
 }

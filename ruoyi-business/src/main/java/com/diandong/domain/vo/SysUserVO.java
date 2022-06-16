@@ -22,6 +22,8 @@ import java.util.List;
 @Data
 public class SysUserVO extends BaseEntity {
 
+    @ApiModelProperty(value = "用户id")
+    private Long userId;
 
     /**
      * 用户账号
@@ -124,4 +126,9 @@ public class SysUserVO extends BaseEntity {
     @ApiModelProperty(value = "营养建议")
     private List<UserNutritionAdviceVO> userNutritionAdviceList;
 
+    /**
+     * 是否有实体卡
+     */
+    @ApiModelProperty(value = "是否有实体卡(0:否;1:是)")
+    private Integer hasCard;
 }

@@ -10,9 +10,11 @@ import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
 import com.diandong.domain.dto.DishesTypeDTO;
 import com.diandong.domain.po.DishesTypePO;
+import com.diandong.domain.po.GroupManagementPO;
 import com.diandong.domain.vo.DishesTypeVO;
 import com.diandong.mapstruct.DishesTypeMsMapper;
 import com.diandong.service.DishesTypeMpService;
+import com.diandong.service.GroupManagementMpService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
@@ -50,8 +52,7 @@ public class DishesTypeController extends BaseController {
 
     @Resource
     private DishesTypeMpService dishesTypeMpService;
-    @Resource
-    private ISysDeptService deptService;
+
 
     /**
      * 分页查询
@@ -98,51 +99,7 @@ public class DishesTypeController extends BaseController {
     @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
     @PostMapping
     public BaseResult save(@RequestBody @Validated(Insert.class) DishesTypeVO vo) {
-
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
-
-
-        DishesTypePO po = DishesTypeMsMapper.INSTANCE.vo2po(vo);
-
-//        设置创建人信息
-//        po.setCreateBy(loginUser.getUserId());
-
-        SysDept groupDept = getGroupDept(loginUser.getDeptId());
-        if (Objects.isNull(groupDept)) {
-            throw new RuntimeException("当前账号无法创建菜品分类");
-        }
-        po.setGroupId(groupDept.getDeptId());
-        po.setGroupName(groupDept.getDeptName());
-
-        boolean result = dishesTypeMpService.save(po);
-        if (result) {
-            return BaseResult.successMsg("添加成功！");
-        } else {
-            return BaseResult.error("添加失败！");
-        }
-    }
-
-    /**
-     * 查询集团id
-     *
-     * @param deptId
-     * @return
-     */
-    private SysDept getGroupDept(Long deptId) {
-
-        SysDept dept = null;
-        if (deptId == DeptConstants.GROUP) {
-            return dept;
-        } else {
-            dept = deptService.selectDeptById(deptId);
-            if (!(dept.getParentId() == DeptConstants.GROUP)) {
-                dept = getGroupDept(dept.getParentId());
-            }
-        }
-        return dept;
+        return dishesTypeMpService.saveDishesType(vo);
     }
 
 

@@ -2,7 +2,10 @@ package com.diandong.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.diandong.configuration.CommonServiceImpl;
+import com.diandong.constant.Constants;
+import com.diandong.constant.RichTextConstants;
 import com.diandong.domain.po.BusinessConfigPO;
 import com.diandong.domain.vo.BusinessConfigVO;
 import com.diandong.mapper.BusinessConfigMapper;
@@ -30,7 +33,12 @@ public class BusinessConfigMpServiceImpl extends CommonServiceImpl<BusinessConfi
     public BusinessConfigPO searchBusinessConfig(String configName) {
         BusinessConfigPO businessConfigPO = new BusinessConfigPO();
         if (StringUtils.isNotBlank(configName)) {
-            List<BusinessConfigPO> list = lambdaQuery().eq(BusinessConfigPO::getConfigName, configName).list();
+            LambdaQueryChainWrapper<BusinessConfigPO> wrapper = lambdaQuery().eq(BusinessConfigPO::getConfigName, configName);
+
+            if(RichTextConstants.START_PAGE.equals(configName)){
+                wrapper.eq(BusinessConfigPO::getDataState,Constants.DEFAULT_YES);
+            }
+            List<BusinessConfigPO> list = wrapper.list();
 
             if (CollectionUtils.isNotEmpty(list)) {
                 businessConfigPO = list.get(0);
@@ -55,6 +63,43 @@ public class BusinessConfigMpServiceImpl extends CommonServiceImpl<BusinessConfi
             return BaseResult.success(po);
         } else {
             return BaseResult.error("操作失败");
+        }
+    }
+
+    @Override
+    public BaseResult saveAndUpdateStartPage(BusinessConfigVO vo) {
+
+        BusinessConfigPO po = BusinessConfigMsMapper.INSTANCE.vo2po(vo);
+        boolean result = saveOrUpdate(po);
+        if (result) {
+            return BaseResult.success(po);
+        } else {
+            return BaseResult.error("操作失败");
+        }
+    }
+
+    @Override
+    public BaseResult onOffStartPageState(String id) {
+
+        BusinessConfigPO businessConfig = getById(id);
+        if (businessConfig.getDataState() == Constants.DEFAULT_YES) {
+//            开启变关闭不做什么处理
+            businessConfig.setDataState(Constants.DEFAULT_NO);
+        } else {
+//            关闭变开启 将其他全部设置为关闭
+
+            lambdaUpdate().set(BusinessConfigPO::getDataState, Constants.DEL_NO)
+                    .eq(BusinessConfigPO::getConfigName, RichTextConstants.START_PAGE)
+                    .update();
+
+            businessConfig.setDataState(Constants.DEFAULT_YES);
+        }
+        boolean result = updateById(businessConfig);
+
+        if (result) {
+            return BaseResult.success();
+        } else {
+            return BaseResult.error();
         }
     }
 }

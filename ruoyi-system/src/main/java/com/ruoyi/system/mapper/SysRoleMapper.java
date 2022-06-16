@@ -114,4 +114,12 @@ public interface SysRoleMapper {
      * @return 符合记录数
      */
     Integer selectUserRoleExist(@Param("roleKey") String roleKey, @Param("userId") Long userId);
+
+    /**
+     * 根据用户id查看角色信息
+     *
+     * @param userId 用户id
+     * @return
+     */
+    List<SysRole> selectUserRoleListByUserId(Long userId);
 }

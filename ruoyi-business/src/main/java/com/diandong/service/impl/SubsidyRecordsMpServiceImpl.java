@@ -18,6 +18,7 @@ import com.diandong.service.SubsidyRecordsMpService;
 import com.diandong.service.UserAmountMpService;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.service.ISysUserService;
 import org.springframework.stereotype.Service;
@@ -25,9 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -66,11 +65,11 @@ public class SubsidyRecordsMpServiceImpl extends CommonServiceImpl<SubsidyRecord
             if (CollectionUtils.isNotEmpty(list)) {
                 for (SysUser user : records) {
                     long count = list.stream().filter(physicalCardPO -> physicalCardPO.getUserId() == user.getUserId()).count();
-                    user.setHasCard(count > 0);
+                    user.setHasCard(count > 0 ? Constants.DEFAULT_YES : Constants.DEFAULT_NO);
                 }
             } else {
                 records.forEach(sysUser -> {
-                    sysUser.setHasCard(false);
+                    sysUser.setHasCard(Constants.DEFAULT_NO);
                 });
             }
 
@@ -120,6 +119,53 @@ public class SubsidyRecordsMpServiceImpl extends CommonServiceImpl<SubsidyRecord
         } else {
             return BaseResult.error();
         }
+    }
+
+    @Override
+    public BaseResult subsidyClear() {
+
+        List<SysUser> list = userService.lambdaQuery().eq(SysUser::getCanteenId, SecurityUtils.getCanteenId()).list();
+        if (CollectionUtils.isNotEmpty(list)) {
+            Boolean result = false;
+
+            List<Long> collect = list.stream().map(SysUser::getUserId).collect(Collectors.toList());
+
+            List<UserAmountPO> userAmountList = userAmountMpService.lambdaQuery().in(UserAmountPO::getUserId, collect).list();
+
+            if (CollectionUtils.isNotEmpty(userAmountList)) {
+
+                List<SubsidyRecordsPO> clearList = new ArrayList<>();
+
+                for (UserAmountPO userAmountPO : userAmountList) {
+
+                    SubsidyRecordsPO subsidyRecord = new SubsidyRecordsPO();
+
+//                    SysUser user = userService.selectUserById(userAmountPO.getUserId());
+//
+//                    TODO 2022年6月9日18:25:00 这个地方有问题
+//                    subsidyRecord.setUserType(Long.valueOf(user.getUserType()));
+                    subsidyRecord.setUserIds(userAmountPO.getUserId().toString());
+                    subsidyRecord.setAmount(userAmountPO.getSubsidy());
+                    subsidyRecord.setType(Constants.SUBSIDY_CLEAR);
+
+                    clearList.add(subsidyRecord);
+                }
+
+                result = saveBatch(clearList);
+            }
+
+
+            result = userAmountMpService.lambdaUpdate()
+                    .set(UserAmountPO::getSubsidy, BigDecimal.ZERO)
+                    .in(UserAmountPO::getUserId, collect)
+                    .update();
+
+            if (!result) {
+                return BaseResult.error("补贴清零失败");
+            }
+        }
+
+        return BaseResult.success();
     }
 
 

@@ -37,6 +37,12 @@ public class PaymentConfigPO implements Serializable {
     private String paymentMethod;
 
     /**
+     *支付方式的key
+     */
+    @TableField(value = "payway")
+    @ApiModelProperty(value = "key")
+    private String payway;
+    /**
      * 状态 默认为1。状态（0:停用；1:启用）
      */
     @TableField(value = "status")

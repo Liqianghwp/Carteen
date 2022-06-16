@@ -1,5 +1,6 @@
 package com.ruoyi.system.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.constant.UserConstants;
@@ -27,6 +28,7 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import javax.validation.Validator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,7 +71,25 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     @DataScope(deptAlias = "d", userAlias = "u")
     public List<SysUser> selectUserList(SysUser user) {
-        return userMapper.selectUserList(user);
+
+        List<SysUser> userList = userMapper.selectUserList(user);
+
+        if(!CollectionUtils.isEmpty(userList)){
+
+            for (SysUser sysUser : userList) {
+//                List<SysUserRole> sysUserRoles = userRoleMapper.selectUserRolesByUserId(sysUser.getUserId());
+
+                List<SysRole> userRolesList = roleMapper.selectUserRoleListByUserId(sysUser.getUserId());
+                sysUser.setRoles(userRolesList);
+
+//                if(!CollectionUtils.isEmpty(userRolesList)){
+//                    List<Long> collect = userRolesList.stream().map(SysRole::getRoleId).collect(Collectors.toList());
+//                    Long[] roleIds = (Long[]) collect.toArray();
+//                    sysUser.setRoleIds((Long[]) collect.toArray());
+//                }
+            }
+        }
+        return userList;
     }
 
     /**
@@ -499,5 +519,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
         }
         return successMsg.toString();
+    }
+
+    @Override
+    public List<SysUser> userManagementPageList(SysUser user, Integer pageSize, Integer pageNum) {
+        pageNum = (pageNum - 1) * pageSize;
+        return userMapper.userManagementPageList(user, pageSize, pageNum);
+    }
+
+    @Override
+    public Integer userManagementPageCount(SysUser user) {
+        return userMapper.userManagementPageCount(user);
     }
 }

@@ -1,13 +1,9 @@
 package com.diandong.service;
 
 import com.diandong.configuration.CommonService;
-import com.diandong.configuration.Insert;
 import com.diandong.domain.po.HealthIndicatorsPO;
 import com.diandong.domain.vo.HealthIndicatorsVO;
 import com.ruoyi.common.core.domain.BaseResult;
-import com.ruoyi.common.core.domain.model.LoginUser;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -25,7 +21,7 @@ public interface HealthIndicatorsMpService extends CommonService<HealthIndicator
      * @param voList
      * @return
      */
-    BaseResult saveList(LoginUser loginUser, List<HealthIndicatorsVO> voList);
+    BaseResult saveList(List<HealthIndicatorsVO> voList);
 
 
 }

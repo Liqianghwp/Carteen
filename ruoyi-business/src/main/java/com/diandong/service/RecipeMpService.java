@@ -24,10 +24,9 @@ public interface RecipeMpService extends CommonService<RecipePO> {
      * 发布食谱
      *
      * @param vo        食谱信息
-     * @param loginUser 登录信息
      * @return BaseResult
      */
-    BaseResult recipePost(RecipeVO vo, LoginUser loginUser) throws Exception;
+    BaseResult recipePost(RecipeVO vo);
 
 //    /**
 //     * 食谱保存
@@ -38,7 +37,7 @@ public interface RecipeMpService extends CommonService<RecipePO> {
 //    BaseResult saveList(List<RecipeVO> voList, LoginUser loginUser) throws Exception;
 
 
-    BaseResult copyRecipe(Long id, LocalDate recipeDate, LoginUser loginUser) throws Exception;
+    BaseResult copyRecipe(Long id, LocalDate recipeDate);
 
     /**
      * 原材料清单

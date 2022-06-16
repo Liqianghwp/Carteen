@@ -126,4 +126,22 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @return 结果
      */
     public SysUser checkEmailUnique(String email);
+
+
+    /**
+     * 用户管理分页查询
+     * @param user      入参信息
+     * @param pageSize  每页个数
+     * @param pageNum   页码
+     * @return
+     */
+    List<SysUser> userManagementPageList(@Param("user") SysUser user,@Param("pageSize")Integer pageSize,@Param("pageNum")Integer pageNum);
+
+    /**
+     * 用户管理分页总数
+     * @param user  入参条件
+     * @return
+     */
+    Integer userManagementPageCount(SysUser user);
+
 }

@@ -38,6 +38,20 @@ public class OrderDetailPO implements Serializable {
     private Long orderId;
 
     /**
+     * 餐次id
+     */
+    @TableField(value = "meal_times_id")
+    @ApiModelProperty(value = "订单id")
+    private Long mealTimesId;
+
+    /**
+     * 餐次名称
+     */
+    @TableField(value = "meal_times_name")
+    @ApiModelProperty(value = "订单id")
+    private String mealTimesName;
+
+    /**
      * 菜品id
      */
     @TableField(value = "dishes_id")

@@ -48,7 +48,7 @@ public class RechargeAmountRecordsPO implements Serializable {
      * 充值类型(0:;1:;2:;3:;)
      */
     @TableField(value = "recharge_type")
-    @ApiModelProperty(value = "充值类型(0:;1:;2:;3:;)")
+    @ApiModelProperty(value = "充值类型(0:电子卡;1:实体卡;)")
     private String rechargeType;
 
     /**
@@ -69,7 +69,7 @@ public class RechargeAmountRecordsPO implements Serializable {
      * 充值方式(0:;1:;2:;3:;)
      */
     @TableField(value = "recharge_method")
-    @ApiModelProperty(value = "充值方式(0:;1:;2:;3:;)")
+    @ApiModelProperty(value = "充值方式(0:系统充值;1:APP充值;2:终端充值;)")
     private String rechargeMethod;
 
     /**

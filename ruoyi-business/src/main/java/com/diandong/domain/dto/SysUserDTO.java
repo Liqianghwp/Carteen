@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,6 +18,11 @@ import java.util.List;
 @Data
 public class SysUserDTO implements Serializable {
 
+
+    /**
+     * 用户id
+     */
+    private Long userId;
     /**
      * 用户账号
      */
@@ -117,5 +123,9 @@ public class SysUserDTO implements Serializable {
     @ApiModelProperty(value = "营养建议")
     private List<UserNutritionAdviceDTO> userNutritionAdviceList;
 
-
+    /**
+     * 余额
+     */
+    @ApiModelProperty(value = "余额")
+    private BigDecimal amount;
 }

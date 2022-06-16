@@ -50,9 +50,6 @@ public class DishesNutritionController extends BaseController {
      * @param vo 参数对象
      * @return 分页数据结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "DishesNutritionVO", name = "vo", value = "查询参数")
-    })
     @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
     @GetMapping
     public BaseResult getList(DishesNutritionVO vo) {
@@ -66,9 +63,6 @@ public class DishesNutritionController extends BaseController {
      * @param id 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
     @ApiOperation(value = "根据id查询", notes = "根据id查询", httpMethod = "GET")
     @GetMapping(value = "/{id}")
     public BaseResult<DishesNutritionDTO> getById(@PathVariable("id") Long id) {
@@ -84,9 +78,6 @@ public class DishesNutritionController extends BaseController {
      * @param voList 参数对象
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<DishesNutritionVO>", name = "voList", value = "参数对象")
-    })
     @ApiOperation(value = "批量保存菜品营养信息", notes = "批量保存菜品营养信息", httpMethod = "POST")
     @PostMapping
     public BaseResult saveList(@RequestBody @Validated(Insert.class) List<DishesNutritionVO> voList) {
@@ -112,9 +103,6 @@ public class DishesNutritionController extends BaseController {
      * @param vo 参数对象
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "DishesNutritionVO", name = "vo", value = "参数对象")
-    })
     @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
     @PutMapping
     public BaseResult update(@RequestBody @Validated(Update.class) DishesNutritionVO vo) {

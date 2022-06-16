@@ -72,6 +72,20 @@ public class RecipeDetailPO implements Serializable {
     private String dishesName;
 
     /**
+     * 菜品类别id
+     */
+    @TableField(value = "dishes_type_id")
+    @ApiModelProperty(value = "菜品类别id")
+    private Long dishesTypeId;
+
+    /**
+     * 菜品类别名称
+     */
+    @TableField(value = "dishes_type_name")
+    @ApiModelProperty(value = "菜品类别名称")
+    private String dishesTypeName;
+
+    /**
      * 厨师id
      */
     @TableField(value = "chef_id")

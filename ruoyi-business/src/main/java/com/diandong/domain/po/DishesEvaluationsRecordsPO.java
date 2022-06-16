@@ -10,16 +10,16 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 购物车详情PO实体类
+ * 菜品评价记录PO实体类
  *
  * @author YuLiu
- * @date 2022-05-11
+ * @date 2022-06-16
  */
-@TableName("wis_shop_cart_detail")
+@TableName("wis_dishes_evaluations_records")
 @Data
-@ApiModel("购物车详情PO实体类")
+@ApiModel("菜品评价记录PO实体类")
 @Accessors(chain = true)
-public class ShopCartDetailPO implements Serializable {
+public class DishesEvaluationsRecordsPO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -30,11 +30,18 @@ public class ShopCartDetailPO implements Serializable {
     private Long id;
 
     /**
-     * 购物车id
+     * 食堂id
      */
-    @TableField(value = "shop_cart_id")
-    @ApiModelProperty(value = "购物车id")
-    private Long shopCartId;
+    @TableField(value = "canteen_id")
+    @ApiModelProperty(value = "食堂id")
+    private Long canteenId;
+
+    /**
+     * 食堂名称
+     */
+    @TableField(value = "canteen_name")
+    @ApiModelProperty(value = "食堂名称")
+    private String canteenName;
 
     /**
      * 菜品id
@@ -51,11 +58,25 @@ public class ShopCartDetailPO implements Serializable {
     private String dishesName;
 
     /**
-     * 数量
+     * 好评数量
      */
-    @TableField(value = "number")
-    @ApiModelProperty(value = "数量")
-    private Integer number;
+    @TableField(value = "good_num")
+    @ApiModelProperty(value = "好评数量")
+    private Integer goodNum;
+
+    /**
+     * 差评数量
+     */
+    @TableField(value = "bad_num")
+    @ApiModelProperty(value = "差评数量")
+    private Integer badNum;
+
+    /**
+     * 好评度
+     */
+    @TableField(value = "praise")
+    @ApiModelProperty(value = "好评度")
+    private Double praise;
 
     /**
      * 数据状态
@@ -65,10 +86,10 @@ public class ShopCartDetailPO implements Serializable {
     private Integer delFlag;
 
     /**
-     * 创建人id
+     * 创建者
      */
     @TableField(value = "create_by", fill = FieldFill.INSERT)
-    @ApiModelProperty(value = "创建人id")
+    @ApiModelProperty(value = "创建者")
     private Long createBy;
 
     /**
@@ -79,10 +100,10 @@ public class ShopCartDetailPO implements Serializable {
     private LocalDateTime createTime;
 
     /**
-     * 更新者id
+     * 更新者
      */
     @TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
-    @ApiModelProperty(value = "更新者id")
+    @ApiModelProperty(value = "更新者")
     private Long updateBy;
 
     /**

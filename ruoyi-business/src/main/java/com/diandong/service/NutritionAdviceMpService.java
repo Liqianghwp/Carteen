@@ -26,7 +26,7 @@ public interface NutritionAdviceMpService extends CommonService<NutritionAdviceP
      * @param naList    营养信息集合
      * @return  BaseResult
      */
-    BaseResult inputNutritionAdvice(List<NutritionAdviceVO> naList, LoginUser loginUser) throws Exception;
+    BaseResult inputNutritionAdvice(List<NutritionAdviceVO> naList) ;
 
     /**
      * 查询营养参数信息

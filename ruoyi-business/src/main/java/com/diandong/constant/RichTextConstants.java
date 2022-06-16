@@ -21,6 +21,10 @@ public class RichTextConstants {
      * 充值服务协议
      */
     public static final String RECHARGE_SERVICE_AGREEMENT = "recharge_service_agreement";
+    /**
+     * 启动页
+     */
+    public static final String START_PAGE = "start_page";
 
 
 }

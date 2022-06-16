@@ -59,7 +59,7 @@ public class UserAuditController extends BaseController {
                     .list();
             records.forEach(sysUser -> {
                 List<FaceRecognitionPO> collect1 = list.stream().filter(faceRecognitionPO -> faceRecognitionPO.getCreateBy() == sysUser.getUserId()).collect(Collectors.toList());
-                sysUser.setFacePicture(CollectionUtils.isNotEmpty(collect1) ? collect1.get(0).getFacePicture() : null);
+                sysUser.setFaceImage(CollectionUtils.isNotEmpty(collect1) ? collect1.get(0).getFacePicture() : null);
             });
         }
 

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class OrderPO implements Serializable {
     /**
      * 编号
      */
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.INPUT)
     @ApiModelProperty(value = "编号")
     private Long id;
 
@@ -57,6 +58,20 @@ public class OrderPO implements Serializable {
     @TableField(value = "order_time")
     @ApiModelProperty(value = "下单时间")
     private LocalDateTime orderTime;
+
+    /**
+     * 订单总价格
+     */
+    @TableField(value = "order_total_price")
+    @ApiModelProperty(value = "订单总价格")
+    private BigDecimal orderTotalPrice;
+
+    /**
+     * 菜品总数量
+     */
+    @TableField(value = "dishes_total_count")
+    @ApiModelProperty(value = "菜品总数量")
+    private Integer dishesTotalCount;
 
     /**
      * 评价状态
@@ -121,8 +136,11 @@ public class OrderPO implements Serializable {
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 
-
+    /**
+     * 订单详情
+     */
     @TableField(exist = false)
+    @ApiModelProperty(value = "订单详情")
     List<OrderDetailPO> orderDetailList;
 
 }

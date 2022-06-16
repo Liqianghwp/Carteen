@@ -36,6 +36,12 @@ public class PaymentConfigVO extends BaseEntity implements Serializable {
     private String paymentMethod;
 
     /**
+     * 支付方式的key
+     */
+    @ApiModelProperty(value = "key")
+    private String payway;
+
+    /**
      * 状态 默认为1。状态（0:停用；1:启用）
      */
     @ApiModelProperty(value = "状态 默认为1。状态（0:停用；1:启用）")

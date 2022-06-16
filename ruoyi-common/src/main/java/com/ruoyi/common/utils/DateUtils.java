@@ -6,6 +6,8 @@ import java.lang.management.ManagementFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -24,6 +26,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     public static String YYYYMMDDHHMMSS = "yyyyMMddHHmmss";
 
     public static String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
+
+    public static String HHMM = "HH:mm";
 
     private static String[] parsePatterns = {
             "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM",
@@ -116,6 +120,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
     /**
      * 计算两个时间差
+     *
      * @param endDate 待比较时间
      * @param nowDate 现在时间
      * @return long [天,时,分,秒,总秒数]
@@ -150,25 +155,40 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
     /**
      * 获得明天开始时间毫秒数
+     *
      * @return
      */
     public static long getTomorrowStartTimeMillis() {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR,1);
-        calendar.set(Calendar.HOUR_OF_DAY,0);
-        calendar.set(Calendar.SECOND,0);
-        calendar.set(Calendar.MINUTE,0);
-        calendar.set(Calendar.MILLISECOND,0);
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTimeInMillis();
     }
 
     /**
      * 计算离明天开始时间差多少秒
+     *
      * @return
      */
     public static long calcTomorrowSecondPoor() {
         return (getTomorrowStartTimeMillis() - System.currentTimeMillis()) / 1000;
     }
+
+
+    public static LocalTime parseLocalTime(String time) {
+
+        while (time.length() < 5) {
+            time = "0" + time;
+        }
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(HHMM);
+
+        return LocalTime.parse(time, dateTimeFormatter);
+    }
+
 
     /*public static void main(String[] args) {
         long[] datePoor = calcDatePoor(new Date(),new Date(System.currentTimeMillis()-70000));

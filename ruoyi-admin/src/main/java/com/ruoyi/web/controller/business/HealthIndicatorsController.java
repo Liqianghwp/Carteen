@@ -6,8 +6,6 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
-import com.diandong.configuration.Update;
-import com.diandong.constant.Constants;
 import com.diandong.domain.dto.HealthIndicatorsDTO;
 import com.diandong.domain.po.HealthIndicatorsPO;
 import com.diandong.domain.vo.HealthIndicatorsVO;
@@ -15,10 +13,8 @@ import com.diandong.mapstruct.HealthIndicatorsMsMapper;
 import com.diandong.service.HealthIndicatorsMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
-import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -49,9 +45,6 @@ public class HealthIndicatorsController extends BaseController {
      * @param vo 参数对象
      * @return 分页数据结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "HealthIndicatorsVO", name = "vo", value = "查询参数")
-    })
     @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
     @GetMapping
     public BaseResult getList(HealthIndicatorsVO vo) {
@@ -65,9 +58,6 @@ public class HealthIndicatorsController extends BaseController {
      * @param id 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
     @ApiOperation(value = "根据id查询", notes = "根据id查询", httpMethod = "GET")
     @GetMapping(value = "/{id}")
     public BaseResult<HealthIndicatorsDTO> getById(@PathVariable("id") Long id) {
@@ -81,57 +71,21 @@ public class HealthIndicatorsController extends BaseController {
      *
      * @return 返回结果
      */
-    @ApiOperation(value = "根据id查询", notes = "根据id查询", httpMethod = "GET")
+    @ApiOperation(value = "查询自己的健康指标", notes = "查询自己的健康指标", httpMethod = "GET")
     @GetMapping(value = "/own")
     public BaseResult getHealthIndicator() {
 
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
+
         List<HealthIndicatorsPO> list = healthIndicatorsMpService.lambdaQuery()
-                .eq(HealthIndicatorsPO::getCreateBy, loginUser.getUserId())
+                .eq(HealthIndicatorsPO::getCreateBy, SecurityUtils.getUserId())
                 .list();
 
         if (CollectionUtils.isEmpty(list)) {
             return BaseResult.success();
         }
-        return BaseResult.success(list.get(0));
+        return BaseResult.success(HealthIndicatorsMsMapper.INSTANCE.poList2dtoList(list));
     }
 
-
-//    /**
-//     * 保存
-//     *
-//     * @param vo 参数对象
-//     * @return 返回结果
-//     */
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(paramType = "query", dataType = "HealthIndicatorsVO", name = "vo", value = "参数对象")
-//    })
-//    @ApiOperation(value = "保存健康指标", notes = "保存健康指标", httpMethod = "POST")
-//    @PostMapping
-//    public BaseResult save(@RequestBody @Validated(Insert.class) HealthIndicatorsVO vo) {
-//
-////        判断登录状态
-//        LoginUser loginUser = getLoginUser();
-//        if (Objects.isNull(loginUser)) {
-//            return BaseResult.error(Constants.ERROR_MESSAGE);
-//        }
-//
-//        HealthIndicatorsPO po = HealthIndicatorsMsMapper.INSTANCE.vo2po(vo);
-//
-////        设置创建人信息
-//        po.setCreateBy(loginUser.getUserId());
-//        po.setCreateName(loginUser.getUsername());
-//
-//        boolean result = healthIndicatorsMpService.save(po);
-//        if (result) {
-//            return BaseResult.successMsg("添加成功！");
-//        } else {
-//            return BaseResult.error("添加失败！");
-//        }
-//    }
 
     /**
      * 保存
@@ -139,51 +93,12 @@ public class HealthIndicatorsController extends BaseController {
      * @param voList 参数对象
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<HealthIndicatorsVO>", name = "voList", value = "参数对象")
-    })
     @ApiOperation(value = "保存健康指标", notes = "保存健康指标", httpMethod = "POST")
     @PostMapping
     public BaseResult saveList(@RequestBody @Validated(Insert.class) List<HealthIndicatorsVO> voList) {
-
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error("用户未登录无法进行操作");
-        }
-
-        return healthIndicatorsMpService.saveList(loginUser, voList);
+        return healthIndicatorsMpService.saveList(voList);
     }
 
-    /**
-     * 更新
-     *
-     * @param vo 参数对象
-     * @return 返回结果
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "HealthIndicatorsVO", name = "vo", value = "参数对象")
-    })
-    @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
-    @PutMapping
-    public BaseResult update(@RequestBody @Validated(Update.class) HealthIndicatorsVO vo) {
-
-//        判断登录状态
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
-
-        HealthIndicatorsPO po = HealthIndicatorsMsMapper.INSTANCE.vo2po(vo);
-//        设置更新人信息
-        po.setUpdateBy(loginUser.getUserId());
-
-        boolean result = healthIndicatorsMpService.updateById(po);
-        if (result) {
-            return BaseResult.successMsg("修改成功");
-        } else {
-            return BaseResult.error("修改失败");
-        }
-    }
 
     /**
      * 删除

@@ -1,5 +1,7 @@
 package com.ruoyi.web.controller.system;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.fasterxml.jackson.datatype.jsr310.ser.YearSerializer;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.constant.UserConstants;
@@ -13,6 +15,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.framework.web.service.TokenService;
 import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
@@ -51,6 +54,9 @@ public class SysUserController extends BaseController {
 
     @Autowired
     private ISysPostService postService;
+    @Autowired
+    private TokenService tokenService;
+
 
     /**
      * 获取用户列表
@@ -275,25 +281,52 @@ public class SysUserController extends BaseController {
         return success();
     }
 
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "SysUser", name = "user", value = "")
-    })
-    @ApiOperation(value = "用户授权角色", notes = "用户授权角色", httpMethod = "PUT")
+    @ApiOperation(value = "用户修改信息", notes = "用户修改信息", httpMethod = "PUT")
     @PutMapping("/changeUserMsg")
-    public BaseResult changeUserMsg(SysUser user) {
-//        判断登录状态
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error("用户未登录，无法进行操作");
-        }
-        if (Objects.isNull(user.getUserId())) {
-            return BaseResult.error("用户id不能为空");
-        }
-        user.setUpdateBy(loginUser.getUsername());
+    public BaseResult changeUserMsg(@RequestBody  SysUser user) {
 
-        userService.updateUser(user);
+        LoginUser loginUser = SecurityUtils.getLoginUser();
 
-        return success();
+
+        if (
+                StringUtils.isBlank(user.getNickName()) &&
+                        StringUtils.isBlank(user.getDepartment()) &&
+                        StringUtils.isBlank(user.getUserBirthday()) &&
+                        StringUtils.isBlank(user.getUserArea()) &&
+                        StringUtils.isBlank(user.getUserHeight()) &&
+                        StringUtils.isBlank(user.getUserWeight()) &&
+                        StringUtils.isBlank(user.getAvatar())
+        ) {
+            return success();
+        }
+
+
+        boolean result = userService.lambdaUpdate()
+                .set(StringUtils.isNotBlank(user.getNickName()), SysUser::getNickName, user.getNickName())
+                .set(StringUtils.isNotBlank(user.getAvatar()), SysUser::getAvatar, user.getAvatar())
+                .set(StringUtils.isNotBlank(user.getDepartment()), SysUser::getDepartment, user.getDepartment())
+                .set(StringUtils.isNotBlank(user.getUserBirthday()), SysUser::getUserBirthday, user.getUserBirthday())
+                .set(StringUtils.isNotBlank(user.getUserArea()), SysUser::getUserArea, user.getUserArea())
+                .set(StringUtils.isNotBlank(user.getUserHeight()), SysUser::getUserHeight, user.getUserHeight())
+                .set(StringUtils.isNotBlank(user.getUserWeight()), SysUser::getUserWeight, user.getUserWeight())
+                .eq(SysUser::getUserId, SecurityUtils.getUserId())
+                .update();
+
+
+        if (result) {
+            SysUser nowUser = loginUser.getUser();
+            nowUser.setNickName(StringUtils.isNotBlank(user.getNickName()) ? user.getNickName() : nowUser.getNickName());
+            nowUser.setDepartment(StringUtils.isNotBlank(user.getDepartment()) ? user.getDepartment() : nowUser.getDepartment());
+            nowUser.setUserBirthday(StringUtils.isNotBlank(user.getUserBirthday()) ? user.getUserBirthday() : nowUser.getUserBirthday());
+            nowUser.setUserArea(StringUtils.isNotBlank(user.getUserArea()) ? user.getUserArea() : nowUser.getUserArea());
+            nowUser.setUserHeight(StringUtils.isNotBlank(user.getUserHeight()) ? user.getUserHeight() : nowUser.getUserHeight());
+            nowUser.setUserWeight(StringUtils.isNotBlank(user.getUserWeight()) ? user.getUserWeight() : nowUser.getUserWeight());
+            nowUser.setAvatar(StringUtils.isNotBlank(user.getAvatar()) ? user.getAvatar() : nowUser.getAvatar());
+            tokenService.refreshToken(loginUser);
+            return success();
+        } else {
+            return error();
+        }
     }
 
 }

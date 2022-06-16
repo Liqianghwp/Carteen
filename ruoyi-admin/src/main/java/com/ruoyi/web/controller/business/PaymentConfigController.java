@@ -149,4 +149,11 @@ public class PaymentConfigController extends BaseController {
         return queryWrapper;
     }
 
+
+
+    @GetMapping("/init")
+    public void initCanteenPaymentMethod(){
+        paymentConfigMpService.initPaymentConfig();
+    }
+
 }

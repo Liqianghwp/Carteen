@@ -1,5 +1,6 @@
 package com.diandong.domain.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.domain.BaseEntity;
@@ -44,6 +45,7 @@ public class RecipeDetailVO extends BaseEntity implements Serializable {
     /**
      * 餐次编号
      */
+    @NotNull(message = "餐次编号不能为空")
     @ApiModelProperty(value = "餐次编号")
     private Long mealTimesId;
 
@@ -56,6 +58,7 @@ public class RecipeDetailVO extends BaseEntity implements Serializable {
     /**
      * 菜品id
      */
+    @NotNull(message = "菜品id不能为空")
     @ApiModelProperty(value = "菜品id")
     private Long dishesId;
 
@@ -66,8 +69,20 @@ public class RecipeDetailVO extends BaseEntity implements Serializable {
     private String dishesName;
 
     /**
+     * 菜品类别id
+     */
+    @ApiModelProperty(value = "菜品类别id")
+    private Long dishesTypeId;
+
+    /**
+     * 菜品类别名称
+     */
+    @ApiModelProperty(value = "菜品类别名称")
+    private String dishesTypeName;
+    /**
      * 厨师id
      */
+    @NotNull(message = "厨师id不能为空")
     @ApiModelProperty(value = "厨师id")
     private Long chefId;
 
@@ -80,6 +95,7 @@ public class RecipeDetailVO extends BaseEntity implements Serializable {
     /**
      * 数量
      */
+    @NotNull(message = "数量不能为空")
     @ApiModelProperty(value = "数量")
     private Integer number;
 

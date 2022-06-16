@@ -29,7 +29,12 @@ public class RecipePO implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     @ApiModelProperty(value = "编号")
     private Long id;
-
+    /**
+     * 食堂id
+     */
+    @TableField(value = "canteen_id")
+    @ApiModelProperty(value = "食堂id")
+    private Long canteenId;
     /**
      * 食谱名称
      */

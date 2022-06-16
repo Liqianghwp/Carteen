@@ -9,10 +9,10 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 /**
- * Mapstruct
+ * 购物车Mapstruct
  *
  * @author YuLiu
- * @date 2022-04-06
+ * @date 2022-06-14
  */
 @Mapper
 public interface ShopCartMsMapper {

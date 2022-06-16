@@ -52,9 +52,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 
 	<sql id="selectUserVo">
-        select u.user_id, u.dept_id, u.user_name, u.nick_name, u.email, u.avatar, u.phonenumber, u.password, u.sex, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark,
-        d.dept_id, d.parent_id, d.dept_name, d.order_num, d.leader, d.status as dept_status,
-        r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope, r.status as role_status
+        select
+            u.user_id, u.dept_id, u.user_type,u.user_name, u.nick_name, u.email, u.avatar, u.phonenumber,
+            u.password, u.sex, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by,
+            u.create_time, u.remark,u.canteen_id,u.check_state,u.dining_canteen_id,u.rejection_reason,
+			u.user_birthday,u.user_area,u.user_height,u.user_weight,u.department,
+            d.dept_id, d.parent_id, d.dept_name, d.order_num, d.leader, d.status as dept_status,
+        	r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope, r.status as role_status
         from sys_user u
 		    left join sys_dept d on u.dept_id = d.dept_id
 		    left join sys_user_role ur on u.user_id = ur.user_id
@@ -62,7 +66,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectUserList" parameterType="com.ruoyi.common.core.domain.entity.SysUser" resultMap="SysUserResult">
-		select u.user_id, u.dept_id, u.nick_name, u.user_name, u.email, u.avatar, u.phonenumber, u.password, u.sex, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark, d.dept_name, d.leader from sys_user u
+		select
+		       u.user_id,
+		       u.dept_id,
+		       u.nick_name,
+		       u.user_name,
+		       u.email,
+		       u.avatar,
+		       u.phonenumber,
+		       u.password,
+		       u.sex,
+		       u.status,
+		       u.del_flag,
+		       u.login_ip,
+		       u.login_date,
+		       u.create_by,
+		       u.create_time,
+		       u.remark,
+		       d.dept_name,
+		       d.leader from sys_user u
 		left join sys_dept d on u.dept_id = d.dept_id
 		where u.del_flag = '0'
 		<if test="userId != null and userId != 0">
@@ -145,6 +167,65 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="checkEmailUnique" parameterType="String" resultMap="SysUserResult">
 		select user_id, email from sys_user where email = #{email} limit 1
+	</select>
+    <select id="userManagementPageList" resultType="com.ruoyi.common.core.domain.entity.SysUser">
+		select su.* from
+			sys_user su
+<!--		<if test="param1.hasCard !=null and param1.hasCard !=''">-->
+			left join
+			wis_physical_card wpc
+			on su.user_id = wpc .user_id
+<!--		</if>-->
+		<where>
+			<if test="user.nickName != null and user.nickName !=''">
+				AND su.nick_name like concat('%', #{user.nickName}, '%')
+			</if>
+			<if test="user.phonenumber != null and user.phonenumber !=''">
+				AND su.phonenumber like concat('%', #{user.phonenumber}, '%')
+			</if>
+			<if test="user.userType != null and user.userType != ''">
+				AND su.user_type = #{user.userType}
+			</if>
+			<if test="user.status != null and user.status != ''">
+				AND su.status = #{user.status}
+			</if>
+			<if test="user.hasCard != null and user.hasCard.equals(0) ">
+				wpc.card_no is null
+			</if>
+			<if test="user.hasCard != null and user.hasCard.equals(1) ">
+				wpc.card_no is not null
+			</if>
+		</where>
+		limit #{pageNum},#{pageSize}
+	</select>
+	<select id="userManagementPageCount" resultType="java.lang.Integer">
+		select count(1) from
+		sys_user su
+<!--		<if test="hasCard !=null and hasCard !=''">-->
+			left join
+			wis_physical_card wpc
+			on su.user_id = wpc .user_id
+<!--		</if>-->
+		<where>
+			<if test="nickName != null and nickName !=''">
+				AND su.nick_name like concat('%', #{nickName}, '%')
+			</if>
+			<if test="phonenumber != null and phonenumber !=''">
+				AND su.phonenumber like concat('%', #{phonenumber}, '%')
+			</if>
+			<if test="userType != null and userType != ''">
+				AND su.user_type = #{userType}
+			</if>
+			<if test="status != null and status != ''">
+				AND su.status = #{status}
+			</if>
+			<if test="hasCard != null and hasCard.equals(0) ">
+				wpc.card_no is null
+			</if>
+			<if test="hasCard != null and hasCard.equals(1) ">
+				wpc.card_no is not null
+			</if>
+		</where>
 	</select>
 
 	<insert id="insertUser" parameterType="com.ruoyi.common.core.domain.entity.SysUser" useGeneratedKeys="true" keyProperty="userId">

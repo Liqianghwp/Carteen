@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.DishesEvaluationsRecordsMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.DishesEvaluationsRecordsPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="canteen_id" jdbcType="BIGINT" property="canteenId"/>
+        <result column="canteen_name" jdbcType="VARCHAR" property="canteenName"/>
+        <result column="dishes_id" jdbcType="BIGINT" property="dishesId"/>
+        <result column="dishes_name" jdbcType="VARCHAR" property="dishesName"/>
+        <result column="good_num" jdbcType="INTEGER" property="goodNum"/>
+        <result column="bad_num" jdbcType="INTEGER" property="badNum"/>
+        <result column="praise" jdbcType="DOUBLE" property="praise"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,der.id
+            ,der.canteen_id
+            ,der.canteen_name
+            ,der.dishes_id
+            ,der.dishes_name
+            ,der.good_num
+            ,der.bad_num
+            ,der.praise
+            ,der.del_flag
+            ,der.create_by
+            ,der.create_time
+            ,der.update_by
+            ,der.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and der.id = #{id}
+            </if>
+            <if test="canteenId != null">
+                and der.canteen_id = #{canteenId}
+            </if>
+            <if test="canteenName != null and canteenName != ''">
+                and der.canteen_name = #{canteenName}
+            </if>
+            <if test="dishesId != null">
+                and der.dishes_id = #{dishesId}
+            </if>
+            <if test="dishesName != null and dishesName != ''">
+                and der.dishes_name = #{dishesName}
+            </if>
+            <if test="goodNum != null">
+                and der.good_num = #{goodNum}
+            </if>
+            <if test="badNum != null">
+                and der.bad_num = #{badNum}
+            </if>
+            <if test="praise != null">
+                and der.praise = #{praise}
+            </if>
+            <if test="delFlag != null">
+                and der.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and der.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and der.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_dishes_evaluations_records -->
+
+</mapper>

@@ -1,15 +1,15 @@
 package com.ruoyi.web.controller.business;
 
+import com.diandong.constant.Constants;
 import com.diandong.constant.RichTextConstants;
 import com.diandong.domain.dto.BusinessConfigDTO;
+import com.diandong.domain.po.BusinessConfigPO;
 import com.diandong.domain.vo.BusinessConfigVO;
 import com.diandong.mapstruct.BusinessConfigMsMapper;
 import com.diandong.service.BusinessConfigMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +39,6 @@ public class BusinessConfigController extends BaseController {
      * @param id 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
     @ApiOperation(value = "根据id查询", notes = "根据id查询", httpMethod = "GET")
     @GetMapping(value = "/{id}")
     public BaseResult<BusinessConfigDTO> getById(@PathVariable("id") Long id) {
@@ -86,11 +83,18 @@ public class BusinessConfigController extends BaseController {
     }
 
 
+    @ApiOperation(value = "启动页", notes = "启动页", httpMethod = "GET")
+    @GetMapping("/start_page")
+    public BaseResult getStartPage() {
+        return BaseResult.success(businessConfigMpService.searchBusinessConfig(RichTextConstants.START_PAGE));
+    }
+
+
     /**
-//     * 查询关于我们的信息
-//     *
-//     * @return
-//     */
+     //     * 查询关于我们的信息
+     //     *
+     //     * @return
+     //     */
 //    @ApiOperation(value = "关于我们", notes = "关于我们", httpMethod = "GET")
 //    @GetMapping("/health_certificate")
 //    public BaseResult getHealthCertificate() {
@@ -103,9 +107,6 @@ public class BusinessConfigController extends BaseController {
      *
      * @return
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "BusinessConfigVO", name = "vo")
-    })
     @ApiOperation(value = "保存&更新(关于我们)")
     @PostMapping("/about_us")
     public BaseResult saveAndUpdateAboutUs(@RequestBody BusinessConfigVO vo) {
@@ -137,17 +138,52 @@ public class BusinessConfigController extends BaseController {
         return businessConfigMpService.saveAndUpdate(vo);
     }
 
-//    /**
-//     * 保存更新关于我们富文本设置
-//     *
-//     * @return
-//     */
-//    @ApiOperation(value = "保存&更新(健康证过期时间)")
-//    @PostMapping("/health_certificate")
-//    public BaseResult saveAndUpdateHealthCertificate(@RequestBody BusinessConfigVO vo) {
-//        vo.setConfigName(RichTextConstants.HEALTH_CERTIFICATE);
-//        return businessConfigMpService.saveAndUpdate(vo);
-//    }
+    /**
+     * 保存更新启动页
+     *
+     * @param vo
+     * @return
+     */
+    @ApiOperation(value = "保存&更新(启动页)")
+    @PostMapping("/start_page")
+    public BaseResult saveAndUpdateStartPage(@RequestBody BusinessConfigVO vo) {
+        vo.setConfigName(RichTextConstants.START_PAGE);
+        return businessConfigMpService.saveAndUpdateStartPage(vo);
+    }
+
+    /**
+     * 删除启动页配置
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "删除(启动页)")
+    @DeleteMapping("/start_page/{id}")
+    public BaseResult deleteStartPage(@PathVariable String id) {
+        BusinessConfigPO businessConfigPO = businessConfigMpService.getById(id);
+
+        if (Constants.DEFAULT_YES == businessConfigPO.getDataState()) {
+            return BaseResult.error("启用状态下不能删除");
+        }
+        boolean result = businessConfigMpService.removeById(id);
+        if (result) {
+            return BaseResult.success();
+        } else {
+            return BaseResult.error();
+        }
+    }
+
+    /**
+     * 开启&关闭启动页
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "开启&关闭(启动页)")
+    @PutMapping("/start_page/onOff/{id}")
+    public BaseResult onOffStartPageState(@PathVariable String id) {
+        return businessConfigMpService.onOffStartPageState(id);
+    }
 
 
 }

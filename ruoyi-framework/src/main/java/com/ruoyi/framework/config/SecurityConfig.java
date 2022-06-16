@@ -122,6 +122,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/*/api-docs").permitAll()
                 .antMatchers("/druid/**").anonymous()
                 .antMatchers("/hello_world/**").permitAll()
+                .antMatchers(
+                        "/business_config/about_us",
+                        "/business_config/user_services_agreement",
+                        "/business_config/start_page",
+                        "/business_config/recharge_service_agreement"
+                ).permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()
                 .and()

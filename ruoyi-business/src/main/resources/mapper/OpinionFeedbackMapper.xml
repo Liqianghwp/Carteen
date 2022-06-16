@@ -13,14 +13,12 @@
         <result column="process_information" jdbcType="VARCHAR" property="processInformation"/>
         <result column="status" jdbcType="INTEGER" property="status"/>
         <result column="anonymous" jdbcType="INTEGER" property="anonymous"/>
+        <result column="handler_id" jdbcType="BIGINT" property="handlerId"/>
         <result column="process_time" jdbcType="TIMESTAMP" property="processTime"/>
-        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
-        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
         <result column="create_by" jdbcType="BIGINT" property="createBy"/>
-        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
-        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
@@ -37,14 +35,12 @@
             ,of.process_information
             ,of.status
             ,of.anonymous
+            ,of.handler_id
             ,of.process_time
-            ,of.data_state
-            ,of.version
+            ,of.del_flag
             ,of.create_by
-            ,of.create_name
             ,of.create_time
             ,of.update_by
-            ,of.update_name
             ,of.update_time
         </trim>
     </sql>
@@ -83,20 +79,14 @@
             <if test="anonymous != null">
                 and of.anonymous = #{anonymous}
             </if>
+            <if test="handlerId != null">
+                and of.handler_id = #{handlerId}
+            </if>
             <if test="processTime != null">
                 and of.process_time = #{processTime}
             </if>
-            <if test="dataState != null">
-                and of.data_state = #{dataState}
-            </if>
-            <if test="version != null">
-                and of.version = #{version}
-            </if>
-            <if test="createName != null and createName != ''">
-                and of.create_name = #{createName}
-            </if>
-            <if test="updateName != null and updateName != ''">
-                and of.update_name = #{updateName}
+            <if test="delFlag != null">
+                and of.del_flag = #{delFlag}
             </if>
             <if test="beginTime != null">
                 and of.create_time <![CDATA[ >= ]]> #{beginTime}

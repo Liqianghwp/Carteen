@@ -1,5 +1,6 @@
 package com.diandong.domain.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.domain.BaseEntity;
@@ -35,6 +36,18 @@ public class OrderDetailVO extends BaseEntity implements Serializable {
      */
     @ApiModelProperty(value = "订单id")
     private Long orderId;
+
+    /**
+     * 餐次id
+     */
+    @ApiModelProperty(value = "订单id")
+    private Long mealTimesId;
+
+    /**
+     * 餐次名称
+     */
+    @ApiModelProperty(value = "订单id")
+    private String mealTimesName;
 
     /**
      * 菜品id

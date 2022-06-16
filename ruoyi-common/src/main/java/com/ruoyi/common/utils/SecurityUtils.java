@@ -3,6 +3,7 @@ package com.ruoyi.common.utils;
 import com.ruoyi.common.constant.HttpStatus;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.exception.ServiceException;
+import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -35,7 +36,7 @@ public class SecurityUtils {
         }
     }
 
-    public static Long getCanteenId(){
+    public static Long getCanteenId() {
         try {
             return getLoginUser().getCanteenId();
         } catch (Exception e) {
@@ -104,4 +105,15 @@ public class SecurityUtils {
     public static boolean isAdmin(Long userId) {
         return userId != null && 1L == userId;
     }
+
+    public static Boolean isLogin() {
+        try {
+            SecurityUtils.getUserId();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
 }

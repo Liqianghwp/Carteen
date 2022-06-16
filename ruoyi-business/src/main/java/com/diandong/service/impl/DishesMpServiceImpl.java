@@ -12,12 +12,16 @@ import com.diandong.mapper.DishesMapper;
 import com.diandong.mapstruct.*;
 import com.diandong.service.*;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.core.domain.entity.SysDictData;
+import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.system.service.ISysDictDataService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -41,6 +45,13 @@ public class DishesMpServiceImpl extends CommonServiceImpl<DishesMapper, DishesP
     private DishesSupplierMpService dishesSupplierMpService;
     @Resource
     private DishesAdditiveMpService dishesAdditiveMpService;
+    @Resource
+    private CanteenMpService canteenMpService;
+    @Resource
+    private DishesTypeMpService dishesTypeMpService;
+
+    @Resource
+    private ISysDictDataService dictDataService;
 
     @Override
     public void getAllDishMsg(DishesDTO dto) {
@@ -74,10 +85,22 @@ public class DishesMpServiceImpl extends CommonServiceImpl<DishesMapper, DishesP
         DishesPO po = DishesMsMapper.INSTANCE.vo2po(vo);
         po.setCode(RandomStringUtils.randomAlphabetic(8).toUpperCase(Locale.ROOT));
 //        保存菜品基本信息
+        Long canteenId = SecurityUtils.getCanteenId();
+        po.setCanteenId(canteenId);
+        CanteenPO canteen = canteenMpService.getById(SecurityUtils.getCanteenId());
+        po.setCanteenName(canteen.getCanteenName());
+//        po.setState()
+        DishesTypePO dishesTypePO = dishesTypeMpService.getById(po.getDishesTypeId());
+        po.setDishesTypeName(dishesTypePO.getTypeName());
+
+        List<SysDictData> dishesAttrList = dictDataService.lambdaQuery().in(SysDictData::getDictCode, Arrays.asList(vo.getDishesAttrId().split(","))).list();
+        if (CollectionUtils.isNotEmpty(dishesAttrList)) {
+            po.setDishesAttrName(dishesAttrList.stream().map(dictData -> dictData.getDictLabel()).collect(Collectors.joining(",")));
+        }
+
         save(po);
 //        保存菜品原材料和菜品营养信息
         saveDishesInformation(vo, po);
-
     }
 
     @Override
@@ -165,7 +188,6 @@ public class DishesMpServiceImpl extends CommonServiceImpl<DishesMapper, DishesP
             LambdaUpdateWrapper<DishesRawMaterialPO> removeWrapper = new LambdaUpdateWrapper<>();
             removeWrapper.eq(DishesRawMaterialPO::getDishesId, po.getId());
             dishesRawMaterialMpService.remove(removeWrapper);
-
 
             dishesRawMaterialList.forEach(dishesRawMaterialVO -> {
                 DishesRawMaterialPO dishesRawMaterialPO = DishesRawMaterialMsMapper.INSTANCE.vo2po(dishesRawMaterialVO);

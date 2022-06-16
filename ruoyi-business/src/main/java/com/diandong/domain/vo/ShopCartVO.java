@@ -10,16 +10,15 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 购物车VO实体类
  *
  * @author YuLiu
- * @date 2022-05-11
+ * @date 2022-06-14
  */
 @Data
-@ApiModel(description = "购物车VO实体类")
+@ApiModel("购物车VO实体类")
 public class ShopCartVO extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -31,18 +30,55 @@ public class ShopCartVO extends BaseEntity implements Serializable {
     private Long id;
 
     /**
-     * 食堂id
+     * 就餐食堂id
      */
-    @ApiModelProperty(value = "食堂id")
+    @ApiModelProperty(value = "就餐食堂id")
     private Long canteenId;
 
     /**
-     * 食堂名称
+     * 就餐食堂名称
      */
-    @ApiModelProperty(value = "食堂名称")
+    @ApiModelProperty(value = "就餐食堂名称")
     private String canteenName;
 
+    /**
+     * 餐次id
+     */
+    @NotNull(groups = {Insert.class}, message = "餐次id不能为空")
+    @ApiModelProperty(value = "餐次id")
+    private Long mealTimesId;
 
-    List<ShopCartDetailVO> shopCartDetailVOList;
+    /**
+     * 餐次名称
+     */
+    @ApiModelProperty(value = "餐次名称")
+    private String mealTimesName;
+
+    /**
+     * 菜品id
+     */
+    @NotNull(groups = {Insert.class}, message = "菜品id不能为空")
+    @ApiModelProperty(value = "菜品id")
+    private Long dishesId;
+
+    /**
+     * 菜品名称
+     */
+    @ApiModelProperty(value = "菜品名称")
+    private String dishesName;
+
+    /**
+     * 菜品规格
+     */
+    @ApiModelProperty(value = "菜品规格")
+    private String dishesSpecification;
+
+    /**
+     * 数量
+     */
+    @NotNull(groups = {Insert.class}, message = "数量不能为空")
+    @ApiModelProperty(value = "数量")
+    private Integer number;
+
 
 }

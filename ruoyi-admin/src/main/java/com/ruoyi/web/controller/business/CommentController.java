@@ -56,9 +56,6 @@ public class CommentController extends BaseController {
      * @param vo 参数对象
      * @return 分页数据结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "CommentVO", name = "vo", value = "查询参数")
-    })
     @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
     @GetMapping
     public BaseResult getList(CommentVO vo) {
@@ -83,9 +80,6 @@ public class CommentController extends BaseController {
      * @param id 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
     @ApiOperation(value = "根据id查询", notes = "根据id查询", httpMethod = "GET")
     @GetMapping(value = "/{id}")
     public BaseResult<CommentDTO> getById(@PathVariable("id") Long id) {
@@ -114,29 +108,10 @@ public class CommentController extends BaseController {
      * @param vo 参数对象
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "CommentVO", name = "vo", value = "参数对象")
-    })
     @ApiOperation(value = "添加订单评价", notes = "添加订单评价", httpMethod = "POST")
     @PostMapping
     public BaseResult save(@RequestBody @Validated(Insert.class) CommentVO vo) {
-
-//        判断登录状态
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
-
-        CommentPO po = CommentMsMapper.INSTANCE.vo2po(vo);
-//        设置创建人信息
-        po.setCreateBy(loginUser.getUserId());
-
-        boolean result = commentMpService.save(po);
-        if (result) {
-            return BaseResult.successMsg("添加成功！");
-        } else {
-            return BaseResult.error("添加失败！");
-        }
+        return commentMpService.saveOrderEvaluation(vo);
     }
 
     /**
@@ -145,9 +120,6 @@ public class CommentController extends BaseController {
      * @param vo 参数
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "CommentVO", name = "vo", value = "参数对象")
-    })
     @ApiOperation(value = "处理评价信息", notes = "处理评价信息", httpMethod = "PUT")
     @PutMapping
     public BaseResult update(@RequestBody @Validated(Update.class) CommentVO vo) {
@@ -178,9 +150,6 @@ public class CommentController extends BaseController {
      * @param ids 编号id数组
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long[]", name = "ids", value = "编号ids数组")
-    })
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
     @DeleteMapping(value = "/{ids}")
     public BaseResult delete(@PathVariable("ids") Long[] ids) {

@@ -8,14 +8,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 购物车详情DTO实体类
+ * 食堂轮播图DTO实体类
  *
  * @author YuLiu
- * @date 2022-05-11
+ * @date 2022-06-16
  */
 @Data
-@ApiModel("购物车详情DTO实体类")
-public class ShopCartDetailDTO implements Serializable {
+@ApiModel("食堂轮播图DTO实体类")
+public class CanteenCarouselDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -25,33 +25,27 @@ public class ShopCartDetailDTO implements Serializable {
     private Long id;
 
     /**
-     * 购物车id
+     * 食堂id
      */
-    @ApiModelProperty(value = "购物车id")
-    private Long shopCartId;
+    @ApiModelProperty(value = "食堂id")
+    private Long canteenId;
 
     /**
-     * 菜品id
+     * 图片
      */
-    @ApiModelProperty(value = "菜品id")
-    private Long dishesId;
+    @ApiModelProperty(value = "图片")
+    private String carouselPic;
 
     /**
-     * 菜品名称
+     * 排序
      */
-    @ApiModelProperty(value = "菜品名称")
-    private String dishesName;
+    @ApiModelProperty(value = "排序")
+    private Integer sort;
 
     /**
-     * 数量
+     * 创建者
      */
-    @ApiModelProperty(value = "数量")
-    private Integer number;
-
-    /**
-     * 创建人id
-     */
-    @ApiModelProperty(value = "创建人id")
+    @ApiModelProperty(value = "创建者")
     private Long createBy;
 
     /**
@@ -61,9 +55,9 @@ public class ShopCartDetailDTO implements Serializable {
     private LocalDateTime createTime;
 
     /**
-     * 更新者id
+     * 更新者
      */
-    @ApiModelProperty(value = "更新者id")
+    @ApiModelProperty(value = "更新者")
     private Long updateBy;
 
     /**

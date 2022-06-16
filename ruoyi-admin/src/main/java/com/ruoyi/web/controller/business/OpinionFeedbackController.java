@@ -17,6 +17,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -166,14 +167,9 @@ public class OpinionFeedbackController extends BaseController {
     @ApiOperation(value = "处理意见反馈", notes = "处理意见反馈", httpMethod = "PUT")
     @PutMapping
     public BaseResult update(@RequestBody @Validated(Update.class) OpinionFeedbackVO vo) {
-//        判断登录状态
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
-
+        
         OpinionFeedbackPO po = OpinionFeedbackMsMapper.INSTANCE.vo2po(vo);
-        po.setUpdateBy(loginUser.getUserId());
+        po.setHandlerId(SecurityUtils.getUserId());
         boolean result = opinionFeedbackMpService.updateById(po);
         if (result) {
             return BaseResult.successMsg("修改成功");

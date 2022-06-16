@@ -31,4 +31,11 @@ public interface SubsidyRecordsMpService extends CommonService<SubsidyRecordsPO>
      * @return
      */
     BaseResult saveSubsidy(SubsidyRecordsVO vo);
+
+
+    /**
+     * 补贴清零
+     * @return
+     */
+    BaseResult subsidyClear();
 }

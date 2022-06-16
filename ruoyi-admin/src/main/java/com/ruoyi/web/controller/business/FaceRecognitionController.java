@@ -169,6 +169,7 @@ public class FaceRecognitionController extends BaseController {
         }
         queryWrapper
                 .eq(ObjectUtils.isNotEmpty(vo.getId()), FaceRecognitionPO::getId, vo.getId())
+                .eq(ObjectUtils.isNotEmpty(vo.getUserId()),FaceRecognitionPO::getUserId,vo.getUserId())
                 .eq(StringUtils.isNotBlank(vo.getFacePicture()), FaceRecognitionPO::getFacePicture, vo.getFacePicture());
 
         return queryWrapper;

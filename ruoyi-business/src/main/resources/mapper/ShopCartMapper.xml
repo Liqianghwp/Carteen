@@ -6,13 +6,16 @@
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="canteen_id" jdbcType="BIGINT" property="canteenId"/>
         <result column="canteen_name" jdbcType="VARCHAR" property="canteenName"/>
-        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
-        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="meal_times_id" jdbcType="BIGINT" property="mealTimesId"/>
+        <result column="meal_times_name" jdbcType="VARCHAR" property="mealTimesName"/>
+        <result column="dishes_id" jdbcType="BIGINT" property="dishesId"/>
+        <result column="dishes_name" jdbcType="VARCHAR" property="dishesName"/>
+        <result column="dishes_specification" jdbcType="VARCHAR" property="dishesSpecification"/>
+        <result column="number" jdbcType="INTEGER" property="number"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
         <result column="create_by" jdbcType="BIGINT" property="createBy"/>
-        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
-        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
@@ -22,13 +25,16 @@
             ,sc.id
             ,sc.canteen_id
             ,sc.canteen_name
-            ,sc.data_state
-            ,sc.version
+            ,sc.meal_times_id
+            ,sc.meal_times_name
+            ,sc.dishes_id
+            ,sc.dishes_name
+            ,sc.dishes_specification
+            ,sc.number
+            ,sc.del_flag
             ,sc.create_by
-            ,sc.create_name
             ,sc.create_time
             ,sc.update_by
-            ,sc.update_name
             ,sc.update_time
         </trim>
     </sql>
@@ -37,33 +43,42 @@
     <sql id="BaseWhereClause">
         <where>
             <trim prefixOverrides="and">
-            <if test="id != null">
-                and sc.id = #{id}
-            </if>
-            <if test="canteenId != null">
-                and sc.canteen_id = #{canteenId}
-            </if>
-            <if test="canteenName != null and canteenName != ''">
-                and sc.canteen_name = #{canteenName}
-            </if>
-            <if test="dataState != null">
-                and sc.data_state = #{dataState}
-            </if>
-            <if test="version != null">
-                and sc.version = #{version}
-            </if>
-            <if test="createName != null and createName != ''">
-                and sc.create_name = #{createName}
-            </if>
-            <if test="updateName != null and updateName != ''">
-                and sc.update_name = #{updateName}
-            </if>
-            <if test="beginTime != null">
-                and sc.create_time <![CDATA[ >= ]]> #{beginTime}
-            </if>
-            <if test="endTime != null">
-                and sc.create_time  <![CDATA[ <= ]]> #{endTime}
-            </if>
+                <if test="id != null">
+                    and sc.id = #{id}
+                </if>
+                <if test="canteenId != null">
+                    and sc.canteen_id = #{canteenId}
+                </if>
+                <if test="canteenName != null and canteenName != ''">
+                    and sc.canteen_name = #{canteenName}
+                </if>
+                <if test="mealTimesId != null">
+                    and sc.meal_times_id = #{mealTimesId}
+                </if>
+                <if test="mealTimesName != null and mealTimesName != ''">
+                    and sc.meal_times_name = #{mealTimesName}
+                </if>
+                <if test="dishesId != null">
+                    and sc.dishes_id = #{dishesId}
+                </if>
+                <if test="dishesName != null and dishesName != ''">
+                    and sc.dishes_name = #{dishesName}
+                </if>
+                <if test="dishesSpecification != null and dishesSpecification != ''">
+                    and sc.dishes_specification = #{dishesSpecification}
+                </if>
+                <if test="number != null">
+                    and sc.number = #{number}
+                </if>
+                <if test="delFlag != null">
+                    and sc.del_flag = #{delFlag}
+                </if>
+                <if test="beginTime != null">
+                    and sc.create_time <![CDATA[ >= ]]> #{beginTime}
+                </if>
+                <if test="endTime != null">
+                    and sc.create_time  <![CDATA[ <= ]]> #{endTime}
+                </if>
             </trim>
         </where>
     </sql>

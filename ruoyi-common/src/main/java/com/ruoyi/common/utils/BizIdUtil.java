@@ -67,6 +67,15 @@ public class BizIdUtil {
         return "CC" + getTime() + nextValue(REDIS_KEY + "recharge_times");
     }
 
+    /**
+     * 订单id
+     *
+     * @return
+     */
+    public Long getOrderId() {
+        return Long.valueOf(getTime() + nextValue(REDIS_KEY + "order"));
+    }
+
 
     private String getTime() {
         LocalDateTime localDateTime = LocalDateTime.now();

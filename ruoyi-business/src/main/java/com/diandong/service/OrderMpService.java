@@ -2,12 +2,9 @@ package com.diandong.service;
 
 import com.diandong.configuration.CommonService;
 import com.diandong.domain.po.OrderPO;
-import com.diandong.domain.vo.ShopCartVO;
+import com.diandong.domain.vo.OrderVO;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.model.LoginUser;
-import org.springframework.web.bind.annotation.PathVariable;
-
-import java.util.List;
 
 /**
  * Service接口类
@@ -21,11 +18,9 @@ public interface OrderMpService extends CommonService<OrderPO> {
     /**
      * 生成订单
      *
-     * @param shopCartVO 购物车信息
-     * @param loginUser  登录人信息
      * @return BaseResult
      */
-    BaseResult createOrder(ShopCartVO shopCartVO, LoginUser loginUser);
+    BaseResult createOrder();
 
     /**
      * 取消订单
@@ -39,21 +34,19 @@ public interface OrderMpService extends CommonService<OrderPO> {
     /**
      * 支付订单
      *
-     * @param orderId   订单编号
-     * @param loginUser 当前登录人信息
+     * @param orderVO   订单信息
      * @return
      */
-    BaseResult payOrder(Long orderId, LoginUser loginUser);
+    BaseResult payOrder(OrderVO orderVO);
 
     /**
      * 处理订单信息
      *
      * @param orderId   订单编号
-     * @param loginUser 当前登录用户
      * @param status    订单状态
      * @return BaseResult
      */
-    BaseResult processOrders(Long orderId, LoginUser loginUser, Integer status);
+    BaseResult processOrders(Long orderId, Integer status);
 
     /**
      * 获取订单详情

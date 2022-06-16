@@ -4,6 +4,7 @@ import com.diandong.domain.vo.BackstageRechargeVO;
 import com.diandong.domain.vo.PhysicalCardVO;
 import com.diandong.domain.vo.SysUserVO;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.core.domain.entity.SysUser;
 
 /**
  * @Classname IUserManagementService
@@ -12,6 +13,15 @@ import com.ruoyi.common.core.domain.BaseResult;
  * @Created by YuLiu
  */
 public interface IUserManagementService {
+
+
+    /**
+     * 用户管理分页信息
+     *
+     * @param vo
+     * @return
+     */
+    BaseResult pageList(SysUserVO vo);
 
     /**
      * 根据用户id查看用户信息
@@ -47,7 +57,8 @@ public interface IUserManagementService {
 
     /**
      * 后台充值
-     * @param vo    充值实体类
+     *
+     * @param vo 充值实体类
      * @return
      */
     BaseResult recharge(BackstageRechargeVO vo);

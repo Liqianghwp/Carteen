@@ -1,5 +1,6 @@
 package com.ruoyi.system.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.entity.SysDept;
@@ -206,4 +207,21 @@ public interface ISysUserService extends IService<SysUser> {
      * @return 结果
      */
     public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName);
+
+
+    /**
+     * 用户管理列表分页查询
+     * @param user
+     * @param pageSize
+     * @param pageNum
+     * @return
+     */
+    List<SysUser> userManagementPageList(SysUser user, Integer pageSize, Integer pageNum);
+
+    /**
+     * 计算总数
+     * @param user
+     * @return
+     */
+    Integer userManagementPageCount(SysUser user);
 }

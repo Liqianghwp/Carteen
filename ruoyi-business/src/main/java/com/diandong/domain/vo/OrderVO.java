@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 
@@ -52,6 +53,18 @@ public class OrderVO extends BaseEntity implements Serializable {
      */
     @ApiModelProperty(value = "下单时间")
     private LocalDateTime orderTime;
+
+    /**
+     * 订单总价格
+     */
+    @ApiModelProperty(value = "订单总价格")
+    private BigDecimal orderTotalPrice;
+
+    /**
+     * 菜品总数量
+     */
+    @ApiModelProperty(value = "菜品总数量")
+    private Integer dishesTotalCount;
 
     /**
      * 评价状态

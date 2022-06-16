@@ -1,10 +1,13 @@
 package com.diandong.domain.dto;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,6 +28,18 @@ public class RecipeDTO implements Serializable {
     @ApiModelProperty(value = "编号")
     private Long id;
 
+
+    /**
+     * 食堂id
+     */
+    @ApiModelProperty(value = "食堂id")
+    private Long canteenId;
+
+    /**
+     * 食堂名称
+     */
+    @ApiModelProperty(value = "食堂名称")
+    private String canteenName;
     /**
      * 食谱名称
      */
@@ -34,8 +49,9 @@ public class RecipeDTO implements Serializable {
     /**
      * 食谱日期
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "食谱日期")
-    private LocalDateTime recipeDate;
+    private LocalDate recipeDate;
 
     /**
      * 添加方式id
@@ -81,5 +97,23 @@ public class RecipeDTO implements Serializable {
 
 
     List<RecipeDetailDTO> recipeDetailDTOList;
+
+    /**
+     * 早点列表
+     */
+    @ApiModelProperty(value = "APP：食谱早餐列表")
+    List<RecipeDetailDTO> breakfastList;
+    /**
+     * 午餐列表
+     */
+    @ApiModelProperty(value = "APP：食谱午餐列表")
+    List<RecipeDetailDTO> lunchList;
+    /**
+     * 晚餐列表
+     */
+    @ApiModelProperty(value = "APP：食谱晚餐列表")
+    List<RecipeDetailDTO> dinnerList;
+
+
 
 }

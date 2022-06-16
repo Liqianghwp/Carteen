@@ -4,18 +4,15 @@
 
     <resultMap id="BaseResultMap" type="com.diandong.domain.po.RecipePO">
         <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="canteen_id" jdbcType="BIGINT" property="canteenId"/>
         <result column="recipe_name" jdbcType="VARCHAR" property="recipeName"/>
         <result column="recipe_date" jdbcType="TIMESTAMP" property="recipeDate"/>
         <result column="add_way_id" jdbcType="BIGINT" property="addWayId"/>
         <result column="add_way_name" jdbcType="VARCHAR" property="addWayName"/>
         <result column="status" jdbcType="INTEGER" property="status"/>
-        <result column="data_state" jdbcType="INTEGER" property="dataState"/>
-        <result column="version" jdbcType="INTEGER" property="version"/>
         <result column="create_by" jdbcType="BIGINT" property="createBy"/>
-        <result column="create_name" jdbcType="VARCHAR" property="createName"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
-        <result column="update_name" jdbcType="VARCHAR" property="updateName"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
@@ -23,18 +20,15 @@
     <sql id="BaseSelectField">
         <trim prefixOverrides=",">
             ,r.id
+            ,r.canteen_id
             ,r.recipe_name
             ,r.recipe_date
             ,r.add_way_id
             ,r.add_way_name
             ,r.status
-            ,r.data_state
-            ,r.version
             ,r.create_by
-            ,r.create_name
             ,r.create_time
             ,r.update_by
-            ,r.update_name
             ,r.update_time
         </trim>
     </sql>

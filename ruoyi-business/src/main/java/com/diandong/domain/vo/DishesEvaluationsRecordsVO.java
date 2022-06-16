@@ -12,14 +12,14 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 
 /**
- * 购物车详情VO实体类
+ * 菜品评价记录VO实体类
  *
  * @author YuLiu
- * @date 2022-05-11
+ * @date 2022-06-16
  */
 @Data
-@ApiModel("购物车详情VO实体类")
-public class ShopCartDetailVO extends BaseEntity implements Serializable {
+@ApiModel("菜品评价记录VO实体类")
+public class DishesEvaluationsRecordsVO extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -30,10 +30,16 @@ public class ShopCartDetailVO extends BaseEntity implements Serializable {
     private Long id;
 
     /**
-     * 购物车id
+     * 食堂id
      */
-    @ApiModelProperty(value = "购物车id")
-    private Long shopCartId;
+    @ApiModelProperty(value = "食堂id")
+    private Long canteenId;
+
+    /**
+     * 食堂名称
+     */
+    @ApiModelProperty(value = "食堂名称")
+    private String canteenName;
 
     /**
      * 菜品id
@@ -48,10 +54,22 @@ public class ShopCartDetailVO extends BaseEntity implements Serializable {
     private String dishesName;
 
     /**
-     * 数量
+     * 好评数量
      */
-    @ApiModelProperty(value = "数量")
-    private Integer number;
+    @ApiModelProperty(value = "好评数量")
+    private Integer goodNum;
+
+    /**
+     * 差评数量
+     */
+    @ApiModelProperty(value = "差评数量")
+    private Integer badNum;
+
+    /**
+     * 好评度
+     */
+    @ApiModelProperty(value = "好评度")
+    private Double praise;
 
 
 }

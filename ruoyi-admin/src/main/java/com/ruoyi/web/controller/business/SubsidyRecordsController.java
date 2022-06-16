@@ -133,6 +133,13 @@ public class SubsidyRecordsController extends BaseController {
         }
     }
 
+    @ApiOperation(value = "补贴清零", notes = "补贴清零", httpMethod = "DELETE")
+    @DeleteMapping(value = "/subsidyClear")
+    public BaseResult subsidyClear() {
+        return subsidyRecordsMpService.subsidyClear();
+    }
+
+
     /**
      * 导出
      *

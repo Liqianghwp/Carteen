@@ -150,4 +150,11 @@ public class DishesVO extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "添加剂信息")
     private List<DishesAdditiveVO> dishesAdditiveList;
 
+    /**
+     * 餐次id
+     */
+    @ApiModelProperty(value = "餐次id")
+    private Long mealTimesId;
+
+
 }

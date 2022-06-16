@@ -79,6 +79,11 @@ public class OpinionFeedbackDTO implements Serializable {
     private Integer anonymous;
 
     /**
+     * 处理人id
+     */
+    @ApiModelProperty(value = "处理人id")
+    private Long handlerId;
+    /**
      * 处理时间
      */
     @ApiModelProperty(value = "处理时间")

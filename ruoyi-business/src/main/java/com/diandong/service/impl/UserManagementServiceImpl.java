@@ -4,11 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.constant.Constants;
-import com.diandong.domain.dto.HealthIndicatorsDTO;
-import com.diandong.domain.dto.NutritionAdviceDTO;
-import com.diandong.domain.dto.SysUserDTO;
-import com.diandong.domain.dto.UserNutritionAdviceDTO;
+import com.diandong.domain.dto.*;
 import com.diandong.domain.po.*;
 import com.diandong.domain.vo.*;
 import com.diandong.enums.RechargeMethodEnum;
@@ -18,11 +16,15 @@ import com.diandong.mapstruct.NutritionAdviceMsMapper;
 import com.diandong.mapstruct.PhysicalCardMsMapper;
 import com.diandong.service.*;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.core.domain.entity.SysDictData;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.BizIdUtil;
+import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysUserService;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import sun.management.VMOptionCompositeData;
 
@@ -63,6 +65,10 @@ public class UserManagementServiceImpl implements IUserManagementService {
     private RechargeTimesRecordsMpService rechargeTimesRecordsMpService;
     @Resource
     private UserAmountMpService userAmountMpService;
+    @Resource
+    private ISysDictDataService dictDataService;
+    @Resource
+    private NutritionParamsMpService nutritionParamsMpService;
 
     @Override
     public Boolean saveUser(SysUserVO vo) {
@@ -71,14 +77,16 @@ public class UserManagementServiceImpl implements IUserManagementService {
 
         BeanUtils.copyProperties(vo, sysUser);
         sysUser.setPhonenumber(vo.getPhoneNumber());
-        boolean result = userService.save(sysUser);
+
+        userService.insertUser(sysUser);
+//        boolean result = userService.save(sysUser);
 
 //        保存实体卡信息
         PhysicalCardVO physicalCard = vo.getPhysicalCard();
         if (Objects.nonNull(physicalCard)) {
             physicalCard.setUserId(sysUser.getUserId());
             PhysicalCardPO physicalCardPO = PhysicalCardMsMapper.INSTANCE.vo2po(physicalCard);
-            result = physicalCardMpService.save(physicalCardPO);
+            physicalCardMpService.save(physicalCardPO);
         }
 
 //        保存人脸认证照片
@@ -102,7 +110,7 @@ public class UserManagementServiceImpl implements IUserManagementService {
             saveUserNutritionAdvice(userNutritionAdviceList, sysUser);
         }
 
-        return result;
+        return true;
     }
 
     @Override
@@ -166,6 +174,36 @@ public class UserManagementServiceImpl implements IUserManagementService {
 
 
     @Override
+    public BaseResult pageList(SysUserVO vo) {
+
+        SysUser user = new SysUser();
+        BeanUtils.copyProperties(vo, user);
+
+
+        List<SysUserDTO> records = new ArrayList<>();
+
+        List<SysUser> userList = userService.userManagementPageList(user, vo.getPageSize(), vo.getPageNum());
+        if (CollectionUtils.isNotEmpty(userList)) {
+
+            for (SysUser sysUser : userList) {
+                SysUserDTO userDTO = new SysUserDTO();
+                BeanUtils.copyProperties(sysUser, userDTO);
+
+                UserAmountPO userAmount = userAmountMpService.lambdaQuery().eq(UserAmountPO::getUserId, sysUser.getUserId()).eq(UserAmountPO::getDelFlag, Constants.DEL_NO).one();
+
+                userDTO.setAmount(Objects.nonNull(userAmount) ? userAmount.getAmount() : BigDecimal.ZERO);
+
+                records.add(userDTO);
+            }
+        }
+
+        Integer count = userService.userManagementPageCount(user);
+        Page<SysUserDTO> page = new Page(vo.getPageNum(), vo.getPageSize(), count);
+        page.setRecords(records);
+        return BaseResult.success(page);
+    }
+
+    @Override
     public BaseResult getById(String userId) {
         SysUserDTO userDTO = new SysUserDTO();
         SysUser user = userService.lambdaQuery().eq(SysUser::getUserId, userId).one();
@@ -177,6 +215,7 @@ public class UserManagementServiceImpl implements IUserManagementService {
         if (Objects.nonNull(physicalCard)) {
             userDTO.setPhysicalCard(PhysicalCardMsMapper.INSTANCE.po2dto(physicalCard));
         }
+
 
         FaceRecognitionPO faceRecognitionPO = faceRecognitionMpService.lambdaQuery()
                 .eq(FaceRecognitionPO::getUserId, user.getUserId())
@@ -248,6 +287,9 @@ public class UserManagementServiceImpl implements IUserManagementService {
             healthIndicatorsPO.setUserId(sysUser.getUserId());
             healthIndicatorsPO.setUserName(sysUser.getNickName());
 
+            SysDictData sysDictData = dictDataService.selectDictDataById(healthIndicatorsVO.getIndicatorsId());
+            healthIndicatorsPO.setIndicatorsName(sysDictData.getDictLabel());
+//            healthIndicatorsPO.setIndicatorUnit()
             healthIndicatorsPOList.add(healthIndicatorsPO);
         });
 
@@ -268,11 +310,19 @@ public class UserManagementServiceImpl implements IUserManagementService {
             if (CollectionUtils.isNotEmpty(nutritionAdviceList)) {
                 List<NutritionAdvicePO> nutritionAdvicePOList = new ArrayList<>();
 
+                SysDictData dictData = dictDataService.selectDictDataById(userNutritionAdviceVO.getMealTimesId());
+
+//                设置营养信息
                 nutritionAdviceList.forEach(nutritionAdviceVO -> {
                             NutritionAdvicePO nutritionAdvicePO = NutritionAdviceMsMapper.INSTANCE.vo2po(nutritionAdviceVO);
                             nutritionAdvicePO.setUserId(sysUser.getUserId());
-                            nutritionAdvicePO.setMealTimesId(userNutritionAdviceVO.getMealTimesId());
-                            nutritionAdvicePO.setMealTimesName(userNutritionAdviceVO.getMealTimesName());
+                            nutritionAdvicePO.setMealTimesId(dictData.getDictCode());
+                            nutritionAdvicePO.setMealTimesName(dictData.getDictLabel());
+
+                            NutritionParamsPO nutritionParamsPO = nutritionParamsMpService.getById(nutritionAdvicePO.getNutritionalId());
+                            nutritionAdvicePO.setNutritionalName(nutritionParamsPO.getNutritionName());
+                            nutritionAdvicePO.setUnit(nutritionParamsPO.getUnit());
+
                             nutritionAdvicePOList.add(nutritionAdvicePO);
                         }
                 );
@@ -304,7 +354,9 @@ public class UserManagementServiceImpl implements IUserManagementService {
         }
         physicalCardMpService.saveOrUpdate(physicalCard);
 
-        return BaseResult.success(physicalCard);
+
+        PhysicalCardDTO physicalCardDTO = PhysicalCardMsMapper.INSTANCE.po2dto(physicalCardMpService.getById(physicalCard.getId()));
+        return BaseResult.success(physicalCardDTO);
     }
 
     @Override
@@ -369,7 +421,7 @@ public class UserManagementServiceImpl implements IUserManagementService {
             }
             userAmountMpService.saveOrUpdate(userAmount);
         }
-        
+
         return BaseResult.success();
     }
 

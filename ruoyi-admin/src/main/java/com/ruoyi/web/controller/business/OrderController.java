@@ -1,6 +1,5 @@
 package com.ruoyi.web.controller.business;
 
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
@@ -10,7 +9,6 @@ import com.diandong.constant.Constants;
 import com.diandong.domain.dto.OrderDTO;
 import com.diandong.domain.po.OrderPO;
 import com.diandong.domain.vo.OrderVO;
-import com.diandong.domain.vo.ShopCartDetailVO;
 import com.diandong.domain.vo.ShopCartVO;
 import com.diandong.enums.OrderStatusEnum;
 import com.diandong.mapstruct.OrderMsMapper;
@@ -28,9 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Controller
@@ -85,7 +81,6 @@ public class OrderController extends BaseController {
     /**
      * 创建订单
      *
-     * @param shopCartVO 购物车集合
      * @return 返回结果
      */
     @ApiImplicitParams({
@@ -93,32 +88,8 @@ public class OrderController extends BaseController {
     })
     @ApiOperation(value = "生成订单", notes = "生成订单", httpMethod = "POST")
     @PostMapping
-    public BaseResult createOrder(@RequestBody ShopCartVO shopCartVO) {
-//        判断登录状态
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
-
-
-        List<ShopCartDetailVO> shopCartDetailVOList = shopCartVO.getShopCartDetailVOList();
-
-        if (CollectionUtils.isEmpty(shopCartDetailVOList)) {
-            return BaseResult.error("没有选好的菜品，请您选择菜品");
-        } else {
-            List<Long> collect = shopCartDetailVOList.stream().map(ShopCartDetailVO::getId).collect(Collectors.toList());
-            if (CollectionUtils.isEmpty(collect)) {
-                return BaseResult.error("没有选好的菜品，请您选择菜品");
-            }
-        }
-        try {
-//            生成订单操作
-            return orderMpService.createOrder(shopCartVO, loginUser);
-        } catch (Exception e) {
-//            当保存失败后处理的信息
-            log.error(e.getMessage(), e);
-            return BaseResult.error(e.getMessage());
-        }
+    public BaseResult createOrder() {
+       return orderMpService.createOrder();
     }
 
     /**
@@ -145,23 +116,13 @@ public class OrderController extends BaseController {
     /**
      * 支付订单
      *
-     * @param orderId 参数对象
+     * @param orderVO 订单信息
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "Long", name = "id", value = "参数对象")
-    })
     @ApiOperation(value = "支付订单", notes = "支付订单", httpMethod = "POST")
-    @PostMapping("/payment/{id}")
-    public BaseResult payOrder(@PathVariable("id") Long orderId) {
-
-//        判断登录状态
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
-
-        return orderMpService.processOrders(orderId, loginUser, OrderStatusEnum.COMPLETED.value());
+    @PostMapping("/payment")
+    public BaseResult payOrder(@RequestBody OrderVO orderVO) {
+        return orderMpService.payOrder(orderVO);
     }
 
 
@@ -216,13 +177,7 @@ public class OrderController extends BaseController {
     @GetMapping("/abolition/{id}")
     public BaseResult cancelOrder(@PathVariable("id") Long orderId) {
 
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
-//        取消订单
-//        return orderMpService.cancelOrder(orderId, loginUser);
-        return orderMpService.processOrders(orderId, loginUser, OrderStatusEnum.CANCELLED.value());
+        return orderMpService.processOrders(orderId, OrderStatusEnum.CANCELLED.value());
     }
 
 

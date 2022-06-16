@@ -102,7 +102,7 @@ public class RecipeController extends BaseController {
 
         List<RecipeDetailPO> recipeDetailList = recipeDetailMpService.lambdaQuery()
                 .eq(RecipeDetailPO::getRecipeId, id)
-                .eq(RecipeDetailPO::getDelFlag, false)
+                .eq(RecipeDetailPO::getDelFlag, Constants.DEL_NO)
                 .list();
 
         List<RecipeDetailDTO> detailDTOList = new ArrayList<>();
@@ -111,7 +111,8 @@ public class RecipeController extends BaseController {
 
             DishesPO dishes = dishesMpService.getById(recipeDetailDTO.getDishesId());
             recipeDetailDTO.setDishesPicture(dishes.getDishesPicture());
-            recipeDetailDTO.setDishesType(dishes.getDishesTypeName());
+            recipeDetailDTO.setDishesTypeId(dishes.getDishesTypeId());
+            recipeDetailDTO.setDishesTypeName(dishes.getDishesTypeName());
             detailDTOList.add(recipeDetailDTO);
         });
 
@@ -132,18 +133,7 @@ public class RecipeController extends BaseController {
     @ApiOperation(value = "食谱发布", notes = "食谱发布", httpMethod = "POST")
     @PostMapping
     public BaseResult save(@RequestBody @Validated(Insert.class) RecipeVO vo) {
-//        判断登录状态
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
-        try {
-            return recipeMpService.recipePost(vo, loginUser);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return BaseResult.error(e.getMessage());
-        }
-
+        return recipeMpService.recipePost(vo);
     }
 
 
@@ -161,20 +151,10 @@ public class RecipeController extends BaseController {
     @GetMapping("/copy/{id}")
     public BaseResult copyRecipe(@PathVariable("id") Long id, LocalDate recipeDate) {
 
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
         if (Objects.isNull(id) || Objects.isNull(recipeDate)) {
             return BaseResult.error("参数不完整");
         }
-
-        try {
-            return recipeMpService.copyRecipe(id, recipeDate, loginUser);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return BaseResult.error(e.getMessage());
-        }
+        return recipeMpService.copyRecipe(id, recipeDate);
 
     }
 
@@ -235,7 +215,7 @@ public class RecipeController extends BaseController {
     }
 
     private LambdaQueryChainWrapper<RecipePO> onSelectWhere(RecipeVO vo) {
-        LambdaQueryChainWrapper<RecipePO> queryWrapper = recipeMpService.lambdaQuery();
+        LambdaQueryChainWrapper<RecipePO> queryWrapper = recipeMpService.lambdaQuery().orderByDesc(RecipePO::getId);
 
         if (Objects.isNull(vo)) {
             return queryWrapper;

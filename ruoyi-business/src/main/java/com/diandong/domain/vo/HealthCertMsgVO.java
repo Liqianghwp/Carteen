@@ -1,8 +1,12 @@
 package com.diandong.domain.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.domain.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -50,7 +54,10 @@ public class HealthCertMsgVO extends BaseEntity implements Serializable {
     /**
      * 预警时间
      */
-    @ApiModelProperty(value = "预警时间")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @TableField(value = "validity_end_time")
+    @ApiModelProperty(value = "预警时间",notes = "2022-6-14 00:00:00")
     private LocalDateTime warningTime;
 
     /**

@@ -158,17 +158,33 @@ public class DishesDTO implements Serializable {
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 
+    /**
+     * 原材料信息
+     */
     @ApiModelProperty(value = "原材料信息")
     private List<DishesRawMaterialDTO> dishesRawMaterialList;
 
+    /**
+     * 营养信息
+     */
     @ApiModelProperty(value = "营养信息")
     private List<DishesNutritionDTO> dishesNutritionList;
 
+    /**
+     * 供应商信息
+     */
     @ApiModelProperty(value = "供应商信息")
     private List<DishesSupplierDTO> dishesSupplierList;
 
+    /**
+     * 添加剂信息
+     */
     @ApiModelProperty(value = "添加剂信息")
     private List<DishesAdditiveDTO> dishesAdditiveList;
 
-
+    /**
+     * 厨师信息
+     */
+    @ApiModelProperty(value = "厨师信息")
+    private ChefManagementDTO chef;
 }

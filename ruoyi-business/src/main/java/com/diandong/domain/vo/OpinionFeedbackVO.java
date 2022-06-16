@@ -84,6 +84,12 @@ public class OpinionFeedbackVO extends BaseEntity implements Serializable {
     private Integer anonymous;
 
     /**
+     * 处理人id
+     */
+    @ApiModelProperty(value = "处理人id")
+    private Long handlerId;
+
+    /**
      * 处理时间
      */
 

@@ -13,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 
 /**
  * @Classname UserManagementController
@@ -37,9 +38,8 @@ public class UserManagementController {
      */
     @ApiOperation("用户列表")
     @GetMapping
-    public BaseResult pageList() {
-
-        return BaseResult.success();
+    public BaseResult pageList(SysUserVO vo) {
+        return userManagementService.pageList(vo);
     }
 
     @ApiOperation(value = "根据用户id查询用户信息")
@@ -81,7 +81,7 @@ public class UserManagementController {
      */
     @ApiOperation(value = "绑定卡号")
     @PostMapping("/bindCard")
-    public BaseResult bindCard(PhysicalCardVO vo) {
+    public BaseResult bindCard(@RequestBody @Validated(Insert.class) PhysicalCardVO vo) {
         return userManagementService.bindCard(vo);
     }
 
@@ -93,7 +93,11 @@ public class UserManagementController {
      */
     @ApiOperation(value = "充值")
     @PostMapping("/recharge")
-    public BaseResult recharge(BackstageRechargeVO vo) {
+    public BaseResult recharge(@RequestBody @Validated(Insert.class) BackstageRechargeVO vo) {
+
+        if (Objects.isNull(vo.getAmount()) && Objects.isNull(vo.getTimes())) {
+            return BaseResult.error("充值失败");
+        }
         return userManagementService.recharge(vo);
     }
 

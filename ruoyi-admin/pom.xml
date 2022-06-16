@@ -84,6 +84,7 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-business</artifactId>
         </dependency>
+
     </dependencies>
 
     <build>

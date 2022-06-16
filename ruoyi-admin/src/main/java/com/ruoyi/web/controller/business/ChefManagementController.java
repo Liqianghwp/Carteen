@@ -7,36 +7,34 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
-import com.diandong.domain.dto.CanteenDTO;
-import com.diandong.domain.po.CanteenPO;
-import com.diandong.domain.po.HealthCertMsgPO;
-import com.diandong.domain.vo.CanteenVO;
-import com.diandong.domain.vo.HealthCertMsgVO;
-import com.diandong.mapstruct.CanteenMsMapper;
-import com.diandong.service.CanteenMpService;
+import com.diandong.domain.dto.ChefManagementDTO;
+import com.diandong.domain.po.ChefManagementPO;
+import com.diandong.domain.vo.ChefManagementVO;
+import com.diandong.mapstruct.ChefManagementMsMapper;
+import com.diandong.service.ChefManagementMpService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import com.ruoyi.common.core.domain.entity.SysDictData;
 import com.ruoyi.common.core.domain.entity.SysUser;
-import com.ruoyi.common.core.page.TableDataInfo;
-import com.diandong.service.ChefManagementMpService;
-import com.diandong.domain.po.ChefManagementPO;
-import com.diandong.domain.dto.ChefManagementDTO;
-import com.diandong.domain.vo.ChefManagementVO;
-import com.diandong.mapstruct.ChefManagementMsMapper;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysUserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
-import java.util.*;
-import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * 厨师管理Controller
@@ -70,6 +68,7 @@ public class ChefManagementController extends BaseController {
     @ApiOperation(value = "厨师管理分页查询", notes = "厨师管理分页查询方法", httpMethod = "GET")
     @GetMapping
     public BaseResult getList(ChefManagementVO vo) {
+        vo.setCanteenId(SecurityUtils.getCanteenId());
         Page<ChefManagementPO> page = onSelectWhere(vo).page(new Page<>(vo.getPageNum(), vo.getPageSize()));
 
         List<ChefManagementPO> records = page.getRecords();
@@ -113,6 +112,7 @@ public class ChefManagementController extends BaseController {
     @PostMapping
     public BaseResult save(@RequestBody @Validated(Insert.class) ChefManagementVO vo) {
         ChefManagementPO po = ChefManagementMsMapper.INSTANCE.vo2po(vo);
+        po.setCanteenId(SecurityUtils.getCanteenId());
         boolean result = chefManagementMpService.save(po);
         if (result) {
             return BaseResult.successMsg("添加成功！");
@@ -210,6 +210,7 @@ public class ChefManagementController extends BaseController {
         }
         queryWrapper
                 .eq(ObjectUtils.isNotEmpty(vo.getId()), ChefManagementPO::getId, vo.getId())
+                .eq(ObjectUtils.isNotEmpty(vo.getCanteenId()), ChefManagementPO::getCanteenId, vo.getCanteenId())
                 .like(StringUtils.isNotBlank(vo.getChefName()), ChefManagementPO::getChefName, vo.getChefName())
                 .eq(ObjectUtils.isNotEmpty(vo.getSex()), ChefManagementPO::getSex, vo.getSex())
                 .eq(StringUtils.isNotBlank(vo.getPhone()), ChefManagementPO::getPhone, vo.getPhone())

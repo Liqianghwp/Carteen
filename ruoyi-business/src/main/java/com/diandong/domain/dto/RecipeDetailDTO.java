@@ -1,9 +1,12 @@
 package com.diandong.domain.dto;
 
+import com.diandong.service.DishesMpService;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -59,7 +62,17 @@ public class RecipeDetailDTO implements Serializable {
      */
     @ApiModelProperty(value = "菜品名称")
     private String dishesName;
+    /**
+     * 菜品类别id
+     */
+    @ApiModelProperty(value = "菜品类别id")
+    private Long dishesTypeId;
 
+    /**
+     * 菜品类别名称
+     */
+    @ApiModelProperty(value = "菜品类别名称")
+    private String dishesTypeName;
     /**
      * 厨师id
      */
@@ -109,9 +122,8 @@ public class RecipeDetailDTO implements Serializable {
     private String dishesPicture;
 
     /**
-     * 菜品分类名称
+     * 菜品信息
      */
-    @ApiModelProperty(value = "菜品分类名称")
-    private String dishesType;
-
+    @ApiModelProperty(value = "菜品信息")
+    private DishesDTO dishes;
 }

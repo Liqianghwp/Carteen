@@ -94,6 +94,7 @@ public class OpinionFeedbackPO implements Serializable {
     @ApiModelProperty(value = "状态 0：未处理；1：已查看；2：已处理")
     private Integer status;
 
+
     /**
      * 匿名状态 0:不匿名；1:匿名
      */
@@ -101,6 +102,12 @@ public class OpinionFeedbackPO implements Serializable {
     @ApiModelProperty(value = "匿名状态 0:不匿名；1:匿名")
     private Integer anonymous;
 
+    /**
+     * 处理人id
+     */
+    @TableField(value = "handler_id")
+    @ApiModelProperty(value = "处理人id")
+    private Long handlerId;
     /**
      * 处理时间
      */

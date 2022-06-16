@@ -79,4 +79,10 @@ public class UserAmountDTO implements Serializable {
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 
+    /**
+     * 实体卡信息
+     */
+    @ApiModelProperty(value = "实体卡信息")
+    private PhysicalCardDTO physicalCard;
+
 }

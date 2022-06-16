@@ -20,6 +20,14 @@ public class BizUserTypeConstants {
      */
     public static final String PARENTS = "parents";
     /**
+     * 食客
+     */
+    public static final String DINERS = "diners";
+    /**
+     * 员工
+     */
+    public static final String STAFF = "staff";
+    /**
      * 系统默认的餐次设置
      */
     public static final List<String> defaultType = Arrays.asList(BizUserTypeConstants.STUDENT, BizUserTypeConstants.PARENTS);

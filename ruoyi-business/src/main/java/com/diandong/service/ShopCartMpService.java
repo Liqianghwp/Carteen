@@ -4,24 +4,29 @@ import com.diandong.configuration.CommonService;
 import com.diandong.domain.po.ShopCartPO;
 import com.diandong.domain.vo.ShopCartVO;
 import com.ruoyi.common.core.domain.BaseResult;
-import com.ruoyi.common.core.domain.model.LoginUser;
 
 /**
- * Service接口类
+ * 购物车Service接口类
  *
  * @author YuLiu
- * @date 2022-04-06
+ * @date 2022-06-14
  */
 public interface ShopCartMpService extends CommonService<ShopCartPO> {
 
 
     /**
+     * 购物车列表
+     * @param vo
+     * @return
+     */
+    BaseResult getList(ShopCartVO vo);
+
+    /**
      * 添加购物车
      *
-     * @param shopCartVO 购物车信息
-     * @param shopCartVO
-     * @return BaseResult
+     * @param vo 要添加的购物车信息
+     * @return
      */
-    BaseResult saveShopCart(ShopCartVO shopCartVO, LoginUser loginUser) throws Exception;
+    BaseResult save(ShopCartVO vo);
 
 }

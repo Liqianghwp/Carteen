@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * 购物车DTO实体类
  *
  * @author YuLiu
- * @date 2022-05-11
+ * @date 2022-06-14
  */
 @Data
 @ApiModel("购物车DTO实体类")
@@ -25,16 +25,52 @@ public class ShopCartDTO implements Serializable {
     private Long id;
 
     /**
-     * 食堂id
+     * 就餐食堂id
      */
-    @ApiModelProperty(value = "食堂id")
+    @ApiModelProperty(value = "就餐食堂id")
     private Long canteenId;
 
     /**
-     * 食堂名称
+     * 就餐食堂名称
      */
-    @ApiModelProperty(value = "食堂名称")
+    @ApiModelProperty(value = "就餐食堂名称")
     private String canteenName;
+
+    /**
+     * 餐次id
+     */
+    @ApiModelProperty(value = "餐次id")
+    private Long mealTimesId;
+
+    /**
+     * 餐次名称
+     */
+    @ApiModelProperty(value = "餐次名称")
+    private String mealTimesName;
+
+    /**
+     * 菜品id
+     */
+    @ApiModelProperty(value = "菜品id")
+    private Long dishesId;
+
+    /**
+     * 菜品名称
+     */
+    @ApiModelProperty(value = "菜品名称")
+    private String dishesName;
+
+    /**
+     * 菜品规格
+     */
+    @ApiModelProperty(value = "菜品规格")
+    private String dishesSpecification;
+
+    /**
+     * 数量
+     */
+    @ApiModelProperty(value = "数量")
+    private Integer number;
 
     /**
      * 创建人id

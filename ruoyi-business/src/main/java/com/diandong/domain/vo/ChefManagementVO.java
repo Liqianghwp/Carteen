@@ -31,6 +31,13 @@ public class ChefManagementVO extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "编号")
     private Long id;
 
+
+    /**
+     * 食堂id
+     */
+    @ApiModelProperty(value = "食堂id")
+    private Long canteenId;
+
     /**
      * 厨师姓名
      */

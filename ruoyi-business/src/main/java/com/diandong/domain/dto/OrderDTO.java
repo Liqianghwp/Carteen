@@ -1,11 +1,17 @@
 package com.diandong.domain.dto;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 订单DTO实体类
@@ -49,6 +55,17 @@ public class OrderDTO implements Serializable {
     private LocalDateTime orderTime;
 
     /**
+     * 订单总价格
+     */
+    @ApiModelProperty(value = "订单总价格")
+    private BigDecimal orderTotalPrice;
+
+    /**
+     * 菜品总数量
+     */
+    @ApiModelProperty(value = "菜品总数量")
+    private Integer dishesTotalCount;
+    /**
      * 评价状态
      */
     @ApiModelProperty(value = "评价状态")
@@ -69,6 +86,8 @@ public class OrderDTO implements Serializable {
     /**
      * 支付时间
      */
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "支付时间")
     private LocalDateTime paymentTime;
 
@@ -81,6 +100,8 @@ public class OrderDTO implements Serializable {
     /**
      * 创建时间 默认为当前时间
      */
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "创建时间 默认为当前时间")
     private LocalDateTime createTime;
 
@@ -93,7 +114,14 @@ public class OrderDTO implements Serializable {
     /**
      * 更新时间
      */
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 
+    /**
+     * 订单详情
+     */
+    @ApiModelProperty(value = "订单详情")
+    private List<OrderDetailDTO> orderDetailList;
 }

@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  * @author YuLiu
  * @date 2022-05-11
  */
-@TableName("wis_recharge_times")
+@TableName("wis_recharge_times_config")
 @Data
 @ApiModel("充值次数设置PO实体类")
 @Accessors(chain = true)

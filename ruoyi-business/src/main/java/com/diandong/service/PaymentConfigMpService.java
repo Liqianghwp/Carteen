@@ -11,4 +11,10 @@ import com.diandong.domain.po.PaymentConfigPO;
  */
 public interface PaymentConfigMpService extends CommonService<PaymentConfigPO> {
 
+
+    /**
+     * 初始化食堂支付配置
+     */
+    void initPaymentConfig();
+
 }

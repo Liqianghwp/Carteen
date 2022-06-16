@@ -7,10 +7,9 @@ import com.diandong.mapper.HealthIndicatorsMapper;
 import com.diandong.mapstruct.HealthIndicatorsMsMapper;
 import com.diandong.service.HealthIndicatorsMpService;
 import com.ruoyi.common.core.domain.BaseResult;
-import com.ruoyi.common.core.domain.model.LoginUser;
-
-import org.springframework.transaction.annotation.Transactional;
+import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,19 +27,17 @@ public class HealthIndicatorsMpServiceImpl extends CommonServiceImpl<HealthIndic
 
 
     @Override
-    public BaseResult saveList(LoginUser loginUser, List<HealthIndicatorsVO> voList) {
+    public BaseResult saveList(List<HealthIndicatorsVO> voList) {
 
         List<HealthIndicatorsPO> poList = new ArrayList<>();
 
         voList.forEach(healthIndicatorsVO -> {
             HealthIndicatorsPO po = HealthIndicatorsMsMapper.INSTANCE.vo2po(healthIndicatorsVO);
-            po.setCreateBy(loginUser.getUserId());
-            po.setUserId(loginUser.getUserId());
-            po.setUserName(loginUser.getUsername());
+            po.setUserId(SecurityUtils.getUserId());
             poList.add(po);
         });
 
-        boolean result = saveBatch(poList);
+        boolean result = saveOrUpdateBatch(poList);
 
         if (result) {
             return BaseResult.successMsg("添加成功");

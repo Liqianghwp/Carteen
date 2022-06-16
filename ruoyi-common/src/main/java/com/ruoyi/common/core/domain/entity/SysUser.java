@@ -25,75 +25,75 @@ import java.util.List;
  *
  * @author ruoyi
  */
-@ApiModel(value = "用户信息实体")
+@ApiModel("用户信息实体")
 public class SysUser extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
      * 用户ID
      */
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(value = "用户序号")
     @Excel(name = "用户序号", cellType = ColumnType.NUMERIC, prompt = "用户编号")
     private Long userId;
 
     /**
      * 部门ID
      */
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(value = "部门编号")
     @Excel(name = "部门编号", type = Type.IMPORT)
     private Long deptId;
 
     /**
      * 用户账号
      */
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(value = "登录名称")
     @Excel(name = "登录名称")
     private String userName;
 
     /**
      * 用户昵称
      */
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(value = "用户名称")
     @Excel(name = "用户名称")
     private String nickName;
 
     /**
      * 用户类型
      */
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(value = "用户类型")
     private String userType;
 
     /**
      * 用户邮箱
      */
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(value = "用户邮箱")
     @Excel(name = "用户邮箱")
     private String email;
 
     /**
      * 手机号码
      */
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(value = "手机号码")
     @Excel(name = "手机号码")
     private String phonenumber;
 
     /**
      * 用户性别
      */
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(value = "用户性别")
     @Excel(name = "用户性别", readConverterExp = "0=男,1=女,2=未知")
     private String sex;
 
     /**
      * 用户头像
      */
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(value = "用户头像")
     private String avatar;
 
     /**
      * 密码
      */
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(value = "密码")
     private String password;
 
     /**
@@ -106,33 +106,34 @@ public class SysUser extends BaseEntity {
     /**
      * 帐号状态（0正常 1停用）
      */
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(value = "帐号状态（0正常 1停用）")
     @Excel(name = "帐号状态", readConverterExp = "0=正常,1=停用")
     private String status;
 
     /**
      * 删除标志（0代表存在 1代表删除）
      */
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(value = "删除标志（0代表存在 1代表删除）")
     private String delFlag;
 
     /**
      * 最后登录IP
      */
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(value = "最后登录IP")
     @Excel(name = "最后登录IP", type = Type.EXPORT)
     private String loginIp;
 
     /**
      * 最后登录时间
      */
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(value = "最后登录时间")
     @Excel(name = "最后登录时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Type.EXPORT)
     private Date loginDate;
 
     /**
      * 验证码
      */
+    @ApiModelProperty(value = "验证码")
     @TableField(exist = false)
     private String authCode;
 
@@ -173,7 +174,7 @@ public class SysUser extends BaseEntity {
      * 审核状态
      * 0：审核中，1：审核通过，2：驳回
      */
-    @ApiModelProperty(value = "审核状态")
+    @ApiModelProperty(value = "审核状态(0：审核中，1：审核通过，2：驳回)")
     private String checkState;
 
     /**
@@ -194,7 +195,17 @@ public class SysUser extends BaseEntity {
      */
     @ApiModelProperty(value = "食堂id")
     private Long canteenId;
+    /**
+     * 就餐食堂id
+     */
+    @ApiModelProperty(value = "就餐食堂ID")
+    private Long diningCanteenId;
 
+    /**
+     * 单位
+     */
+    @ApiModelProperty(value = "单位（个人设置）")
+    private String department;
 
     /**
      * 部门对象
@@ -237,7 +248,7 @@ public class SysUser extends BaseEntity {
 
     @ApiModelProperty(value = "人脸认证图片")
     @TableField(exist = false)
-    private String facePicture;
+    private String faceImage;
 
 
     @ApiModelProperty(value = "勾选导出的ID集合")
@@ -246,7 +257,7 @@ public class SysUser extends BaseEntity {
 
     @ApiModelProperty(value = "是否有实体卡(true:有;false:没有)")
     @TableField(exist = false)
-    private Boolean hasCard;
+    private Integer hasCard;
 
 
     public SysUser() {
@@ -501,19 +512,19 @@ public class SysUser extends BaseEntity {
         this.rejectionReason = rejectionReason;
     }
 
-    public String getFacePicture() {
-        return facePicture;
+    public String getFaceImage() {
+        return faceImage;
     }
 
-    public void setFacePicture(String facePicture) {
-        this.facePicture = facePicture;
+    public void setFaceImage(String faceImage) {
+        this.faceImage = faceImage;
     }
 
-    public Boolean getHasCard() {
+    public Integer getHasCard() {
         return hasCard;
     }
 
-    public void setHasCard(Boolean hasCard) {
+    public void setHasCard(Integer hasCard) {
         this.hasCard = hasCard;
     }
 
@@ -523,6 +534,22 @@ public class SysUser extends BaseEntity {
 
     public void setCanteenId(Long canteenId) {
         this.canteenId = canteenId;
+    }
+
+    public Long getDiningCanteenId() {
+        return diningCanteenId;
+    }
+
+    public void setDiningCanteenId(Long diningCanteenId) {
+        this.diningCanteenId = diningCanteenId;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     @Override

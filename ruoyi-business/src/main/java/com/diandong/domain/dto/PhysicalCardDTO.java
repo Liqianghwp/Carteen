@@ -1,5 +1,7 @@
 package com.diandong.domain.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,6 +23,7 @@ public class PhysicalCardDTO implements Serializable {
     /**
      * 编号
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     @ApiModelProperty(value = "编号")
     private Long id;
 
@@ -51,6 +54,7 @@ public class PhysicalCardDTO implements Serializable {
     /**
      * 创建者
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     @ApiModelProperty(value = "创建者")
     private Long createBy;
 
@@ -63,6 +67,7 @@ public class PhysicalCardDTO implements Serializable {
     /**
      * 更新者
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     @ApiModelProperty(value = "更新者")
     private Long updateBy;
 

@@ -1,30 +1,39 @@
 package com.ruoyi.web.controller.business;
 
-import com.diandong.domain.vo.DictDateVO;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.diandong.domain.dto.BizDictDTO;
+import com.diandong.domain.dto.DictRechargeExportDTO;
+import com.diandong.domain.dto.HealthCertificateDTO;
+import com.diandong.domain.po.BizDictPO;
+import com.diandong.domain.po.CanteenPO;
+import com.diandong.domain.po.GroupManagementPO;
+import com.diandong.domain.po.HealthCertificatePO;
+import com.diandong.domain.vo.BizDictVO;
+import com.diandong.mapstruct.BizDictMsMapper;
+import com.diandong.mapstruct.HealthCertificateMsMapper;
+import com.diandong.service.BizDictMpService;
+import com.diandong.service.CanteenMpService;
+import com.diandong.service.GroupManagementMpService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
-import com.ruoyi.common.core.domain.entity.SysDictData;
-import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.system.constant.SysConstants;
-import com.ruoyi.system.service.ISysDictDataService;
-import com.ruoyi.system.service.ISysDictTypeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,51 +46,31 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/dict/recharge")
 public class DictRechargeSettingController extends BaseController {
-    @Resource
-    private ISysDictDataService dictDataService;
+
 
     @Resource
-    private ISysDictTypeService dictTypeService;
+    private BizDictMpService dictMpService;
+    @Resource
+    private GroupManagementMpService groupManagementMpService;
+    @Resource
+    private CanteenMpService canteenMpService;
 
     /**
      * 字典数据列表
      *
-     * @param dictData
+     * @param vo
      * @return
      */
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "SysDictData", name = "dictData", value = "")
     })
     @ApiOperation(value = "字典数据列表", notes = "字典数据列表", httpMethod = "GET")
-    @PreAuthorize("@ss.hasPermi('dict:recharge:list')")
     @GetMapping
-    public TableDataInfo list(SysDictData dictData) {
-        startPage();
-        resetSysDictData(dictData);
-        List<SysDictData> list = dictDataService.selectDictDataList(dictData);
-        return getDataTable(list);
+    public BaseResult list(BizDictVO vo) {
+        resetSysDictData(vo);
+        return dictMpService.pageList(vo);
     }
 
-    /**
-     * 字典数据导出
-     *
-     * @param response
-     * @param dictData
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "HttpServletResponse", name = "response", value = ""),
-            @ApiImplicitParam(paramType = "query", dataType = "SysDictData", name = "dictData", value = "")
-    })
-    @ApiOperation(value = "字典数据导出", notes = "字典数据导出", httpMethod = "POST")
-    @Log(title = "字典数据", businessType = BusinessType.EXPORT)
-    @PreAuthorize("@ss.hasPermi('dict:recharge:export')")
-    @PostMapping("/export")
-    public void export(HttpServletResponse response, SysDictData dictData) {
-        resetSysDictData(dictData);
-        List<SysDictData> list = dictDataService.selectDictDataList(dictData);
-        ExcelUtil<SysDictData> util = new ExcelUtil<SysDictData>(SysDictData.class);
-        util.exportExcel(response, list, "字典数据");
-    }
 
     /**
      * 查询字典数据详细
@@ -90,53 +79,32 @@ public class DictRechargeSettingController extends BaseController {
             @ApiImplicitParam(paramType = "path", dataType = "long", name = "dictCode", value = "")
     })
     @ApiOperation(value = "查询字典数据详细", notes = "查询字典数据详细", httpMethod = "GET")
-    @PreAuthorize("@ss.hasPermi('dict:recharge:query')")
-    @GetMapping(value = "/{dictCode}")
-    public BaseResult getInfo(@PathVariable Long dictCode) {
-        return BaseResult.success(dictDataService.selectDictDataById(dictCode));
+    @GetMapping(value = "/{id}")
+    public BaseResult getInfo(@PathVariable Long id) {
+        return BaseResult.success(dictMpService.getById(id));
     }
 
-    /**
-     * 根据字典类型查询字典数据信息
-     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "string", name = "dictType", value = "")
-    })
-    @ApiOperation(value = "根据字典类型查询字典数据信息", notes = "根据字典类型查询字典数据信息", httpMethod = "GET")
-    @GetMapping(value = "/type/{dictType}")
-    public BaseResult dictType(@PathVariable String dictType) {
-        List<SysDictData> data = dictTypeService.selectDictDataByType(dictType);
-        if (StringUtils.isNull(data)) {
-            data = new ArrayList<SysDictData>();
-        }
-        return BaseResult.success(data);
-    }
 
     /**
      * 新增字典类型
      */
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "body", dataType = "SysDictData", name = "dict", value = "")
+            @ApiImplicitParam(paramType = "body", dataType = "DictDateVO", name = "dict", value = "")
     })
     @ApiOperation(value = "新增字典类型", notes = "新增字典类型", httpMethod = "POST")
-    @PreAuthorize("@ss.hasPermi('dict:recharge:add')")
     @Log(title = "字典数据", businessType = BusinessType.INSERT)
     @PostMapping
-    public BaseResult add(@Validated @RequestBody DictDateVO dict) {
+    public BaseResult add(@Validated @RequestBody BizDictVO vo) {
+        resetSysDictData(vo);
 
-        SysDictData sysDictData = new SysDictData();
-        BeanUtils.copyProperties(dict, sysDictData);
-        resetSysDictData(sysDictData);
-
-        sysDictData.setCreateBy(getUsername());
-
-
-        Integer count = dictDataService.countDictData(sysDictData);
-        if (count > 0) {
-            return BaseResult.error("充值面额重复");
+        GroupManagementPO groupManagement = groupManagementMpService.lambdaQuery().eq(GroupManagementPO::getDeptId, SecurityUtils.getDeptId()).last("limit 1").one();
+        if (Objects.nonNull(groupManagement)) {
+            vo.setGroupId(groupManagement.getId());
         }
+        vo.setCanteenId(SecurityUtils.getCanteenId());
 
-        return toAjax(dictDataService.insertDictData(sysDictData));
+
+        return dictMpService.saveBizDict(vo);
     }
 
     /**
@@ -146,21 +114,11 @@ public class DictRechargeSettingController extends BaseController {
             @ApiImplicitParam(paramType = "body", dataType = "SysDictData", name = "dict", value = "")
     })
     @ApiOperation(value = "修改保存字典类型", notes = "修改保存字典类型", httpMethod = "PUT")
-    @PreAuthorize("@ss.hasPermi('dict:recharge:edit')")
     @Log(title = "字典数据", businessType = BusinessType.UPDATE)
     @PutMapping
-    public BaseResult edit(@Validated @RequestBody DictDateVO dict) {
-
-        SysDictData sysDictData = new SysDictData();
-        BeanUtils.copyProperties(dict, sysDictData);
-        resetSysDictData(sysDictData);
-
-        sysDictData.setUpdateBy(getUsername());
-        Integer count = dictDataService.countDictData(sysDictData);
-        if (count > 0) {
-            return BaseResult.error("充值面额重复");
-        }
-        return toAjax(dictDataService.updateDictData(sysDictData));
+    public BaseResult edit(@Validated @RequestBody BizDictVO vo) {
+        resetSysDictData(vo);
+        return dictMpService.updateBizDict(vo);
     }
 
 
@@ -171,25 +129,51 @@ public class DictRechargeSettingController extends BaseController {
             @ApiImplicitParam(paramType = "path", dataType = "Long[]", name = "dictCodes", value = "")
     })
     @ApiOperation(value = "删除字典类型", notes = "删除字典类型", httpMethod = "DELETE")
-    @PreAuthorize("@ss.hasPermi('dict:recharge:remove')")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{dictCodes}")
-    public BaseResult remove(@PathVariable Long[] dictCodes) {
-        dictDataService.deleteDictDataByIds(dictCodes);
+    @DeleteMapping("/{ids}")
+    public BaseResult remove(@PathVariable Long[] ids) {
+        dictMpService.removeByIds(Arrays.asList(ids));
         return success();
+    }
+
+    @ApiOperation(value = "导出")
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, BizDictVO vo) {
+
+        List<Long> ids = vo.getIds();
+
+        List<BizDictPO> list;
+        if (CollectionUtils.isNotEmpty(ids)) {
+            list = dictMpService.lambdaQuery().in(BizDictPO::getId, ids).list();
+        } else {
+            list = dictMpService.onSelectWhere(vo).list();
+        }
+        List<DictRechargeExportDTO> dictRechargeExportList = new ArrayList<>();
+
+        list.forEach(dictPO -> {
+            BizDictDTO bizDictDTO = BizDictMsMapper.INSTANCE.po2dto(dictPO);
+            DictRechargeExportDTO dto = new DictRechargeExportDTO();
+
+            BeanUtils.copyProperties(bizDictDTO, dto);
+
+            dictRechargeExportList.add(dto);
+        });
+
+        ExcelUtil<DictRechargeExportDTO> util = new ExcelUtil<DictRechargeExportDTO>(DictRechargeExportDTO.class);
+        util.exportExcel(response, dictRechargeExportList, "健康证管理");
     }
 
     /**
      * 默认设置字典类型
      *
-     * @param sysDictData 字典数据
+     * @param vo 字典数据
      */
-    private void resetSysDictData(SysDictData sysDictData) {
-        if (Objects.isNull(sysDictData)) {
-            sysDictData = new SysDictData();
+    private void resetSysDictData(BizDictVO vo) {
+        if (Objects.isNull(vo)) {
+            vo = new BizDictVO();
         }
-        if (StringUtils.isBlank(sysDictData.getDictType())) {
-            sysDictData.setDictType(SysConstants.RECHARGE_SETTING);
+        if (StringUtils.isBlank(vo.getDictType())) {
+            vo.setDictType(SysConstants.RECHARGE_SETTING);
         }
     }
 

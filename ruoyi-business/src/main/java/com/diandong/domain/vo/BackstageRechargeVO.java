@@ -1,9 +1,12 @@
 package com.diandong.domain.vo;
 
+import com.diandong.configuration.Insert;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -19,6 +22,7 @@ import java.math.BigDecimal;
 public class BackstageRechargeVO implements Serializable {
     private static final long serialVersionUID = -5019914474251228590L;
 
+    @NotNull(groups = {Insert.class},message = "用户id不能为空")
     @ApiModelProperty(value = "用户id")
     private Long userId;
 

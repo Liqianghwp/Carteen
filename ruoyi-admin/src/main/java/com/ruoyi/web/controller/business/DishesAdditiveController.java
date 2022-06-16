@@ -43,9 +43,6 @@ public class DishesAdditiveController extends BaseController {
      * @param vo 参数对象
      * @return 分页数据结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "DishesAdditiveVO", name = "vo", value = "查询参数")
-    })
     @ApiOperation(value = "菜品添加剂信息分页查询", notes = "菜品添加剂信息分页查询方法", httpMethod = "GET")
     @GetMapping
     public BaseResult getList(DishesAdditiveVO vo) {
@@ -60,9 +57,6 @@ public class DishesAdditiveController extends BaseController {
      * @param id 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
     @ApiOperation(value = "菜品添加剂信息根据id查询", notes = "菜品添加剂信息根据id查询", httpMethod = "GET")
     @GetMapping(value = "/{id}")
     public BaseResult<DishesAdditiveDTO> getById(@PathVariable("id") Long id) {
@@ -77,9 +71,6 @@ public class DishesAdditiveController extends BaseController {
      * @param vo 参数对象
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "DishesAdditiveVO", name = "vo", value = "参数对象")
-    })
     @ApiOperation(value = "菜品添加剂信息保存", notes = "菜品添加剂信息保存", httpMethod = "POST")
     @PostMapping
     public BaseResult save(@Validated(Insert.class) DishesAdditiveVO vo) {
@@ -98,9 +89,6 @@ public class DishesAdditiveController extends BaseController {
      * @param vo 参数对象
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "DishesAdditiveVO", name = "vo", value = "参数对象")
-    })
     @ApiOperation(value = "菜品添加剂信息更新", notes = "菜品添加剂信息更新", httpMethod = "PUT")
     @PutMapping
     public BaseResult update(@Validated(Update.class) DishesAdditiveVO vo) {
@@ -119,9 +107,6 @@ public class DishesAdditiveController extends BaseController {
      * @param id 编号id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
-    })
     @ApiOperation(value = "菜品添加剂信息删除", notes = "菜品添加剂信息删除", httpMethod = "DELETE")
     @DeleteMapping(value = "/{id}")
     public BaseResult delete(@PathVariable("id") Long id) {
@@ -139,9 +124,6 @@ public class DishesAdditiveController extends BaseController {
      * @param idList 编号id集合
      * @return 返回结果
     */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
     @ApiOperation(value = "菜品添加剂信息批量删除", notes = "菜品添加剂信息批量删除", httpMethod = "DELETE")
     @DeleteMapping
     public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {

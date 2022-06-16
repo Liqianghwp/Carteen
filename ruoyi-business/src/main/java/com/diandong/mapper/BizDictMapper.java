@@ -1,16 +1,16 @@
 package com.diandong.mapper;
 
 import com.diandong.configuration.CommonMapper;
-import com.diandong.domain.po.ShopCartDetailPO;
+import com.diandong.domain.po.BizDictPO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * Mapper
+ * 业务字典Mapper
  *
  * @author YuLiu
- * @date 2022-04-06
+ * @date 2022-06-10
  */
 @Mapper
-public interface ShopCartDetailMapper extends CommonMapper<ShopCartDetailPO> {
+public interface BizDictMapper extends CommonMapper<BizDictPO> {
 
 }

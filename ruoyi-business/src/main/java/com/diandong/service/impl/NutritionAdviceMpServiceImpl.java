@@ -18,10 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -37,22 +34,14 @@ public class NutritionAdviceMpServiceImpl extends CommonServiceImpl<NutritionAdv
         implements NutritionAdviceMpService {
 
     @Override
-    public BaseResult inputNutritionAdvice(List<NutritionAdviceVO> naList, LoginUser loginUser) throws Exception {
+    public BaseResult inputNutritionAdvice(List<NutritionAdviceVO> naList) {
 
-        Boolean result = false;
+        List<NutritionAdvicePO> list = new ArrayList<>();
+
         for (NutritionAdviceVO nutritionAdviceVO : naList) {
-
-
-            NutritionAdvicePO po = NutritionAdviceMsMapper.INSTANCE.vo2po(nutritionAdviceVO);
-
-            po.setCreateBy(loginUser.getUserId());
-
-            result = save(po);
-
-            if (!result) {
-                throw new Exception("添加失败");
-            }
+            list.add(NutritionAdviceMsMapper.INSTANCE.vo2po(nutritionAdviceVO));
         }
+        saveOrUpdateBatch(list);
         return BaseResult.successMsg("添加成功");
     }
 

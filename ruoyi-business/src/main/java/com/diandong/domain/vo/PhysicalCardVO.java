@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.io.Serializable;
@@ -32,12 +33,14 @@ public class PhysicalCardVO extends BaseEntity implements Serializable {
     /**
      * 用户id
      */
+    @NotNull(groups = {Insert.class},message = "用户id不能为空")
     @ApiModelProperty(value = "用户id")
     private Long userId;
 
     /**
      * 卡号
      */
+    @NotBlank(groups = {Insert.class},message = "卡号不能为空")
     @ApiModelProperty(value = "卡号")
     private String cardNo;
 

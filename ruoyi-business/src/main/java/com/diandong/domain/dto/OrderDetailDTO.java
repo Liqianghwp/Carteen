@@ -1,5 +1,9 @@
 package com.diandong.domain.dto;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -31,6 +35,17 @@ public class OrderDetailDTO implements Serializable {
     @ApiModelProperty(value = "订单id")
     private Long orderId;
 
+    /**
+     * 餐次id
+     */
+    @ApiModelProperty(value = "订单id")
+    private Long mealTimesId;
+
+    /**
+     * 餐次名称
+     */
+    @ApiModelProperty(value = "订单id")
+    private String mealTimesName;
     /**
      * 菜品id
      */
@@ -76,6 +91,8 @@ public class OrderDetailDTO implements Serializable {
     /**
      * 创建时间 默认为当前时间
      */
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "创建时间 默认为当前时间")
     private LocalDateTime createTime;
 
@@ -88,6 +105,8 @@ public class OrderDetailDTO implements Serializable {
     /**
      * 更新时间
      */
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 

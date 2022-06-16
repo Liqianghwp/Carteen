@@ -1,5 +1,6 @@
 package com.diandong.domain.dto;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -29,6 +30,12 @@ public class PaymentConfigDTO implements Serializable {
      */
     @ApiModelProperty(value = "支付方式 包含但不限于（现金，微信，支付宝等等）")
     private String paymentMethod;
+
+    /**
+     *支付方式的key
+     */
+    @ApiModelProperty(value = "key")
+    private String payway;
 
     /**
      * 状态 默认为1。状态（0:停用；1:启用）

@@ -30,8 +30,8 @@ import javax.annotation.Resource;
  */
 @Validated
 @RestController
-@Api(value = "/recharge_times_config", tags = {"充值次数设置模块"})
-@RequestMapping(value = "/recharge_times_config")
+@Api(value = "/recharge_times", tags = {"充值次数设置模块"})
+@RequestMapping(value = "/recharge_times")
 public class RechargeTimesConfigController extends BaseController {
 
     @Resource
