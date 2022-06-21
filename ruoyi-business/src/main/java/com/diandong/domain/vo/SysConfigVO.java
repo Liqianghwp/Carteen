@@ -27,5 +27,8 @@ public class SysConfigVO implements Serializable {
     @ApiModelProperty(value = "餐次间隔")
     private String mealTimesInterval;
 
+    @ApiModelProperty(value = "餐次数量显示")
+    private String meanTimesShow;
+
 
 }

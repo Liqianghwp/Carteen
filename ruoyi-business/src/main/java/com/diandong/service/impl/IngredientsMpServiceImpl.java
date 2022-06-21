@@ -1,6 +1,7 @@
 package com.diandong.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.diandong.configuration.CommonServiceImpl;
 import com.diandong.constant.Constants;
 import com.diandong.domain.po.IngredientsDetailPO;
@@ -15,17 +16,13 @@ import com.diandong.service.IngredientsDetailMpService;
 import com.diandong.service.IngredientsMpService;
 import com.diandong.service.RawMaterialMpService;
 import com.ruoyi.common.core.domain.BaseResult;
-import com.ruoyi.common.core.domain.entity.SysDictData;
-import com.ruoyi.system.constant.SysConstants;
-import com.ruoyi.system.domain.SysConfig;
-import com.ruoyi.system.service.ISysConfigService;
-import com.ruoyi.system.service.ISysDictDataService;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 配料管理service实现类
@@ -110,9 +107,9 @@ public class IngredientsMpServiceImpl extends CommonServiceImpl<IngredientsMappe
         ingredientsDetailVO.setIngredientsId(po.getId());
         RawMaterialPO rawMaterialPO = rawMaterialMpService.getById(ingredientsDetailVO.getRawMaterialId());
 
-        ingredientsDetailVO.setRawMaterialName(rawMaterialPO.getRawMaterialName());
-        ingredientsDetailVO.setUnitId(rawMaterialPO.getUnitId());
-        ingredientsDetailVO.setUnitName(rawMaterialPO.getUnitName());
+        ingredientsDetailVO.setRawMaterialName(StringUtils.isNotBlank(ingredientsDetailVO.getRawMaterialName()) ? ingredientsDetailVO.getRawMaterialName() : rawMaterialPO.getRawMaterialName());
+        ingredientsDetailVO.setUnitId(Objects.nonNull(ingredientsDetailVO.getUnitId()) ? ingredientsDetailVO.getUnitId() : rawMaterialPO.getUnitId());
+        ingredientsDetailVO.setUnitName(StringUtils.isNotBlank(ingredientsDetailVO.getUnitName()) ? ingredientsDetailVO.getUnitName() : rawMaterialPO.getUnitName());
 
         list.add(IngredientsDetailMsMapper.INSTANCE.vo2po(ingredientsDetailVO));
     }

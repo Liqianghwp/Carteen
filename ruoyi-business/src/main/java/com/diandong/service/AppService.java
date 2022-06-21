@@ -182,5 +182,12 @@ public interface AppService {
      * @param vo
      * @return
      */
-    BaseResult appRecharge(BackstageRechargeVO vo);
+    BaseResult appRecharge(AppRechargeVO vo);
+
+    /**
+     * 意见与反馈
+     * @param vo
+     * @return
+     */
+    BaseResult opinionFeedback(OpinionFeedbackVO vo);
 }

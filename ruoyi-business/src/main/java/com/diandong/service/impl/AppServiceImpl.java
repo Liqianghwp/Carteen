@@ -28,6 +28,13 @@ import com.ruoyi.framework.manager.factory.AsyncFactory;
 import com.ruoyi.framework.security.sms.SmsCodeAuthenticationToken;
 import com.ruoyi.framework.web.service.SysLoginService;
 import com.ruoyi.framework.web.service.TokenService;
+import com.ruoyi.pay.model.enums.BizTypeEnum;
+import com.ruoyi.pay.model.enums.PayWay;
+import com.ruoyi.pay.model.req.ReqPayVO;
+import com.ruoyi.pay.model.res.ResPayResultVO;
+import com.ruoyi.pay.service.PayFactory;
+import com.ruoyi.pay.service.PayService;
+import com.ruoyi.pay.util.RunningNumberUtil;
 import com.ruoyi.system.constant.MealSettingConstants;
 import com.ruoyi.system.constant.SysConstants;
 import com.ruoyi.system.service.ISysUserService;
@@ -101,6 +108,11 @@ public class AppServiceImpl implements AppService {
     private RechargeAmountRecordsMpService rechargeAmountRecordsMpService;
     @Resource
     private BizIdUtil bizIdUtil;
+    @Resource
+    private PayFactory payFactory;
+    @Resource
+    private OpinionFeedbackMpService opinionFeedbackMpService;
+
 
     /**
      * 找回密码的通用key
@@ -420,6 +432,7 @@ public class AppServiceImpl implements AppService {
                     .eq(RecipePO::getRecipeDate, LocalDate.now())
                     .eq(RecipePO::getDelFlag, Constants.DEL_NO)
                     .last(Constants.limit).one();
+
             vo.setRecipeId(recipe.getId());
         }
 //        查询菜谱详情信息
@@ -463,13 +476,14 @@ public class AppServiceImpl implements AppService {
         List<PaymentConfigPO> list = paymentConfigMpService.lambdaQuery()
                 .eq(PaymentConfigPO::getCanteenId, diningCanteenId)
                 .eq(PaymentConfigPO::getStatus, Constants.DEFAULT_YES)
-                .in(PaymentConfigPO::getPayway, PaymentMethodEnum.AliPay.getValue(), PaymentMethodEnum.WeChatPay.getValue(), PaymentMethodEnum.ElectronicCard.getValue())
+                .in(PaymentConfigPO::getPayway, PaymentMethodEnum.FaceRecognition.getValue(), PaymentMethodEnum.AliPay.getValue(), PaymentMethodEnum.WeChatPay.getValue(), PaymentMethodEnum.ElectronicCard.getValue())
                 .list();
 
         return BaseResult.success(PaymentConfigMsMapper.INSTANCE.poList2dtoList(list));
     }
 
     @Override
+    @Transactional
     public BaseResult pay(OrderPayVO orderPay) {
 
         OrderPO order = orderMpService.lambdaQuery()
@@ -484,13 +498,13 @@ public class AppServiceImpl implements AppService {
 
 //        查询支付配置
         PaymentConfigPO paymentConfig = paymentConfigMpService.getById(orderPay.getPayWay());
-        PaymentMethodEnum payWay = PaymentMethodEnum.getEnum(paymentConfig.getPayway());
+        PaymentMethodEnum methodEnum = PaymentMethodEnum.getEnum(paymentConfig.getPayway());
 
 //        设置订单支付完成信息
         order.setPaymentMethodId(paymentConfig.getId());
         order.setPaymentMethodName(paymentConfig.getPaymentMethod());
 
-        switch (payWay) {
+        switch (methodEnum) {
             case Cash://    现金
                 //                更新订单信息
                 order.setStatus(OrderStatusEnum.COMPLETED.value());
@@ -519,11 +533,48 @@ public class AppServiceImpl implements AppService {
                 payService.cardPayTask(order.getOrderTotalPrice(), userAmount);
                 return BaseResult.success();
             case FaceRecognition:// 人脸认证
-                break;
+                userId = SecurityUtils.getUserId();
+                userAmount = userAmountMpService.lambdaQuery()
+                        .eq(UserAmountPO::getUserId, userId)
+                        .eq(UserAmountPO::getDelFlag, Constants.DEL_NO)
+                        .last(Constants.limit).one();
+                if (Objects.isNull(userAmount) || userAmount.getSubsidy().add(userAmount.getAmount()).compareTo(order.getOrderTotalPrice()) < 0) {
+                    return BaseResult.error("账户余额不足，请充值");
+                }
+//                更新订单信息
+                order.setStatus(OrderStatusEnum.COMPLETED.value());
+                order.setPaymentTime(LocalDateTime.now());
+
+                orderMpService.updateById(order);
+//                处理用户余额信息
+                payService.faceEnginePayTask(order.getOrderTotalPrice(), userAmount);
+                return BaseResult.success();
             case WeChatPay://   微信支付
-                break;
+//                PayWay payWay = PayWay.WECHAT_APP;
+                PayWay payWay = PayWay.WECHAT_NATIVE;
+                ReqPayVO reqPayVO = new ReqPayVO();
+                reqPayVO.setPayWay(payWay);
+                reqPayVO.setOrderId(order.getId().toString());
+                reqPayVO.setSubject("食堂支付");
+//                reqPayVO.setRunningNum(bizIdUtil.createPayOrderNumber(BizTypeEnum.ORDER.getValue().toString(), SecurityUtils.getUserId()));
+                reqPayVO.setRunningNum(String.valueOf(System.currentTimeMillis()));
+                reqPayVO.setPayMoney(order.getOrderTotalPrice());
+                reqPayVO.setType(BizTypeEnum.ORDER);
+                PayService payService = payFactory.createPayService(payWay);
+                ResPayResultVO balance = payService.createBalance(reqPayVO);
+                return BaseResult.success(balance.getWechatNativeResult());
             case AliPay://  支付宝支付
-                break;
+                payWay = PayWay.ALI_APP;
+                reqPayVO = new ReqPayVO();
+                reqPayVO.setPayWay(payWay);
+                reqPayVO.setOrderId(order.getId().toString());
+                reqPayVO.setSubject("食堂支付");
+                reqPayVO.setRunningNum(bizIdUtil.createPayOrderNumber(BizTypeEnum.ORDER.getValue().toString(), SecurityUtils.getUserId()));
+                reqPayVO.setPayMoney(order.getOrderTotalPrice());
+                reqPayVO.setType(BizTypeEnum.ORDER);
+                payService = payFactory.createPayService(payWay);
+                balance = payService.createBalance(reqPayVO);
+                return BaseResult.success(balance.getAliAppResult());
             default:
                 break;
         }
@@ -581,7 +632,7 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public BaseResult appRecharge(BackstageRechargeVO vo) {
+    public BaseResult appRecharge(AppRechargeVO vo) {
 
         Long userId = SecurityUtils.getUserId();
 //        用户余额
@@ -618,11 +669,48 @@ public class AppServiceImpl implements AppService {
         rechargeAmountRecordsMpService.save(rechargeAmountRecords);
 
 //        获取用户实体卡信息
-        PhysicalCardPO physicalCardPO = physicalCardMpService.lambdaQuery().eq(PhysicalCardPO::getUserId, userId).eq(PhysicalCardPO::getDelFlag, Constants.DEL_NO).last(Constants.limit).one();
-        UserAmountDTO userAmountDTO = UserAmountMsMapper.INSTANCE.po2dto(userAmount);
-        userAmountDTO.setPhysicalCard(PhysicalCardMsMapper.INSTANCE.po2dto(physicalCardPO));
+//        PhysicalCardPO physicalCardPO = physicalCardMpService.lambdaQuery().eq(PhysicalCardPO::getUserId, userId).eq(PhysicalCardPO::getDelFlag, Constants.DEL_NO).last(Constants.limit).one();
+//        UserAmountDTO userAmountDTO = UserAmountMsMapper.INSTANCE.po2dto(userAmount);
+//        userAmountDTO.setPhysicalCard(PhysicalCardMsMapper.INSTANCE.po2dto(physicalCardPO));
 
-        return BaseResult.success(userAmountDTO);
+        PaymentConfigPO paymentConfig = paymentConfigMpService.getById(vo.getPayWay());
+        PaymentMethodEnum methodEnum = PaymentMethodEnum.getEnum(paymentConfig.getPayway());
+        ReqPayVO payVO = new ReqPayVO();
+        payVO.setOpenId(rechargeAmountRecords.getSerialNumber());
+        payVO.setPayMoney(vo.getAmount());
+        payVO.setSubject("账户充值");
+        payVO.setRunningNum(bizIdUtil.createPayOrderNumber(BizTypeEnum.RECHARGE_AMOUNT.getValue().toString(), SecurityUtils.getUserId()));
+        payVO.setType(BizTypeEnum.RECHARGE_AMOUNT);
+
+        switch (methodEnum) {
+            case WeChatPay:
+                PayWay payWay = PayWay.WECHAT_APP;
+                payVO.setPayWay(payWay);
+                PayService payService = payFactory.createPayService(payWay);
+                ResPayResultVO balance = payService.createBalance(payVO);
+                return BaseResult.success(balance.getWechatAppPayResult());
+            case AliPay:
+                payWay = PayWay.ALI_APP;
+                payVO.setPayWay(PayWay.ALI_APP);
+                payService = payFactory.createPayService(payWay);
+                balance = payService.createBalance(payVO);
+                return BaseResult.success(balance.getAliAppResult());
+            default:
+                break;
+        }
+        return BaseResult.error("预支付失败");
+    }
+
+    @Override
+    public BaseResult opinionFeedback(OpinionFeedbackVO vo) {
+
+        Page<OpinionFeedbackPO> page = opinionFeedbackMpService.lambdaQuery()
+                .eq(OpinionFeedbackPO::getCreateBy, SecurityUtils.getUserId())
+                .eq(OpinionFeedbackPO::getDelFlag, Constants.DEL_NO)
+                .eq(Objects.nonNull(vo.getOpinionId()), OpinionFeedbackPO::getOpinionId, vo.getOpinionId())
+                .eq(Objects.nonNull(vo.getStatus()), OpinionFeedbackPO::getStatus, vo.getStatus())
+                .page(new Page<>(vo.getPageNum(), vo.getPageSize()));
+        return BaseResult.success(page);
     }
 
     private RecipeDTO resetRecipe(RecipePO recipe) {

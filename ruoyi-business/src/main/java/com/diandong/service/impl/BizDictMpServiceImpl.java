@@ -91,14 +91,14 @@ public class BizDictMpServiceImpl extends CommonServiceImpl<BizDictMapper, BizDi
         }
         queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getId()), BizDictPO::getId, vo.getId());
         queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getDictSort()), BizDictPO::getDictSort, vo.getDictSort());
-        queryWrapper.eq(com.baomidou.mybatisplus.core.toolkit.StringUtils.isNotBlank(vo.getDictLabel()), BizDictPO::getDictLabel, vo.getDictLabel());
-        queryWrapper.eq(com.baomidou.mybatisplus.core.toolkit.StringUtils.isNotBlank(vo.getDictValue()), BizDictPO::getDictValue, vo.getDictValue());
-        queryWrapper.eq(com.baomidou.mybatisplus.core.toolkit.StringUtils.isNotBlank(vo.getDictType()), BizDictPO::getDictType, vo.getDictType());
-        queryWrapper.eq(com.baomidou.mybatisplus.core.toolkit.StringUtils.isNotBlank(vo.getStatus()), BizDictPO::getStatus, vo.getStatus());
+        queryWrapper.like(StringUtils.isNotBlank(vo.getDictLabel()), BizDictPO::getDictLabel, vo.getDictLabel());
+        queryWrapper.eq(StringUtils.isNotBlank(vo.getDictValue()), BizDictPO::getDictValue, vo.getDictValue());
+        queryWrapper.eq(StringUtils.isNotBlank(vo.getDictType()), BizDictPO::getDictType, vo.getDictType());
+        queryWrapper.eq(StringUtils.isNotBlank(vo.getStatus()), BizDictPO::getStatus, vo.getStatus());
         queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getGroupId()), BizDictPO::getGroupId, vo.getGroupId());
         queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getCanteenId()), BizDictPO::getCanteenId, vo.getCanteenId());
-        queryWrapper.eq(com.baomidou.mybatisplus.core.toolkit.StringUtils.isNotBlank(vo.getBeginTime()), BizDictPO::getBeginTime, vo.getBeginTime());
-        queryWrapper.eq(com.baomidou.mybatisplus.core.toolkit.StringUtils.isNotBlank(vo.getEndTime()), BizDictPO::getEndTime, vo.getEndTime());
+        queryWrapper.eq(StringUtils.isNotBlank(vo.getBeginTime()), BizDictPO::getBeginTime, vo.getBeginTime());
+        queryWrapper.eq(StringUtils.isNotBlank(vo.getEndTime()), BizDictPO::getEndTime, vo.getEndTime());
         queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getUsed()), BizDictPO::getUsed, vo.getUsed());
         return queryWrapper;
     }

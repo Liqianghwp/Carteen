@@ -76,6 +76,26 @@ public class BizIdUtil {
         return Long.valueOf(getTime() + nextValue(REDIS_KEY + "order"));
     }
 
+    /**
+     * 创建支付订单
+     *
+     * @param businessType 业务类型
+     * @param userId       用户id
+     * @return
+     */
+    public String createPayOrderNumber(String businessType, Long userId) {
+        return getCurrentTimeMillis() + businessType + userId;
+    }
+
+    /**
+     * 当前时间戳
+     *
+     * @return
+     */
+    public String getCurrentTimeMillis() {
+        return String.valueOf(System.currentTimeMillis());
+    }
+
 
     private String getTime() {
         LocalDateTime localDateTime = LocalDateTime.now();

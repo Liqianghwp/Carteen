@@ -5,9 +5,6 @@ import com.diandong.domain.po.RecipePO;
 import com.diandong.domain.vo.RecipeDetailVO;
 import com.diandong.domain.vo.RecipeVO;
 import com.ruoyi.common.core.domain.BaseResult;
-import com.ruoyi.common.core.domain.model.LoginUser;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,7 +20,7 @@ public interface RecipeMpService extends CommonService<RecipePO> {
     /**
      * 发布食谱
      *
-     * @param vo        食谱信息
+     * @param vo 食谱信息
      * @return BaseResult
      */
     BaseResult recipePost(RecipeVO vo);
@@ -46,6 +43,22 @@ public interface RecipeMpService extends CommonService<RecipePO> {
      * @return
      */
     BaseResult rawMaterialsList(List<RecipeDetailVO> voList);
+
+    /**
+     * 原材料清单
+     *
+     * @param recipeId 食谱id
+     * @return
+     */
+    BaseResult rawMaterialList(String recipeId);
+
+    /**
+     * 生成采购计划单
+     *
+     * @param recipeId 食谱id
+     * @return
+     */
+    BaseResult createCanteenPurchase(String recipeId);
 
     /**
      * 不容食谱列表信息

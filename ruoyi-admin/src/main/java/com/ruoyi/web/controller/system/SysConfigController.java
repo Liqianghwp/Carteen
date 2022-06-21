@@ -162,11 +162,13 @@ public class SysConfigController extends BaseController {
         String registerUser = BizConfigEnum.REGISTER_USER.key();
         String healthCertInvalid = BizConfigEnum.HEALTH_CERT_INVALID.key();
         String mealTimesInterval = BizConfigEnum.MEAL_TIMES_INTERVAL.key();
+        String mealTimesShow = BizConfigEnum.MEAL_TIMES_SHOW.key();
 
         List<String> keys = new ArrayList<>();
         keys.add(registerUser);
         keys.add(healthCertInvalid);
         keys.add(mealTimesInterval);
+        keys.add(mealTimesShow);
 
         List<SysConfig> listByKeys = configService.getListByKeys(keys);
 
@@ -180,6 +182,9 @@ public class SysConfigController extends BaseController {
                     break;
                 case MEAL_TIMES_INTERVAL:
                     sysConfig.setConfigValue(config.getMealTimesInterval());
+                    break;
+                case MEAL_TIMES_SHOW:
+                    sysConfig.setConfigValue(config.getMeanTimesShow());
                     break;
                 default:
                     break;

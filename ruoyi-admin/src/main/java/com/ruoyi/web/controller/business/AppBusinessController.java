@@ -4,7 +4,6 @@ import com.diandong.domain.vo.*;
 import com.diandong.service.AppService;
 import com.ruoyi.common.core.domain.BaseResult;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -168,33 +167,45 @@ public class AppBusinessController {
 
     /**
      * 用户钱包
+     *
      * @return
      */
     @ApiOperation(value = "用户钱包")
     @GetMapping("electronicCard")
-    public BaseResult userAmount(){
+    public BaseResult userAmount() {
         return appService.userAmount();
     }
 
     /**
      * 食堂充值设置
+     *
      * @return
      */
     @ApiOperation(value = "食堂充值设置")
     @GetMapping("canteen_recharge")
-    public BaseResult getCanteenRecharge(){
+    public BaseResult getCanteenRecharge() {
         return appService.getCanteenRecharge();
     }
 
     /**
      * APP充值
-     * @param vo    充值参数
+     *
+     * @param vo 充值参数
      * @return
      */
     @ApiOperation(value = "APP充值")
-    @GetMapping("APP充值")
-    public BaseResult appRecharge(BackstageRechargeVO vo){
+    @GetMapping("appRecharge")
+    public BaseResult appRecharge(AppRechargeVO vo) {
         return appService.appRecharge(vo);
+    }
+
+    /**
+     * @return
+     */
+    @ApiOperation(value = "我的意见与反馈")
+    @GetMapping("opinionFeedback")
+    public BaseResult opinionFeedback(OpinionFeedbackVO vo) {
+        return appService.opinionFeedback(vo);
     }
 
 }

@@ -81,6 +81,12 @@ public class BizDictDTO implements Serializable {
     private String endTime;
 
     /**
+     * 备注
+     */
+    @ApiModelProperty(value = "备注")
+    private String remark;
+
+    /**
      * 使用状态 0：未使用；1：使用
      */
     @ApiModelProperty(value = "使用状态 0：未使用；1：使用")

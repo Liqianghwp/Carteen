@@ -1,0 +1,28 @@
+国密改造点：
+1. 配置文件acp_sdk.properties证书相关配置改为使用以下国密证书的配置项，如：
+
+#########################入网测试环境签名证书配置 ################################
+# 多证书的情况证书路径为代码指定，可不对此块做配置。
+# 签名证书路径，必须使用绝对路径，如果不想使用绝对路径，可以自行实现相对路径获取证书的方法；测试证书所有商户共用开发包中的测试签名证书，生产环境请从商户服务平台配合cfca插件下载导出
+acpsdk.sm2.signCert.path=D:/certs/acp_test_sign.sm2
+# 签名证书密码，使用导出私钥证书时设置的值
+acpsdk.sm2.signCert.pwd=111111
+
+##########################验签证书配置################################
+# 验签证书路径（银联提供）（全渠道5.0.0、6.0.0、二维码接口使用，全渠道5.1.0接口无需使用）
+acpsdk.sm2.validateCert.dir=D:/certs/
+# 验签中级证书路径（银联提供）（全渠道5.1.0接口使用）
+acpsdk.sm2.middleCert.path=d:/certs/acp_test_middle_SM2.cer
+# 验签根证书路径（银联提供）（全渠道5.1.0接口使用）
+acpsdk.sm2.rootCert.path=d:/certs/acp_test_root_SM2.cer
+
+##########################加密证书配置################################
+# 敏感信息加密证书路径(商户号开通了商户对敏感信息加密的权限，需要对 卡号accNo，pin和phoneNo，cvn2，expired加密（如果这些上送的话），对敏感信息加密使用)
+acpsdk.sm2.encryptCert.path=d:/certs/acp_test_enc_SM2.cer
+# 6.0.0统一支付产品pni加密证书路径
+acpsdk.sm2.pinEncryptCert.path=d:/certs/acp_test_pin_enc_SM2.cer
+
+2. 将gm目录下的源码拷贝到sdk目录下。
+3. 将demo里面调用AcpService的地方修改为GmAcpService。
+4. 使用lib下面的BC包，避免使用JDK7，因为其对最新的BC包兼容性不好。
+5. demo类如Demo6_1_Transfer_In.java的基类修改为GmAcp6DemoBase

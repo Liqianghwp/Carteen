@@ -154,10 +154,10 @@ public class RechargeCardCarouselController extends BaseController {
         if (Objects.isNull(vo)) {
             return queryWrapper;
         }
-        rechargeCardCarouselMpService.lambdaQuery()
+        queryWrapper
                 .eq(ObjectUtils.isNotEmpty(vo.getId()), RechargeCardCarouselPO::getId, vo.getId())
                 .eq(StringUtils.isNotBlank(vo.getCarouselPic()), RechargeCardCarouselPO::getCarouselPic, vo.getCarouselPic())
-                .eq(StringUtils.isNotBlank(vo.getCarouselName()), RechargeCardCarouselPO::getCarouselName, vo.getCarouselName());
+                .like(StringUtils.isNotBlank(vo.getCarouselName()), RechargeCardCarouselPO::getCarouselName, vo.getCarouselName());
 
         return queryWrapper;
     }

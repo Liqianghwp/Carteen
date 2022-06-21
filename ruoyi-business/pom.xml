@@ -58,6 +58,10 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-framework</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi_pay</artifactId>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
         <dependency>
@@ -65,6 +69,17 @@
             <artifactId>hutool-all</artifactId>
             <version>5.8.2</version>
         </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/com.arcsoft.face/arcsoft-sdk-face -->
+        <dependency>
+            <groupId>com.arcsoft.face</groupId>
+            <artifactId>arcsoft-sdk-face</artifactId>
+            <version>3.0.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/arcsoft-sdk-face-3.0.0.0.jar</systemPath>
+        </dependency>
+
 
 
     </dependencies>

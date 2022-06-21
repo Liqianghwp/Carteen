@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.PayRecordsMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.PayRecordsPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="serial_id" jdbcType="VARCHAR" property="serialId"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="pay_flag" jdbcType="INTEGER" property="payFlag"/>
+        <result column="pay_amount" jdbcType="DECIMAL" property="payAmount"/>
+        <result column="pay_time" jdbcType="TIMESTAMP" property="payTime"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="pay_way" jdbcType="INTEGER" property="payWay"/>
+        <result column="pay_no" jdbcType="VARCHAR" property="payNo"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,pr.id
+            ,pr.serial_id
+            ,pr.type
+            ,pr.pay_flag
+            ,pr.pay_amount
+            ,pr.pay_time
+            ,pr.user_id
+            ,pr.pay_way
+            ,pr.pay_no
+            ,pr.del_flag
+            ,pr.create_by
+            ,pr.create_time
+            ,pr.update_by
+            ,pr.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and pr.id = #{id}
+            </if>
+            <if test="serialId != null and serialId != ''">
+                and pr.serial_id = #{serialId}
+            </if>
+            <if test="type != null">
+                and pr.type = #{type}
+            </if>
+            <if test="payFlag != null">
+                and pr.pay_flag = #{payFlag}
+            </if>
+            <if test="payAmount != null">
+                and pr.pay_amount = #{payAmount}
+            </if>
+            <if test="payTime != null">
+                and pr.pay_time = #{payTime}
+            </if>
+            <if test="userId != null">
+                and pr.user_id = #{userId}
+            </if>
+            <if test="payWay != null">
+                and pr.pay_way = #{payWay}
+            </if>
+            <if test="payNo != null and payNo != ''">
+                and pr.pay_no = #{payNo}
+            </if>
+            <if test="delFlag != null">
+                and pr.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and pr.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and pr.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_pay_records -->
+
+</mapper>

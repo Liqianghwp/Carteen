@@ -1,6 +1,5 @@
 package com.diandong.domain.dto;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -95,8 +94,8 @@ public class RecipeDTO implements Serializable {
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 
-
-    List<RecipeDetailDTO> recipeDetailDTOList;
+    @ApiModelProperty(value = "食谱详情信息")
+    List<RecipeDetailDTO> recipeDetailList;
 
     /**
      * 早点列表
@@ -113,7 +112,6 @@ public class RecipeDTO implements Serializable {
      */
     @ApiModelProperty(value = "APP：食谱晚餐列表")
     List<RecipeDetailDTO> dinnerList;
-
 
 
 }

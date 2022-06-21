@@ -49,15 +49,15 @@ spring:
   messages:
     # 国际化资源文件路径
     basename: i18n/messages
-  profiles: 
+  profiles:
     active: druid
   # 文件上传
   servlet:
-     multipart:
-       # 单个文件大小
-       max-file-size:  10MB
-       # 设置总上传的文件大小
-       max-request-size:  20MB
+    multipart:
+      # 单个文件大小
+      max-file-size: 10MB
+      # 设置总上传的文件大小
+      max-request-size: 20MB
   # 服务模块
   devtools:
     restart:
@@ -67,7 +67,7 @@ spring:
   redis:
     # 地址
     host: 192.168.0.93
-#    host: 127.0.0.1
+    #    host: 127.0.0.1
     # 端口，默认为6379
     port: 6379
     # 数据库索引
@@ -89,13 +89,13 @@ spring:
 
 # token配置
 token:
-    # 令牌自定义标识
-    header: Authorization
-    # 令牌密钥
-    secret: abcdefghijklmnopqrstuvwxyz
-    # 令牌有效期（默认30分钟）
-    expireTime: 600
-  
+  # 令牌自定义标识
+  header: Authorization
+  # 令牌密钥
+  secret: abcdefghijklmnopqrstuvwxyz
+  # 令牌有效期（默认30分钟）
+  expireTime: 600
+
 # MyBatis配置
 #mybatis:
 #    # 搜索指定包别名
@@ -121,10 +121,10 @@ mybatis-plus:
       logic-delete-value: 1
 
 # PageHelper分页插件
-pagehelper: 
+pagehelper:
   helperDialect: mysql
   supportMethodsArguments: false
-  params: count=countSql 
+  params: count=countSql
 
 # Swagger配置
 swagger:
@@ -134,10 +134,63 @@ swagger:
   pathMapping:
 
 # 防止XSS攻击
-xss: 
+xss:
   # 过滤开关
   enabled: true
   # 排除链接（多个用逗号分隔）
   excludes: /system/notice
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
+
+#支付相关
+ali:
+  pay:
+    #应用ID,您的APPID，收款账号既是您的APPID对应支付宝账号
+    appid: 2021003125681491
+    #商户私钥，您的PKCS8格式RSA2私钥
+    privateKey: MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCANfA3i8m8nfs+UUGU7qZNLlpK/8MRWOATIVMW06NrolWkX9GGjvg1mke7sudp+mKGR3D7EM9eH9ncfWr5GtFevADByWlAk3UAmtIHYXLJo9j9Bp8n41QXS8OeUVGnoQ7RmBItegk01iPZXLrIeEBM5g9VCfLl/E+xjTnRRNLSjM0+y1ieGYoJlZE6Oqbxl5vb2GoI7uJFnuzgvM18KOdhYjyilAbVqpEu3HuhrWlPcsgTXylIxHqMiAxs4uhHaqWOjLqxL7QSsMdOcOguw5Fx9mOaHapZQZT/1q2Gl2ptwfpGeQhljErgUbUnWw0pWYvrgOfHfx0M43H601avKn4dAgMBAAECggEAOC1qMCyEHK1sZQXdopBfNfpVff9LTdKPfFJhweLB/GuI8xk5CaijgXk0bT4awAkCGqw7CQd4lVmHcGFT+gqSKtxdyIukHrN91OIBnVJJpaixb0zzd9rYAc0kzb379WNQxu3HKT4LwqcB1kAXZ7epFQjJNw3A7Jz9nmKvLs7lQXPomb2nh421lHhhz1rKKQT5JiAnxEzak9lVr455iy50qEtYyU7uEAuIsAglXQeaXFdOn3y/wuLak7BDbKrS+CKRcbpbEAqAa6nzQ6LYyFGJeQYG0kztw9sZYRczBK6M/tcAKg43/H8gVYdbPr0JqBViK4jkzXMldeRakUBko/lQgQKBgQDMmtm31aUE/G43k4JaXIyRs0RpQ9S1qULbPuFdXGy3bhEmdNFMmCic2Fx0k22OOnyWTNfp/G1eXfA+cI4aWYKWNzIpwOasjTFHdIQSwfwOmDTihwa5YEmw+4JpKS2uqv7imU6wLnjeOnPKSgZSxQn49YYWbx5taTNgl/T6Hccc2QKBgQCgaowqT6pIxG0mu1NnnSVECsFPN4c7MHRgAQf3i1HsWd+k2MlUgz5WXrHCnU6Wr/V9kBTt7SQ/Gw/XtmIAbrsUQnWEixrq3hdGrMLk8buxHSgrYbifBRW6Cz3xdRzWIu+awGZ76/wYfEpjDeWS3v0AiNWM7eYQBJgi4Xgk+K0w5QKBgETEiwaRpQwe98BwMLDESG60DPtAVB7Wi+T6pm5loRipwtPlEW+n+IZ25eQ8pObX24X8v9kiAXRlKFkkJW7PxOdOF+sWrbEzJ2v3ymgvkNMq7yNv9J+bsEjuz68eqv749AAfPOZUSEWQ6dgEt0lcdnSZuP6TTGvDnwQJLspd9c1JAoGAJolyIrgAsHp/vk5COyIFUdNDnUQ5uH5rdqTIxS8y/xSYJYHu296rmxQkoBwqRQkAcKmsXXwauQ5HQAsQgAoZ50QP90dzr/iqns/iAh4QePwIKmPPdmRCU+9fciIwS0EZTpPqCtsmNLunIySzghUPspEsvC5qlm6EHd0Mf9U9xgECgYBYbxpcaNLT33ftdZNJzyrbnwfvAjiv2LbrN/5DCj02nEwUmM4YU1wuEh3cmhnhb+EWBIzJVExIEXyQJZe4UbRC0gDTd4xwQ/QryPSdxOPJ7uaRYrYBjeM8qOBTbgTApWWJWCBJJWc/vQ9aSYzurKnHKOn9R4K/qaREskPov/Q3Ag==
+    #//支付宝公钥,查看地址：https://openhome.alipay.com/platform/keyManage.htm 对应APPID下的支付宝公钥。
+    publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAto0cQba6DZb5r4ZKk86ZYNuKLu4mqd10ax9M+c0iS2Ilt/fx7Ih2kP8mtOHWwxrPe02qY500H3ioKcp21DFzW2lhq7wBGbyKaEPYeg61UIRKxxT0NxCcqvwwWCH4jo6ziQIiGaV68AxTTw3wEva5A68759UW/6Ecl3KQWJ4XqfcjWy94zFBpeQHDIDoXxfHNhuVjoTffXiNj+E23ZbvJHOlTYHJ1N5nNhLWOvCbTByg51ICDRKjY5CYKQcSLYK31Czwfhtc6BkQJUflLQKpmhXRA/i2K5r10cBkYog7QsDl1gwxnAZswuYet2Qqysq/sfVTgyh93XKtZu+53j7WgRQIDAQAB
+    inputCharset: UTF-8
+    signType: RSA2
+    gateway:
+      url: https://openapi.alipay.com/gateway.do
+wechat:
+  pay:
+    #秘钥
+    #    key: b56e7523014247276e765e2e3ba89e86
+    key: Rxkjhbxa20051991133100MA0EY47M0T
+    #小程序 appid
+    appletAppId: wx1dc17a6c0e48fafd
+    #小程序商户 id
+    appletMchId: 1577959261
+    #app AppId
+    appId: wxbb004b56371dc84b
+    #app 商户Id
+    appMchId: 1624969344
+    #公众号 Appid
+    subscriptionAppId: wxd4a72ec084e73ebd
+    #公众号 商户id
+    subscriptionMchId: 1624969344
+    #H5 Appid
+    h5AppId: wxbb004b56371dc84b
+    # h5 商户id
+    h5MchId: 1624969344
+    # 证书地址
+    certName: apiclient_cert.p12
+unionpay:
+  encoding: UTF-8
+  frontUrl:
+    app: https://www.d-eg.com/share/yunPayCallBack.html
+    web: https://www.d-eg.com/#/my/order
+  signCert:
+    qrMerId: 777290058198285
+    qrPath: /unionpay/qr_sign.pfx
+    applePayMerId: 777290058198285
+    applePayPath: /unionpay/apple_pay_sign.pfx
+    wapMerId: 777290058198285
+    wapPath: /unionpay/wap_sign.pfx
+
+callBack:
+  notifyUrl: http://wisdom.vaiwan.com/balanceCallBack/notifyUrl/%s
+  returnUrl: https://www.d-eg.com/#/my/order

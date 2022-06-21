@@ -216,7 +216,8 @@ public class ChefManagementController extends BaseController {
                 .eq(StringUtils.isNotBlank(vo.getPhone()), ChefManagementPO::getPhone, vo.getPhone())
                 .eq(StringUtils.isNotBlank(vo.getJobTitle()), ChefManagementPO::getJobTitle, vo.getJobTitle())
                 .eq(StringUtils.isNotBlank(vo.getHomeAddress()), ChefManagementPO::getHomeAddress, vo.getHomeAddress())
-                .eq(StringUtils.isNotBlank(vo.getChefDetails()), ChefManagementPO::getChefDetails, vo.getChefDetails());
+                .eq(StringUtils.isNotBlank(vo.getChefDetails()), ChefManagementPO::getChefDetails, vo.getChefDetails())
+                .between(ObjectUtils.isNotEmpty(vo.getStartTime()) && ObjectUtils.isNotEmpty(vo.getEndTime()), ChefManagementPO::getCreateTime, vo.getStartTime(), vo.getEndTime());
 
         return queryWrapper;
     }

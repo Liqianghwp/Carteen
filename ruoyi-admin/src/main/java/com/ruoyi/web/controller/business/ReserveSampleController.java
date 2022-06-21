@@ -75,7 +75,7 @@ public class ReserveSampleController extends BaseController {
     @GetMapping
     public BaseResult getList(ReserveSampleVO vo) {
 
-        CanteenPO canteen = canteenMpService.lambdaQuery().eq(CanteenPO::getDeptId, SecurityUtils.getDeptId()).one();
+        CanteenPO canteen = canteenMpService.lambdaQuery().eq(CanteenPO::getId, SecurityUtils.getCanteenId()).one();
 
         if(Objects.isNull(canteen)){
             return BaseResult.error("非食堂人员无法预留样品");
@@ -118,7 +118,7 @@ public class ReserveSampleController extends BaseController {
     public BaseResult save(@RequestBody @Validated(Insert.class) ReserveSampleVO vo) {
 
 
-        CanteenPO canteen = canteenMpService.lambdaQuery().eq(CanteenPO::getDeptId, SecurityUtils.getDeptId()).one();
+        CanteenPO canteen = canteenMpService.lambdaQuery().eq(CanteenPO::getId, SecurityUtils.getCanteenId()).one();
         if (Objects.isNull(canteen)) {
             return BaseResult.error("您不是食堂管理人员，请勿操作");
         }

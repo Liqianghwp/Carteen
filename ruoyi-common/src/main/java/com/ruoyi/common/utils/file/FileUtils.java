@@ -6,6 +6,7 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.uuid.IdUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -213,4 +214,27 @@ public class FileUtils {
         }
         return strFileExtendName;
     }
+
+
+    public static File transferToFile(MultipartFile multipartFile) {
+        File file = null;
+        try {
+            String originalFilename = multipartFile.getOriginalFilename();
+            String[] filename = originalFilename.split("\\.");
+
+            String temp = filename[0];
+            while (temp.length()<4){
+                temp = "0"+temp;
+            }
+
+            file = File.createTempFile(temp, filename[1]);
+            multipartFile.transferTo(file);
+            file.deleteOnExit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return file;
+    }
+
 }

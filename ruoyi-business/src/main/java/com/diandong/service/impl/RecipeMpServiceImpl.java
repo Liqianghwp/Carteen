@@ -2,6 +2,7 @@ package com.diandong.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.diandong.configuration.CommonServiceImpl;
+import com.diandong.constant.CanteenPurchaseState;
 import com.diandong.constant.Constants;
 import com.diandong.domain.dto.RawMaterialDTO;
 import com.diandong.domain.po.*;
@@ -13,14 +14,11 @@ import com.diandong.mapstruct.RecipeDetailMsMapper;
 import com.diandong.mapstruct.RecipeMsMapper;
 import com.diandong.service.*;
 import com.ruoyi.common.core.domain.BaseResult;
-import com.ruoyi.common.core.domain.entity.SysDictData;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.constant.MealSettingConstants;
 import com.ruoyi.system.constant.SysConstants;
-import com.ruoyi.system.service.ISysDictDataService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +53,11 @@ public class RecipeMpServiceImpl extends CommonServiceImpl<RecipeMapper, RecipeP
     private DishesMpService dishesMpService;
     @Resource
     private ChefManagementMpService chefManagementMpService;
+    @Resource
+    private CanteenPurchaseMpService canteenPurchaseMpService;
+    @Resource
+    private CanteenMpService canteenMpService;
+
 
     @Override
     public BaseResult recipePost(RecipeVO vo) {
@@ -182,44 +185,90 @@ public class RecipeMpServiceImpl extends CommonServiceImpl<RecipeMapper, RecipeP
 
 
         for (RecipeDetailVO recipeDetailVO : voList) {
-            //            查询菜品原材料信息
-            List<DishesRawMaterialPO> dishesRawMaterialList = dishesRawMaterialMpService.lambdaQuery()
-                    .eq(DishesRawMaterialPO::getDishesId, recipeDetailVO.getDishesId())
-                    .eq(DishesRawMaterialPO::getDelFlag, Constants.DEL_NO)
-                    .list();
+            getRawMaterialList(rawMaterialDTOList, RecipeDetailMsMapper.INSTANCE.vo2po(recipeDetailVO));
+        }
+        return BaseResult.success(rawMaterialDTOList);
+    }
 
-            if (CollectionUtils.isNotEmpty(dishesRawMaterialList)) {
+    @Override
+    public BaseResult rawMaterialList(String recipeId) {
 
-                for (DishesRawMaterialPO dishesRawMaterialPO : dishesRawMaterialList) {
-                    //                    查询原材料信息
+        List<RecipeDetailPO> list = recipeDetailMpService.lambdaQuery()
+                .eq(RecipeDetailPO::getRecipeId, recipeId)
+                .eq(RecipeDetailPO::getDelFlag, Constants.DEL_NO)
+                .list();
 
-                    RawMaterialDTO rawMaterialDTO = RawMaterialMsMapper.INSTANCE.po2dto(rawMaterialMpService.getById(dishesRawMaterialPO.getRawMaterialId()));
-                    double v = recipeDetailVO.getNumber() * dishesRawMaterialPO.getNumber();
-
-
-                    List<RawMaterialDTO> collect = rawMaterialDTOList.stream().filter(rawMaterial -> rawMaterial.getId() == rawMaterialDTO.getId()).collect(Collectors.toList());
-                    if (CollectionUtils.isNotEmpty(collect)) {
-                        RawMaterialDTO rawMaterialDTO1 = collect.get(0);
-                        rawMaterialDTO1.setNumber(rawMaterialDTO1.getNumber() + v);
-                    } else {
-                        rawMaterialDTO.setNumber(v);
-                        rawMaterialDTOList.add(rawMaterialDTO);
-                    }
-                }
+        List<RawMaterialDTO> rawMaterialDTOList = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (RecipeDetailPO recipeDetailPO : list) {
+                getRawMaterialList(rawMaterialDTOList, recipeDetailPO);
             }
         }
         return BaseResult.success(rawMaterialDTOList);
     }
 
     @Override
-    public void resetRecipeList(List<RecipePO> records) {
+    public BaseResult createCanteenPurchase(String recipeId) {
 
+        RecipePO recipe = getById(recipeId);
+        Integer count = canteenPurchaseMpService.lambdaQuery()
+                .gt(CanteenPurchasePO::getRecipeStartDate, recipe.getRecipeDate())
+                .lt(CanteenPurchasePO::getRecipeEndDate, recipe.getRecipeDate())
+                .eq(CanteenPurchasePO::getDelFlag, Constants.DEL_NO)
+                .count();
+        if (count != 0) {
+            return BaseResult.error("食谱已被记录");
+        }
+
+        CanteenPurchasePO canteenPurchase = new CanteenPurchasePO();
+
+        Long canteenId = SecurityUtils.getCanteenId();
+        CanteenPO canteen = canteenMpService.getById(canteenId);
+        canteenPurchase.setCanteenId(canteenId);
+        canteenPurchase.setCanteenName(canteen.getCanteenName());
+        canteenPurchase.setRecipeStartDate(recipe.getRecipeDate());
+        canteenPurchase.setRecipeEndDate(recipe.getRecipeDate());
+        canteenPurchase.setDays(1);
+        canteenPurchase.setState(CanteenPurchaseState.UN_SUBMIT);
+        canteenPurchaseMpService.save(canteenPurchase);
+
+        return BaseResult.success();
+    }
+
+    private void getRawMaterialList(List<RawMaterialDTO> rawMaterialDTOList, RecipeDetailPO recipeDetail) {
+        //            查询菜品原材料信息
+        List<DishesRawMaterialPO> dishesRawMaterialList = dishesRawMaterialMpService.lambdaQuery()
+                .eq(DishesRawMaterialPO::getDishesId, recipeDetail.getDishesId())
+                .eq(DishesRawMaterialPO::getDelFlag, Constants.DEL_NO)
+                .list();
+
+        if (CollectionUtils.isNotEmpty(dishesRawMaterialList)) {
+
+            for (DishesRawMaterialPO dishesRawMaterialPO : dishesRawMaterialList) {
+                //                    查询原材料信息
+
+                RawMaterialDTO rawMaterialDTO = RawMaterialMsMapper.INSTANCE.po2dto(rawMaterialMpService.getById(dishesRawMaterialPO.getRawMaterialId()));
+                double v = recipeDetail.getNumber() * dishesRawMaterialPO.getNumber();
+
+                List<RawMaterialDTO> collect = rawMaterialDTOList.stream().filter(rawMaterial -> rawMaterial.getId() == rawMaterialDTO.getId()).collect(Collectors.toList());
+                if (CollectionUtils.isNotEmpty(collect)) {
+                    RawMaterialDTO rawMaterialDTO1 = collect.get(0);
+                    rawMaterialDTO1.setNumber(rawMaterialDTO1.getNumber() + v);
+                } else {
+                    rawMaterialDTO.setNumber(v);
+                    rawMaterialDTOList.add(rawMaterialDTO);
+                }
+            }
+        }
+    }
+
+
+    @Override
+    public void resetRecipeList(List<RecipePO> records) {
 
         List<Long> collect = records.stream().map(RecipePO::getId).collect(Collectors.toList());
 
-
         List<BizDictPO> bizDictList = bizDictMpService.lambdaQuery().eq(BizDictPO::getDictType, SysConstants.MEAL_SETTING).list();
-
 
         Long breakfastCode = 0L;
         Long lunchCode = 0L;

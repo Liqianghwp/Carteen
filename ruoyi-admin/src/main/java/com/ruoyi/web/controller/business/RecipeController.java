@@ -13,7 +13,6 @@ import com.diandong.domain.dto.RecipeDetailDTO;
 import com.diandong.domain.po.DishesPO;
 import com.diandong.domain.po.RecipeDetailPO;
 import com.diandong.domain.po.RecipePO;
-import com.diandong.domain.vo.DishesVO;
 import com.diandong.domain.vo.RecipeDetailVO;
 import com.diandong.domain.vo.RecipeVO;
 import com.diandong.mapstruct.RecipeDetailMsMapper;
@@ -24,8 +23,6 @@ import com.diandong.service.RecipeDetailMpService;
 import com.diandong.service.RecipeMpService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
-import com.ruoyi.common.core.domain.model.LoginUser;
-import com.ruoyi.common.core.page.TableDataInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -116,7 +113,7 @@ public class RecipeController extends BaseController {
             detailDTOList.add(recipeDetailDTO);
         });
 
-        dto.setRecipeDetailDTOList(detailDTOList);
+        dto.setRecipeDetailList(detailDTOList);
 
         return BaseResult.success(dto);
     }
@@ -175,6 +172,29 @@ public class RecipeController extends BaseController {
     public BaseResult rawMaterialsList(@RequestBody List<RecipeDetailVO> voList) {
         return recipeMpService.rawMaterialsList(voList);
     }
+
+    /**
+     * 原材料清单
+     *
+     * @return
+     */
+    @ApiOperation(value = "原材料清单", notes = "原材料清单", httpMethod = "GET")
+    @GetMapping("rawMaterialList/{recipeId}")
+    public BaseResult rawMaterialList(@PathVariable String recipeId) {
+        return recipeMpService.rawMaterialList(recipeId);
+    }
+
+    /**
+     * 生成食堂采购单
+     * @param recipeId
+     * @return
+     */
+    @ApiOperation(value = "生成采购计划单", notes = "生成采购计划单", httpMethod = "GET")
+    @GetMapping("purchase/{recipeId}")
+    public BaseResult createPurchasePlan(@PathVariable String recipeId) {
+        return recipeMpService.createCanteenPurchase(recipeId);
+    }
+
 
     /**
      * 更新

@@ -122,6 +122,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/*/api-docs").permitAll()
                 .antMatchers("/druid/**").anonymous()
                 .antMatchers("/hello_world/**").permitAll()
+                .antMatchers("/balanceCallBack/**").permitAll()
                 .antMatchers(
                         "/business_config/about_us",
                         "/business_config/user_services_agreement",

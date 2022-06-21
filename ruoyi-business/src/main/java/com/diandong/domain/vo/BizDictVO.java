@@ -87,6 +87,12 @@ public class BizDictVO implements Serializable {
     private String endTime;
 
     /**
+     * 备注
+     */
+    @ApiModelProperty(value = "备注")
+    private String remark;
+
+    /**
      *
      */
     @ApiModelProperty(value = "勾选导出的id集合")

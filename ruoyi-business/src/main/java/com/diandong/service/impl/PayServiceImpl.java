@@ -23,7 +23,6 @@ public class PayServiceImpl implements IPayService {
     @Resource
     private UserAmountMpService userAmountMpService;
 
-
     /**
      * 电子卡、实体卡支付任务
      */
@@ -32,6 +31,18 @@ public class PayServiceImpl implements IPayService {
     public void cardPayTask(BigDecimal orderPrice, UserAmountPO userAmount) {
 
         log.info("计算用户余额信息  ===> Start");
+        updateUserAmount(orderPrice, userAmount);
+        log.info("计算用户余额信息  ===> End");
+    }
+
+    @Override
+    public void faceEnginePayTask(BigDecimal orderPrice, UserAmountPO userAmount) {
+        log.info("计算用户余额信息  ===> Start");
+        updateUserAmount(orderPrice, userAmount);
+        log.info("计算用户余额信息  ===> End");
+    }
+
+    private void updateUserAmount(BigDecimal orderPrice, UserAmountPO userAmount) {
         if (userAmount.getSubsidy().compareTo(orderPrice) < 0) {
             userAmount.setAmount(userAmount.getAmount().subtract(orderPrice.subtract(userAmount.getSubsidy())));
             userAmount.setSubsidy(BigDecimal.ZERO);
@@ -39,6 +50,5 @@ public class PayServiceImpl implements IPayService {
             userAmount.setSubsidy(userAmount.getSubsidy().subtract(orderPrice));
         }
         userAmountMpService.updateById(userAmount);
-        log.info("计算用户余额信息  ===> End");
     }
 }
