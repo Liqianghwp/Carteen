@@ -74,14 +74,7 @@ public class NutritionAdviceController extends BaseController {
     @ApiOperation(value = "分页查询", notes = "分页查询方法", httpMethod = "GET")
     @GetMapping("/{mealTimesId}")
     public BaseResult getNutritionAdvice(@PathVariable("mealTimesId") Long mealTimesId) {
-
-//        判断登录信息
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
-
-        return nutritionAdviceMpService.getNutritionAdvice(mealTimesId, loginUser);
+        return nutritionAdviceMpService.getNutritionAdvice(mealTimesId);
     }
 
 
@@ -112,17 +105,10 @@ public class NutritionAdviceController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", dataType = "IntakeAnalysisVO", name = "vo", value = "参数对象")
     })
-    @ApiOperation(value = "根据id查询", notes = "根据id查询", httpMethod = "GET")
+    @ApiOperation(value = "营养摄入分析", notes = "营养摄入分析")
     @PostMapping(value = "/intake_analysis")
     public BaseResult intakeAnalysis(@RequestBody @Validated IntakeAnalysisVO vo) {
-
-//        判断登录状态
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
-
-        return nutritionAdviceMpService.intakeAnalysis(vo, loginUser);
+        return nutritionAdviceMpService.intakeAnalysis(vo);
     }
 
 

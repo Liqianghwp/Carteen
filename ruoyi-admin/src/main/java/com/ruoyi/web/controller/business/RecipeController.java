@@ -10,17 +10,14 @@ import com.diandong.configuration.Update;
 import com.diandong.constant.Constants;
 import com.diandong.domain.dto.RecipeDTO;
 import com.diandong.domain.dto.RecipeDetailDTO;
+import com.diandong.domain.po.CanteenPurchasePO;
 import com.diandong.domain.po.DishesPO;
 import com.diandong.domain.po.RecipeDetailPO;
 import com.diandong.domain.po.RecipePO;
-import com.diandong.domain.vo.RecipeDetailVO;
 import com.diandong.domain.vo.RecipeVO;
 import com.diandong.mapstruct.RecipeDetailMsMapper;
 import com.diandong.mapstruct.RecipeMsMapper;
-import com.diandong.service.DishesMpService;
-import com.diandong.service.RawMaterialMpService;
-import com.diandong.service.RecipeDetailMpService;
-import com.diandong.service.RecipeMpService;
+import com.diandong.service.*;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
 import io.swagger.annotations.Api;
@@ -33,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -59,6 +57,8 @@ public class RecipeController extends BaseController {
     private DishesMpService dishesMpService;
     @Resource
     private RawMaterialMpService rawMaterialMpService;
+    @Resource
+    private CanteenPurchaseMpService canteenPurchaseMpService;
 
     /**
      * 食谱分页查询
@@ -115,6 +115,12 @@ public class RecipeController extends BaseController {
 
         dto.setRecipeDetailList(detailDTOList);
 
+        Integer count = canteenPurchaseMpService.lambdaQuery()
+                .like(CanteenPurchasePO::getValidDate, dto.getRecipeDate().format(DateTimeFormatter.ISO_DATE))
+                .eq(CanteenPurchasePO::getDelFlag, Constants.DEL_NO)
+                .count();
+        dto.setHasCanteenPurchase(count > 0 ? true : false);
+
         return BaseResult.success(dto);
     }
 
@@ -161,18 +167,9 @@ public class RecipeController extends BaseController {
      * <p>
      * Q：这个地方有个疑问，是先有了食谱才有原材料清单还是再未创建食谱之前就可以通过传参查询原材料清单
      *
-     * @param voList 菜谱菜品信息
+     * @param recipeId 菜谱id
      * @return 返回结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "List<RecipeDetailVO>", name = "voList", value = "菜谱信息"),
-    })
-    @ApiOperation(value = "原材料清单", notes = "原材料清单", httpMethod = "POST")
-    @PostMapping("list/raw_materials")
-    public BaseResult rawMaterialsList(@RequestBody List<RecipeDetailVO> voList) {
-        return recipeMpService.rawMaterialsList(voList);
-    }
-
     /**
      * 原材料清单
      *
@@ -180,12 +177,13 @@ public class RecipeController extends BaseController {
      */
     @ApiOperation(value = "原材料清单", notes = "原材料清单", httpMethod = "GET")
     @GetMapping("rawMaterialList/{recipeId}")
-    public BaseResult rawMaterialList(@PathVariable String recipeId) {
-        return recipeMpService.rawMaterialList(recipeId);
+    public BaseResult recipeSourcing(@PathVariable String recipeId) {
+        return recipeMpService.recipeSourcing(recipeId);
     }
 
     /**
      * 生成食堂采购单
+     *
      * @param recipeId
      * @return
      */
@@ -243,6 +241,9 @@ public class RecipeController extends BaseController {
         queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getId()), RecipePO::getId, vo.getId());
         queryWrapper.eq(StringUtils.isNotBlank(vo.getRecipeName()), RecipePO::getRecipeName, vo.getRecipeName());
         queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getRecipeDate()), RecipePO::getRecipeDate, vo.getRecipeDate());
+        if (ObjectUtils.isNotEmpty(vo.getStartTime()) && ObjectUtils.isNotEmpty(vo.getEndTime())) {
+            queryWrapper.between(RecipePO::getRecipeDate, vo.getStartTime().toLocalDate(), vo.getEndTime().toLocalDate());
+        }
         queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getAddWayId()), RecipePO::getAddWayId, vo.getAddWayId());
         queryWrapper.eq(StringUtils.isNotBlank(vo.getAddWayName()), RecipePO::getAddWayName, vo.getAddWayName());
         queryWrapper.eq(ObjectUtils.isNotEmpty(vo.getStatus()), RecipePO::getStatus, vo.getStatus());

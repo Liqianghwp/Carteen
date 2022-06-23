@@ -1,6 +1,7 @@
 package com.diandong.domain.vo;
 
 import com.diandong.configuration.Insert;
+import com.diandong.configuration.PhoneConstraint;
 import com.diandong.configuration.Update;
 import com.diandong.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
@@ -40,7 +41,7 @@ public class SupplierVO extends BaseEntity implements Serializable {
      * 账号信息
      */
     @ApiModelProperty(value = "账号信息")
-    private String account;
+        private String account;
 
     /**
      * 联系人姓名
@@ -51,6 +52,7 @@ public class SupplierVO extends BaseEntity implements Serializable {
     /**
      * 联系人电话
      */
+    @PhoneConstraint
     @ApiModelProperty(value = "联系人电话")
     private String contactPhone;
 

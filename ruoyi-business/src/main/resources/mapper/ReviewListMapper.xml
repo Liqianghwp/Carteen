@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.ReviewListMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.ReviewListPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="apply_id" jdbcType="VARCHAR" property="applyId"/>
+        <result column="apply_status" jdbcType="INTEGER" property="applyStatus"/>
+        <result column="apply_step_type" jdbcType="INTEGER" property="applyStepType"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="dept_id" jdbcType="BIGINT" property="deptId"/>
+        <result column="dept_name" jdbcType="VARCHAR" property="deptName"/>
+        <result column="role_id" jdbcType="BIGINT" property="roleId"/>
+        <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+        <result column="from_time" jdbcType="TIMESTAMP" property="fromTime"/>
+        <result column="finish_time" jdbcType="TIMESTAMP" property="finishTime"/>
+        <result column="apply_opinion" jdbcType="VARCHAR" property="applyOpinion"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,rl.id
+            ,rl.apply_id
+            ,rl.apply_status
+            ,rl.apply_step_type
+            ,rl.user_id
+            ,rl.user_name
+            ,rl.dept_id
+            ,rl.dept_name
+            ,rl.role_id
+            ,rl.role_name
+            ,rl.from_time
+            ,rl.finish_time
+            ,rl.apply_opinion
+            ,rl.sort
+            ,rl.del_flag
+            ,rl.create_by
+            ,rl.create_time
+            ,rl.update_by
+            ,rl.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and rl.id = #{id}
+            </if>
+            <if test="applyId != null and applyId != ''">
+                and rl.apply_id = #{applyId}
+            </if>
+            <if test="applyStatus != null">
+                and rl.apply_status = #{applyStatus}
+            </if>
+            <if test="applyStepType != null">
+                and rl.apply_step_type = #{applyStepType}
+            </if>
+            <if test="userId != null">
+                and rl.user_id = #{userId}
+            </if>
+            <if test="userName != null and userName != ''">
+                and rl.user_name = #{userName}
+            </if>
+            <if test="deptId != null">
+                and rl.dept_id = #{deptId}
+            </if>
+            <if test="deptName != null and deptName != ''">
+                and rl.dept_name = #{deptName}
+            </if>
+            <if test="roleId != null">
+                and rl.role_id = #{roleId}
+            </if>
+            <if test="roleName != null and roleName != ''">
+                and rl.role_name = #{roleName}
+            </if>
+            <if test="fromTime != null">
+                and rl.from_time = #{fromTime}
+            </if>
+            <if test="finishTime != null">
+                and rl.finish_time = #{finishTime}
+            </if>
+            <if test="applyOpinion != null and applyOpinion != ''">
+                and rl.apply_opinion = #{applyOpinion}
+            </if>
+            <if test="sort != null">
+                and rl.sort = #{sort}
+            </if>
+            <if test="delFlag != null">
+                and rl.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and rl.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and rl.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_review_list -->
+
+</mapper>

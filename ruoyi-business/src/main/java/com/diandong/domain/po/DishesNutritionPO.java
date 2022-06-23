@@ -30,6 +30,13 @@ public class DishesNutritionPO implements Serializable {
     private Long id;
 
     /**
+     * 食堂id
+     */
+    @TableField(value = "canteen_id")
+    @ApiModelProperty(value = "食堂id")
+    private Long canteenId;
+
+    /**
      * 菜品id
      */
     @TableField(value = "dishes_id")

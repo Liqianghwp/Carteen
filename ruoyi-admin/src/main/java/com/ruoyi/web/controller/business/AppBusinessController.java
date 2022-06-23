@@ -3,8 +3,10 @@ package com.ruoyi.web.controller.business;
 import com.diandong.domain.vo.*;
 import com.diandong.service.AppService;
 import com.ruoyi.common.core.domain.BaseResult;
+import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +38,52 @@ public class AppBusinessController {
     public BaseResult getUserInfo() {
         return appService.getUserInfo();
     }
+
+    /**
+     * 找回密码：发送验证码
+     *
+     * @param vo 找回密码实体
+     * @return
+     */
+    @ApiOperation(value = "找回密码:发送验证码", notes = "发送验证码", httpMethod = "PUT")
+    @PutMapping("/reset/get_code")
+    public BaseResult getResetPwdVerifyCode(@RequestBody ResetPwdVO vo) {
+        vo.setPhone(SecurityUtils.getLoginUser().getUser().getPhonenumber());
+        return appService.resetPwdVerifyCode(vo);
+    }
+
+    /**
+     * 找回密码：校验验证码
+     *
+     * @param vo 找回密码实体
+     * @return
+     */
+    @ApiOperation(value = "找回密码:校验验证码", notes = "校验验证码，验证码不能为空", httpMethod = "PUT")
+    @PutMapping("/reset/verify_code")
+    public BaseResult resetVerifyPhoneCode(@RequestBody ResetPwdVO vo) {
+        if (StringUtils.isBlank(vo.getVerifyCode())) {
+            return BaseResult.error("验证码不能为空");
+        }
+        vo.setPhone(SecurityUtils.getLoginUser().getUser().getPhonenumber());
+        return appService.resetVerifyPhoneCode(vo);
+    }
+
+    /**
+     * 找回密码：设置新密码
+     *
+     * @param vo 找回密码实体
+     * @return
+     */
+    @ApiOperation(value = "找回密码:设置新密码", notes = "设置新密码，密码不能为空")
+    @PostMapping("/reset/pwd")
+    public BaseResult resetPwd(@RequestBody ResetPwdVO vo) {
+        if (StringUtils.isBlank(vo.getPassword())) {
+            return BaseResult.error("密码不能为空");
+        }
+        vo.setPhone(SecurityUtils.getLoginUser().getUser().getPhonenumber());
+        return appService.resetPwd(vo);
+    }
+
 
     /**
      * 提交审核
@@ -200,6 +248,8 @@ public class AppBusinessController {
     }
 
     /**
+     * 我的意见与反馈
+     *
      * @return
      */
     @ApiOperation(value = "我的意见与反馈")
@@ -207,5 +257,30 @@ public class AppBusinessController {
     public BaseResult opinionFeedback(OpinionFeedbackVO vo) {
         return appService.opinionFeedback(vo);
     }
+
+
+    /**
+     * 学生支付方式
+     *
+     * @return
+     */
+    @ApiOperation(value = "学生支付方式")
+    @GetMapping("studentPayWay")
+    public BaseResult setStudentPayWay() {
+        return appService.setStudentPayWay();
+    }
+
+    /**
+     * 设置学生支付方式
+     *
+     * @return
+     */
+    @ApiOperation(value = "学生支付方式")
+    @PostMapping("studentPayWay")
+    public BaseResult setStudentPayWay(@RequestBody BusinessConfigVO vo) {
+        return appService.setStudentPayWay(vo);
+    }
+
+
 
 }

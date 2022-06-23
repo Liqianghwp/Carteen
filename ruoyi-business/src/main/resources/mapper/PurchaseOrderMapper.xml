@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.PurchaseOrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.PurchaseOrderPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="group_id" jdbcType="BIGINT" property="groupId"/>
+        <result column="order_id" jdbcType="VARCHAR" property="orderId"/>
+        <result column="supplier_id" jdbcType="BIGINT" property="supplierId"/>
+        <result column="supplier_name" jdbcType="VARCHAR" property="supplierName"/>
+        <result column="order_price" jdbcType="DOUBLE" property="orderPrice"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="details" jdbcType="VARCHAR" property="details"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,po.id
+            ,po.group_id
+            ,po.order_id
+            ,po.supplier_id
+            ,po.supplier_name
+            ,po.order_price
+            ,po.state
+            ,po.details
+            ,po.del_flag
+            ,po.create_by
+            ,po.create_time
+            ,po.update_by
+            ,po.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and po.id = #{id}
+            </if>
+            <if test="groupId != null">
+                and po.group_id = #{groupId}
+            </if>
+            <if test="orderId != null and orderId != ''">
+                and po.order_id = #{orderId}
+            </if>
+            <if test="supplierId != null">
+                and po.supplier_id = #{supplierId}
+            </if>
+            <if test="supplierName != null and supplierName != ''">
+                and po.supplier_name = #{supplierName}
+            </if>
+            <if test="orderPrice != null">
+                and po.order_price = #{orderPrice}
+            </if>
+            <if test="state != null">
+                and po.state = #{state}
+            </if>
+            <if test="details != null and details != ''">
+                and po.details = #{details}
+            </if>
+            <if test="delFlag != null">
+                and po.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and po.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and po.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_purchase_order -->
+
+</mapper>

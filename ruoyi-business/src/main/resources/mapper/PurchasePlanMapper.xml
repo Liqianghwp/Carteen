@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.PurchasePlanMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.PurchasePlanPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="plan_id" jdbcType="VARCHAR" property="planId"/>
+        <result column="apply_id" jdbcType="VARCHAR" property="applyId"/>
+        <result column="canteen_id" jdbcType="BIGINT" property="canteenId"/>
+        <result column="canteen_name" jdbcType="VARCHAR" property="canteenName"/>
+        <result column="recipe_date" jdbcType="VARCHAR" property="recipeDate"/>
+        <result column="total" jdbcType="DOUBLE" property="total"/>
+        <result column="state" jdbcType="VARCHAR" property="state"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,pp.id
+            ,pp.plan_id
+            ,pp.apply_id
+            ,pp.canteen_id
+            ,pp.canteen_name
+            ,pp.recipe_date
+            ,pp.total
+            ,pp.state
+            ,pp.remark
+            ,pp.del_flag
+            ,pp.create_by
+            ,pp.create_time
+            ,pp.update_by
+            ,pp.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and pp.id = #{id}
+            </if>
+            <if test="planId != null and planId != ''">
+                and pp.plan_id = #{planId}
+            </if>
+            <if test="applyId != null and applyId != ''">
+                and pp.apply_id = #{applyId}
+            </if>
+            <if test="canteenId != null">
+                and pp.canteen_id = #{canteenId}
+            </if>
+            <if test="canteenName != null and canteenName != ''">
+                and pp.canteen_name = #{canteenName}
+            </if>
+            <if test="recipeDate != null and recipeDate != ''">
+                and pp.recipe_date = #{recipeDate}
+            </if>
+            <if test="total != null">
+                and pp.total = #{total}
+            </if>
+            <if test="state != null and state != ''">
+                and pp.state = #{state}
+            </if>
+            <if test="remark != null and remark != ''">
+                and pp.remark = #{remark}
+            </if>
+            <if test="delFlag != null">
+                and pp.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and pp.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and pp.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_purchase_plan -->
+
+</mapper>

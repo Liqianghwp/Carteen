@@ -94,6 +94,12 @@ public class SysUserVO extends BaseEntity {
      */
     @ApiModelProperty(value = "用户体重")
     private String userWeight;
+
+    /**
+     * 单位
+     */
+    @ApiModelProperty(value = "单位")
+    private String department;
     /**
      * 用户生日
      */

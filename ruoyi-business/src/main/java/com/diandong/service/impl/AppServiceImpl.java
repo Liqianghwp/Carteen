@@ -7,10 +7,7 @@ import com.diandong.constant.Constants;
 import com.diandong.domain.dto.*;
 import com.diandong.domain.po.*;
 import com.diandong.domain.vo.*;
-import com.diandong.enums.OrderStatusEnum;
-import com.diandong.enums.PaymentMethodEnum;
-import com.diandong.enums.RechargeMethodEnum;
-import com.diandong.enums.RechargeTypeEnum;
+import com.diandong.enums.*;
 import com.diandong.mapstruct.*;
 import com.diandong.service.*;
 import com.ruoyi.common.constant.LoginTypeConstants;
@@ -34,7 +31,6 @@ import com.ruoyi.pay.model.req.ReqPayVO;
 import com.ruoyi.pay.model.res.ResPayResultVO;
 import com.ruoyi.pay.service.PayFactory;
 import com.ruoyi.pay.service.PayService;
-import com.ruoyi.pay.util.RunningNumberUtil;
 import com.ruoyi.system.constant.MealSettingConstants;
 import com.ruoyi.system.constant.SysConstants;
 import com.ruoyi.system.service.ISysUserService;
@@ -112,7 +108,10 @@ public class AppServiceImpl implements AppService {
     private PayFactory payFactory;
     @Resource
     private OpinionFeedbackMpService opinionFeedbackMpService;
-
+    //    @Resource
+//    private ISysConfigService configService;
+    @Resource
+    private BusinessConfigMpService businessConfigMpService;
 
     /**
      * 找回密码的通用key
@@ -713,6 +712,44 @@ public class AppServiceImpl implements AppService {
         return BaseResult.success(page);
     }
 
+    @Override
+    public BaseResult setStudentPayWay() {
+
+        BusinessConfigPO businessConfig = businessConfigMpService.lambdaQuery()
+                .eq(BusinessConfigPO::getConfigName, BizConfigEnum.STUDENT_PAY_WAY.key())
+                .eq(BusinessConfigPO::getCanteenId, SecurityUtils.getCanteenId())
+                .eq(BusinessConfigPO::getDelFlag, Constants.DEL_NO)
+                .last(Constants.limit).one();
+
+        return BaseResult.success(businessConfig);
+    }
+
+    @Override
+    public BaseResult setStudentPayWay(BusinessConfigVO vo) {
+
+        /**
+         * 查看是否有设置
+         */
+        BusinessConfigPO businessConfig = businessConfigMpService.lambdaQuery()
+                .eq(BusinessConfigPO::getConfigName, BizConfigEnum.STUDENT_PAY_WAY.key())
+                .eq(BusinessConfigPO::getCanteenId, SecurityUtils.getCanteenId())
+                .eq(BusinessConfigPO::getDelFlag, Constants.DEL_NO)
+                .last(Constants.limit).one();
+
+//        当没有时进行添加
+        if (Objects.isNull(businessConfig)) {
+            businessConfig = new BusinessConfigPO();
+            businessConfig.setConfigName(BizConfigEnum.STUDENT_PAY_WAY.key());
+            businessConfig.setCanteenId(SecurityUtils.getCanteenId());
+            businessConfig.setDataState(Constants.DEFAULT_YES);
+
+        }
+//        更新业务配置
+        businessConfig.setConfigValue(vo.getConfigValue());
+        businessConfigMpService.saveOrUpdate(businessConfig);
+        return BaseResult.success(businessConfig);
+    }
+
     private RecipeDTO resetRecipe(RecipePO recipe) {
 
         RecipeDTO recipeDTO = RecipeMsMapper.INSTANCE.po2dto(recipe);
@@ -724,6 +761,7 @@ public class AppServiceImpl implements AppService {
                 .in(RecipeDetailPO::getMealTimesId, collect)
                 .eq(RecipeDetailPO::getDelFlag, Constants.DEL_NO)
                 .list();
+        recipeDTO.setRecipeDetailList(resetRecipeDetailDTO(recipeDetailList));
 //        对食谱详情进行分组
         Map<Long, List<RecipeDetailPO>> map = recipeDetailList.stream().collect(Collectors.groupingBy(RecipeDetailPO::getMealTimesId));
 
@@ -754,10 +792,12 @@ public class AppServiceImpl implements AppService {
                 RecipeDetailDTO recipeDetailDTO = RecipeDetailMsMapper.INSTANCE.po2dto(recipeDetailPO);
 
                 DishesPO dishes = dishesMpService.getById(recipeDetailDTO.getDishesId());
-                recipeDetailDTO.setDishesPicture(dishes.getDishesPicture());
-                recipeDetailDTO.setDishesTypeId(dishes.getDishesTypeId());
-                recipeDetailDTO.setDishesTypeName(dishes.getDishesTypeName());
-                recipeDetailDTOList.add(recipeDetailDTO);
+                if (Objects.nonNull(dishes)) {
+                    recipeDetailDTO.setDishesPicture(dishes.getDishesPicture());
+                    recipeDetailDTO.setDishesTypeId(dishes.getDishesTypeId());
+                    recipeDetailDTO.setDishesTypeName(dishes.getDishesTypeName());
+                    recipeDetailDTOList.add(recipeDetailDTO);
+                }
             }
             return recipeDetailDTOList;
         }

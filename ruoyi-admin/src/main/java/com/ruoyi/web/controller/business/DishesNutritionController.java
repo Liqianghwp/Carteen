@@ -81,19 +81,7 @@ public class DishesNutritionController extends BaseController {
     @ApiOperation(value = "批量保存菜品营养信息", notes = "批量保存菜品营养信息", httpMethod = "POST")
     @PostMapping
     public BaseResult saveList(@RequestBody @Validated(Insert.class) List<DishesNutritionVO> voList) {
-
-//        判断登录状态
-        LoginUser loginUser = getLoginUser();
-        if (Objects.isNull(loginUser)) {
-            return BaseResult.error(Constants.ERROR_MESSAGE);
-        }
-
-        try {
-            return dishesNutritionMpService.saveDishesNutritionList(voList, loginUser);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return BaseResult.error(e.getMessage());
-        }
+            return dishesNutritionMpService.saveDishesNutritionList(voList);
     }
 
 

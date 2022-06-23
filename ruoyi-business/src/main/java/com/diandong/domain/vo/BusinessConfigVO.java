@@ -36,6 +36,12 @@ public class BusinessConfigVO implements Serializable {
     private String configValue;
 
     /**
+     * 食堂id
+     */
+    @ApiModelProperty(value = "食堂id")
+    private Long canteenId;
+
+    /**
      * 数据状态 停用启用状态
      */
     @ApiModelProperty(value = "数据状态 停用启用状态")

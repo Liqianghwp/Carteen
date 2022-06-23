@@ -64,17 +64,33 @@ public class DishesMpServiceImpl extends CommonServiceImpl<DishesMapper, DishesP
                 .eq(DishesNutritionPO::getDelFlag, Constants.DEL_NO)
                 .list();
 
-
+//        菜品原材料信息
         List<DishesRawMaterialPO> dishesRawMaterialPOList = dishesRawMaterialMpService.lambdaQuery()
                 .eq(DishesRawMaterialPO::getDelFlag, Constants.DEL_NO)
                 .eq(DishesRawMaterialPO::getDishesId, dishId)
                 .list();
+//         菜品供应商信息
+        List<DishesSupplierPO> dishesSupplierPOList = dishesSupplierMpService.lambdaQuery()
+                .eq(DishesSupplierPO::getDelFlag, Constants.DEL_NO)
+                .eq(DishesSupplierPO::getDishesId, dishId)
+                .list();
+
+//        菜品添加剂信息
+        List<DishesAdditivePO> dishesAdditivePOList = dishesAdditiveMpService.lambdaQuery()
+                .eq(DishesAdditivePO::getDelFlag, Constants.DEL_NO)
+                .eq(DishesAdditivePO::getDishesId, dishId)
+                .list();
+
 
         List<DishesNutritionDTO> collect1 = dishesNutritionPOList.stream().map(dishesNutritionPO -> DishesNutritionMsMapper.INSTANCE.po2dto(dishesNutritionPO)).collect(Collectors.toList());
         List<DishesRawMaterialDTO> collect2 = dishesRawMaterialPOList.stream().map(dishesRawMaterialPO -> DishesRawMaterialMsMapper.INSTANCE.po2dto(dishesRawMaterialPO)).collect(Collectors.toList());
+        List<DishesSupplierDTO> collect3 = dishesSupplierPOList.stream().map(dishesSupplierPO -> DishesSupplierMsMapper.INSTANCE.po2dto(dishesSupplierPO)).collect(Collectors.toList());
+        List<DishesAdditiveDTO> collect4 = dishesAdditivePOList.stream().map(dishesAdditivePO -> DishesAdditiveMsMapper.INSTANCE.po2dto(dishesAdditivePO)).collect(Collectors.toList());
 
         dto.setDishesNutritionList(collect1);
         dto.setDishesRawMaterialList(collect2);
+        dto.setDishesSupplierList(collect3);
+        dto.setDishesAdditiveList(collect4);
 
 
     }

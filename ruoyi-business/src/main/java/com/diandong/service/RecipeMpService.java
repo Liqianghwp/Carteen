@@ -39,10 +39,10 @@ public interface RecipeMpService extends CommonService<RecipePO> {
     /**
      * 原材料清单
      *
-     * @param voList 菜谱菜品信息
+     * @param recipeId 菜谱菜品信息
      * @return
      */
-    BaseResult rawMaterialsList(List<RecipeDetailVO> voList);
+    BaseResult rawMaterialsList(String recipeId);
 
     /**
      * 原材料清单
@@ -50,7 +50,7 @@ public interface RecipeMpService extends CommonService<RecipePO> {
      * @param recipeId 食谱id
      * @return
      */
-    BaseResult rawMaterialList(String recipeId);
+    BaseResult recipeSourcing(String recipeId);
 
     /**
      * 生成采购计划单

@@ -1,7 +1,6 @@
 package com.diandong.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -21,12 +20,9 @@ import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.BizIdUtil;
 import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysUserService;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
-import sun.management.VMOptionCompositeData;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -190,8 +186,10 @@ public class UserManagementServiceImpl implements IUserManagementService {
                 BeanUtils.copyProperties(sysUser, userDTO);
 
                 UserAmountPO userAmount = userAmountMpService.lambdaQuery().eq(UserAmountPO::getUserId, sysUser.getUserId()).eq(UserAmountPO::getDelFlag, Constants.DEL_NO).one();
-
                 userDTO.setAmount(Objects.nonNull(userAmount) ? userAmount.getAmount() : BigDecimal.ZERO);
+
+                PhysicalCardPO physicalCard = physicalCardMpService.lambdaQuery().eq(PhysicalCardPO::getUserId, sysUser.getUserId()).eq(PhysicalCardPO::getDelFlag, Constants.DEL_NO).last(Constants.limit).one();
+                userDTO.setHasCard(Objects.nonNull(physicalCard) ? Constants.DEFAULT_YES : Constants.DEFAULT_NO);
 
                 records.add(userDTO);
             }

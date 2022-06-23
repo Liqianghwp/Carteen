@@ -89,6 +89,11 @@ public class RecipeDTO implements Serializable {
     private Long updateBy;
 
     /**
+     * 是否已经被食堂采购
+     */
+    @ApiModelProperty(value = "已被食堂采购")
+    private Boolean hasCanteenPurchase;
+    /**
      * 更新时间
      */
     @ApiModelProperty(value = "更新时间")

@@ -15,13 +15,13 @@ public class IntakeAnalysisResponseVO extends BaseEntity implements Serializable
     /**
      * 录入营养摄入信息
      */
-    @ApiModelProperty(value = "录入营养摄入信息")
+    @ApiModelProperty(value = "建议营养摄入信息")
     private Map<String,Double> inputMap;
 
     /**
      * 建议营养摄入信息
      */
-    @ApiModelProperty(value = "建议营养摄入信息")
+    @ApiModelProperty(value = "营养摄入信息")
     private Map<String,Double> suggestionMap;
 
 }

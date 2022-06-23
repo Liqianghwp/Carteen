@@ -1,5 +1,6 @@
 package com.diandong.domain.dto;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -35,6 +36,12 @@ public class BusinessConfigDTO implements Serializable {
      */
     @ApiModelProperty(value = "配置内容 text文本格式")
     private String configValue;
+
+    /**
+     * 食堂id
+     */
+    @ApiModelProperty(value = "食堂id")
+    private Long canteenId;
 
     /**
      * 数据状态 停用启用状态

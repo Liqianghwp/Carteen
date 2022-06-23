@@ -59,6 +59,13 @@ public class CanteenPurchasePO implements Serializable {
     private LocalDate recipeEndDate;
 
     /**
+     * 有效日期
+     */
+    @TableField(value = "valid_date")
+    @ApiModelProperty(value = "有效日期")
+    private String validDate;
+
+    /**
      * 天数
      */
     @TableField(value = "days")
@@ -71,6 +78,13 @@ public class CanteenPurchasePO implements Serializable {
     @TableField(value = "state")
     @ApiModelProperty(value = "审核状态 (0:未提交;1:审核中;2:审核通过;3:审核驳回;)")
     private Integer state;
+
+    /**
+     * 审核id
+     */
+    @TableField(value = "apply_id")
+    @ApiModelProperty(value = "审核id")
+    private String applyId;
 
     /**
      * 备注

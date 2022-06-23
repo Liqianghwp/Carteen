@@ -1,5 +1,6 @@
 package com.diandong.domain.dto;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.Data;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 食堂采购DTO实体类
@@ -50,6 +52,12 @@ public class CanteenPurchaseDTO implements Serializable {
     private LocalDate recipeEndDate;
 
     /**
+     * 有效日期
+     */
+    @ApiModelProperty(value = "有效日期")
+    private String validDate;
+
+    /**
      * 天数
      */
     @ApiModelProperty(value = "天数")
@@ -60,6 +68,12 @@ public class CanteenPurchaseDTO implements Serializable {
      */
     @ApiModelProperty(value = "审核状态 (0:未提交;1:审核中;2:审核通过;3:审核驳回;)")
     private Integer state;
+
+    /**
+     * 审核id
+     */
+    @ApiModelProperty(value = "审核id")
+    private String applyId;
 
     /**
      * 备注
@@ -96,5 +110,11 @@ public class CanteenPurchaseDTO implements Serializable {
      */
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
+
+    /**
+     * 食谱列表
+     */
+    @ApiModelProperty(value = "食谱列表")
+    private List<RecipeDTO> recipeList;
 
 }

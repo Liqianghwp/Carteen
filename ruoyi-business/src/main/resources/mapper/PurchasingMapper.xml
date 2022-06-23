@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.PurchasingMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.PurchasingPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="group_id" jdbcType="BIGINT" property="groupId"/>
+        <result column="category_id" jdbcType="BIGINT" property="categoryId"/>
+        <result column="category_name" jdbcType="VARCHAR" property="categoryName"/>
+        <result column="raw_material_id" jdbcType="BIGINT" property="rawMaterialId"/>
+        <result column="raw_material_name" jdbcType="VARCHAR" property="rawMaterialName"/>
+        <result column="number" jdbcType="INTEGER" property="number"/>
+        <result column="unit_id" jdbcType="BIGINT" property="unitId"/>
+        <result column="unit_name" jdbcType="VARCHAR" property="unitName"/>
+        <result column="price" jdbcType="DOUBLE" property="price"/>
+        <result column="is_purchase" jdbcType="INTEGER" property="isPurchase"/>
+        <result column="subtotal" jdbcType="DOUBLE" property="subtotal"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,p.id
+            ,p.group_id
+            ,p.category_id
+            ,p.category_name
+            ,p.raw_material_id
+            ,p.raw_material_name
+            ,p.number
+            ,p.unit_id
+            ,p.unit_name
+            ,p.price
+            ,p.is_purchase
+            ,p.subtotal
+            ,p.del_flag
+            ,p.create_by
+            ,p.create_time
+            ,p.update_by
+            ,p.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and p.id = #{id}
+            </if>
+            <if test="groupId != null">
+                and p.group_id = #{groupId}
+            </if>
+            <if test="categoryId != null">
+                and p.category_id = #{categoryId}
+            </if>
+            <if test="categoryName != null and categoryName != ''">
+                and p.category_name = #{categoryName}
+            </if>
+            <if test="rawMaterialId != null">
+                and p.raw_material_id = #{rawMaterialId}
+            </if>
+            <if test="rawMaterialName != null and rawMaterialName != ''">
+                and p.raw_material_name = #{rawMaterialName}
+            </if>
+            <if test="number != null">
+                and p.number = #{number}
+            </if>
+            <if test="unitId != null">
+                and p.unit_id = #{unitId}
+            </if>
+            <if test="unitName != null and unitName != ''">
+                and p.unit_name = #{unitName}
+            </if>
+            <if test="price != null">
+                and p.price = #{price}
+            </if>
+            <if test="isPurchase != null">
+                and p.is_purchase = #{isPurchase}
+            </if>
+            <if test="subtotal != null">
+                and p.subtotal = #{subtotal}
+            </if>
+            <if test="delFlag != null">
+                and p.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and p.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and p.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_purchasing -->
+
+</mapper>

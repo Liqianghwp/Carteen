@@ -33,14 +33,13 @@ public interface NutritionAdviceMpService extends CommonService<NutritionAdviceP
      * @param vo    查询参数
      * @return  BaseResult
      */
-    BaseResult intakeAnalysis(IntakeAnalysisVO vo, LoginUser loginUser);
+    BaseResult intakeAnalysis(IntakeAnalysisVO vo);
 
 
     /**
      * 查询当前天营养信息记录
      * @param mealTimesId   餐次id
-     * @param loginUser     当前登录人
      * @return  BaseResult
      */
-    BaseResult getNutritionAdvice(Long mealTimesId, LoginUser loginUser);
+    BaseResult getNutritionAdvice(Long mealTimesId);
 }

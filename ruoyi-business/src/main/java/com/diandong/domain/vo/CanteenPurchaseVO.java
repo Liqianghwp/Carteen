@@ -1,5 +1,6 @@
 package com.diandong.domain.vo;
 
+import com.diandong.configuration.Insert;
 import com.diandong.configuration.Update;
 import com.diandong.domain.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -49,7 +50,7 @@ public class CanteenPurchaseVO extends BaseEntity implements Serializable {
     /**
      * 食谱日期开始时间
      */
-    @NotNull(message = "食谱开始日期不能为空")
+    @NotNull(groups = {Insert.class},message = "食谱开始日期不能为空")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @ApiModelProperty(value = "食谱日期开始时间")
@@ -58,11 +59,17 @@ public class CanteenPurchaseVO extends BaseEntity implements Serializable {
     /**
      * 食谱日期结束时间
      */
-    @NotNull(message = "食谱结束日期不能为空")
+    @NotNull(groups = {Insert.class},message = "食谱结束日期不能为空")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @ApiModelProperty(value = "食谱日期结束时间")
     private LocalDate recipeEndDate;
+
+    /**
+     * 有效日期
+     */
+    @ApiModelProperty(value = "有效日期")
+    private String validDate;
 
     /**
      * 天数
@@ -74,10 +81,16 @@ public class CanteenPurchaseVO extends BaseEntity implements Serializable {
      * 审核状态 (0:未提交;1:审核中;2:审核通过;3:审核驳回;)
      */
     @NotNull(message = "审核状态不能为空")
-    @Max(value = 1, message = "请输入对应的审核状态")
+    @Max(value = 3, message = "请输入对应的审核状态")
     @Min(value = 0, message = "请输入对应的审核状态")
     @ApiModelProperty(value = "审核状态 (0:未提交;1:审核中;2:审核通过;3:审核驳回;)")
     private Integer state;
+
+    /**
+     * 审核id
+     */
+    @ApiModelProperty(value = "审核id")
+    private String applyId;
 
     /**
      * 备注

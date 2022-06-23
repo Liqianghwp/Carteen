@@ -1,6 +1,5 @@
 package com.diandong.domain.dto;
 
-import com.diandong.domain.vo.UserNutritionAdviceVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -104,6 +103,11 @@ public class SysUserDTO implements Serializable {
     @ApiModelProperty(value = "人脸图片")
     private String faceImage;
 
+    /**
+     * 单位（个人设置）
+     */
+    @ApiModelProperty(value = "单位（个人设置）")
+    private String department;
 
     /**
      * 实体卡信息
@@ -128,4 +132,11 @@ public class SysUserDTO implements Serializable {
      */
     @ApiModelProperty(value = "余额")
     private BigDecimal amount;
+
+    /**
+     * 是否有实体卡
+     */
+    @ApiModelProperty(value = "是否有实体卡(true:有;false:没有)")
+    private Integer hasCard;
+
 }

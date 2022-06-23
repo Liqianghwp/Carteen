@@ -68,6 +68,15 @@ public class BizIdUtil {
     }
 
     /**
+     * 审批id
+     *
+     * @return
+     */
+    public String getApplyId() {
+        return "AI" + getTime() + nextValue(REDIS_KEY + "apply_id");
+    }
+
+    /**
      * 订单id
      *
      * @return

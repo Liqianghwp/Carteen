@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diandong.mapper.PurchasePlanDetailMapper">
+
+    <resultMap id="BaseResultMap" type="com.diandong.domain.po.PurchasePlanDetailPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="plan_id" jdbcType="VARCHAR" property="planId"/>
+        <result column="category_id" jdbcType="BIGINT" property="categoryId"/>
+        <result column="namecategory_name" jdbcType="VARCHAR" property="namecategoryName"/>
+        <result column="raw_material_id" jdbcType="BIGINT" property="rawMaterialId"/>
+        <result column="raw_material_name" jdbcType="VARCHAR" property="rawMaterialName"/>
+        <result column="unit_id" jdbcType="BIGINT" property="unitId"/>
+        <result column="unit_name" jdbcType="VARCHAR" property="unitName"/>
+        <result column="last_purchase" jdbcType="DOUBLE" property="lastPurchase"/>
+        <result column="number" jdbcType="DOUBLE" property="number"/>
+        <result column="current_price" jdbcType="DOUBLE" property="currentPrice"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- Select_Field -->
+    <sql id="BaseSelectField">
+        <trim prefixOverrides=",">
+            ,ppd.id
+            ,ppd.plan_id
+            ,ppd.category_id
+            ,ppd.namecategory_name
+            ,ppd.raw_material_id
+            ,ppd.raw_material_name
+            ,ppd.unit_id
+            ,ppd.unit_name
+            ,ppd.last_purchase
+            ,ppd.number
+            ,ppd.current_price
+            ,ppd.del_flag
+            ,ppd.create_by
+            ,ppd.create_time
+            ,ppd.update_by
+            ,ppd.update_time
+        </trim>
+    </sql>
+
+    <!-- Base_Where_Clause -->
+    <sql id="BaseWhereClause">
+        <where>
+            <trim prefixOverrides="and">
+            <if test="id != null">
+                and ppd.id = #{id}
+            </if>
+            <if test="planId != null and planId != ''">
+                and ppd.plan_id = #{planId}
+            </if>
+            <if test="categoryId != null">
+                and ppd.category_id = #{categoryId}
+            </if>
+            <if test="namecategoryName != null and namecategoryName != ''">
+                and ppd.namecategory_name = #{namecategoryName}
+            </if>
+            <if test="rawMaterialId != null">
+                and ppd.raw_material_id = #{rawMaterialId}
+            </if>
+            <if test="rawMaterialName != null and rawMaterialName != ''">
+                and ppd.raw_material_name = #{rawMaterialName}
+            </if>
+            <if test="unitId != null">
+                and ppd.unit_id = #{unitId}
+            </if>
+            <if test="unitName != null and unitName != ''">
+                and ppd.unit_name = #{unitName}
+            </if>
+            <if test="lastPurchase != null">
+                and ppd.last_purchase = #{lastPurchase}
+            </if>
+            <if test="number != null">
+                and ppd.number = #{number}
+            </if>
+            <if test="currentPrice != null">
+                and ppd.current_price = #{currentPrice}
+            </if>
+            <if test="delFlag != null">
+                and ppd.del_flag = #{delFlag}
+            </if>
+            <if test="beginTime != null">
+                and ppd.create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and ppd.create_time  <![CDATA[ <= ]]> #{endTime}
+            </if>
+            </trim>
+        </where>
+    </sql>
+    <!-- tableName  wis_purchase_plan_detail -->
+
+</mapper>

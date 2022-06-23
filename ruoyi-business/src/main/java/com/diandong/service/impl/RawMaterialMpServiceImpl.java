@@ -6,6 +6,7 @@ import com.diandong.configuration.CommonServiceImpl;
 import com.diandong.constant.Constants;
 import com.diandong.domain.dto.RawMaterialDTO;
 import com.diandong.domain.dto.RawMaterialNutritionDTO;
+import com.diandong.domain.po.BizDictPO;
 import com.diandong.domain.po.CanteenPO;
 import com.diandong.domain.po.RawMaterialNutritionPO;
 import com.diandong.domain.po.RawMaterialPO;
@@ -14,6 +15,7 @@ import com.diandong.domain.vo.RawMaterialVO;
 import com.diandong.mapper.RawMaterialMapper;
 import com.diandong.mapstruct.RawMaterialMsMapper;
 import com.diandong.mapstruct.RawMaterialNutritionMsMapper;
+import com.diandong.service.BizDictMpService;
 import com.diandong.service.CanteenMpService;
 import com.diandong.service.RawMaterialMpService;
 import com.diandong.service.RawMaterialNutritionMpService;
@@ -40,8 +42,11 @@ public class RawMaterialMpServiceImpl extends CommonServiceImpl<RawMaterialMappe
 
     @Resource
     private RawMaterialNutritionMpService rawMaterialNutritionMpService;
+//    @Resource
+//    private ISysDictDataService dictDataService;
+
     @Resource
-    private ISysDictDataService dictDataService;
+    private BizDictMpService bizDictMpService;
     @Resource
     private CanteenMpService canteenMpService;
 
@@ -50,10 +55,13 @@ public class RawMaterialMpServiceImpl extends CommonServiceImpl<RawMaterialMappe
     public Boolean saveRawMaterial(RawMaterialVO vo) {
         RawMaterialPO rawMaterialPO = RawMaterialMsMapper.INSTANCE.vo2po(vo);
 
-        SysDictData categoryData = dictDataService.selectDictDataById(vo.getCategoryId());
+//        SysDictData categoryData = dictDataService.selectDictDataById(vo.getCategoryId());
+
+        BizDictPO bizDictPO = bizDictMpService.getById(vo.getCategoryId());
+
         CanteenPO canteenPO = canteenMpService.getById(SecurityUtils.getCanteenId());
         rawMaterialPO.setCanteenName(canteenPO.getCanteenName());
-        rawMaterialPO.setCategoryName(categoryData.getDictLabel());
+        rawMaterialPO.setCategoryName(bizDictPO.getDictLabel());
         boolean result = save(rawMaterialPO);
         if (result) {
             List<RawMaterialNutritionVO> rawMaterialNutritionVOList = vo.getRawMaterialNutritionVOList();

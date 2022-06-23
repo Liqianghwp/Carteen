@@ -179,19 +179,24 @@ public class RecipeMpServiceImpl extends CommonServiceImpl<RecipeMapper, RecipeP
     }
 
     @Override
-    public BaseResult rawMaterialsList(List<RecipeDetailVO> voList) {
+    public BaseResult rawMaterialsList(String recipeId) {
+
+        List<RecipeDetailPO> list = recipeDetailMpService.lambdaQuery()
+                .eq(RecipeDetailPO::getRecipeId, recipeId)
+                .eq(RecipeDetailPO::getDelFlag, Constants.DEL_NO)
+                .list();
+
 
         List<RawMaterialDTO> rawMaterialDTOList = new ArrayList<>();
 
-
-        for (RecipeDetailVO recipeDetailVO : voList) {
-            getRawMaterialList(rawMaterialDTOList, RecipeDetailMsMapper.INSTANCE.vo2po(recipeDetailVO));
+        for (RecipeDetailPO recipeDetailPO : list) {
+            getRawMaterialList(rawMaterialDTOList, recipeDetailPO);
         }
         return BaseResult.success(rawMaterialDTOList);
     }
 
     @Override
-    public BaseResult rawMaterialList(String recipeId) {
+    public BaseResult recipeSourcing(String recipeId) {
 
         List<RecipeDetailPO> list = recipeDetailMpService.lambdaQuery()
                 .eq(RecipeDetailPO::getRecipeId, recipeId)
@@ -211,11 +216,18 @@ public class RecipeMpServiceImpl extends CommonServiceImpl<RecipeMapper, RecipeP
     public BaseResult createCanteenPurchase(String recipeId) {
 
         RecipePO recipe = getById(recipeId);
+//        Integer count = canteenPurchaseMpService.lambdaQuery()
+//                .ge(CanteenPurchasePO::getRecipeStartDate, recipe.getRecipeDate())
+//                .le(CanteenPurchasePO::getRecipeEndDate, recipe.getRecipeDate())
+//                .eq(CanteenPurchasePO::getDelFlag, Constants.DEL_NO)
+//                .count();
+        String recipeDate = recipe.getRecipeDate().format(DateTimeFormatter.ISO_DATE);
+
         Integer count = canteenPurchaseMpService.lambdaQuery()
-                .gt(CanteenPurchasePO::getRecipeStartDate, recipe.getRecipeDate())
-                .lt(CanteenPurchasePO::getRecipeEndDate, recipe.getRecipeDate())
+                .like(CanteenPurchasePO::getValidDate, recipeDate)
                 .eq(CanteenPurchasePO::getDelFlag, Constants.DEL_NO)
                 .count();
+
         if (count != 0) {
             return BaseResult.error("食谱已被记录");
         }
@@ -228,6 +240,7 @@ public class RecipeMpServiceImpl extends CommonServiceImpl<RecipeMapper, RecipeP
         canteenPurchase.setCanteenName(canteen.getCanteenName());
         canteenPurchase.setRecipeStartDate(recipe.getRecipeDate());
         canteenPurchase.setRecipeEndDate(recipe.getRecipeDate());
+        canteenPurchase.setValidDate(recipeDate);
         canteenPurchase.setDays(1);
         canteenPurchase.setState(CanteenPurchaseState.UN_SUBMIT);
         canteenPurchaseMpService.save(canteenPurchase);

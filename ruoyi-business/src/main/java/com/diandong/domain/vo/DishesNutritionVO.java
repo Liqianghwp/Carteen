@@ -30,8 +30,15 @@ public class DishesNutritionVO extends BaseEntity implements Serializable {
     private Long id;
 
     /**
+     * 食堂id
+     */
+    @ApiModelProperty(value = "食堂id")
+    private Long canteenId;
+
+    /**
      * 菜品id
      */
+    @NotNull(groups = {Insert.class},message = "菜品ID不能为空")
     @ApiModelProperty(value = "菜品id")
     private Long dishesId;
 
@@ -44,6 +51,7 @@ public class DishesNutritionVO extends BaseEntity implements Serializable {
     /**
      * 营养信息id
      */
+    @NotNull(groups = {Insert.class},message = "营养信息不能为空")
     @ApiModelProperty(value = "营养信息id")
     private Long nutritionId;
 

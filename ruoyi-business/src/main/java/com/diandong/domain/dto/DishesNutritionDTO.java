@@ -1,5 +1,6 @@
 package com.diandong.domain.dto;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -23,6 +24,12 @@ public class DishesNutritionDTO implements Serializable {
      */
     @ApiModelProperty(value = "编号")
     private Long id;
+
+    /**
+     * 食堂id
+     */
+    @ApiModelProperty(value = "食堂id")
+    private Long canteenId;
 
     /**
      * 菜品id

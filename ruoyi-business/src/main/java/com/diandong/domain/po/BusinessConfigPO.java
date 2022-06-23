@@ -3,6 +3,7 @@ package com.diandong.domain.po;
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -42,6 +43,13 @@ public class BusinessConfigPO implements Serializable {
     @TableField(value = "config_value")
     @ApiModelProperty(value = "配置内容 text文本格式")
     private String configValue;
+
+    /**
+     * 食堂id
+     */
+    @TableField(value = "canteen_id")
+    @ApiModelProperty(value = "食堂id")
+    private Long canteenId;
 
     /**
      * 数据状态 停用启用状态

@@ -24,6 +24,10 @@ public class CanteenPurchaseState {
      * 审核驳回
      */
     public static final Integer AUDIT_NO = 3;
+    /**
+     * 修改意见
+     */
+    public static final Integer REVISE_OPINION = 4;
 
 
 }

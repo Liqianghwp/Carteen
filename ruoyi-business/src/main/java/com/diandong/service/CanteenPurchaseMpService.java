@@ -13,11 +13,28 @@ import com.ruoyi.common.core.domain.BaseResult;
  */
 public interface CanteenPurchaseMpService extends CommonService<CanteenPurchasePO> {
 
+
+    /**
+     * 获取详情
+     *
+     * @param id
+     * @return
+     */
+    BaseResult getCanteenPurchase(Long id);
+
+
     /**
      * 保存食堂采购
+     *
      * @param vo
      * @return
      */
     BaseResult saveCanteenPurchase(CanteenPurchaseVO vo);
 
+    /**
+     * 审核
+     * @param vo    审核
+     * @return
+     */
+    BaseResult audit(CanteenPurchaseVO vo);
 }

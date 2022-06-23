@@ -167,18 +167,21 @@ public interface AppService {
 
     /**
      * 获取个人电子会员卡信息
+     *
      * @return
      */
     BaseResult userAmount();
 
     /**
      * 食堂充值设置
+     *
      * @return
      */
     BaseResult getCanteenRecharge();
 
     /**
      * APP充值记录
+     *
      * @param vo
      * @return
      */
@@ -186,8 +189,25 @@ public interface AppService {
 
     /**
      * 意见与反馈
+     *
      * @param vo
      * @return
      */
     BaseResult opinionFeedback(OpinionFeedbackVO vo);
+
+    /**
+     * 获取学生支付方式
+     *
+     * @return
+     */
+    BaseResult setStudentPayWay();
+
+    /**
+     * 设置学生支付方式
+     *
+     * @return
+     */
+    BaseResult setStudentPayWay(BusinessConfigVO vo);
+
+
 }
