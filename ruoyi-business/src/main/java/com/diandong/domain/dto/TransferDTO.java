@@ -1,6 +1,7 @@
 package com.diandong.domain.dto;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.ruoyi.common.annotation.Excel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -28,24 +29,29 @@ public class TransferDTO implements Serializable {
     /**
      * 单据编号
      */
+    @Excel(name = "单据编号",sort = 2)
     @ApiModelProperty(value = "单据编号")
     private String code;
 
     /**
      * 出库食堂
      */
+    @Excel(name = "出库食堂",sort = 3)
+
     @ApiModelProperty(value = "出库食堂")
     private String outboundCanteen;
 
     /**
      * 入库食堂
      */
+    @Excel(name = "入库食堂",sort = 4)
     @ApiModelProperty(value = "入库食堂")
     private String inboundCanteen;
 
     /**
      * 状态
      */
+    @Excel(name = "审核状态",sort = 5)
     @ApiModelProperty(value = "状态")
     private String state;
 
@@ -76,8 +82,16 @@ public class TransferDTO implements Serializable {
     /**
      * 创建时间
      */
+    @Excel(name = "申请时间",sort = 1)
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
+    /**
+     * 库存
+     * */
+    @TableField(exist = false)
+    @ApiModelProperty(value = "库存")
+    private Long repertory;
+
 
     /**
      * 原材料类别名称
@@ -103,11 +117,6 @@ public class TransferDTO implements Serializable {
     @ApiModelProperty(value = "调拨数量")
     private Long number;
 
-    /**
-     * 库存
-     * */
-    @TableField(exist = false)
-    @ApiModelProperty(value = "库存")
-    private Long repertory;
+
 
 }

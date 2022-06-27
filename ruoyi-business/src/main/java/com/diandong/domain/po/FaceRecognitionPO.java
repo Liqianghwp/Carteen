@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class FaceRecognitionPO implements Serializable {
     private static final long serialVersionUID = 1L;
-
     /**
      * 编号
      */

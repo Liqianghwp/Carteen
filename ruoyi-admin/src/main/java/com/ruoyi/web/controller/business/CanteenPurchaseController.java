@@ -80,6 +80,7 @@ public class CanteenPurchaseController extends BaseController {
     @ApiOperation(value = "食堂采购保存", notes = "食堂采购保存", httpMethod = "POST")
     @PostMapping
     public BaseResult save(@RequestBody @Validated(Insert.class) CanteenPurchaseVO vo) {
+
         return canteenPurchaseMpService.saveCanteenPurchase(vo);
     }
 

@@ -126,11 +126,13 @@ public class UserAuditController extends BaseController {
             for (SysUser user : userList) {
                 UserCheckExportDTO exportDTO = new UserCheckExportDTO();
                 BeanUtils.copyProperties(user, exportDTO);
-
                 exportList.add(exportDTO);
             }
+
         }
+
         ExcelUtil<UserCheckExportDTO> util = new ExcelUtil(UserCheckExportDTO.class);
+
         util.exportExcel(response, exportList, "用户审核");
 
 

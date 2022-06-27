@@ -151,4 +151,13 @@ public class Constants {
     public static final String NEW_PHONE_VERIFY_CODE = "2";
 
 //    ========================================= 获取验证码分类 End
+//    ==========================================集团管理状态
+    /**
+     * 启用
+     */
+    public static final String START_USING = "0";
+    /**
+     * 停用
+     */
+    public static final String OUT_OF_SERVICE = "1";
 }

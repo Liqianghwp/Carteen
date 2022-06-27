@@ -1,27 +1,35 @@
 package com.ruoyi.web.controller.business;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diandong.configuration.Insert;
-import com.diandong.configuration.Update;
 import com.diandong.domain.po.*;
+import com.diandong.constant.Constants;
 import com.diandong.service.*;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseResult;
-import com.ruoyi.common.core.page.TableDataInfo;
+import com.diandong.domain.po.TransferPO;
 import com.diandong.domain.dto.TransferDTO;
 import com.diandong.domain.vo.TransferVO;
 import com.diandong.mapstruct.TransferMsMapper;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
-import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Controller
@@ -116,10 +124,32 @@ public class TransferController extends BaseController {
     })
     @ApiOperation(value = "保存", notes = "保存", httpMethod = "POST")
     @PostMapping
-    public BaseResult save(@Validated(Insert.class) TransferVO vo) {
+    public BaseResult save(@RequestBody @Validated(Insert.class) TransferVO vo) {
         TransferPO po = TransferMsMapper.INSTANCE.vo2po(vo);
 
-        boolean result = transferMpService.save(po);
+        List<TransferCommentPO> storage = vo.getStorage();
+
+
+        //获取当前时间
+        po.setCreateTime(LocalDateTime.now());
+        //获取时间的数字数据
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+        String times = sdf.format(new Date());
+        //单号
+        po.setCode("DB" + times + Math.round((Math.random() + 1) * 1000));
+        //状态
+        po.setState("1");
+        //创建人 getUsername当前账号归属人
+        po.setCreateBy(getUsername());
+
+        boolean result =  transferMpService.save(po);
+        for (TransferCommentPO transferCommentPO : storage) {
+            transferCommentPO.setTransferId(po.getId());
+
+        }
+
+        result = transferCommentMpService.saveBatch(storage);
+
         if (result) {
             return BaseResult.successMsg("添加成功！");
         } else {
@@ -128,24 +158,32 @@ public class TransferController extends BaseController {
     }
 
     /**
-     * 更新
+     * 根据更新查询
      *
-     * @param vo 参数对象
+     * @param id 编号id
      * @return 返回结果
      */
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "TransferVO", name = "vo", value = "参数对象")
+            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "编号id")
     })
-    @ApiOperation(value = "更新", notes = "更新", httpMethod = "PUT")
-    @PutMapping
-    public BaseResult update(@Validated(Update.class) TransferVO vo) {
-        TransferPO po = TransferMsMapper.INSTANCE.vo2po(vo);
-        boolean result = transferMpService.updateById(po);
-        if (result) {
-            return BaseResult.successMsg("修改成功");
-        } else {
-            return BaseResult.error("修改失败");
+    @ApiOperation(value = "状态", notes = "状态", httpMethod = "GET")
+    @PutMapping(value = "/{id}")
+    public BaseResult<TransferDTO> update(@PathVariable("id") Long id,@RequestBody @Validated(Insert.class) TransferVO vo) {
+        TransferPO byId = transferMpService.getById(id);
+
+
+        if (Constants.REVIEW_THE_REJECTED.equals(vo.getState())){
+             byId.setState("2");
+             transferMpService.updateById(byId);
+            return BaseResult.successMsg("审核失败");
         }
+             byId.setReviewer(getUsername());
+             byId.setReviewTime(LocalDateTime.now());
+             byId.setState("3");
+             transferMpService.updateById(byId);
+            return BaseResult.successMsg("审核成功");
+
+
     }
 
     /**
@@ -160,33 +198,46 @@ public class TransferController extends BaseController {
     @ApiOperation(value = "删除", notes = "删除", httpMethod = "DELETE")
     @DeleteMapping(value = "/{id}")
     public BaseResult delete(@PathVariable("id") Long id) {
-        boolean result = transferMpService.removeById(id);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
-            return BaseResult.error("删除失败");
+        TransferPO byId = transferMpService.getById(id);
+        if (Constants.REVIEW_THE_REJECTED.equals(byId.getState()) || Constants.TO_AUDIT.equals(byId.getState())) {
+            boolean result = transferMpService.removeById(id);
+            if (result) {
+                return BaseResult.successMsg("删除成功");
+            } else {
+                return BaseResult.error("审批通过无法删除");
+            }
         }
+        return BaseResult.error("审批通过无法删除");
+        }
+
+
+
+    @Log(title = "调拨管理", businessType = BusinessType.EXPORT)
+    @PutMapping("/export")
+    public void export(HttpServletResponse response, TransferVO vo) {
+        //实例勾选
+        List<Long> ids = vo.getIds();
+        //创建list集合
+        List<TransferPO> list;
+        //判断他有没有勾选 如果没有勾选就打印全部
+        if (CollectionUtils.isNotEmpty(ids)) {
+            list = transferMpService.lambdaQuery().in(TransferPO::getId, ids).list();
+        } else {
+            //如果勾选就打印勾选
+            list = onSelectWhere(vo).list();
+        }
+        //将要打印的保存到inventoryInboundDTOList集合里面
+        List<TransferDTO> transferDTOS = new ArrayList<>();
+
+        list.forEach(TransferPO -> {
+            transferDTOS.add(TransferMsMapper.INSTANCE.po2dto(TransferPO));
+
+        });
+        ExcelUtil<TransferDTO> util = new ExcelUtil(TransferDTO.class);
+        util.exportExcel(response, transferDTOS, "调拨管理表");
     }
 
-    /**
-     * 批量删除
-     *
-     * @param idList 编号id集合
-     * @return 返回结果
-    */
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "List<Long>", name = "idList", value = "编号id集合")
-    })
-    @ApiOperation(value = "批量删除", notes = "批量删除", httpMethod = "DELETE")
-    @DeleteMapping
-    public BaseResult deleteByIdList(@RequestParam("idList") List<Long> idList) {
-        boolean result = transferMpService.removeByIds(idList);
-        if (result) {
-            return BaseResult.successMsg("删除成功");
-        } else {
-            return BaseResult.error("删除失败");
-        }
-    }
+
     private LambdaQueryChainWrapper<TransferPO> onSelectWhere(TransferVO vo) {
         LambdaQueryChainWrapper<TransferPO> queryWrapper = transferMpService.lambdaQuery();
 
@@ -206,3 +257,5 @@ public class TransferController extends BaseController {
 
 
 }
+
+

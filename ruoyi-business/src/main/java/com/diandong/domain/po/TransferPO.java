@@ -1,6 +1,7 @@
 package com.diandong.domain.po;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.diandong.domain.vo.TransferCommentVO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -8,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * PO实体类
@@ -99,4 +101,30 @@ public class TransferPO implements Serializable {
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
 
+    /**
+     * 调拨子表
+     */
+    @ApiModelProperty(value = "调拨子表")
+    @TableField(exist = false)
+    private List<TransferCommentPO> storage;
+    /**
+     * 库存
+     * */
+    @TableField(exist = false)
+    @ApiModelProperty(value = "库存")
+    private Long repertory;
+    /**
+     * 调拨数量
+     */
+    @TableField(exist = false)
+    @ApiModelProperty(value = "调拨数量")
+    private Long number;
+
+
+    /**
+     * 保存
+     */
+    @TableField(exist = false)
+    @ApiModelProperty(value = "保存")
+    private String People;
 }
